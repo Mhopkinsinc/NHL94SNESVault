@@ -1,2 +1,4 @@
 # NHL94SNESVault
-comprehensive collection or resource for NHL '94 on the SNES.
+Comprehensive collection of resources for NHL '94 on the SNES.
+
+## How to build the solution
