@@ -17,8 +17,8 @@ Output/
 # Ignore the Backup directory
 Backup/
 
-# Ignore the nhl94.smc file in the root directory
-nhl94.smc
+# Ignore the Backup directory
+DizExport/
 
 # Ignore the nhl94.smc file in the root directory
-/nhl94.smc
+/NHL '94 (USA).sfc
