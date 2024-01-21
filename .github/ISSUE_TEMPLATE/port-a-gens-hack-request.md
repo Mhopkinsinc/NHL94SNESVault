@@ -1,5 +1,5 @@
 ---
-name: Port Gens Hack to SNES
+name: Request - Port Gens Hack to SNES
 about: Use this to request porting a GENS hack to SNES
 title: ''
 labels: ''

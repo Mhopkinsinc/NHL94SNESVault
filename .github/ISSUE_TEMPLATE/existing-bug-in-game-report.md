@@ -1,5 +1,5 @@
 ---
-name: Existing Bug Report
+name: Report - Existing Bug 
 about: Use this to report an existing bug in the game
 title: ''
 labels: ''
