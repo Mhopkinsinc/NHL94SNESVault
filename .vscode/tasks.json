@@ -7,7 +7,7 @@
             "label": "Create Export Folder",
             "type": "shell",
             "command": "cmd",
-            "args": ["/C", "if not exist export mkdir export"],
+            "args": ["/C", "if not exist Output mkdir Output"],
             "problemMatcher": []
         },
         {

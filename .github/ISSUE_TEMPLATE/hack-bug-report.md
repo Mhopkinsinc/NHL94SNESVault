@@ -27,6 +27,6 @@ State how you expect the hack should behave here.
 - [ ] Provided brief description of the actual changes (Solution) performed.
 
 # Sprint Ready Checklist 
-1. - [ ] Acceptance criteria defined.
-2. - [ ] Identified solution / steps to satisfy acceptance criteria.
-3. - [ ] Acceptance criteria is verifiable / testable.
+- [ ] Acceptance criteria defined.
+- [ ] Identified solution / steps to satisfy acceptance criteria.
+- [ ] Acceptance criteria is verifiable / testable.
