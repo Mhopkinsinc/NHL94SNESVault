@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 # User story
-Update text with the gens hack you would like ported to snes. If possible include and links to forum posts on the available hack.
+Update text with the gens hack you would like ported to snes. If possible include any links to forum posts on the available hack.
 
 # Possible Solution
 - [ ] Identify the code that may resolve / fix the issue
