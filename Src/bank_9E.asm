@@ -9613,7 +9613,7 @@
  
           CODE_9ED0BF:
                        LDY.B $91                            ;9ED0BF|A491    |;
-                       LDA.W $17AA,Y                        ;9ED0C1|B9AA17  |;
+                       LDA.W Selected_Goalie,Y              ;9ED0C1|B9AA17  |;
                        BMI CODE_9ED0FC                      ;9ED0C4|3036    |;
                        LDX.W $1766,Y                        ;9ED0C6|BE6617  |;
                        LDY.W $0AD9                          ;9ED0C9|ACD90A  |;

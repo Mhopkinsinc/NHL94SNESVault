@@ -1,14 +1,14 @@
 ;!^!-USED-!                        Native_NMI = $80FFEA
 ;!^!-USED-!                        Native_IRQ = $80FFF4
 ;!^!-USED-!                        Emulation_RESET = $80FFFE
-;!^!-USED-!  
-;!^!-UNUSED-!  
+;!^!-USED-!                        Ten_min_per = $9F9B30
+;!^!-UNUSED-!                        Def_Ctrl_Awy = $001C96; !^ Def Control On or Off 1c96 = Away ^!
 ;!^!-USED-!                        Set_Default_Goalie = $9FC6B2
 ;!^!-USED-!                        Enable_DefControl = $9FFB24
 ;!^!-USED-!                        One_Min_Pen = $9EFB5B
 ;!^!-USED-!                        not1min = $9EFB6D
 ;!^!-USED-!                        Shootout_Edit_Lines = $80CE41
-;!^!-USED-!                        Team_PTR = $9CA5E7
+;!^!-USED-!                        Team_PTR = $9CA5E7; !^ Team Data Pointer for each Team ^!
 ;!^!-USED-!                        Team_Data_ANH = $9CEB4F
 ;!^!-USED-!                        Team_Data_FLA = $9CE94D
 ;!^!-USED-!                        Team_Data_WSH = $9CE6AD
@@ -40,8 +40,12 @@
 ;!^!-USED-!                        Banner_Team_Text_PTR = $9C9649
 ;!^!-USED-!                        LoadGameSetupScreen = $80BBB3
 ;!^!-USED-!                        DefaultGameSetupValues = $9D9CC2
-;!^!-USED-!                        PeriodLength = $9F9B2E
-;!^!-USED-!  
+;!^!-USED-!                        Period_Length_Arry = $9F9B2E
+;!^!-USED-!                        Twenty_Min_Per = $9F9B32
+;!^!-UNUSED-!                        Def_Ctrl = $001C94; !^ Def Control On or Off 1c94+y = Home 1c94 = Away ^!
+;!^!-USED-!                        Thirty_Sec_Per = $9F9B34
+;!^!-UNUSED-!                        Selected_Goalie_Awy = $0017AC
+;!^!-UNUSED-!                        Selected_Goalie = $0017AA
 ;!^!-USED-!                        CODE_80802A = $80802A
 ;!^!-USED-!                        CODE_80804D = $80804D
 ;!^!-USED-!                        CODE_808055 = $808055
@@ -1622,6 +1626,7 @@
 ;!^!-USED-!                        CODE_9D994B = $9D994B
 ;!^!-USED-!                        CODE_9D9783 = $9D9783
 ;!^!-USED-!                        CODE_9D9966 = $9D9966
+;!^!-USED-!                        CODE_9D9A23 = $9D9A23
 ;!^!-USED-!                        CODE_9D996F = $9D996F
 ;!^!-USED-!                        CODE_9D9A0E = $9D9A0E
 ;!^!-USED-!                        CODE_9D9977 = $9D9977
@@ -1742,7 +1747,8 @@
 ;!^!-USED-!                        CODE_9DA869 = $9DA869
 ;!^!-USED-!                        CODE_9DA770 = $9DA770
 ;!^!-USED-!                        CODE_9DA793 = $9DA793
-;!^!-USED-!                        UNREACH_9DA7A3 = $9DA7A3
+;!^!-USED-!                        CODE_9DA7A3 = $9DA7A3
+;!^!-USED-!                        CODE_9DA7B1 = $9DA7B1
 ;!^!-USED-!                        CODE_9DA81E = $9DA81E
 ;!^!-USED-!                        CODE_9DA822 = $9DA822
 ;!^!-USED-!                        CODE_9D98D3 = $9D98D3
