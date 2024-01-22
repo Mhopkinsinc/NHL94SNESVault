@@ -46,6 +46,7 @@
 ;!^!-USED-!                        Thirty_Sec_Per = $9F9B34
 ;!^!-UNUSED-!                        Selected_Goalie_Awy = $0017AC
 ;!^!-UNUSED-!                        Selected_Goalie = $0017AA
+;!^!-USED-!                        Game_Setup_Menus_Arry_Sizes = $9DACD1
 ;!^!-USED-!                        CODE_80802A = $80802A
 ;!^!-USED-!                        CODE_80804D = $80804D
 ;!^!-USED-!                        CODE_808055 = $808055
