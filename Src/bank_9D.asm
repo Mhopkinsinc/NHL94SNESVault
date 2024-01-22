@@ -272,7 +272,8 @@
                        BNE CODE_9D8217                      ;9D820A|D00B    |;
                        LDA.L $7E34CC                        ;9D820C|AFCC347E|;
                        BNE CODE_9D8217                      ;9D8210|D005    |;
-                       db $CE,$41,$0D,$30,$03               ;9D8212|        |;
+                       DEC.W $0D41                          ;9D8212|CE410D  |;
+                       BMI CODE_9D821A                      ;9D8215|3003    |;
  
           CODE_9D8217:
                        JMP.W CODE_9D8195                    ;9D8217|4C9581  |;
@@ -2668,7 +2669,7 @@
           CODE_9D995D:
                        LDA.L $7E34CC                        ;9D995D|AFCC347E|;
                        BNE CODE_9D9966                      ;9D9961|D003    |;
-                       db $4C,$23,$9A                       ;9D9963|        |;
+                       JMP.W CODE_9D9A23                    ;9D9963|4C239A  |;
  
           CODE_9D9966:
                        LDA.L $7E34BC                        ;9D9966|AFBC347E|;
@@ -2768,6 +2769,8 @@
                        STA.B $89                            ;9D9A1F|8589    |;
                        INY                                  ;9D9A21|C8      |;
                        INY                                  ;9D9A22|C8      |;
+ 
+          CODE_9D9A23:
                        JSL.L CODE_9FC79F                    ;9D9A23|229FC79F|;
                        RTL                                  ;9D9A27|6B      |;
  
@@ -3585,7 +3588,7 @@ DefaultGameSetupValues:
                        STZ.W $1C8C                          ;9DA0E1|9C8C1C  |;
                        LDA.L $7E34CC                        ;9DA0E4|AFCC347E|;
                        BNE CODE_9DA0EB                      ;9DA0E8|D001    |;
-                       db $6B                               ;9DA0EA|        |;
+                       RTL                                  ;9DA0EA|6B      |;
  
           CODE_9DA0EB:
                        LDA.W #$FFFF                         ;9DA0EB|A9FFFF  |;
@@ -4235,17 +4238,27 @@ DefaultGameSetupValues:
                        JSL.L CODE_9FBF75                    ;9DA796|2275BF9F|;
                        DEC.B $BD                            ;9DA79A|C6BD    |;
                        DEC.B $BD                            ;9DA79C|C6BD    |;
-                       BMI UNREACH_9DA7A3                   ;9DA79E|3003    |;
+                       BMI CODE_9DA7A3                      ;9DA79E|3003    |;
                        JMP.W CODE_9DA704                    ;9DA7A0|4C04A7  |;
  
-       UNREACH_9DA7A3:
-                       db $A9,$1C,$00,$22,$85,$B3,$9B,$8F   ;9DA7A3|        |;
-                       db $BE,$34,$7E,$8D,$98,$1C,$A9,$1C   ;9DA7AB|        |;
-                       db $00,$22,$85,$B3,$9B,$CF,$BE,$34   ;9DA7B3|        |;
-                       db $7E,$F0,$F3,$8F,$C0,$34,$7E,$8D   ;9DA7BB|        |;
-                       db $9A,$1C,$A9,$00,$00,$8F,$CC,$34   ;9DA7C3|        |;
-                       db $7E,$A9,$00,$00,$8F,$BC,$34,$7E   ;9DA7CB|        |;
-                       db $8F,$CA,$34,$7E                   ;9DA7D3|        |;
+          CODE_9DA7A3:
+                       LDA.W #$001C                         ;9DA7A3|A91C00  |;
+                       JSL.L CODE_9BB385                    ;9DA7A6|2285B39B|;
+                       STA.L $7E34BE                        ;9DA7AA|8FBE347E|;
+                       STA.W $1C98                          ;9DA7AE|8D981C  |;
+ 
+          CODE_9DA7B1:
+                       LDA.W #$001C                         ;9DA7B1|A91C00  |;
+                       JSL.L CODE_9BB385                    ;9DA7B4|2285B39B|;
+                       CMP.L $7E34BE                        ;9DA7B8|CFBE347E|;
+                       BEQ CODE_9DA7B1                      ;9DA7BC|F0F3    |;
+                       STA.L $7E34C0                        ;9DA7BE|8FC0347E|;
+                       STA.W $1C9A                          ;9DA7C2|8D9A1C  |;
+                       LDA.W #$0000                         ;9DA7C5|A90000  |;
+                       STA.L $7E34CC                        ;9DA7C8|8FCC347E|;
+                       LDA.W #$0000                         ;9DA7CC|A90000  |;
+                       STA.L $7E34BC                        ;9DA7CF|8FBC347E|;
+                       STA.L $7E34CA                        ;9DA7D3|8FCA347E|;
  
           CODE_9DA7D7:
                        LDA.W #$009A                         ;9DA7D7|A99A00  |;
