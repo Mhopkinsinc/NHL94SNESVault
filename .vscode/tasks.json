@@ -14,7 +14,7 @@
             "label": "Compile Rom(smc)",
             "type": "process",
             "command": "ASAR\\asar-domfix.exe",
-            "args": ["--fix-checksum=on","Src\\main.asm","Output\\nhl94.smc"],
+            "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.smc"],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -25,7 +25,7 @@
             "label": "Compile Rom(sfc)",
             "type": "process",
             "command": "ASAR\\asar-domfix.exe",
-            "args": ["--fix-checksum=on","Src\\main.asm","Output\\nhl94.sfc"],
+            "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.sfc"],
             "problemMatcher": [],
             "group": {
                 "kind": "build",

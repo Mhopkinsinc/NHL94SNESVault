@@ -20,5 +20,8 @@ Backup/
 # Ignore the Backup directory
 DizExport/
 
+# Ignore the Orig_Roms_For_Comparison directory
+Orig_Roms_For_Comparison/
+
 # Ignore the nhl94.smc file in the root directory
 /NHL '94 (USA).sfc
