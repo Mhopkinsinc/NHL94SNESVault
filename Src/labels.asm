@@ -1,4 +1,7 @@
- 
+                       Def_Ctrl_Awy = $001C96; !^ Def Control On or Off 1c96 = Away ^!
+                       Def_Ctrl = $001C94; !^ Def Control On or Off 1c94+y = Home 1c94 = Away ^!
+                       Selected_Goalie_Awy = $0017AC
+                       Selected_Goalie = $0017AA
                        LOOSE_OP_808185 = $808185
                        LOOSE_OP_808468 = $808468
                        LOOSE_OP_8084FF = $8084FF

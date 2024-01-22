@@ -343,7 +343,8 @@
                        db $A9,$20,$00,$0C,$D4,$15           ;9F8376|        |;
  
           CODE_9F837C:
-                       JSL.L Set_Default_Goalie             ;9F837C|22B2C69F|; hijack to call our def control code
+                       JSR.W Enable_DefControl              ;9F837C|2024FB  |; hijack to call our def control code
+                       NOP                                  ;9F837F|EA      |;
                        JSL.L CODE_9FC702                    ;9F8380|2202C79F|;
                        JSL.L CODE_9FC833                    ;9F8384|2233C89F|;
                        LDA.W #$007E                         ;9F8388|A97E00  |;
@@ -2306,13 +2307,22 @@
                        LDA.L $7E34C2                        ;9F9B20|AFC2347E|;
                        ASL A                                ;9F9B24|0A      |;
                        TAX                                  ;9F9B25|AA      |;
-                       LDA.L PeriodLength,X                 ;9F9B26|BF2E9B9F|;
+                       LDA.L Period_Length_Arry,X           ;9F9B26|BF2E9B9F|;
                        STA.B $A5                            ;9F9B2A|85A5    |;
                        PLX                                  ;9F9B2C|FA      |;
                        RTL                                  ;9F9B2D|6B      |;
  
-         PeriodLength:
-                       db $2C,$01,$58,$02,$B0,$04,$1E,$00   ;9F9B2E|        |;
+   Period_Length_Arry:
+                       db $2C,$01                           ;9F9B2E|        |; 5 minute period length
+ 
+          Ten_min_per:
+                       db $58,$02                           ;9F9B30|        |; 10 min period length
+ 
+       Twenty_Min_Per:
+                       db $B0,$04                           ;9F9B32|        |; 20 min period length
+ 
+       Thirty_Sec_Per:
+                       db $1E,$00                           ;9F9B34|        |; 30 second period length
  
           CODE_9F9B36:
                        LDA.B $A5                            ;9F9B36|A5A5    |;
@@ -7161,9 +7171,9 @@
                        RTL                                  ;9FC6B1|6B      |;
  
    Set_Default_Goalie:
-                       LDA.W $17AA                          ;9FC6B2|ADAA17  |; Called When Ron Barr Intro Screen Ends, Sets Starting Home + Away Goalie
+                       LDA.W Selected_Goalie                ;9FC6B2|ADAA17  |; Called When Ron Barr Intro Screen Ends, Sets Starting Home + Away Goalie
                        PHA                                  ;9FC6B5|48      |; 0000 = 1st Goalie 0100 = 2nd Goalie 0200 = 3rd goalie FFFF = No Goalie
-                       LDA.W $17AC                          ;9FC6B6|ADAC17  |; 17AA Home 17AC Away
+                       LDA.W Selected_Goalie_Awy            ;9FC6B6|ADAC17  |; 17AA Home 17AC Away
                        PHA                                  ;9FC6B9|48      |;
                        LDX.W #$0000                         ;9FC6BA|A20000  |;
  
@@ -7992,7 +8002,7 @@
                        db $A0,$02,$00                       ;9FCD37|        |;
  
           CODE_9FCD3A:
-                       LDA.W $1C94,Y                        ;9FCD3A|B9941C  |;
+                       LDA.W Def_Ctrl,Y                     ;9FCD3A|B9941C  |;
                        BNE UNREACH_9FCD40                   ;9FCD3D|D001    |;
                        RTL                                  ;9FCD3F|6B      |;
  
@@ -10401,9 +10411,9 @@
                        BEQ CODE_9FE42E                      ;9FE41D|F00F    |;
                        JSL.L CODE_9FC76C                    ;9FE41F|226CC79F|;
                        LDY.B $91                            ;9FE423|A491    |;
-                       LDA.W $1C94,Y                        ;9FE425|B9941C  |;
-                       EOR.W #$0001                         ;9FE428|490100  |;
-                       STA.W $1C94,Y                        ;9FE42B|99941C  |;
+                       LDA.W Def_Ctrl,Y                     ;9FE425|B9941C  |;
+                       EOR.W #$0001                         ;9FE428|490100  |; Turns Def Control On or Off with EOR of current value
+                       STA.W Def_Ctrl,Y                     ;9FE42B|99941C  |;
  
           CODE_9FE42E:
                        JMP.W CODE_9FE19E                    ;9FE42E|4C9EE1  |;
@@ -11269,7 +11279,7 @@
           CODE_9FEC07:
                        JSL.L CODE_9FC76C                    ;9FEC07|226CC79F|;
                        LDY.B $91                            ;9FEC0B|A491    |;
-                       LDA.W $1C94,Y                        ;9FEC0D|B9941C  |;
+                       LDA.W Def_Ctrl,Y                     ;9FEC0D|B9941C  |;
                        BEQ CODE_9FEC1E                      ;9FEC10|F00C    |;
                        LDA.W #$009F                         ;9FEC12|A99F00  |;
                        STA.B $9B                            ;9FEC15|859B    |;
@@ -12532,159 +12542,12 @@
                        db $00                               ;9FFB23|        |;
  
     Enable_DefControl:
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB24|        |; Run Original Code we Hijacked
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB2C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB34|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB3C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB44|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB4C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB54|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB5C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB64|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB6C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB74|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB7C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB84|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB8C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB94|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFB9C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFBA4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFBAC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFBB4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFBBC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFBC4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFBCC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFBD4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFBDC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFBE4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFBEC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFBF4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFBFC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC04|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC0C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC14|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC1C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC24|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC2C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC34|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC3C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC44|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC4C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC54|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC5C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC64|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC6C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC74|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC7C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC84|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC8C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC94|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFC9C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFCA4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFCAC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFCB4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFCBC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFCC4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFCCC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFCD4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFCDC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFCE4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFCEC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFCF4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFCFC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD04|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD0C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD14|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD1C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD24|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD2C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD34|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD3C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD44|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD4C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD54|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD5C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD64|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD6C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD74|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD7C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD84|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD8C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD94|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFD9C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFDA4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFDAC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFDB4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFDBC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFDC4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFDCC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFDD4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFDDC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFDE4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFDEC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFDF4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFDFC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE04|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE0C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE14|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE1C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE24|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE2C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE34|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE3C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE44|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE4C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE54|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE5C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE64|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE6C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE74|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE7C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE84|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE8C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE94|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFE9C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFEA4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFEAC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFEB4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFEBC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFEC4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFECC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFED4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFEDC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFEE4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFEEC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFEF4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFEFC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF04|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF0C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF14|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF1C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF24|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF2C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF34|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF3C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF44|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF4C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF54|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF5C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF64|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF6C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF74|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF7C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF84|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF8C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF94|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFF9C|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFFA4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFFAC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFFB4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFFBC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFFC4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFFCC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFFD4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFFDC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFFE4|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFFEC|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9FFFF4|        |;
-                       db $FF,$FF,$FF,$FF                   ;9FFFFC|        |;
+                       JSL.L Set_Default_Goalie             ;9FFB24|22B2C69F|; Run Original Code we Hijacked
+                       LDA.W !Defense_Control               ;9FFB28|A90100  |; Enable Def Control On (0001) or Off (0000) via LDA
+                       STA.W Def_Ctrl                       ;9FFB2B|8D941C  |; Store A into :1C94 Home Defense Control
+                       STA.W Def_Ctrl_Awy                   ;9FFB2E|8D961C  |; Store A into :1C96 Away Defense Control
+                       WDM #$01                             ;9FFB31|4201    |; Used for Debug in Emulator
+                       RTS                                  ;9FFB33|60      |; Return from this Subroutine
+                       
+                       padbyte $FF
+                       pad $9FFFFF
