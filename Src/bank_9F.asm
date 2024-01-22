@@ -2313,16 +2313,16 @@
                        RTL                                  ;9F9B2D|6B      |;
  
    Period_Length_Arry:
-                       db $2C,$01                           ;9F9B2E|        |; 5 minute period length
+                       dw $012C                             ;9F9B2E|        |; 5 minute period length
  
           Ten_min_per:
-                       db $58,$02                           ;9F9B30|        |; 10 min period length
+                       dw $0258                             ;9F9B30|        |; 10 min period length
  
        Twenty_Min_Per:
-                       db $B0,$04                           ;9F9B32|        |; 20 min period length
+                       dw $04B0                             ;9F9B32|        |; 20 min period length
  
        Thirty_Sec_Per:
-                       db $1E,$00                           ;9F9B34|        |; 30 second period length
+                       dw $001E                             ;9F9B34|        |; 30 second period length
  
           CODE_9F9B36:
                        LDA.B $A5                            ;9F9B36|A5A5    |;

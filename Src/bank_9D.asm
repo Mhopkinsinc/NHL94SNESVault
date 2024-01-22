@@ -4825,10 +4825,17 @@ DefaultGameSetupValues:
                        db $00,$00,$01,$00,$01,$00,$01,$00   ;9DACBD|        |;
                        db $00,$00,$00,$00,$00,$00,$01,$00   ;9DACC5|        |;
                        db $00,$00,$00,$00                   ;9DACCD|        |;
-                       db $05,$00,$1C,$00,$1C,$00,$03,$00   ;9DACD1|        |; Controls Game Setup Play Mode # of Options allowed.
-                       db $03,$00,$03,$00,$02,$00,$0E,$00   ;9DACD9|        |; Controls Game Setup Penalties # of Options Displayed.
-                       db $5E,$00,$5E,$00,$5E,$00,$9E,$00   ;9DACE1|        |;
-                       db $CE,$00,$FE,$00,$10,$00           ;9DACE9|        |;
+Game_Setup_Menus_Arry_Sizes:                                                ;|; Array of words[0-5] that control the number of options for each menu entry on game setup screen
+                       dw $0005                             ;9DACD1|        |; Play Mode (Regular Season, Playoffs, etc)
+                       dw $001C                             ;9DACD3|        |; Home Team (28)
+                       dw $001C                             ;9DACD5|        |; Away Team (28)
+                       dw !Thirty_Second_Period             ;9DACD7|        |; Period Length (4)
+                       dw $0003                             ;9DACD9|        |; Penalities   (3)
+                       dw $0003                             ;9DACDB|        |; Line Changes (3)
+                       dw $0002                             ;9DACDD|        |; Goalie Control (2)
+                       db $0E,$00,$5E,$00,$5E,$00           ;9DACDE|        |; Goalie Control (2)   
+                       db $5E,$00,$9E,$00,$CE,$00,$FE,$00   ;9DACE5|        |;
+                       db $10,$00                           ;9DACED|        |;
                        db "Regular Season"                  ;9DACEF|        |;
                        db $10,$00                           ;9DACFD|        |;
                        db "Cont. Playoffs"                  ;9DACFF|        |;
