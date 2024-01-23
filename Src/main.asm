@@ -66,3 +66,6 @@
                        incsrc "bank_BF.asm"
                        incsrc "labels.asm"
                        incsrc "config.asm"
+                       incsrc "patches/30SecondPeriods.asm"
+                       incsrc "patches/DefControl.asm"
+                       incsrc "patches/RealTimeClock.asm"
