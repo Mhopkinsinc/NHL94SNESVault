@@ -48,6 +48,9 @@
 00:17AC Selected_Goalie_Awy
 00:17AA Selected_Goalie
 9D:ACD1 Game_Setup_Menus_Arry_Sizes
+9F:85B5 Real_Time_Clock_Speed
+9E:BF65 Real_Time_Pen_Clock
+9F:8667 Real_Time_Pen_Clock
 80:8000 DATA8_808000
 80:8013 DATA8_808013
 80:FEFF UNREACH_80FEFF

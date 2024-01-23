@@ -580,7 +580,8 @@
                        BEQ CODE_9F85D0                      ;9F85AF|F01F    |;
                        LDA.W $1634                          ;9F85B1|AD3416  |;
                        SEC                                  ;9F85B4|38      |;
-                       SBC.W #$0AAA                         ;9F85B5|E9AA0A  |;
+Real_Time_Clock_Speed:
+                       SBC.W #$0AAA                         ;9F85B5|E9AA0A  |; 0444 makes this real time
                        STA.W $1634                          ;9F85B8|8D3416  |;
                        BCS CODE_9F85D0                      ;9F85BB|B013    |;
                        DEC.W $1632                          ;9F85BD|CE3216  |; Decrease Period Timer by 1 second
@@ -652,7 +653,8 @@
                        STA.W $0CF7                          ;9F8661|8DF70C  |;
                        BPL CODE_9F8685                      ;9F8664|101F    |;
                        CLC                                  ;9F8666|18      |;
-                       ADC.W #$0018                         ;9F8667|691800  |;
+Real_Time_Pen_Clock_2:
+                       ADC.W #$0018                         ;9F8667|691800  |; 003C makes this real time
                        STA.W $0CF7                          ;9F866A|8DF70C  |;
                        JSL.L CODE_9ED0A8                    ;9F866D|22A8D09E|;
                        JSL.L CODE_80D322                    ;9F8671|2222D380|;
@@ -12543,7 +12545,7 @@
  
     Enable_DefControl:
                        JSL.L Set_Default_Goalie             ;9FFB24|22B2C69F|; Run Original Code we Hijacked
-                       LDA.W !Defense_Control               ;9FFB28|A90100  |; Enable Def Control On (0001) or Off (0000) via LDA
+                       LDA.W #0000                          ;9FFB28|A90100  |; Enable Def Control On (0001) or Off (0000) via LDA
                        STA.W Def_Ctrl                       ;9FFB2B|8D941C  |; Store A into :1C94 Home Defense Control
                        STA.W Def_Ctrl_Awy                   ;9FFB2E|8D961C  |; Store A into :1C96 Away Defense Control
                        WDM #$01                             ;9FFB31|4201    |; Used for Debug in Emulator

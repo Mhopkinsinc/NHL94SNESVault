@@ -4829,7 +4829,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        dw $0005                             ;9DACD1|        |; Play Mode (Regular Season, Playoffs, etc)
                        dw $001C                             ;9DACD3|        |; Home Team (28)
                        dw $001C                             ;9DACD5|        |; Away Team (28)
-                       dw !Thirty_Second_Period             ;9DACD7|        |; Period Length (4)
+                       dw $0003                             ;9DACD7|        |; Period Length (4)
                        dw $0003                             ;9DACD9|        |; Penalities   (3)
                        dw $0003                             ;9DACDB|        |; Line Changes (3)
                        dw $0002                             ;9DACDD|        |; Goalie Control (2)

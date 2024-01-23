@@ -7538,7 +7538,8 @@
                        SBC.B $C1                            ;9EBF5E|E5C1    |;
                        STA.W $1622                          ;9EBF60|8D2216  |;
                        BPL CODE_9EBFDD                      ;9EBF63|1078    |;
-                       ADC.W #$0018                         ;9EBF65|691800  |;
+  Real_Time_Pen_Clock:
+                       ADC.W #$0018                         ;9EBF65|691800  |; 003C makes this real time
                        STA.W $1622                          ;9EBF68|8D2216  |;
                        LDA.W #$0020                         ;9EBF6B|A92000  |;
                        TSB.W $15DC                          ;9EBF6E|0CDC15  |;

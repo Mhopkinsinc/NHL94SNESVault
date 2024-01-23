@@ -1,6 +1,5 @@
                        lorom
- 
-                       incsrc "config.asm" 
+                        
                        incsrc "bank_80.asm"
                        incsrc "bank_81.asm"
                        incsrc "bank_82.asm"
@@ -66,3 +65,4 @@
                        incsrc "bank_BE.asm"
                        incsrc "bank_BF.asm"
                        incsrc "labels.asm"
+                       incsrc "config.asm"
