@@ -12545,7 +12545,7 @@ Real_Time_Pen_Clock_2:
  
     Enable_DefControl:
                        JSL.L Set_Default_Goalie             ;9FFB24|22B2C69F|; Run Original Code we Hijacked
-                       LDA.W #0000                          ;9FFB28|A90100  |; Enable Def Control On (0001) or Off (0000) via LDA
+                       LDA.W #$0000                         ;9FFB28|A90000  |; Enable Def Control On (0001) or Off (0000) via LDA
                        STA.W Def_Ctrl                       ;9FFB2B|8D941C  |; Store A into :1C94 Home Defense Control
                        STA.W Def_Ctrl_Awy                   ;9FFB2E|8D961C  |; Store A into :1C96 Away Defense Control
                        WDM #$01                             ;9FFB31|4201    |; Used for Debug in Emulator

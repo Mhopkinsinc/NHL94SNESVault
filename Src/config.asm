@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;This Sets Defense Control On or Off by Default
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-!Defense_Control = 1        ; Off = 0 On = 1
+!Defense_Control = 0        ; Off = 0 On = 1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Define Penalty Lengths
@@ -11,7 +11,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Enable Hidden "30 Seconds" Periods Selection in Menu
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-!Thirty_Second_Period = 1     ; Enable = 04,  Disable = 03
+!Thirty_Second_Period = 0     ; Enable = 04,  Disable = 03
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Enable Pull Goalie Wit L+R Trigger
