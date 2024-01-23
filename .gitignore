@@ -25,3 +25,6 @@ Orig_Roms_For_Comparison/
 
 # Ignore the nhl94.smc file in the root directory
 /NHL '94 (USA).sfc
+
+#Ignore Rom Backups
+_rom_backups/

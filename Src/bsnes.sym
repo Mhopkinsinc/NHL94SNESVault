@@ -48,6 +48,9 @@
 00:17AC Selected_Goalie_Awy
 00:17AA Selected_Goalie
 9D:ACD1 Game_Setup_Menus_Arry_Sizes
+9F:85B5 Real_Time_Clock_Speed
+9E:BF65 Real_Time_Pen_Clock
+9F:8667 Real_Time_Pen_Clock_2
 80:8000 DATA8_808000
 80:8013 DATA8_808013
 80:FEFF UNREACH_80FEFF
@@ -330,6 +333,9 @@
 00:1C94 Def Control On or Off 1c94+y = Home 1c94 = Away
 9F:9B34 30 second period length
 9D:ACD1 Array of words[0-5] that control the number of options for each menu entry on game setup screen
+9F:85B5 0444 makes this real time
+9E:BF65 003C makes this real time
+9F:8667 003C makes this real time
 80:8070 Mode 7 Settings
 9C:9623 ? Called During Change of Player Portrai on Game Setup
 9E:B5AB Sub routine to Add Stats, 198Ax = Pen Minutes
