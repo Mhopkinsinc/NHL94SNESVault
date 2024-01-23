@@ -1,7 +1,7 @@
 ---
 name: Request - New Hack
 about: Use this to request a new hack
-title: ''
+title: 'Hack - '
 labels: 'SNES Hack'
 assignees: ''
 

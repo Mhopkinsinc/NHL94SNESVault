@@ -1,7 +1,7 @@
 ---
 name: Code Cleanup / Refactor
 about: Use this to report code refactor or cleanup
-title: ''
+title: 'Code Refactor - '
 labels: 'Code Refactor'
 assignees: ''
 

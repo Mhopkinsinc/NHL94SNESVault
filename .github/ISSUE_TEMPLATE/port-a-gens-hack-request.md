@@ -1,7 +1,7 @@
 ---
 name: Request - Port Gens Hack to SNES
 about: Use this to request porting a GENS hack to SNES
-title: ''
+title: 'Port Gens Hack - '
 labels: 'Port GENS hack to SNES'
 assignees: ''
 
