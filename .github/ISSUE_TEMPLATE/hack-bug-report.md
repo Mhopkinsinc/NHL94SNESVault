@@ -2,7 +2,7 @@
 name: Report - Hack Bug
 about: Use this to report a bug in one of the existing hacks
 title: ''
-labels: ''
+labels: 'SNES Hack - Bug'
 assignees: ''
 
 ---
