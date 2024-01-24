@@ -11,6 +11,9 @@
 # Built Visual Studio Code Extensions
 *.vsix
 
+# Mac OS generated files
+*.DS_Store
+
 # Ignore the Output directory
 Output/
 
@@ -23,8 +26,8 @@ DizExport/
 # Ignore the Orig_Roms_For_Comparison directory
 Orig_Roms_For_Comparison/
 
-# Ignore the nhl94.smc file in the root directory
-/NHL '94 (USA).sfc
+# Ignore the sfc file in the root directory
+/*.sfc
 
 #Ignore Rom Backups
 _rom_backups/
