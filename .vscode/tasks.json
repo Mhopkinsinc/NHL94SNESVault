@@ -23,7 +23,7 @@
         {
             "label": "Compile Rom(smc)",
             "type": "process",
-            "command": "ASAR\\asar-domfix.exe",
+            "command": "ASAR\\asar.exe",
             "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.smc"],
             "problemMatcher": [],
             "group": {
@@ -31,22 +31,22 @@
                 "isDefault": true
             },
             "windows": {
-                "command": "ASAR\\asar-domfix.exe",
+                "command": "ASAR\\asar.exe",
                 "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.smc"]
             },
             "linux": {
-                "command": "./ASAR/asar-domfix",
+                "command": "./ASAR/asar",
                 "args": ["--fix-checksum=off","Src/main.asm","Output/nhl94.smc"]
             },
             "osx": {
-                "command": "./ASAR/asar-domfix",
+                "command": "./ASAR/asar",
                 "args": ["--fix-checksum=off","Src/main.asm","Output/nhl94.smc"]
             }
         },
         {
             "label": "Compile Rom(sfc)",
             "type": "process",
-            "command": "ASAR\\asar-domfix.exe",
+            "command": "ASAR\\asar.exe",
             "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.sfc"],
             "problemMatcher": [],
             "group": {
@@ -54,15 +54,15 @@
                 "isDefault": true
             },
             "windows": {
-                "command": "ASAR\\asar-domfix.exe",
+                "command": "ASAR\\asar.exe",
                 "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.sfc"]
             },
             "linux": {
-                "command": "./ASAR/asar-domfix",
+                "command": "./ASAR/asar",
                 "args": ["--fix-checksum=off","Src/main.asm","Output/nhl94.sfc"]
             },
             "osx": {
-                "command": "./ASAR/asar-domfix",
+                "command": "./ASAR/asar",
                 "args": ["--fix-checksum=off","Src/main.asm","Output/nhl94.sfc"]
             }
         },
