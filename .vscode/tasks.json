@@ -2,6 +2,11 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "1 - Compile Roms",            
+            "problemMatcher": [],
+            "dependsOn": ["Compile Rom(smc)", "Compile Rom(sfc)"]
+        },
+        {
             "label": "Create Export Folder",
             "type": "shell",
             "command": "cmd",
@@ -23,51 +28,53 @@
         {
             "label": "Compile Rom(smc)",
             "type": "process",
-            "command": "ASAR\\asar.exe",
+            "command": "ASAR\\windows\\asar.exe",
             "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.smc"],
             "problemMatcher": [],
+            "dependsOn": ["Create Export Folder"],
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
             "windows": {
-                "command": "ASAR\\asar.exe",
+                "command": "ASAR\\windows\\asar.exe",
                 "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.smc"]
             },
             "linux": {
-                "command": "./ASAR/asar",
+                "command": "./ASAR/linux/asar",
                 "args": ["--fix-checksum=off","Src/main.asm","Output/nhl94.smc"]
             },
             "osx": {
-                "command": "./ASAR/asar",
+                "command": "./ASAR/osx/asar",
                 "args": ["--fix-checksum=off","Src/main.asm","Output/nhl94.smc"]
             }
         },
         {
             "label": "Compile Rom(sfc)",
             "type": "process",
-            "command": "ASAR\\asar.exe",
+            "command": "ASAR\\windows\\asar.exe",
             "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.sfc"],
             "problemMatcher": [],
+            "dependsOn": ["Create Export Folder"],
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
             "windows": {
-                "command": "ASAR\\asar.exe",
+                "command": "ASAR\\windows\\asar.exe",
                 "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.sfc"]
             },
             "linux": {
-                "command": "./ASAR/asar",
+                "command": "./ASAR/linux/asar",
                 "args": ["--fix-checksum=off","Src/main.asm","Output/nhl94.sfc"]
             },
             "osx": {
-                "command": "./ASAR/asar",
+                "command": "./ASAR/osx/asar",
                 "args": ["--fix-checksum=off","Src/main.asm","Output/nhl94.sfc"]
             }
         },
         {
-            "label": "Copy Roms",
+            "label": "Copy Roms",            
             "type": "shell",            
             "command": "cmd",
             "args": ["/c", "copy Output\\nhl94.smc C:\\_Personal\\Roms && copy Output\\nhl94.sfc C:\\_Personal\\Roms"],
@@ -90,11 +97,6 @@
             "label": "Compile Rom and Copy",
             "dependsOn": ["Copy Roms"],
             "problemMatcher": []
-        },
-        {
-            "label": "Compile Roms",            
-            "problemMatcher": [],
-            "dependsOn": ["Compile Rom(smc)", "Compile Rom(sfc)"]
         }
-    ]
+            ]
 }
