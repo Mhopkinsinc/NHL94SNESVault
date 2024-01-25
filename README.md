@@ -17,9 +17,9 @@ Project "Back to the Ice": Decompiling NHL '94 on SNES, Slaying Bugs, Hacking th
         - Real Time Clock
         - Pull The Goalie with L+R trigger buttons
 
-- Run "1 - Compile Roms" task in Visual Studio Code Task Runner.
-    - This task creates .smc and .sfc version of the rom in the Output folder.
-    - Copy the rom to your emulator of choice
+    - Run "1 - Compile Roms" task in Visual Studio Code Task Runner.
+        - This task creates .smc and .sfc version of the rom in the Output folder.
+        - Copy the rom to your emulator of choice
 
 ## Contributing
 
