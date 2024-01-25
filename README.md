@@ -5,7 +5,7 @@ Project "Back to the Ice": Decompiling NHL '94 on SNES, Slaying Bugs, Hacking th
 
 - Install [Visual Studio Code](https://code.visualstudio.com/download) and Clone this Repo. [Not technically required, but makes life easier]
     - Detailed [Windows](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki/Windows) Install / Setup Instructions
-    - Detailed [Mac](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki/Mac) Install / Setup Instructions
+    - Detailed [Mac](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki/macOS) Install / Setup Instructions
     - Detailed [Linux](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki/Linux) Install / Setup Instructions
 
 ## Usage
