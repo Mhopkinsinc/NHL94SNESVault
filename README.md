@@ -28,5 +28,5 @@ Project "Back to the Ice": Decompiling NHL '94 on SNES, Slaying Bugs, Hacking th
     - Request New Hack
     - Request Porting a GENS hack to SNES
     - Report Existing Bug in the game    
-- Fork the project and create a new branch from the issue you created    
-- Create a pull request for review
+- Interested in tweaking things? Start by forking the project, then branch out from the issue you've pinpointed to initiate your modifications.
+    - Create a pull request for review
