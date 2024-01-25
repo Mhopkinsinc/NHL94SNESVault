@@ -1,21 +1,17 @@
 # NHL94SNESVault
 Comprehensive collection of resources for NHL '94 on the SNES.
 
-## Table of Contents
-
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#Contributing)
-
 ## Installation
 
-- Install [Visual Studio Code](https://code.visualstudio.com/download) [Not technically required, but makes life easier]
-    - Clone Git Repository    
+- Install [Visual Studio Code](https://code.visualstudio.com/download) and Clone this Repo. [Not technically required, but makes life easier]
+    - Windows Install
+    - OSX Install
+    - Linux Install
 
 ## Usage
 
 - Edit Src/Config.asm to set your Rom preferences
-    - Def.Control by default
+    - Def. Control ON by default
     - 30 Second Periods 
     - Real Time Clock
     - Pull The Goalie with L+R trigger buttons
