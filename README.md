@@ -1,4 +1,4 @@
-# NHL94' SNESVault
+# NHL 94' SNESVault
 Project "Back to the Ice": Decompiling NHL '94 on SNES, Slaying Bugs, Hacking the Puck, and Power-Playing Enhancements!
 
 ## Installation
