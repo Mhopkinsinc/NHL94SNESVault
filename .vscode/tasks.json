@@ -1,54 +1,102 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
+        {
+            "label": "1 - Compile Roms",            
+            "problemMatcher": [],
+            "dependsOn": ["Compile Rom(smc)", "Compile Rom(sfc)"]
+        },
         {
             "label": "Create Export Folder",
             "type": "shell",
             "command": "cmd",
             "args": ["/C", "if not exist Output mkdir Output"],
-            "problemMatcher": []
+            "problemMatcher": [],
+            "windows": {
+                "command": "cmd",
+                "args": ["/C", "if not exist Output mkdir Output"]
+            },
+            "linux": {
+                "command": "mkdir",
+                "args": ["-p", "Output"]
+            },
+            "osx": {
+                "command": "mkdir",
+                "args": ["-p", "Output"]
+            }
         },
         {
             "label": "Compile Rom(smc)",
             "type": "process",
-            "command": "ASAR\\asar-domfix.exe",
+            "command": "ASAR\\windows\\asar.exe",
             "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.smc"],
             "problemMatcher": [],
+            "dependsOn": ["Create Export Folder"],
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }             
+            },
+            "windows": {
+                "command": "ASAR\\windows\\asar.exe",
+                "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.smc"]
+            },
+            "linux": {
+                "command": "./ASAR/linux/asar",
+                "args": ["--fix-checksum=off","Src/main.asm","Output/nhl94.smc"]
+            },
+            "osx": {
+                "command": "./ASAR/osx/asar",
+                "args": ["--fix-checksum=off","Src/main.asm","Output/nhl94.smc"]
+            }
         },
         {
             "label": "Compile Rom(sfc)",
             "type": "process",
-            "command": "ASAR\\asar-domfix.exe",
+            "command": "ASAR\\windows\\asar.exe",
             "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.sfc"],
             "problemMatcher": [],
+            "dependsOn": ["Create Export Folder"],
             "group": {
                 "kind": "build",
                 "isDefault": true
+            },
+            "windows": {
+                "command": "ASAR\\windows\\asar.exe",
+                "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.sfc"]
+            },
+            "linux": {
+                "command": "./ASAR/linux/asar",
+                "args": ["--fix-checksum=off","Src/main.asm","Output/nhl94.sfc"]
+            },
+            "osx": {
+                "command": "./ASAR/osx/asar",
+                "args": ["--fix-checksum=off","Src/main.asm","Output/nhl94.sfc"]
             }
         },
         {
-            "label": "Copy Roms",
+            "label": "Copy Roms",            
             "type": "shell",            
             "command": "cmd",
             "args": ["/c", "copy Output\\nhl94.smc C:\\_Personal\\Roms && copy Output\\nhl94.sfc C:\\_Personal\\Roms"],
             "problemMatcher": [],
-            "dependsOn": ["Create Export Folder","Compile Rom(smc)","Compile Rom(sfc)"]            
+            "dependsOn": ["Create Export Folder","Compile Rom(smc)","Compile Rom(sfc)"],
+            "windows": {
+                "command": "cmd",
+                "args": ["/c", "copy Output\\nhl94.smc C:\\_Personal\\Roms && copy Output\\nhl94.sfc C:\\_Personal\\Roms"]
+            },
+            "linux": {
+                "command": "cp",
+                "args": ["Output/nhl94.smc", "~/Roms", "&&", "cp", "Output/nhl94.sfc", "~/Roms"]
+            },
+            "osx": {
+                "command": "cp",
+                "args": ["Output/nhl94.smc", "~/Roms", "&&", "cp", "Output/nhl94.sfc", "~/Roms"]
+            }
         },
         {
             "label": "Compile Rom and Copy",
             "dependsOn": ["Copy Roms"],
             "problemMatcher": []
-        },
-        {
-            "label": "Compile Roms",            
-            "problemMatcher": [],
-            "dependsOn": ["Compile Rom(smc)", "Compile Rom(sfc)"]
         }
-    ]
+            ]
 }
