@@ -10,11 +10,12 @@ Project "Back to the Ice": Decompiling NHL '94 on SNES, Slaying Bugs, Hacking th
 
 ## Usage
 
-- Edit Src/Config.asm to set your Rom preferences
-    - Def. Control ON by default
-    - 30 Second Periods 
-    - Real Time Clock
-    - Pull The Goalie with L+R trigger buttons
+- If you just want to build the rom and turn certain hacks on and off:
+    - Edit Src/Config.asm to set your Rom preferences
+        - Def. Control ON by default
+        - 30 Second Periods 
+        - Real Time Clock
+        - Pull The Goalie with L+R trigger buttons
 
 - Run "1 - Compile Roms" task in Visual Studio Code Task Runner.
     - This task creates .smc and .sfc version of the rom in the Output folder.
