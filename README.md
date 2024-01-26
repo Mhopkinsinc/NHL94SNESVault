@@ -9,7 +9,7 @@ Project "Back to the Ice": Decompiling NHL '94 on SNES, Slaying Bugs, Hacking th
     - Detailed [Mac](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki/macOS) Install / Setup Instructions
     - Detailed [Linux](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki/Linux) Install / Setup Instructions
 
-## Usage
+## Building
 
 - If you just want to build the rom and turn certain hacks on and off:
     - Edit Src/Config.asm to set your Rom preferences
@@ -34,3 +34,9 @@ Project "Back to the Ice": Decompiling NHL '94 on SNES, Slaying Bugs, Hacking th
 
 - Interested in tweaking things? Start by forking the project, then branch out from the issue you've pinpointed to initiate your modifications.
     - Create a pull request for review
+
+## Usage
+
+- This project is intended for educational purposes and should be used ethically and legally. Please ensure that you adhere to the following guidelines when using the tools and files provided in this repository.
+    -1. A legally obtained copy of the ROM that corresponds to the files and tools in this repository. This project does not endorse or promote piracy. Ownership of the original ROM is mandatory.
+
