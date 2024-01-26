@@ -38,5 +38,5 @@ Project "Back to the Ice": Decompiling NHL '94 on SNES, Slaying Bugs, Hacking th
 ## Usage
 
 - This project is intended for educational purposes and should be used ethically and legally. Please ensure that you adhere to the following guidelines when using the tools and files provided in this repository.
-    -1. A legally obtained copy of the ROM that corresponds to the files and tools in this repository. This project does not endorse or promote piracy. Ownership of the original ROM is mandatory.
+    - A legally obtained copy of the ROM that corresponds to the files and tools in this repository. This project does not endorse or promote piracy. Ownership of the original ROM is mandatory.
 
