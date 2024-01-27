@@ -7746,7 +7746,7 @@
                        PHA                                  ;9EC174|48      |;
                        LDA.B $8F                            ;9EC175|A58F    |;
                        PHA                                  ;9EC177|48      |;
-                       LDA.W $15DA                          ;9EC178|ADDA15  |;
+                       JSR.W One_Min_Pen                    ;9EC178|205BFB  |; One_Min_Pen Code Injection
                        BEQ CODE_9EC180                      ;9EC17B|F003    |;
                        JMP.W CODE_9EC265                    ;9EC17D|4C65C2  |;
  
@@ -14635,156 +14635,17 @@
                        PLX                                  ;9EFB59|FA      |;
                        RTL                                  ;9EFB5A|6B      |;
  
-          One_Min_Pen:
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFB5B|        |; Used for Debug in emulator
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFB63|        |;  If the values are not equal, branch to the code labeled 'notEqual'
-                       db $FF,$FF                           ;9EFB6B|        |; Pull the Accumulator off the stack before RTS
+          One_Min_Pen:                       
+                       LDA.B $AD                            ;9EFB5B|A5AD    |; Load the value at memory location $0000AD into the Accumulator
+                       CMP.W #$203C                         ;9EFB5D|C93C20  |; Compare the Accumulator with the immediate value $20C3 // C3 is 60 in decimal 1 minute pen.
+                       BNE .not1min                         ;9EFB60|D007    |;  If the values are not equal, branch to the code labeled 'notEqual'
+                       LDA.W #$0001                         ;9EFB62|A90100  |; Load the immediate value $0001 into the Accumulator
+                       STA.W $15DA                          ;9EFB65|8DDA15  |; Store the value in the Accumulator at memory location $15DA
+                       RTS                                  ;9EFB68|60      |; Return to subroutine
  
-              not1min:
-                       db $FF,$FF,$FF,$FF,$FF               ;9EFB6D|        |; Pull the Accumulator off the stack
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFB72|        |; Pad $FF to end of Bank
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFB7A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFB82|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFB8A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFB92|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFB9A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFBA2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFBAA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFBB2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFBBA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFBC2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFBCA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFBD2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFBDA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFBE2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFBEA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFBF2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFBFA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC02|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC0A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC12|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC1A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC22|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC2A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC32|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC3A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC42|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC4A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC52|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC5A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC62|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC6A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC72|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC7A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC82|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC8A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC92|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFC9A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFCA2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFCAA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFCB2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFCBA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFCC2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFCCA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFCD2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFCDA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFCE2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFCEA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFCF2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFCFA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD02|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD0A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD12|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD1A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD22|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD2A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD32|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD3A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD42|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD4A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD52|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD5A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD62|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD6A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD72|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD7A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD82|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD8A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD92|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFD9A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFDA2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFDAA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFDB2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFDBA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFDC2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFDCA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFDD2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFDDA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFDE2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFDEA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFDF2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFDFA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE02|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE0A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE12|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE1A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE22|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE2A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE32|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE3A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE42|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE4A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE52|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE5A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE62|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE6A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE72|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE7A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE82|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE8A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE92|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFE9A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFEA2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFEAA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFEB2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFEBA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFEC2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFECA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFED2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFEDA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFEE2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFEEA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFEF2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFEFA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF02|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF0A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF12|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF1A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF22|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF2A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF32|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF3A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF42|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF4A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF52|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF5A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF62|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF6A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF72|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF7A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF82|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF8A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF92|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFF9A|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFFA2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFFAA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFFB2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFFBA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFFC2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFFCA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFFD2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFFDA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFFE2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFFEA|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;9EFFF2|        |;
-                       db $FF,$FF,$FF,$FF,$FF,$FF           ;9EFFFA|        |;
+            .not1min:
+                       LDA.W $15DA                          ;9EFB69|ADDA15  |; Run original code that was hijacked
+                       RTS                                  ;9EFB6C|60      |; Return to subroutine
+            
+             padbyte $FF
+             pad $9F8000

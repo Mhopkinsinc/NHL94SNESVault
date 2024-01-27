@@ -7,7 +7,7 @@ $001C96,7318,Def_Ctrl_Awy,Def Control On or Off 1c96 = Away,UNUSED
 $9FC6B2,10471090,Set_Default_Goalie,,USED
 $9FFB24,10484516,Enable_DefControl,,USED
 $9EFB5B,10419035,One_Min_Pen,,USED
-$9EFB6D,10419053,not1min,,USED
+$9EFB69,10419049,.not1min,,USED
 $80CE41,8441409,Shootout_Edit_Lines,,USED
 $9CA5E7,10266087,Team_PTR,Team Data Pointer for each Team,USED
 $9CEB4F,10283855,Team_Data_ANH,,USED

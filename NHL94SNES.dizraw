@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProjectXmlSerializer-Root xmlns:exs="https://extendedxmlserializer.github.io/v2" xmlns:ns1="clr-namespace:Diz.Core.model;assembly=Diz.Core" xmlns:ns2="clr-namespace:Diz.Core.model.snes;assembly=Diz.Core" xmlns:sys="https://extendedxmlserializer.github.io/system" xmlns:ns3="clr-namespace:IX.Observable;assembly=IX.Observable" xmlns:ns4="clr-namespace:Diz.Core.export;assembly=Diz.Core" SaveVersion="102" Watermark="DiztinGUIsh" Extra1="" Extra2="" xmlns="clr-namespace:Diz.Core.serialization.xml_serializer;assembly=Diz.Core">
-  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="1047332">
+  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="1048565">
     <LogWriterSettings Format="%label:-22% %code:37%;%pc%|%bytes%|; %comment%" DataPerLine="8" Unlabeled="ShowInPoints" Structure="OneBankPerFile" NewLine="true" OutputExtraWhitespace="true" GenerateFullLine="false" IncludeUnusedLabels="true" PrintLabelSpecificComments="true" RomSizeOverride="-1" FileOrFolderOutPath="DizExport\" OutputToString="false" ErrorFilename="errors.txt" />
     <ProjectSettings exs:member="" BsnesUsageMapImportOnlyChangedUnmarked="true">
       <RomBytesOutputFormatSettings CompressGroupBlock="true" CompressUsingTable1="true" InsertCommentIntoOutputLinesEveryNBytes="2048" />
@@ -27,19 +27,11 @@
         <sys:Item Key="10401195" Value="Sub routine to Add Stats, 198Ax = Pen Minutes" />
         <sys:Item Key="10401202" Value="Get Current Number of pen minutes for the player Load into A register" />
         <sys:Item Key="10401334" Value="Pen Called 3rd already has 2078 also called when penalty ticks down every second" />
-        <sys:Item Key="10419035" Value="Used for Debug in emulator" />
-        <sys:Item Key="10419037" Value="Push the Accumulator onto the stack before we start" />
-        <sys:Item Key="10419040" Value="Compare the Accumulator with the immediate value $20C3 // C3 is 60 in decimal 1 minute pen." />
-        <sys:Item Key="10419038" Value="Load the value at memory location $0000AD into the Accumulator" />
-        <sys:Item Key="10419043" Value=" If the values are not equal, branch to the code labeled 'notEqual'" />
-        <sys:Item Key="10419045" Value="Load the immediate value $0001 into the Accumulator" />
-        <sys:Item Key="10419048" Value="Store the value in the Accumulator at memory location $15DA" />
-        <sys:Item Key="10419051" Value="Pull the Accumulator off the stack before RTS" />
-        <sys:Item Key="10419052" Value="Return from Subroutine" />
-        <sys:Item Key="10419053" Value="Pull the Accumulator off the stack" />
-        <sys:Item Key="10419054" Value="Load the value at memory location $15DA into the Accumulator" />
-        <sys:Item Key="10419057" Value="Return from Subroutine" />
-        <sys:Item Key="10419058" Value="Pad $FF to end of Bank" />
+        <sys:Item Key="10419035" Value="Load the value at memory location $0000AD into the Accumulator" />
+        <sys:Item Key="10419040" Value=" If the values are not equal, branch to the code labeled 'notEqual'" />
+        <sys:Item Key="10419045" Value="Store the value in the Accumulator at memory location $15DA" />
+        <sys:Item Key="10419048" Value="Return to subroutine" />
+        <sys:Item Key="10419037" Value="Compare the Accumulator with the immediate value $20C3 // C3 is 60 in decimal 1 minute pen." />
         <sys:Item Key="10194499" Value="Edit Lines # Of players at positon " />
         <sys:Item Key="10194508" Value="# of Goalies" />
         <sys:Item Key="10194482" Value="# of Goalies" />
@@ -162,6 +154,10 @@
         <sys:Item Key="10403685" Value="003C makes this real time" />
         <sys:Item Key="10454631" Value="003C makes this real time" />
         <sys:Item Key="10454453" Value="0444 makes this real time" />
+        <sys:Item Key="10404216" Value="One_Min_Pen Code Injection" />
+        <sys:Item Key="10419042" Value="Load the immediate value $0001 into the Accumulator" />
+        <sys:Item Key="10419049" Value="Run original code that was hijacked" />
+        <sys:Item Key="10419052" Value="Return to subroutine" />
       </Comments>
       <Labels>
         <sys:Item Key="8454122">
@@ -188,8 +184,8 @@
         <sys:Item Key="10419035">
           <Value exs:type="ns1:Label" Name="One_Min_Pen" Comment="" />
         </sys:Item>
-        <sys:Item Key="10419053">
-          <Value exs:type="ns1:Label" Name="not1min" Comment="" />
+        <sys:Item Key="10419049">
+          <Value exs:type="ns1:Label" Name=".not1min" Comment="" />
         </sys:Item>
         <sys:Item Key="8441409">
           <Value exs:type="ns1:Label" Name="Shootout_Edit_Lines" Comment="" />
@@ -319,9 +315,6 @@
         </sys:Item>
         <sys:Item Key="10454631">
           <Value exs:type="ns1:Label" Name="Real_Time_Pen_Clock_2" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10403715">
-          <Value exs:type="ns1:Label" Name="" Comment="" />
         </sys:Item>
       </Labels>
       <RomBytes>
@@ -41492,152 +41485,152 @@ U
 U
 r 68 A
 r 1747 U
-+09F
++E9E
 ;pos=0E8000
-+09F
-+09F
-.09F
-.09F
-.09F
-+09F
-+09F
-.09F
-.09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-+09F
-+09F
-+09F
-+09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-+09F
-+09F
-+09F
-+09F
-.09F
-.09F
-+09F
-+09F
-+09F
-+09F
-+09F
-+09F
-.09F
-.09F
-+09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-+09F
-.09F
-+09F
-+09F
-.09F
-+09F
-.09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-+09F
-.09F
-+09F
-+09F
-.09F
-+09F
-.09F
-+09F
-+09F
-+09F
-+09F
-+09F
-.09F
-.09F
-.09F
-+09F
-+09F
-.09F
-+09F
-.09F
-+09F
-.09F
-+09F
-.09F
-+09F
-+09F
-.09F
-+09F
-.09F
-.09F
-.09F
-+09F
-.09F
-.09F
-+09F
++09E
++09E
+.09E
+.09E
+.09E
++09E
++09E
+.09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++I9E
+.09E
+.09E
++09E
+.09E
++09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
+.09E
++E9E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++I9E
+.09E
+.09E
++09F
+.09F
++09F
+.09F
++09F
+.09F
+.09F
++09F
+.09F
++09F
+.09F
+.09F
++09F
++09F
++09F
++09F
++09F
+.09F
+.09F
++09F
+.09F
++09F
+.09F
+.09F
++09F
++09F
++09F
++E9E
+.09E
+.09E
++09E
++09E
++09E
++09E
++09E
++09E
+.09E
+.09E
++09E
++09E
+.09E
+.09E
++09E
+.09E
++09E
++09E
+.09E
++09E
++09E
+.09E
++09E
+.09E
+.09E
+.09E
++09E
+.09E
++09E
+.09E
++09E
+.09E
++09E
++09E
+.09E
++09E
+.09E
++09E
++09E
++E9E
++09E
++09E
+.09E
+.09E
+.09E
++09E
++I9E
+.09E
++09E
+.09E
++09E
+.09E
++09E
+.09E
++09E
++09E
+.09E
++09E
+.09E
+.09E
+.09E
++09E
+.09E
+.09E
++Q9E
 +09F
 +09F
 +09F
@@ -74828,15 +74821,15 @@ r 150 U
 +09E
 .09E
 +09E
-+09E
++I9E
 .09E
 .09E
-+09E
++I9E
 .09E
-+09E
++Y9E
 .09E
 .09E
-+09E
++E9E
 .09E
 .09E
 .09E
@@ -75034,7 +75027,7 @@ U
 .09E
 +09E
 .09E
-+09E
++M9E
 .09E
 .09E
 .09E
@@ -75792,48 +75785,48 @@ U
 .09E
 +09E
 +09E
-+09F
-+09F
-.09F
-.09F
-+09F
-.09F
-.09F
-+09F
-+09F
-+09F
-+09F
-+09F
-+09F
-.09F
-.09F
-+09F
-+09F
-.09F
-.09F
-+09F
-+09F
-.09F
-.09F
-.09F
-+09F
-.09F
-.09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-+09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-+09F
++E9E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
++09E
++09E
++09E
++09E
++09E
+.09E
+.09E
++09E
++09E
+.09E
+.09E
++09E
++09E
+.09E
+.09E
+.09E
++09E
+.09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++09E
++09E
+.09E
++I9E
+.09E
++Y9E
+.09E
+.09E
++E9F
 .09F
 +09F
 .09F
@@ -75981,13 +75974,13 @@ r 8 +09F
 +09F
 .09F
 .09F
-+09F
-+09F
-.09F
-+09F
-.09F
-+09F
-+09F
++E9E
++09E
+.09E
++09E
+.09E
++09E
++Q9E
 r 12 U
 +09F
 +09F
@@ -76100,49 +76093,49 @@ r 12 U
 .09F
 +09F
 r 17 U
-+09F
-.09F
-+09F
-+09F
-.09F
-+09F
-+09F
-.09F
-+09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-.09F
-+09F
-+09F
-.09F
-+09F
-+09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-.09F
++E9E
+.09E
++09E
++09E
+.09E
++09E
++09E
+.09E
++09E
++09E
+.09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++I9E
+.09E
+.09E
+.09E
++09E
++09E
+.09E
++09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++I9E
+.09E
+.09E
+.09E
 +09F
 .09F
 +09F
@@ -87246,15 +87239,29 @@ r 12 U
 .09F
 +09F
 +09F
-r 8 X09F
-XI9F
-r 8 X09F
-XQ9F
-XE9F
-X09F
-X09F
-X09F
-XQ9F
++E9F
+.09F
++09F
+.09F
+.09F
++I9F
+.I9F
++09F
+.I9F
+.09F
++09F
+.09F
+.09F
++Q9F
++E9F
+.Q9F
+.E9F
++Q9F
+UE9F
+U09F
+UQ9F
+U09F
+UQ9F
 r 1166 U
 +09F
 ;pos=0F8000

@@ -7,7 +7,7 @@
 9F:C6B2 Set_Default_Goalie
 9F:FB24 Enable_DefControl
 9E:FB5B One_Min_Pen
-9E:FB6D not1min
+9E:FB69 .not1min
 80:CE41 Shootout_Edit_Lines
 9C:A5E7 Team_PTR
 9C:EB4F Team_Data_ANH
@@ -321,8 +321,8 @@
 00:1C96 Def Control On or Off 1c96 = Away
 9F:C6B2 Called When Ron Barr Intro Screen Ends, Sets Starting Home + Away Goalie
 9F:FB24 Run Original Code we Hijacked
-9E:FB5B Used for Debug in emulator
-9E:FB6D Pull the Accumulator off the stack
+9E:FB5B Load the value at memory location $0000AD into the Accumulator
+9E:FB69 Run original code that was hijacked
 9C:A5E7 Anaheim
 9C:A657 Start of All Stars East Header (85) bytes
 9C:9649 PTR Table For Banner Text Per Team

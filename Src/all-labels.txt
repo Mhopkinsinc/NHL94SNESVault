@@ -6,7 +6,7 @@
 ;!^!-USED-!                        Set_Default_Goalie = $9FC6B2
 ;!^!-USED-!                        Enable_DefControl = $9FFB24
 ;!^!-USED-!                        One_Min_Pen = $9EFB5B
-;!^!-USED-!                        not1min = $9EFB6D
+;!^!-USED-!                        .not1min = $9EFB69
 ;!^!-USED-!                        Shootout_Edit_Lines = $80CE41
 ;!^!-USED-!                        Team_PTR = $9CA5E7; !^ Team Data Pointer for each Team ^!
 ;!^!-USED-!                        Team_Data_ANH = $9CEB4F
@@ -50,7 +50,6 @@
 ;!^!-USED-!                        Real_Time_Clock_Speed = $9F85B5
 ;!^!-USED-!                        Real_Time_Pen_Clock = $9EBF65
 ;!^!-USED-!                        Real_Time_Pen_Clock_2 = $9F8667
-;!^!-UNUSED-!  
 ;!^!-USED-!                        CODE_80802A = $80802A
 ;!^!-USED-!                        CODE_80804D = $80804D
 ;!^!-USED-!                        CODE_808055 = $808055

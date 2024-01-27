@@ -38,7 +38,7 @@
             },
             "windows": {
                 "command": "ASAR\\windows\\asar.exe",
-                "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.smc"]
+                "args": ["--verbose","--fix-checksum=off","Src\\main.asm","Output\\nhl94.smc"]
             },
             "linux": {
                 "command": "./ASAR/linux/asar",
@@ -62,7 +62,7 @@
             },
             "windows": {
                 "command": "ASAR\\windows\\asar.exe",
-                "args": ["--fix-checksum=off","Src\\main.asm","Output\\nhl94.sfc"]
+                "args": ["--verbose","--fix-checksum=off","Src\\main.asm","Output\\nhl94.sfc"]
             },
             "linux": {
                 "command": "./ASAR/linux/asar",

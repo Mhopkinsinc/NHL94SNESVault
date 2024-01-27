@@ -12552,4 +12552,4 @@ Real_Time_Pen_Clock_2:
                        RTS                                  ;9FFB33|60      |; Return from this Subroutine
                        
                        padbyte $FF
-                       pad $9FFFFF
+                       pad $A08000
