@@ -18,6 +18,7 @@ Please use the [Wiki](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki) for in
         - 30 Second Periods 
         - Real Time Clock
         - 1 Minute Penalties
+        - Pull Goalie During Game Play with L+R Trigger buttons (Coming Soon)
 
     - Run "1 - Compile Roms" task in Visual Studio Code Task Runner.
         - This task creates .smc and .sfc version of the rom in the Output folder.
