@@ -17,7 +17,7 @@ Please use the [Wiki](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki) for in
         - Def. Control ON by default
         - 30 Second Periods 
         - Real Time Clock
-        - Pull The Goalie with L+R trigger buttons
+        - 1 Minute Penalties
 
     - Run "1 - Compile Roms" task in Visual Studio Code Task Runner.
         - This task creates .smc and .sfc version of the rom in the Output folder.
