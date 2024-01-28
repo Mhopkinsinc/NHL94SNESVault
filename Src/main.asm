@@ -67,6 +67,7 @@
                        incsrc "labels.asm"
                        incsrc "config.asm"
                        incsrc "DizSettings.asm"
+                       incsrc "patches/CPUPullGoalie.asm"
                        incsrc "patches/30SecondPeriods.asm"
                        incsrc "patches/DefControl.asm"
                        incsrc "patches/RealTimeClock.asm"
