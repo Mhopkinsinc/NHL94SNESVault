@@ -7955,7 +7955,7 @@
                        LDA.W $1D85                          ;80C87F|AD851D  |;
                        CMP.W #$0006                         ;80C882|C90600  |;
                        BMI CODE_80C851                      ;80C885|30CA    |;
-                       LDA.W $178E                          ;80C887|AD8E17  |;
+                       LDA.W Score_HmAw                     ;80C887|AD8E17  |;
                        CMP.W $1790                          ;80C88A|CD9017  |;
                        BEQ CODE_80C851                      ;80C88D|F0C2    |;
                        STZ.W $1D81                          ;80C88F|9C811D  |;
@@ -8070,7 +8070,7 @@
                        JMP.W CODE_80CA05                    ;80C955|4C05CA  |;
  
           CODE_80C958:
-                       LDA.W $178E                          ;80C958|AD8E17  |;
+                       LDA.W Score_HmAw                     ;80C958|AD8E17  |;
                        SEC                                  ;80C95B|38      |;
                        SBC.W $1790                          ;80C95C|ED9017  |;
                        BNE CODE_80C964                      ;80C95F|D003    |;
@@ -8083,7 +8083,7 @@
                        PHA                                  ;80C968|48      |;
                        LDA.B $8D                            ;80C969|A58D    |;
                        PHA                                  ;80C96B|48      |;
-                       LDA.W $178E                          ;80C96C|AD8E17  |;
+                       LDA.W Score_HmAw                     ;80C96C|AD8E17  |;
                        SEC                                  ;80C96F|38      |;
                        SBC.W $1790                          ;80C970|ED9017  |;
                        BMI CODE_80C97A                      ;80C973|3005    |;

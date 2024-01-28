@@ -2,6 +2,11 @@
                        Def_Ctrl = $001C94; !^ Def Control On or Off 1c94+y = Home 1c94 = Away ^!
                        Selected_Goalie_Awy = $0017AC
                        Selected_Goalie = $0017AA
+                       Score_HmAw = $9E178E; !^ 178E Home 1790 Away Score ^!
+                       period = $9E1630
+ 
+                       clock_remaining_time = $9E1632
+                       GoalieInNetHmAw = $9E17AA
                        LOOSE_OP_808185 = $808185
                        LOOSE_OP_808468 = $808468
                        LOOSE_OP_8084FF = $8084FF

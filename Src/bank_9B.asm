@@ -2500,7 +2500,7 @@
                        db $EE,$11,$0D,$6B                   ;9B9B67|        |;
  
           CODE_9B9B6B:
-                       LDA.W $1630                          ;9B9B6B|AD3016  |;
+                       LDA.W period                         ;9B9B6B|AD3016  |;
                        CMP.W #$0003                         ;9B9B6E|C90300  |;
                        BEQ CODE_9B9BA4                      ;9B9B71|F031    |;
                        STZ.B $00                            ;9B9B73|6400    |;
@@ -3717,10 +3717,14 @@
                        PLA                                  ;9BAB4C|68      |;
                        LSR A                                ;9BAB4D|4A      |;
                        PHA                                  ;9BAB4E|48      |;
+          CODE_9BAB4F:
                        LDA.B $01,S                          ;9BAB4F|A301    |;
                        BEQ CODE_9BAB5C                      ;9BAB51|F009    |;
-                       db $22,$36,$B1,$9B,$68,$3A,$48,$80   ;9BAB53|        |;
-                       db $F3                               ;9BAB5B|        |;
+                       JSL.L CODE_9BB136                    ;9BAB53|2236B19B|;
+                       PLA                                  ;9BAB57|68      |;
+                       DEC A                                ;9BAB58|3A      |;
+                       PHA                                  ;9BAB59|48      |;
+                       BRA CODE_9BAB4F                      ;9BAB5A|80F3    |;
  
           CODE_9BAB5C:
                        PLA                                  ;9BAB5C|68      |;
@@ -3781,12 +3785,12 @@
           CODE_9BABDF:
                        CMP.W #$FFC0                         ;9BABDF|C9C0FF  |;
                        BPL CODE_9BABE7                      ;9BABE2|1003    |;
-                       db $A9,$C0,$FF                       ;9BABE4|        |;
+                       LDA.W #$FFC0                         ;9BABE4|A9C0FF  |;
  
           CODE_9BABE7:
                        CMP.W #$0040                         ;9BABE7|C94000  |;
                        BMI CODE_9BABEF                      ;9BABEA|3003    |;
-                       db $A9,$40,$00                       ;9BABEC|        |;
+                       LDA.W #$0040                         ;9BABEC|A94000  |;
  
           CODE_9BABEF:
                        STA.W $0CEB                          ;9BABEF|8DEB0C  |;
@@ -3795,9 +3799,14 @@
                        STA.W $0DD7                          ;9BABF8|8DD70D  |;
                        CMP.W $0CBF                          ;9BABFB|CDBF0C  |;
                        BPL CODE_9BAC11                      ;9BABFE|1011    |;
-                       db $AD,$BF,$0C,$38,$E9,$04,$00,$CD   ;9BAC00|        |;
-                       db $D7,$0D,$10,$03,$AD,$D7,$0D,$80   ;9BAC08|        |;
-                       db $0F                               ;9BAC10|        |;
+                       LDA.W $0CBF                          ;9BAC00|ADBF0C  |;
+                       SEC                                  ;9BAC03|38      |;
+                       SBC.W #$0004                         ;9BAC04|E90400  |;
+                       CMP.W $0DD7                          ;9BAC07|CDD70D  |;
+                       BPL CODE_9BAC0F                      ;9BAC0A|1003    |;
+                       db $AD,$D7,$0D                       ;9BAC0C|        |;
+          CODE_9BAC0F:
+                       BRA CODE_9BAC20                      ;9BAC0F|800F    |;
  
           CODE_9BAC11:
                        LDA.W $0CBF                          ;9BAC11|ADBF0C  |;
@@ -3836,7 +3845,7 @@
                        SBC.W #$0002                         ;9BAC4F|E90200  |;
                        CMP.W $0D75                          ;9BAC52|CD750D  |;
                        BPL CODE_9BAC5A                      ;9BAC55|1003    |;
-                       db $AD,$75,$0D                       ;9BAC57|        |;
+                       LDA.W $0D75                          ;9BAC57|AD750D  |;
  
           CODE_9BAC5A:
                        BRA CODE_9BAC6B                      ;9BAC5A|800F    |;
@@ -3852,7 +3861,7 @@
           CODE_9BAC6B:
                        CMP.W #$FFC0                         ;9BAC6B|C9C0FF  |;
                        BPL CODE_9BAC73                      ;9BAC6E|1003    |;
-                       db $A9,$C0,$FF                       ;9BAC70|        |;
+                       LDA.W #$FFC0                         ;9BAC70|A9C0FF  |;
  
           CODE_9BAC73:
                        CMP.W #$0040                         ;9BAC73|C94000  |;
@@ -3870,7 +3879,7 @@
                        SBC.W #$0002                         ;9BAC8D|E90200  |;
                        CMP.W $0DD7                          ;9BAC90|CDD70D  |;
                        BPL CODE_9BAC98                      ;9BAC93|1003    |;
-                       db $AD,$D7,$0D                       ;9BAC95|        |;
+                       LDA.W $0DD7                          ;9BAC95|ADD70D  |;
  
           CODE_9BAC98:
                        BRA CODE_9BACA9                      ;9BAC98|800F    |;
@@ -4092,9 +4101,15 @@
                        LDA.W $0AE7                          ;9BAE7F|ADE70A  |;
                        CMP.W #$000F                         ;9BAE82|C90F00  |;
                        BEQ CODE_9BAE9D                      ;9BAE85|F016    |;
-                       db $0A,$AA,$A9,$0F,$00,$8D,$F3,$0A   ;9BAE87|        |;
-                       db $BD,$55,$0D,$8D,$75,$0D,$BD,$B7   ;9BAE8F|        |;
-                       db $0D,$8D,$D7,$0D,$80,$32           ;9BAE97|        |;
+                       ASL A                                ;9BAE87|0A      |;
+                       TAX                                  ;9BAE88|AA      |;
+                       LDA.W #$000F                         ;9BAE89|A90F00  |;
+                       STA.W $0AF3                          ;9BAE8C|8DF30A  |;
+                       LDA.W $0D55,X                        ;9BAE8F|BD550D  |;
+                       STA.W $0D75                          ;9BAE92|8D750D  |;
+                       LDA.W $0DB7,X                        ;9BAE95|BDB70D  |;
+                       STA.W $0DD7                          ;9BAE98|8DD70D  |;
+                       BRA CODE_9BAECF                      ;9BAE9B|8032    |;
  
           CODE_9BAE9D:
                        LDA.W #$000F                         ;9BAE9D|A90F00  |;
@@ -4286,27 +4301,52 @@
           CODE_9BB0C5:
                        LDA.B $99                            ;9BB0C5|A599    |;
                        CMP.W #$577E                         ;9BB0C7|C97E57  |;
-                       BNE UNREACH_9BB0E5                   ;9BB0CA|D019    |;
+                       BNE CODE_9BB0E5                      ;9BB0CA|D019    |;
                        LDA.B $9B                            ;9BB0CC|A59B    |;
                        CMP.W #$007E                         ;9BB0CE|C97E00  |;
-                       BNE UNREACH_9BB0E5                   ;9BB0D1|D012    |;
+                       BNE CODE_9BB0E5                      ;9BB0D1|D012    |;
                        LDA.W $15D8                          ;9BB0D3|ADD815  |;
                        BIT.W #$0010                         ;9BB0D6|891000  |;
                        BEQ CODE_9BB12F                      ;9BB0D9|F054    |;
-                       db $A9,$7E,$00,$85,$9B,$A9,$76,$E6   ;9BB0DB|        |;
-                       db $85,$99                           ;9BB0E3|        |;
+                       LDA.W #$007E                         ;9BB0DB|A97E00  |;
+                       STA.B $9B                            ;9BB0DE|859B    |;
+                       LDA.W #$E676                         ;9BB0E0|A976E6  |;
+                       STA.B $99                            ;9BB0E3|8599    |;
  
-       UNREACH_9BB0E5:
-                       db $A5,$99,$38,$E9,$7A,$00,$85,$99   ;9BB0E5|        |;
-                       db $A5,$9B,$E9,$00,$00,$85,$9B,$A5   ;9BB0ED|        |;
-                       db $99,$CD,$1F,$0D,$F0,$04,$5C,$9D   ;9BB0F5|        |;
-                       db $B1,$9B,$A5,$9B,$CD,$21,$0D,$F0   ;9BB0FD|        |;
-                       db $04,$5C,$9D,$B1,$9B,$A5,$99,$18   ;9BB105|        |;
-                       db $69,$7A,$00,$85,$99,$90,$02,$E6   ;9BB10D|        |;
-                       db $9B,$C9,$76,$E6,$D0,$11,$A5,$9B   ;9BB115|        |;
-                       db $C9,$7E,$00,$D0,$0A,$A9,$7E,$00   ;9BB11D|        |;
-                       db $85,$9B,$A9,$7E,$57,$85,$99,$64   ;9BB125|        |;
-                       db $C1,$6B                           ;9BB12D|        |;
+          CODE_9BB0E5:
+                       LDA.B $99                            ;9BB0E5|A599    |;
+                       SEC                                  ;9BB0E7|38      |;
+                       SBC.W #$007A                         ;9BB0E8|E97A00  |;
+                       STA.B $99                            ;9BB0EB|8599    |;
+                       LDA.B $9B                            ;9BB0ED|A59B    |;
+                       SBC.W #$0000                         ;9BB0EF|E90000  |;
+                       STA.B $9B                            ;9BB0F2|859B    |;
+                       LDA.B $99                            ;9BB0F4|A599    |;
+                       CMP.W $0D1F                          ;9BB0F6|CD1F0D  |;
+                       BEQ CODE_9BB0FF                      ;9BB0F9|F004    |;
+                       JML.L CODE_9BB19D                    ;9BB0FB|5C9DB19B|;
+          CODE_9BB0FF:
+                       LDA.B $9B                            ;9BB0FF|A59B    |;
+                       CMP.W $0D21                          ;9BB101|CD210D  |;
+                       BEQ CODE_9BB10A                      ;9BB104|F004    |;
+                       db $5C,$9D,$B1,$9B                   ;9BB106|        |;
+ 
+          CODE_9BB10A:
+                       LDA.B $99                            ;9BB10A|A599    |;
+                       CLC                                  ;9BB10C|18      |;
+                       ADC.W #$007A                         ;9BB10D|697A00  |;
+                       STA.B $99                            ;9BB110|8599    |;
+                       BCC CODE_9BB116                      ;9BB112|9002    |;
+                       db $E6,$9B                           ;9BB114|        |;
+          CODE_9BB116:
+                       CMP.W #$E676                         ;9BB116|C976E6  |;
+                       BNE CODE_9BB12C                      ;9BB119|D011    |;
+                       db $A5,$9B,$C9,$7E,$00,$D0,$0A,$A9   ;9BB11B|        |;
+                       db $7E,$00,$85,$9B,$A9,$7E,$57,$85   ;9BB123|        |;
+                       db $99                               ;9BB12B|        |;
+          CODE_9BB12C:
+                       STZ.B $C1                            ;9BB12C|64C1    |;
+                       RTL                                  ;9BB12E|6B      |;
  
           CODE_9BB12F:
                        JSL.L CODE_9BB19D                    ;9BB12F|229DB19B|;
@@ -4339,14 +4379,14 @@
           CODE_9BB167:
                        LDA.B $99                            ;9BB167|A599    |;
                        CMP.W $0D1F                          ;9BB169|CD1F0D  |;
-                       BNE UNREACH_9BB176                   ;9BB16C|D008    |;
+                       BNE CODE_9BB176                      ;9BB16C|D008    |;
                        LDA.B $9B                            ;9BB16E|A59B    |;
                        CMP.W $0D21                          ;9BB170|CD210D  |;
-                       BNE UNREACH_9BB176                   ;9BB173|D001    |;
+                       BNE CODE_9BB176                      ;9BB173|D001    |;
                        RTL                                  ;9BB175|6B      |;
  
-       UNREACH_9BB176:
-                       db $22,$9D,$B1,$9B                   ;9BB176|        |;
+          CODE_9BB176:
+                       JSL.L CODE_9BB19D                    ;9BB176|229DB19B|;
  
           CODE_9BB17A:
                        LDA.B $99                            ;9BB17A|A599    |;
@@ -4464,12 +4504,12 @@
                        BPL CODE_9BB213                      ;9BB252|10BF    |;
                        LDA.W $2180                          ;9BB254|AD8021  |;
                        STA.W $0DF9                          ;9BB257|8DF90D  |;
-                       BPL UNREACH_9BB260                   ;9BB25A|1004    |;
+                       BPL CODE_9BB260                      ;9BB25A|1004    |;
                        LDA.B #$FF                           ;9BB25C|A9FF    |;
                        BRA CODE_9BB262                      ;9BB25E|8002    |;
  
-       UNREACH_9BB260:
-                       db $A9,$00                           ;9BB260|        |;
+          CODE_9BB260:
+                       LDA.B #$00                           ;9BB260|A900    |;
  
           CODE_9BB262:
                        STA.W $0DFA                          ;9BB262|8DFA0D  |;
