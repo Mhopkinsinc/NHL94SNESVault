@@ -18,6 +18,9 @@ Please use the [Wiki](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki) for in
         - 30 Second Periods 
         - Real Time Clock
         - 1 Minute Penalties
+        - Modify when CPU pulls goalie if it is losing:
+            - Change how early the goalie is pulled
+            - Change if the goalie is pulled when losing by 1, 2, 3 or more
         - Pull Goalie During Game Play with L+R Trigger buttons (Coming Soon)
 
     - Run "1 - Compile Roms" task in Visual Studio Code Task Runner.
