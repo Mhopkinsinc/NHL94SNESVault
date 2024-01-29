@@ -10,8 +10,8 @@
             pad $9ED149
 
             org $9ED150                            ;Seconds Remaining to Pull Goalie
-            padByte !CPU_Pull_Goalie_Time_Left     ;Original Value was 3D (Hex) 61 seconds
-            pad $9ED151            
+            padWord !CPU_Pull_Goalie_Time_Left     ;Original Value was 3D (Hex) 61 seconds
+            pad $9ED152            
         
         else                ;Restore Original Values if DizImport is enabled
 
