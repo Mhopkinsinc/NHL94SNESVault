@@ -4,7 +4,9 @@ Please see the [Installation / Setup](https://github.com/Mhopkinsinc/NHL94SNESVa
 
 ## Installation
 
-- Install [Git](https://git-scm.com/downloads) & [Visual Studio Code](https://code.visualstudio.com/download) and Clone this Repo. [Not technically required, but makes life easier]
+- Just want to try out some of the hacks? Download the latest [app](https://github.com/Mhopkinsinc/NHL94SNESVault/releases) in the releases section to enable / configure some of the available hacks.
+  
+- Dev Install [Git](https://git-scm.com/downloads) & [Visual Studio Code](https://code.visualstudio.com/download) and Clone this Repo. [Not technically required, but makes life easier]
     
     - Detailed [Windows](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki/Windows) Install / Setup Instructions
     - Detailed [Mac](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki/macOS) Install / Setup Instructions
