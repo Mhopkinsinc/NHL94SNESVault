@@ -343,10 +343,10 @@
                        STA.W $1E77                          ;9D82E0|8D771E  |;
                        STZ.W $1E45                          ;9D82E3|9C451E  |;
                        STZ.W $1E47                          ;9D82E6|9C471E  |;
-                       STZ.B $91                            ;9D82E9|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9D82E9|6491    |;
                        JSL.L CODE_9D8330                    ;9D82EB|2230839D|;
                        LDA.W #$0002                         ;9D82EF|A90200  |;
-                       STA.B $91                            ;9D82F2|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9D82F2|8591    |;
                        JSL.L CODE_9D8330                    ;9D82F4|2230839D|;
                        LDA.W $1C98                          ;9D82F8|AD981C  |;
                        STA.W $1E41                          ;9D82FB|8D411E  |;
@@ -397,7 +397,7 @@
                        SEC                                  ;9D8356|38      |;
                        SBC.B $AD                            ;9D8357|E5AD    |;
                        STA.B $A5                            ;9D8359|85A5    |;
-                       LDY.B $91                            ;9D835B|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9D835B|A491    |;
                        LDA.W $1E45,Y                        ;9D835D|B9451E  |;
                        CLC                                  ;9D8360|18      |;
                        ADC.B $A5                            ;9D8361|65A5    |;
@@ -627,11 +627,11 @@
                        LDA.W #$FFFF                         ;9D8520|A9FFFF  |;
                        STA.L $7E3454                        ;9D8523|8F54347E|;
                        STA.L $7E3452                        ;9D8527|8F52347E|;
-                       STZ.B $91                            ;9D852B|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9D852B|6491    |;
                        LDA.W $1DB9                          ;9D852D|ADB91D  |;
                        STA.L $7E345A                        ;9D8530|8F5A347E|;
                        LDA.W #$0002                         ;9D8534|A90200  |;
-                       STA.B $91                            ;9D8537|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9D8537|8591    |;
                        LDA.W $1DB9                          ;9D8539|ADB91D  |;
                        STA.L $7E345C                        ;9D853C|8F5C347E|;
                        JSL.L CODE_9DDDB3                    ;9D8540|22B3DD9D|;
@@ -639,7 +639,7 @@
                        STA.L $7F7500                        ;9D8547|8F00757F|;
                        JSL.L CODE_9DE0D4                    ;9D854B|22D4E09D|;
                        LDA.W #$0002                         ;9D854F|A90200  |;
-                       STA.B $91                            ;9D8552|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9D8552|8591    |;
                        LDA.B $8F                            ;9D8554|A58F    |;
                        PHA                                  ;9D8556|48      |;
                        LDA.B $8D                            ;9D8557|A58D    |;
@@ -683,7 +683,7 @@
                        STA.B $A5                            ;9D85B0|85A5    |;
                        JSL.L CODE_9FC427                    ;9D85B2|2227C49F|;
                        JSL.L CODE_9EC7BE                    ;9D85B6|22BEC79E|;
-                       STZ.B $91                            ;9D85BA|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9D85BA|6491    |;
                        LDA.B $8F                            ;9D85BC|A58F    |;
                        PHA                                  ;9D85BE|48      |;
                        LDA.B $8D                            ;9D85BF|A58D    |;
@@ -742,7 +742,7 @@
                        JSL.L CODE_9DDDB3                    ;9D863F|22B3DD9D|;
                        JSL.L CODE_9DE0D4                    ;9D8643|22D4E09D|;
                        LDA.W #$0002                         ;9D8647|A90200  |;
-                       STA.B $91                            ;9D864A|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9D864A|8591    |;
                        LDA.B $8F                            ;9D864C|A58F    |;
                        PHA                                  ;9D864E|48      |;
                        LDA.B $8D                            ;9D864F|A58D    |;
@@ -763,7 +763,7 @@
                        STA.B $A9                            ;9D8670|85A9    |;
                        JSL.L CODE_9FC623                    ;9D8672|2223C69F|;
                        JSL.L CODE_9EC7BE                    ;9D8676|22BEC79E|;
-                       STZ.B $91                            ;9D867A|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9D867A|6491    |;
                        LDA.B $8F                            ;9D867C|A58F    |;
                        PHA                                  ;9D867E|48      |;
                        LDA.B $8D                            ;9D867F|A58D    |;
@@ -890,7 +890,7 @@
                        db $69,$65,$20,$20,$20               ;9D87B0|        |;
  
           CODE_9D87B5:
-                       LDY.B $91                            ;9D87B5|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9D87B5|A491    |;
                        LDA.W $1CDC,Y                        ;9D87B7|B9DC1C  |;
                        STA.B $89                            ;9D87BA|8589    |;
                        LDA.W #$009C                         ;9D87BC|A99C00  |;
@@ -1122,14 +1122,14 @@
                        LDA.W $1C98                          ;9D89F4|AD981C  |;
                        CMP.W #$0018                         ;9D89F7|C91800  |;
                        BCS CODE_9D89FE                      ;9D89FA|B002    |;
-                       STZ.B $91                            ;9D89FC|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9D89FC|6491    |;
  
           CODE_9D89FE:
                        LDA.W $1C9A                          ;9D89FE|AD9A1C  |;
                        CMP.W #$0018                         ;9D8A01|C91800  |;
                        BCS CODE_9D8A0B                      ;9D8A04|B005    |;
                        LDA.W #$0002                         ;9D8A06|A90200  |;
-                       STA.B $91                            ;9D8A09|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9D8A09|8591    |;
  
           CODE_9D8A0B:
                        LDA.W #$009A                         ;9D8A0B|A99A00  |;
@@ -1692,7 +1692,7 @@
                        ASL A                                ;9D8F7F|0A      |;
                        CLC                                  ;9D8F80|18      |;
                        ADC.W #$7500                         ;9D8F81|690075  |;
-                       STA.B $91                            ;9D8F84|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9D8F84|8591    |;
                        LDA.W #$0000                         ;9D8F86|A90000  |;
                        ADC.W #$007F                         ;9D8F89|697F00  |;
                        STA.B $93                            ;9D8F8C|8593    |;
@@ -1710,7 +1710,7 @@
                        LDA.W #$0007                         ;9D8F9D|A90700  |;
                        STA.B $C5                            ;9D8FA0|85C5    |;
                        STA.B $C7                            ;9D8FA2|85C7    |;
-                       LDA.B [$91]                          ;9D8FA4|A791    |;
+                       LDA.B [zpCurntTeamLoopVal]           ;9D8FA4|A791    |;
                        CLC                                  ;9D8FA6|18      |;
                        ADC.L $7E35CE                        ;9D8FA7|6FCE357E|;
                        STA.L $7EA676,X                      ;9D8FAB|9F76A67E|;
@@ -1718,9 +1718,9 @@
                        STA.L $7EA686,X                      ;9D8FB2|9F86A67E|;
                        INX                                  ;9D8FB6|E8      |;
                        INX                                  ;9D8FB7|E8      |;
-                       INC.B $91                            ;9D8FB8|E691    |;
-                       INC.B $91                            ;9D8FBA|E691    |;
-                       LDA.B [$91]                          ;9D8FBC|A791    |;
+                       INC.B zpCurntTeamLoopVal             ;9D8FB8|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9D8FBA|E691    |;
+                       LDA.B [zpCurntTeamLoopVal]           ;9D8FBC|A791    |;
                        CLC                                  ;9D8FBE|18      |;
                        ADC.L $7E35CE                        ;9D8FBF|6FCE357E|;
  
@@ -1730,9 +1730,9 @@
                        INX                                  ;9D8FC8|E8      |;
                        DEC.B $C5                            ;9D8FC9|C6C5    |;
                        BNE CODE_9D8FC3                      ;9D8FCB|D0F6    |;
-                       INC.B $91                            ;9D8FCD|E691    |;
-                       INC.B $91                            ;9D8FCF|E691    |;
-                       LDA.B [$91]                          ;9D8FD1|A791    |;
+                       INC.B zpCurntTeamLoopVal             ;9D8FCD|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9D8FCF|E691    |;
+                       LDA.B [zpCurntTeamLoopVal]           ;9D8FD1|A791    |;
                        CLC                                  ;9D8FD3|18      |;
                        ADC.L $7E35CE                        ;9D8FD4|6FCE357E|;
                        ORA.W #$8000                         ;9D8FD8|090080  |;
@@ -1741,9 +1741,9 @@
                        STA.L $7EA776,X                      ;9D8FE2|9F76A77E|;
                        INX                                  ;9D8FE6|E8      |;
                        INX                                  ;9D8FE7|E8      |;
-                       INC.B $91                            ;9D8FE8|E691    |;
-                       INC.B $91                            ;9D8FEA|E691    |;
-                       LDA.B [$91]                          ;9D8FEC|A791    |;
+                       INC.B zpCurntTeamLoopVal             ;9D8FE8|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9D8FEA|E691    |;
+                       LDA.B [zpCurntTeamLoopVal]           ;9D8FEC|A791    |;
                        CLC                                  ;9D8FEE|18      |;
                        ADC.L $7E35CE                        ;9D8FEF|6FCE357E|;
                        ORA.W #$8000                         ;9D8FF3|090080  |;
@@ -1850,7 +1850,7 @@
                        AND.W #$00FF                         ;9D90AE|29FF00  |;
                        STA.B $B5                            ;9D90B1|85B5    |;
                        BEQ CODE_9D910B                      ;9D90B3|F056    |;
-                       STZ.B $91                            ;9D90B5|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9D90B5|6491    |;
  
           CODE_9D90B7:
                        LDA.B [$89]                          ;9D90B7|A789    |;
@@ -1869,7 +1869,7 @@
                        STA.B $8D                            ;9D90D5|858D    |;
                        LDA.W #$0005                         ;9D90D7|A90500  |;
                        STA.W $0A2A                          ;9D90DA|8D2A0A  |;
-                       LDX.B $91                            ;9D90DD|A691    |;
+                       LDX.B zpCurntTeamLoopVal             ;9D90DD|A691    |;
                        LDA.L $7E3548,X                      ;9D90DF|BF48357E|;
                        ADC.W #$0030                         ;9D90E3|693000  |;
                        STA.W $0A2C                          ;9D90E6|8D2C0A  |;
@@ -1881,8 +1881,8 @@
                        LDA.W #$6E82                         ;9D90F9|A9826E  |;
                        STA.W $0CD9                          ;9D90FC|8DD90C  |;
                        JSL.L CODE_9EC7BE                    ;9D90FF|22BEC79E|;
-                       INC.B $91                            ;9D9103|E691    |;
-                       INC.B $91                            ;9D9105|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9D9103|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9D9105|E691    |;
                        DEC.B $B5                            ;9D9107|C6B5    |;
                        BNE CODE_9D90B7                      ;9D9109|D0AC    |;
  
@@ -3193,13 +3193,13 @@ DefaultGameSetupValues:
  
           CODE_9D9D26:
                        JSL.L CODE_9DE0E9                    ;9D9D26|22E9E09D|;
-                       LDY.B $91                            ;9D9D2A|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9D9D2A|A491    |;
                        LDA.W $1796,Y                        ;9D9D2C|B99617  |;
                        INC A                                ;9D9D2F|1A      |;
                        STA.B $A5                            ;9D9D30|85A5    |;
                        STA.W $0D43                          ;9D9D32|8D430D  |;
                        STZ.W $0D47                          ;9D9D35|9C470D  |;
-                       LDX.B $91                            ;9D9D38|A691    |;
+                       LDX.B zpCurntTeamLoopVal             ;9D9D38|A691    |;
                        LDA.W $1C98,X                        ;9D9D3A|BD981C  |;
                        STA.L $7E3454                        ;9D9D3D|8F54347E|;
                        LDA.W #$001D                         ;9D9D41|A91D00  |;
@@ -3281,7 +3281,7 @@ DefaultGameSetupValues:
                        STA.B $8F                            ;9D9DFA|858F    |;
                        LDA.W $1C98                          ;9D9DFC|AD981C  |;
                        STA.B $A9                            ;9D9DFF|85A9    |;
-                       LDA.B $91                            ;9D9E01|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9D9E01|A591    |;
                        BEQ CODE_9D9E0D                      ;9D9E03|F008    |;
                        LDA.W $1C9A                          ;9D9E05|AD9A1C  |;
                        STA.B $A9                            ;9D9E08|85A9    |;
@@ -3352,11 +3352,11 @@ DefaultGameSetupValues:
                        BRA CODE_9D9E86                      ;9D9E9A|80EA    |;
  
           CODE_9D9E9C:
-                       LDA.B $91                            ;9D9E9C|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9D9E9C|A591    |;
                        EOR.W #$0002                         ;9D9E9E|490200  |;
-                       STA.B $91                            ;9D9EA1|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9D9EA1|8591    |;
                        JSL.L CODE_80AF7B                    ;9D9EA3|227BAF80|;
-                       LDX.B $91                            ;9D9EA7|A691    |;
+                       LDX.B zpCurntTeamLoopVal             ;9D9EA7|A691    |;
                        LDA.W $1C98,X                        ;9D9EA9|BD981C  |;
                        STA.L $7E3454                        ;9D9EAC|8F54347E|;
                        LDX.W #$004C                         ;9D9EB0|A24C00  |;
@@ -3490,7 +3490,7 @@ DefaultGameSetupValues:
                        ASL A                                ;9D9FC0|0A      |;
                        ASL A                                ;9D9FC1|0A      |;
                        STA.B $A5                            ;9D9FC2|85A5    |;
-                       LDY.B $91                            ;9D9FC4|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9D9FC4|A491    |;
                        LDA.W #$009C                         ;9D9FC6|A99C00  |;
                        STA.B $97                            ;9D9FC9|8597    |;
                        LDA.W $1CDC,Y                        ;9D9FCB|B9DC1C  |;
@@ -4149,16 +4149,16 @@ DefaultGameSetupValues:
                        STA.W $0E4F                          ;9DA6A8|8D4F0E  |;
                        LDA.W #$FFFF                         ;9DA6AB|A9FFFF  |;
                        STA.L $7E34CC                        ;9DA6AE|8FCC347E|;
-                       LDA.B $91                            ;9DA6B2|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9DA6B2|A591    |;
                        PHA                                  ;9DA6B4|48      |;
                        LDA.W #$0000                         ;9DA6B5|A90000  |;
-                       STA.B $91                            ;9DA6B8|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DA6B8|8591    |;
                        JSL.L CODE_9B9334                    ;9DA6BA|2234939B|;
                        LDA.W #$0002                         ;9DA6BE|A90200  |;
-                       STA.B $91                            ;9DA6C1|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DA6C1|8591    |;
                        JSL.L CODE_9B9334                    ;9DA6C3|2234939B|;
                        PLA                                  ;9DA6C7|68      |;
-                       STA.B $91                            ;9DA6C8|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DA6C8|8591    |;
                        STZ.B $C1                            ;9DA6CA|64C1    |;
                        STZ.B $A5                            ;9DA6CC|64A5    |;
                        JSR.W CODE_9DAC4F                    ;9DA6CE|204FAC  |;
@@ -4383,7 +4383,7 @@ DefaultGameSetupValues:
                        LDA.W #$007E                         ;9DA8DF|A97E00  |;
                        STA.B $93                            ;9DA8E2|8593    |;
                        LDA.W #$34BC                         ;9DA8E4|A9BC34  |;
-                       STA.B $91                            ;9DA8E7|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DA8E7|8591    |;
                        LDA.W #$009D                         ;9DA8E9|A99D00  |;
                        STA.B $97                            ;9DA8EC|8597    |;
                        LDA.W #$ACD1                         ;9DA8EE|A9D1AC  |;
@@ -4392,7 +4392,7 @@ DefaultGameSetupValues:
                        LDY.B $C1                            ;9DA8F5|A4C1    |;
                        LDA.B [$95],Y                        ;9DA8F7|B795    |;
                        STA.B $B5                            ;9DA8F9|85B5    |;
-                       LDA.B [$91],Y                        ;9DA8FB|B791    |;
+                       LDA.B [zpCurntTeamLoopVal],Y         ;9DA8FB|B791    |;
                        STA.B $B1                            ;9DA8FD|85B1    |;
                        LDA.L $7E34BC                        ;9DA8FF|AFBC347E|;
                        CMP.W #$0002                         ;9DA903|C90200  |;
@@ -4407,7 +4407,7 @@ DefaultGameSetupValues:
           CODE_9DA917:
                        JSR.W CODE_9DA921                    ;9DA917|2021A9  |;
                        LDA.B $B1                            ;9DA91A|A5B1    |;
-                       STA.B [$91],Y                        ;9DA91C|9791    |;
+                       STA.B [zpCurntTeamLoopVal],Y         ;9DA91C|9791    |;
                        LDA.B $AD                            ;9DA91E|A5AD    |;
  
           CODE_9DA920:
@@ -4690,7 +4690,7 @@ DefaultGameSetupValues:
                        STA.B $8F                            ;9DAB78|858F    |;
                        LDA.W #$0A5C                         ;9DAB7A|A95C0A  |;
                        STA.B $8D                            ;9DAB7D|858D    |;
-                       STZ.B $91                            ;9DAB7F|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9DAB7F|6491    |;
                        LDA.W #$FFFF                         ;9DAB81|A9FFFF  |;
                        STA.B $A9                            ;9DAB84|85A9    |;
                        LDX.W #$0008                         ;9DAB86|A20800  |;
@@ -4705,7 +4705,7 @@ DefaultGameSetupValues:
                        LDA.W #$0A2A                         ;9DAB9B|A92A0A  |;
                        STA.B $8D                            ;9DAB9E|858D    |;
                        LDA.W #$0002                         ;9DABA0|A90200  |;
-                       STA.B $91                            ;9DABA3|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DABA3|8591    |;
                        LDA.W #$FFFF                         ;9DABA5|A9FFFF  |;
                        STA.B $A9                            ;9DABA8|85A9    |;
                        LDX.W #$0008                         ;9DABAA|A20800  |;
@@ -4749,11 +4749,11 @@ DefaultGameSetupValues:
                        JSR.W CODE_9DAC22                    ;9DAC07|2022AC  |;
  
           CODE_9DAC0A:
-                       STZ.B $91                            ;9DAC0A|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9DAC0A|6491    |;
                        LDA.L $7E345E                        ;9DAC0C|AF5E347E|;
                        STA.L $7E345A                        ;9DAC10|8F5A347E|;
                        LDA.W #$0002                         ;9DAC14|A90200  |;
-                       STA.B $91                            ;9DAC17|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DAC17|8591    |;
                        LDA.L $7E345E                        ;9DAC19|AF5E347E|;
                        STA.L $7E345C                        ;9DAC1D|8F5C347E|;
  
@@ -4761,7 +4761,7 @@ DefaultGameSetupValues:
                        RTS                                  ;9DAC21|60      |;
  
           CODE_9DAC22:
-                       STX.B $91                            ;9DAC22|8691    |;
+                       STX.B zpCurntTeamLoopVal             ;9DAC22|8691    |;
                        LDA.L $7E345E                        ;9DAC24|AF5E347E|;
                        JSL.L CODE_9DC973                    ;9DAC28|2273C99D|;
                        JSL.L CODE_9FC4D0                    ;9DAC2C|22D0C49F|;
@@ -4899,7 +4899,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        db "Goalie"                          ;9DAE67|        |;
  
           CODE_9DAE6D:
-                       LDA.B $91                            ;9DAE6D|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9DAE6D|A591    |;
                        PHA                                  ;9DAE6F|48      |;
                        PHX                                  ;9DAE70|DA      |;
                        LDA.W #$0001                         ;9DAE71|A90100  |;
@@ -4946,7 +4946,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        LDA.W #$009A                         ;9DAED2|A99A00  |;
                        STA.B $93                            ;9DAED5|8593    |;
                        LDA.W #$E9A3                         ;9DAED7|A9A3E9  |;
-                       STA.B $91                            ;9DAEDA|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DAEDA|8591    |;
                        LDA.W $0D11                          ;9DAEDC|AD110D  |;
                        ASL A                                ;9DAEDF|0A      |;
                        ASL A                                ;9DAEE0|0A      |;
@@ -4962,7 +4962,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        STA.B $C7                            ;9DAEF1|85C7    |;
  
           CODE_9DAEF3:
-                       LDA.B [$91],Y                        ;9DAEF3|B791    |;
+                       LDA.B [zpCurntTeamLoopVal],Y         ;9DAEF3|B791    |;
                        CLC                                  ;9DAEF5|18      |;
                        ADC.L $7E35CE                        ;9DAEF6|6FCE357E|;
                        CLC                                  ;9DAEFA|18      |;
@@ -4978,7 +4978,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        BNE CODE_9DAEF3                      ;9DAF0C|D0E5    |;
  
           CODE_9DAF0E:
-                       LDA.B [$91],Y                        ;9DAF0E|B791    |;
+                       LDA.B [zpCurntTeamLoopVal],Y         ;9DAF0E|B791    |;
                        CLC                                  ;9DAF10|18      |;
                        ADC.L $7E35CE                        ;9DAF11|6FCE357E|;
                        CLC                                  ;9DAF15|18      |;
@@ -5014,7 +5014,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        STA.W $0D0F                          ;9DAF53|8D0F0D  |;
                        PLX                                  ;9DAF56|FA      |;
                        PLA                                  ;9DAF57|68      |;
-                       STA.B $91                            ;9DAF58|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DAF58|8591    |;
                        RTS                                  ;9DAF5A|60      |;
  
           CODE_9DAF5B:
@@ -6470,13 +6470,13 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
  
           CODE_9DBD4F:
                        JSL.L CODE_9DE0E9                    ;9DBD4F|22E9E09D|;
-                       LDA.B $91                            ;9DBD53|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9DBD53|A591    |;
                        PHA                                  ;9DBD55|48      |;
                        STZ.W $07C6                          ;9DBD56|9CC607  |;
                        JSL.L CODE_9DC697                    ;9DBD59|2297C69D|;
                        PLA                                  ;9DBD5D|68      |;
-                       STA.B $91                            ;9DBD5E|8591    |;
-                       LDA.B $91                            ;9DBD60|A591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DBD5E|8591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9DBD60|A591    |;
                        PHA                                  ;9DBD62|48      |;
                        STZ.W $1DB9                          ;9DBD63|9CB91D  |;
                        JSL.L CODE_9FC93D                    ;9DBD66|223DC99F|;
@@ -6511,7 +6511,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
  
           CODE_9DBDAA:
                        PLA                                  ;9DBDAA|68      |;
-                       STA.B $91                            ;9DBDAB|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DBDAB|8591    |;
                        RTL                                  ;9DBDAD|6B      |;
  
        UNREACH_9DBDAE:
@@ -6537,7 +6537,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        SBC.W #$0007                         ;9DBE15|E90700  |;
                        BMI CODE_9DBE54                      ;9DBE18|303A    |;
                        STA.W $1D9B                          ;9DBE1A|8D9B1D  |;
-                       LDY.B $91                            ;9DBE1D|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9DBE1D|A491    |;
                        LDA.W #$009C                         ;9DBE1F|A99C00  |;
                        STA.B $97                            ;9DBE22|8597    |;
                        LDA.W $1CDC,Y                        ;9DBE24|B9DC1C  |;
@@ -6570,9 +6570,9 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        JMP.W CODE_9DBD7B                    ;9DBE58|4C7BBD  |;
  
           CODE_9DBE5B:
-                       LDA.B $91                            ;9DBE5B|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9DBE5B|A591    |;
                        EOR.W #$0002                         ;9DBE5D|490200  |;
-                       STA.B $91                            ;9DBE60|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DBE60|8591    |;
                        STZ.W $1DB9                          ;9DBE62|9CB91D  |;
                        JSL.L CODE_9FC93D                    ;9DBE65|223DC99F|;
                        LDA.B $A5                            ;9DBE69|A5A5    |;
@@ -6604,12 +6604,12 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        LDA.L $7E35D0                        ;9DBEA1|AFD0357E|;
                        STA.B $AD                            ;9DBEA5|85AD    |;
                        JSL.L CODE_9FBD9C                    ;9DBEA7|229CBD9F|;
-                       LDY.B $91                            ;9DBEAB|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9DBEAB|A491    |;
                        LDA.W $1C98,Y                        ;9DBEAD|B9981C  |;
                        LDX.W #$00C8                         ;9DBEB0|A2C800  |;
                        LDY.W #$0010                         ;9DBEB3|A01000  |;
                        JSL.L CODE_9DDFBF                    ;9DBEB6|22BFDF9D|;
-                       LDY.B $91                            ;9DBEBA|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9DBEBA|A491    |;
                        LDA.W #$009C                         ;9DBEBC|A99C00  |;
                        STA.B $97                            ;9DBEBF|8597    |;
                        LDA.W $1CDC,Y                        ;9DBEC1|B9DC1C  |;
@@ -6871,13 +6871,13 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        STA.B $8D                            ;9DC114|858D    |;
                        PLA                                  ;9DC116|68      |;
                        STA.B $8F                            ;9DC117|858F    |;
-                       LDY.B $91                            ;9DC119|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9DC119|A491    |;
                        LDA.W $1C98,Y                        ;9DC11B|B9981C  |;
                        STA.B $A9                            ;9DC11E|85A9    |;
                        JSL.L CODE_9FBE08                    ;9DC120|2208BE9F|;
                        LDA.W #$0000                         ;9DC124|A90000  |;
                        STA.L $7E3464                        ;9DC127|8F64347E|;
-                       LDY.B $91                            ;9DC12B|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9DC12B|A491    |;
                        LDA.W #$009C                         ;9DC12D|A99C00  |;
                        STA.B $8F                            ;9DC130|858F    |;
                        LDA.W $1CDC,Y                        ;9DC132|B9DC1C  |;
@@ -7052,7 +7052,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
  
           CODE_9DC2DE:
                        LDX.W #$00CE                         ;9DC2DE|A2CE00  |;
-                       LDA.B $91                            ;9DC2E1|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9DC2E1|A591    |;
                        BNE CODE_9DC2E8                      ;9DC2E3|D003    |;
                        LDX.W #$00EE                         ;9DC2E5|A2EE00  |;
  
@@ -7733,7 +7733,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        LDA.B [$8D],Y                        ;9DC97E|B78D    |;
                        AND.W #$00FF                         ;9DC980|29FF00  |;
                        PHA                                  ;9DC983|48      |;
-                       LDY.B $91                            ;9DC984|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9DC984|A491    |;
                        LDA.W #$009C                         ;9DC986|A99C00  |;
                        STA.B $8F                            ;9DC989|858F    |;
                        LDA.W $1CDC,Y                        ;9DC98B|B9DC1C  |;
@@ -7759,7 +7759,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
           CODE_9DC9B3:
                        PHY                                  ;9DC9B3|5A      |;
                        PHX                                  ;9DC9B4|DA      |;
-                       LDA.B $91                            ;9DC9B5|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9DC9B5|A591    |;
                        BEQ CODE_9DC9C1                      ;9DC9B7|F008    |;
                        LDA.W #$2400                         ;9DC9B9|A90024  |;
                        STA.W $1E87                          ;9DC9BC|8D871E  |;
@@ -7771,7 +7771,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
  
           CODE_9DC9C7:
                        LDA.B $A5                            ;9DC9C7|A5A5    |;
-                       LDY.B $91                            ;9DC9C9|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9DC9C9|A491    |;
                        STA.B $A5                            ;9DC9CB|85A5    |;
                        LDA.W $1C98,Y                        ;9DC9CD|B9981C  |;
                        LDX.W #$001A                         ;9DC9D0|A21A00  |;
@@ -7791,7 +7791,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        STA.B $10                            ;9DC9F1|8510    |;
                        JSL.L CODE_80C373                    ;9DC9F3|2273C380|;
                        STX.B $00                            ;9DC9F7|8600    |;
-                       LDA.B $91                            ;9DC9F9|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9DC9F9|A591    |;
                        BEQ CODE_9DCA08                      ;9DC9FB|F00B    |;
                        LDA.W #$6900                         ;9DC9FD|A90069  |;
                        STA.B $10                            ;9DCA00|8510    |;
@@ -7824,7 +7824,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        LDA.L $7E35D2                        ;9DCA3E|AFD2357E|;
                        CLC                                  ;9DCA42|18      |;
                        ADC.W $1E87                          ;9DCA43|6D871E  |;
-                       LDY.B $91                            ;9DCA46|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9DCA46|A491    |;
                        BEQ CODE_9DCA4E                      ;9DCA48|F004    |;
                        CLC                                  ;9DCA4A|18      |;
                        ADC.W #$0030                         ;9DCA4B|693000  |;
@@ -7849,7 +7849,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        LDA.L $7E35D2                        ;9DCA6F|AFD2357E|;
                        CLC                                  ;9DCA73|18      |;
                        ADC.W $1E87                          ;9DCA74|6D871E  |;
-                       LDY.B $91                            ;9DCA77|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9DCA77|A491    |;
                        BEQ CODE_9DCA7F                      ;9DCA79|F004    |;
                        CLC                                  ;9DCA7B|18      |;
                        ADC.W #$0030                         ;9DCA7C|693000  |;
@@ -7860,7 +7860,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        JSL.L CODE_9DCAB7                    ;9DCA81|22B7CA9D|;
  
           CODE_9DCA85:
-                       LDY.B $91                            ;9DCA85|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9DCA85|A491    |;
                        LDA.W $1C98,Y                        ;9DCA87|B9981C  |;
                        ASL A                                ;9DCA8A|0A      |;
                        ASL A                                ;9DCA8B|0A      |;
@@ -7875,7 +7875,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        INC.B $8D                            ;9DCA9D|E68D    |;
                        LDA.B [$8D]                          ;9DCA9F|A78D    |;
                        STA.B $0E                            ;9DCAA1|850E    |;
-                       LDA.B $91                            ;9DCAA3|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9DCAA3|A591    |;
                        BEQ CODE_9DCAAC                      ;9DCAA5|F005    |;
                        LDY.W #$0010                         ;9DCAA7|A01000  |;
                        BRA CODE_9DCAAF                      ;9DCAAA|8003    |;
@@ -8003,7 +8003,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        RTL                                  ;9DCB71|6B      |;
  
           CODE_9DCB72:
-                       LDY.B $91                            ;9DCB72|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9DCB72|A491    |;
                        LDA.W #$009C                         ;9DCB74|A99C00  |;
                        STA.B $97                            ;9DCB77|8597    |;
                        LDA.W $1CDC,Y                        ;9DCB79|B9DC1C  |;
@@ -8032,12 +8032,12 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
           CODE_9DCB9F:
                        PHY                                  ;9DCB9F|5A      |;
                        PHX                                  ;9DCBA0|DA      |;
-                       LDX.B $91                            ;9DCBA1|A691    |;
+                       LDX.B zpCurntTeamLoopVal             ;9DCBA1|A691    |;
                        JSL.L CODE_9DCC36                    ;9DCBA3|2236CC9D|;
                        LDA.B $A5                            ;9DCBA7|A5A5    |;
                        ASL A                                ;9DCBA9|0A      |;
                        TAX                                  ;9DCBAA|AA      |;
-                       LDA.B $91                            ;9DCBAB|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9DCBAB|A591    |;
                        BEQ CODE_9DCBC3                      ;9DCBAD|F014    |;
                        LDA.W #$2400                         ;9DCBAF|A90024  |;
                        STA.W $1E87                          ;9DCBB2|8D871E  |;
@@ -8069,7 +8069,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        LDA.L $7E35D2                        ;9DCBEE|AFD2357E|;
                        CLC                                  ;9DCBF2|18      |;
                        ADC.W $1E87                          ;9DCBF3|6D871E  |;
-                       LDY.B $91                            ;9DCBF6|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9DCBF6|A491    |;
                        BEQ CODE_9DCBFE                      ;9DCBF8|F004    |;
                        CLC                                  ;9DCBFA|18      |;
                        ADC.W #$0030                         ;9DCBFB|693000  |;
@@ -8078,7 +8078,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        PLX                                  ;9DCBFE|FA      |;
                        PLY                                  ;9DCBFF|7A      |;
                        JSL.L CODE_808E2D                    ;9DCC00|222D8E80|;
-                       LDY.B $91                            ;9DCC04|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9DCC04|A491    |;
                        LDA.W $1C98,Y                        ;9DCC06|B9981C  |;
                        ASL A                                ;9DCC09|0A      |;
                        ASL A                                ;9DCC0A|0A      |;
@@ -8093,7 +8093,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        INC.B $8D                            ;9DCC1C|E68D    |;
                        LDA.B [$8D]                          ;9DCC1E|A78D    |;
                        STA.B $0E                            ;9DCC20|850E    |;
-                       LDA.B $91                            ;9DCC22|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9DCC22|A591    |;
                        BEQ CODE_9DCC2B                      ;9DCC24|F005    |;
                        LDY.W #$0010                         ;9DCC26|A01000  |;
                        BRA CODE_9DCC2E                      ;9DCC29|8003    |;
@@ -8107,7 +8107,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        RTL                                  ;9DCC35|6B      |;
  
           CODE_9DCC36:
-                       STX.B $91                            ;9DCC36|8691    |;
+                       STX.B zpCurntTeamLoopVal             ;9DCC36|8691    |;
                        LDA.W $1C98,X                        ;9DCC38|BD981C  |;
                        CMP.L $7E346C,X                      ;9DCC3B|DF6C347E|;
                        BNE CODE_9DCC42                      ;9DCC3F|D001    |;
@@ -8123,7 +8123,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        TXA                                  ;9DCC49|8A      |;
                        LSR A                                ;9DCC4A|4A      |;
                        JSL.L CODE_9DC973                    ;9DCC4B|2273C99D|;
-                       LDX.B $91                            ;9DCC4F|A691    |;
+                       LDX.B zpCurntTeamLoopVal             ;9DCC4F|A691    |;
                        LDA.W $1C98,X                        ;9DCC51|BD981C  |;
                        STA.L $7E346C,X                      ;9DCC54|9F6C347E|;
                        LDX.W #$001A                         ;9DCC58|A21A00  |;
@@ -8145,7 +8145,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        STX.B $00                            ;9DCC7F|8600    |;
                        LDA.B $01,S                          ;9DCC81|A301    |;
                        TAX                                  ;9DCC83|AA      |;
-                       LDA.B $91                            ;9DCC84|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9DCC84|A591    |;
                        BEQ CODE_9DCC8D                      ;9DCC86|F005    |;
                        LDA.W #$2D00                         ;9DCC88|A9002D  |;
                        BRA CODE_9DCC90                      ;9DCC8B|8003    |;
@@ -8705,7 +8705,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
  
           CODE_9DD9AD:
                        STZ.W $07C6                          ;9DD9AD|9CC607  |;
-                       LDA.B $91                            ;9DD9B0|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9DD9B0|A591    |;
                        PHA                                  ;9DD9B2|48      |;
                        JSL.L CODE_9F96F7                    ;9DD9B3|22F7969F|;
                        LDA.W #$0081                         ;9DD9B7|A98100  |;
@@ -9071,14 +9071,14 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        LDA.W $1C98                          ;9DDD44|AD981C  |;
                        CMP.W #$0018                         ;9DDD47|C91800  |;
                        BCS CODE_9DDD4E                      ;9DDD4A|B002    |;
-                       STZ.B $91                            ;9DDD4C|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9DDD4C|6491    |;
  
           CODE_9DDD4E:
                        LDA.W $1C9A                          ;9DDD4E|AD9A1C  |;
                        CMP.W #$0018                         ;9DDD51|C91800  |;
                        BCS CODE_9DDD5B                      ;9DDD54|B005    |;
                        LDA.W #$0002                         ;9DDD56|A90200  |;
-                       STA.B $91                            ;9DDD59|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DDD59|8591    |;
  
           CODE_9DDD5B:
                        LDA.W #$009A                         ;9DDD5B|A99A00  |;
@@ -9108,11 +9108,11 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        STA.L $7F7500                        ;9DDDA7|8F00757F|;
                        JSL.L CODE_9DDDB3                    ;9DDDAB|22B3DD9D|;
                        PLA                                  ;9DDDAF|68      |;
-                       STA.B $91                            ;9DDDB0|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DDDB0|8591    |;
                        RTL                                  ;9DDDB2|6B      |;
  
           CODE_9DDDB3:
-                       LDA.B $91                            ;9DDDB3|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9DDDB3|A591    |;
                        PHA                                  ;9DDDB5|48      |;
                        LDA.L $7E3454                        ;9DDDB6|AF54347E|;
                        STA.B $00                            ;9DDDBA|8500    |;
@@ -9120,7 +9120,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        LDA.L $7E3452                        ;9DDDBE|AF52347E|;
                        BPL CODE_9DDDC9                      ;9DDDC2|1005    |;
                        LDA.W #$0002                         ;9DDDC4|A90200  |;
-                       STA.B $91                            ;9DDDC7|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DDDC7|8591    |;
  
           CODE_9DDDC9:
                        LDA.L $7E345C                        ;9DDDC9|AF5C347E|;
@@ -9187,7 +9187,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        BPL CODE_9DDEA9                      ;9DDE69|103E    |;
                        LDA.L $7E3454                        ;9DDE6B|AF54347E|;
                        BPL CODE_9DDE73                      ;9DDE6F|1002    |;
-                       STZ.B $91                            ;9DDE71|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9DDE71|6491    |;
  
           CODE_9DDE73:
                        LDA.L $7E345A                        ;9DDE73|AF5A347E|;
@@ -9297,7 +9297,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
  
           CODE_9DDF6F:
                        PLA                                  ;9DDF6F|68      |;
-                       STA.B $91                            ;9DDF70|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DDF70|8591    |;
                        RTL                                  ;9DDF72|6B      |;
  
           CODE_9DDF73:
@@ -9470,13 +9470,13 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        RTL                                  ;9DE0E8|6B      |;
  
           CODE_9DE0E9:
-                       STZ.B $91                            ;9DE0E9|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9DE0E9|6491    |;
                        LDX.W $0AC6                          ;9DE0EB|AEC60A  |;
                        LDA.W $1C84,X                        ;9DE0EE|BD841C  |;
                        CMP.W #$0002                         ;9DE0F1|C90200  |;
                        BNE CODE_9DE0FB                      ;9DE0F4|D005    |;
                        LDA.W #$0002                         ;9DE0F6|A90200  |;
-                       STA.B $91                            ;9DE0F9|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9DE0F9|8591    |;
  
           CODE_9DE0FB:
                        RTL                                  ;9DE0FB|6B      |;

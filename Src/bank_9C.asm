@@ -206,9 +206,9 @@
  
           CODE_9C8583:
                        JSL.L CODE_9DE0E9                    ;9C8583|22E9E09D|;
-                       LDA.B $91                            ;9C8587|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9C8587|A591    |;
                        PHA                                  ;9C8589|48      |;
-                       LDX.B $91                            ;9C858A|A691    |;
+                       LDX.B zpCurntTeamLoopVal             ;9C858A|A691    |;
                        LDA.W $1C98,X                        ;9C858C|BD981C  |;
                        STA.L $7E3454                        ;9C858F|8F54347E|;
                        LDA.W #$001D                         ;9C8593|A91D00  |;
@@ -355,7 +355,7 @@
                        LDA.W #$0000                         ;9C86F3|A90000  |;
                        STA.L $7E3478                        ;9C86F6|8F78347E|;
                        PLA                                  ;9C86FA|68      |;
-                       STA.B $91                            ;9C86FB|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9C86FB|8591    |;
                        RTL                                  ;9C86FD|6B      |;
  
           CODE_9C86FE:
@@ -579,7 +579,7 @@
                        JSL.L CODE_9FC427                    ;9C8993|2227C49F|;
                        JSL.L CODE_9EC894                    ;9C8997|2294C89E|;
                        STX.W $1DC9                          ;9C899B|8EC91D  |;
-                       LDA.B $91                            ;9C899E|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9C899E|A591    |;
                        BEQ CODE_9C89A5                      ;9C89A0|F003    |;
                        db $A9,$1A,$00                       ;9C89A2|        |;
  
@@ -780,7 +780,7 @@
                        AND.W #$00FF                         ;9C8C39|29FF00  |;
                        TAX                                  ;9C8C3C|AA      |;
                        STX.W $1DC9                          ;9C8C3D|8EC91D  |;
-                       LDA.B $91                            ;9C8C40|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9C8C40|A591    |;
                        BEQ CODE_9C8C47                      ;9C8C42|F003    |;
                        db $A9,$1A,$00                       ;9C8C44|        |;
  
@@ -789,7 +789,7 @@
                        ADC.W $1DC9                          ;9C8C48|6DC91D  |;
                        TAX                                  ;9C8C4B|AA      |;
                        STY.W $1DC9                          ;9C8C4C|8CC91D  |;
-                       LDA.B $91                            ;9C8C4F|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9C8C4F|A591    |;
                        BEQ CODE_9C8C56                      ;9C8C51|F003    |;
                        db $A9,$1A,$00                       ;9C8C53|        |;
  
@@ -1146,12 +1146,12 @@
                        JSL.L CODE_9EC894                    ;9C9006|2294C89E|;
                        LDA.W #$2400                         ;9C900A|A90024  |;
                        STA.W $0D0D                          ;9C900D|8D0D0D  |;
-                       STZ.B $91                            ;9C9010|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9C9010|6491    |;
                        LDA.W #$001C                         ;9C9012|A91C00  |;
                        STA.W $0D0F                          ;9C9015|8D0F0D  |;
                        JSR.W CODE_9C902A                    ;9C9018|202A90  |;
                        LDA.W #$0002                         ;9C901B|A90200  |;
-                       STA.B $91                            ;9C901E|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9C901E|8591    |;
                        LDA.W #$0007                         ;9C9020|A90700  |;
                        STA.W $0D0F                          ;9C9023|8D0F0D  |;
                        JSR.W CODE_9C902A                    ;9C9026|202A90  |;
@@ -1203,7 +1203,7 @@
           CODE_9C9074:
                        LDA.B [$89]                          ;9C9074|A789    |;
                        CLC                                  ;9C9076|18      |;
-                       ADC.B $91                            ;9C9077|6591    |;
+                       ADC.B zpCurntTeamLoopVal             ;9C9077|6591    |;
                        TAY                                  ;9C9079|A8      |;
                        LDA.W $0000,Y                        ;9C907A|B90000  |;
                        STA.B $A5                            ;9C907D|85A5    |;
@@ -1213,7 +1213,7 @@
           CODE_9C9086:
                        LDA.B [$89]                          ;9C9086|A789    |;
                        CLC                                  ;9C9088|18      |;
-                       ADC.B $91                            ;9C9089|6591    |;
+                       ADC.B zpCurntTeamLoopVal             ;9C9089|6591    |;
                        TAY                                  ;9C908B|A8      |;
                        LDA.W $0000,Y                        ;9C908C|B90000  |;
                        STA.B $A5                            ;9C908F|85A5    |;
@@ -1221,7 +1221,7 @@
                        INC.B $89                            ;9C9093|E689    |;
                        LDA.B [$89]                          ;9C9095|A789    |;
                        CLC                                  ;9C9097|18      |;
-                       ADC.B $91                            ;9C9098|6591    |;
+                       ADC.B zpCurntTeamLoopVal             ;9C9098|6591    |;
                        TAY                                  ;9C909A|A8      |;
                        LDA.W $0000,Y                        ;9C909B|B90000  |;
                        STA.B $A9                            ;9C909E|85A9    |;
@@ -1263,7 +1263,7 @@
                        INC.B $89                            ;9C90F2|E689    |;
                        INC.B $89                            ;9C90F4|E689    |;
                        CLC                                  ;9C90F6|18      |;
-                       ADC.B $91                            ;9C90F7|6591    |;
+                       ADC.B zpCurntTeamLoopVal             ;9C90F7|6591    |;
                        TAY                                  ;9C90F9|A8      |;
                        LDA.W $0000,Y                        ;9C90FA|B90000  |;
                        STA.B $A5                            ;9C90FD|85A5    |;
@@ -1282,7 +1282,7 @@
                        LDA.W #$F36D                         ;9C911F|A96DF3  |;
                        STA.B $8D                            ;9C9122|858D    |;
                        JSL.L CODE_9ECFA5                    ;9C9124|22A5CF9E|;
-                       LDA.B $91                            ;9C9128|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9C9128|A591    |;
                        CLC                                  ;9C912A|18      |;
                        ADC.B $A9                            ;9C912B|65A9    |;
                        TAY                                  ;9C912D|A8      |;
@@ -1299,7 +1299,7 @@
           CODE_9C9145:
                        LDA.B [$89]                          ;9C9145|A789    |;
                        CLC                                  ;9C9147|18      |;
-                       ADC.B $91                            ;9C9148|6591    |;
+                       ADC.B zpCurntTeamLoopVal             ;9C9148|6591    |;
                        TAY                                  ;9C914A|A8      |;
                        LDA.W $0000,Y                        ;9C914B|B90000  |;
                        STA.B $A5                            ;9C914E|85A5    |;
@@ -1490,7 +1490,7 @@
                        LDA.B $8D                            ;9C9425|A58D    |;
                        STA.B $A9                            ;9C9427|85A9    |;
                        LDA.W #$FFFF                         ;9C9429|A9FFFF  |;
-                       STA.B $91                            ;9C942C|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9C942C|8591    |;
                        STA.B $93                            ;9C942E|8593    |;
                        PHA                                  ;9C9430|48      |;
                        SEP #$30                             ;9C9431|E230    |;
@@ -1596,7 +1596,7 @@
                        LDY.W #$0000                         ;9C94D2|A00000  |;
                        LDA.B $16                            ;9C94D5|A516    |;
                        BEQ CODE_9C94EA                      ;9C94D7|F011    |;
-                       LDA.B $91                            ;9C94D9|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9C94D9|A591    |;
                        BMI CODE_9C94EA                      ;9C94DB|300D    |;
                        BNE CODE_9C94F8                      ;9C94DD|D019    |;
                        LDA.W #$00F8                         ;9C94DF|A9F800  |;
@@ -1679,7 +1679,7 @@
  
           CODE_9C9563:
                        LDA.W #$3C00                         ;9C9563|A9003C  |;
-                       LDX.B $91                            ;9C9566|A691    |;
+                       LDX.B zpCurntTeamLoopVal             ;9C9566|A691    |;
                        BNE CODE_9C956D                      ;9C9568|D003    |;
                        LDA.W #$3E00                         ;9C956A|A9003E  |;
  
@@ -2461,7 +2461,7 @@
                        LDA.W #$000D                         ;9C9C49|A90D00  |;
                        STA.W $0D0F                          ;9C9C4C|8D0F0D  |;
                        STZ.B $B1                            ;9C9C4F|64B1    |;
-                       STZ.B $91                            ;9C9C51|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9C9C51|6491    |;
                        LDA.W $1E2B                          ;9C9C53|AD2B1E  |;
                        CMP.W #$001A                         ;9C9C56|C91A00  |;
                        BMI CODE_9C9C69                      ;9C9C59|300E    |;
@@ -2482,7 +2482,7 @@
                        LDA.W #$000D                         ;9C9C89|A90D00  |;
                        STA.W $0D0F                          ;9C9C8C|8D0F0D  |;
                        STZ.B $B1                            ;9C9C8F|64B1    |;
-                       STZ.B $91                            ;9C9C91|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9C9C91|6491    |;
                        LDA.W $1E2D                          ;9C9C93|AD2D1E  |;
                        CMP.W #$001A                         ;9C9C96|C91A00  |;
                        BMI CODE_9C9CA9                      ;9C9C99|300E    |;
@@ -2502,7 +2502,7 @@
                        LDA.W #$000D                         ;9C9CC9|A90D00  |;
                        STA.W $0D0F                          ;9C9CCC|8D0F0D  |;
                        STZ.B $B1                            ;9C9CCF|64B1    |;
-                       STZ.B $91                            ;9C9CD1|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9C9CD1|6491    |;
                        LDA.W $1E2F                          ;9C9CD3|AD2F1E  |;
                        CMP.W #$001A                         ;9C9CD6|C91A00  |;
                        BMI CODE_9C9CE9                      ;9C9CD9|300E    |;
@@ -2576,7 +2576,7 @@
                        db $1A,$00,$8D,$1F,$1E               ;9C9D85|        |;
  
           CODE_9C9D8A:
-                       STZ.B $91                            ;9C9D8A|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9C9D8A|6491    |;
                        JSL.L CODE_9FC93D                    ;9C9D8C|223DC99F|;
                        LDA.B $A5                            ;9C9D90|A5A5    |;
                        STA.W $1E21                          ;9C9D92|8D211E  |;
@@ -2708,7 +2708,7 @@
                        CPX.W #$001A                         ;9C9E98|E01A00  |;
                        BMI CODE_9C9EBC                      ;9C9E9B|301F    |;
                        LDA.W #$0002                         ;9C9E9D|A90200  |;
-                       STA.B $91                            ;9C9EA0|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9C9EA0|8591    |;
                        JSL.L CODE_9FC93D                    ;9C9EA2|223DC99F|;
                        LDA.B $A5                            ;9C9EA6|A5A5    |;
                        CLC                                  ;9C9EA8|18      |;
@@ -2727,16 +2727,16 @@
           CODE_9C9EC4:
                        RTL                                  ;9C9EC4|6B      |;
           CODE_9C9EC5:
-                       STZ.B $91                            ;9C9EC5|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9C9EC5|6491    |;
                        LDA.W #$0002                         ;9C9EC7|A90200  |;
                        STA.B $8D                            ;9C9ECA|858D    |;
                        CPX.W #$001A                         ;9C9ECC|E01A00  |;
                        BMI CODE_9C9ED8                      ;9C9ECF|3007    |;
                        LDA.W #$0002                         ;9C9ED1|A90200  |;
-                       STA.B $91                            ;9C9ED4|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9C9ED4|8591    |;
                        STZ.B $8D                            ;9C9ED6|648D    |;
           CODE_9C9ED8:
-                       LDY.B $91                            ;9C9ED8|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9C9ED8|A491    |;
                        LDA.W Score_HmAw,Y                   ;9C9EDA|B98E17  |;
                        LDY.B $8D                            ;9C9EDD|A48D    |;
                        SEC                                  ;9C9EDF|38      |;
@@ -3172,13 +3172,13 @@
                        BNE CODE_9CA22D                      ;9CA235|D0F6    |;
                        STZ.B $BD                            ;9CA237|64BD    |;
                        STZ.B $8D                            ;9CA239|648D    |;
-                       STZ.B $91                            ;9CA23B|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9CA23B|6491    |;
                        STZ.B $95                            ;9CA23D|6495    |;
                        STZ.B $99                            ;9CA23F|6499    |;
                        STZ.W $0DF9                          ;9CA241|9CF90D  |;
  
           CODE_9CA244:
-                       LDX.B $91                            ;9CA244|A691    |;
+                       LDX.B zpCurntTeamLoopVal             ;9CA244|A691    |;
                        LDY.B $95                            ;9CA246|A495    |;
                        LDA.B $BD                            ;9CA248|A5BD    |;
                        STA.W $1143,Y                        ;9CA24A|994311  |;
@@ -3244,10 +3244,10 @@
                        INC.B $99                            ;9CA2D6|E699    |;
                        INC.B $99                            ;9CA2D8|E699    |;
                        INC.B $BD                            ;9CA2DA|E6BD    |;
-                       LDA.B $91                            ;9CA2DC|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9CA2DC|A591    |;
                        CLC                                  ;9CA2DE|18      |;
                        ADC.W #$0012                         ;9CA2DF|691200  |;
-                       STA.B $91                            ;9CA2E2|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9CA2E2|8591    |;
                        LDA.B $BD                            ;9CA2E4|A5BD    |;
                        CMP.W #$0010                         ;9CA2E6|C91000  |;
                        BEQ CODE_9CA2EE                      ;9CA2E9|F003    |;

@@ -62,7 +62,7 @@
             },
             "windows": {
                 "command": "ASAR\\windows\\asar.exe",
-                "args": ["--verbose","--fix-checksum=off","Src\\main.asm","Output\\nhl94.sfc"]
+                "args": ["--verbose","--fix-checksum=off","--symbols=wla","Src\\main.asm","Output\\nhl94.sfc"]
             },
             "linux": {
                 "command": "./ASAR/linux/asar",

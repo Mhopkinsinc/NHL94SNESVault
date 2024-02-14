@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProjectXmlSerializer-Root xmlns:exs="https://extendedxmlserializer.github.io/v2" xmlns:ns1="clr-namespace:Diz.Core.model;assembly=Diz.Core" xmlns:ns2="clr-namespace:Diz.Core.model.snes;assembly=Diz.Core" xmlns:sys="https://extendedxmlserializer.github.io/system" xmlns:ns3="clr-namespace:IX.Observable;assembly=IX.Observable" xmlns:ns4="clr-namespace:Diz.Core.export;assembly=Diz.Core" SaveVersion="102" Watermark="DiztinGUIsh" Extra1="" Extra2="" xmlns="clr-namespace:Diz.Core.serialization.xml_serializer;assembly=Diz.Core">
-  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="1003814">
+  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="1014532">
     <LogWriterSettings Format="%label:-22% %code:37%;%pc%|%bytes%|; %comment%" DataPerLine="8" Unlabeled="ShowInPoints" Structure="OneBankPerFile" NewLine="true" OutputExtraWhitespace="true" GenerateFullLine="false" IncludeUnusedLabels="true" PrintLabelSpecificComments="true" RomSizeOverride="-1" FileOrFolderOutPath="DizExport\" OutputToString="false" ErrorFilename="errors.txt" />
     <ProjectSettings exs:member="" BsnesUsageMapImportOnlyChangedUnmarked="true">
       <RomBytesOutputFormatSettings CompressGroupBlock="true" CompressUsingTable1="true" InsertCommentIntoOutputLinesEveryNBytes="2048" />
@@ -181,6 +181,15 @@
         <sys:Item Key="10408297" Value="Value contains Home or Away Team Loop 02 Away 00 Home" />
         <sys:Item Key="10408283" Value="Not sure what this jump bypasses" />
         <sys:Item Key="10408299" Value="Load the Goalie value" />
+        <sys:Item Key="10408127" Value="Hijack For Manual Pull Goalie" />
+        <sys:Item Key="10419059" Value="17AA is Home 17AC is Away" />
+        <sys:Item Key="10419062" Value="FF00 indicates the goalie is out of the net due to penalty" />
+        <sys:Item Key="10419091" Value="L+R Trigger Pressed" />
+        <sys:Item Key="10419099" Value="If the value is 0000, set #$FFFF" />
+        <sys:Item Key="10419104" Value="If the value is FFFF, set #$0000" />
+        <sys:Item Key="10419106" Value="If the value is neither FFFor 0000, we're done" />
+        <sys:Item Key="10419111" Value="Store the value back to GoalieInNetHmAw" />
+        <sys:Item Key="10419114" Value="Call the subroutine at $9FD407 To start the goalie animation" />
       </Comments>
       <Labels>
         <sys:Item Key="8454122">
@@ -362,6 +371,42 @@
         </sys:Item>
         <sys:Item Key="10408293">
           <Value exs:type="ns1:Label" Name="skipsbc" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419053">
+          <Value exs:type="ns1:Label" Name="ManualPullGoalie" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419059">
+          <Value exs:type="ns1:Label" Name="CheckGoalie" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419068">
+          <Value exs:type="ns1:Label" Name="CheckJoypad" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419085">
+          <Value exs:type="ns1:Label" Name=".hit" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419118">
+          <Value exs:type="ns1:Label" Name="Done" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419108">
+          <Value exs:type="ns1:Label" Name=".set" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419096">
+          <Value exs:type="ns1:Label" Name="PullOrInsertGoalie" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419124">
+          <Value exs:type="ns1:Label" Name="JyPadHmAwyLookupTable" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10354833">
+          <Value exs:type="ns1:Label" Name="CurntTeamLoopVal" Comment="00 Home 02 Away" />
+        </sys:Item>
+        <sys:Item Key="10356598">
+          <Value exs:type="ns1:Label" Name="JyPadBtnPrss" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10361988">
+          <Value exs:type="ns1:Label" Name="JyPadHmAwy" Comment="01 Home 02 Away" />
+        </sys:Item>
+        <sys:Item Key="145">
+          <Value exs:type="ns1:Label" Name="zpCurntTeamLoopVal" Comment="00 Home 02 Away" />
         </sys:Item>
       </Labels>
       <RomBytes>
@@ -24224,26 +24269,26 @@ U
 +09F
 .09F
 +09F
-+09E
++E9E
 .09E
 .09E
 +09E
 .09E
 +09E
 .09E
-+09E
++I9E
 .09E
 +09E
 .09E
 .09E
-+09E
++Y9E
 .09E
-+09E
++E9E
 .09E
 .09E
-+09E
++E9E
 .09E
-+09E
++Q9E
 +09F
 .09F
 +09F
@@ -79095,20 +79140,12 @@ U
 .09E
 +09E
 .09E
-+09E
-.09E
-+09E
++I9E
 .09E
 .09E
 +09E
-.09E
 +09E
-.09E
-.09E
-+09E
-.09E
-.09E
-+09E
++I9E
 .09E
 +09E
 .09E
@@ -79116,15 +79153,15 @@ U
 +09E
 .09E
 .09E
-+09E
++I9E
 .09E
 +09E
 .09E
-+09E
-.09E
 .09E
 +09E
 .09E
+.09E
++I9E
 .09E
 +09E
 .09E
@@ -79133,18 +79170,38 @@ U
 .09E
 +09E
 .09E
+.09E
++I9E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
 +09E
 .09E
 .09E
 +09E
 .09E
-+09E
++I9E
 .09E
 .09E
 .09E
 +09E
-r 13 U
++E9E
+.09E
+.09E
 +09E
+.09E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
+.09E
+.09E
++E9E
 +09E
 .09E
 +09E
@@ -79172,26 +79229,13 @@ r 13 U
 .09E
 r 25 U
 +09E
-+09E
++E9E
 .09E
 .09E
 +09E
 .09E
 .09E
-+09E
-.09E
-+09E
-.09E
-+09E
-.09E
-.09E
-+09E
-.09E
-+09E
-+09E
-.09E
-.09E
-+09E
++I9E
 .09E
 +09E
 .09E
@@ -79201,35 +79245,17 @@ r 25 U
 +09E
 .09E
 +09E
++09E
 .09E
+.09E
++I9E
+.09E
++I9E
 .09E
 +09E
 .09E
 .09E
-+09E
-.09E
-+09E
-.09E
-.09E
-+09E
-+09E
-.09E
-.09E
-+09E
-.09E
-+09E
-.09E
-.09E
-+09E
-+09E
-.09E
-+09E
-.09E
-+09E
-.09E
-+09E
-.09E
-+09E
++I9E
 .09E
 +09E
 .09E
@@ -79237,14 +79263,45 @@ r 25 U
 +09E
 .09E
 .09E
++I9E
+.09E
++09E
+.09E
+.09E
++09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
+.09E
++09E
++09E
+.09E
++09E
+.09E
++E9E
+.09E
++I9E
+.09E
++09E
+.09E
 +09E
 .09E
 .09E
 +09E
 .09E
 .09E
-.09E
 +09E
+.09E
+.09E
++Y9E
+.09E
+.09E
+.09E
++E9E
 r 391 U
 +09E
 .09E
@@ -88449,12 +88506,82 @@ r 12 U
 .Q9E
 .E9E
 +Q9E
-UE9F
-U09F
-UQ9F
-U09F
-UQ9F
-r 1166 U
++E9E
+.09E
+.Q9E
++09E
+.Q9E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
++Q9E
++E9E
+.09E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
++09E
++09E
+.09E
+.09E
++I9E
+.09E
++Y9E
+.09E
++E9E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
++Y9E
+.09E
++E9E
+.09E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
+.09E
+.09E
++E9E
+.09E
++09E
+.09E
+.09E
++Q9E
+Eg
+E
+E
+E
+r 1096 U
 +09F
 ;pos=0F8000
 .09F
@@ -104986,29 +105113,12 @@ U
 .09E
 +09E
 r 265 U
-+09E
++E9E
 .09E
 +09E
 .09E
 .09E
-+09E
-.09E
-+09E
-+09E
-+09E
-+09E
-.09E
-.09E
-+09E
-.09E
-+09E
-.09E
-+09E
-.09E
-+09E
-.09E
-.09E
-+09E
++E9E
 .09E
 +09E
 +09E
@@ -105016,7 +105126,7 @@ r 265 U
 +09E
 .09E
 .09E
-+09E
++I9E
 .09E
 +09E
 .09E
@@ -105024,6 +105134,18 @@ r 265 U
 .09E
 +09E
 .09E
+.09E
++E9E
+.09E
++09E
++09E
++09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
 .09E
 +09E
 .09E
@@ -105037,19 +105159,24 @@ r 265 U
 .09E
 +09E
 .09E
++E9E
+.09E
 .09E
 +09E
 .09E
 .09E
 +09E
+.09E
+.09E
++09E
 +09E
 +09E
 .09E
 +09E
 .09E
-+09E
++I9E
 .09E
-+09E
++I9E
 .09E
 .09E
 .09E
@@ -105328,7 +105455,7 @@ U
 +09E
 .09E
 +09E
-+09E
++E9E
 .09E
 .09E
 +09E
@@ -105366,7 +105493,7 @@ U
 +09E
 .09E
 .09E
-+09E
++I9E
 .09E
 +09E
 .09E
@@ -105383,7 +105510,30 @@ U
 +09E
 .09E
 .09E
++I9E
+.09E
 +09E
+.09E
++Y9E
+.09E
++E9E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++09E
+.09E
++E9E
+.09E
++09E
++09E
+.09E
++09E
++I9E
+.09E
+.09E
 .09E
 +09E
 .09E
@@ -105393,29 +105543,6 @@ U
 .09E
 +09E
 .09E
-.09E
-+09E
-.09E
-+09E
-.09E
-+09E
-.09E
-+09E
-+09E
-.09E
-+09E
-+09E
-.09E
-.09E
-.09E
-+09E
-.09E
-+09E
-.09E
-+09E
-.09E
-+09E
-.09E
 +09E
 +09E
 .09E
@@ -105441,9 +105568,9 @@ U
 .09E
 +09E
 .09E
-+09E
++Y9E
 .09E
-+09E
++E9E
 .09E
 +09E
 .09E
@@ -105519,23 +105646,16 @@ U
 .C9E
 +C9E
 .C9E
-+09E
++E9E
 .09E
-+09E
-.09E
-+09E
-.09E
-.09E
-+09E
-.09E
-+09E
-.09E
-+09E
++I9E
 .09E
 +09E
 .09E
 .09E
 +09E
+.09E
++E9E
 .09E
 +09E
 .09E
@@ -105543,6 +105663,13 @@ U
 .09E
 .09E
 +09E
+.09E
++I9E
+.09E
++Y9E
+.09E
+.09E
++E9E
 .09E
 .09E
 +09E
@@ -105675,14 +105802,14 @@ U
 .09E
 +09E
 .09E
-+09E
++E9E
 .09E
-+09E
++I9E
 .09E
-+09E
++Y9E
 .09E
 .09E
-+09E
++E9E
 r 24 U
 +09E
 .09E

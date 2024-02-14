@@ -7921,10 +7921,10 @@
                        STA.L $7E34C6                        ;80C824|8FC6347E|;
                        LDA.W #$0001                         ;80C828|A90100  |;
                        STA.W $1D81                          ;80C82B|8D811D  |;
-                       STZ.B $91                            ;80C82E|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;80C82E|6491    |;
                        JSL.L CODE_80CDC8                    ;80C830|22C8CD80|;
                        LDA.W #$0002                         ;80C834|A90200  |;
-                       STA.B $91                            ;80C837|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;80C837|8591    |;
                        JSL.L CODE_80CDC8                    ;80C839|22C8CD80|;
                        JSL.L CODE_9F833C                    ;80C83D|223C839F|;
                        JSL.L CODE_9F8433                    ;80C841|2233849F|;
@@ -7936,7 +7936,7 @@
           CODE_80C851:
                        STZ.W $1D89                          ;80C851|9C891D  |;
                        LDA.W #$0002                         ;80C854|A90200  |;
-                       STA.B $91                            ;80C857|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;80C857|8591    |;
                        STZ.B $8D                            ;80C859|648D    |;
                        JSL.L CODE_80C898                    ;80C85B|2298C880|;
                        LDA.W $1D85                          ;80C85F|AD851D  |;
@@ -7946,7 +7946,7 @@
                        STA.W $1D89                          ;80C86A|8D891D  |;
  
           CODE_80C86D:
-                       STZ.B $91                            ;80C86D|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;80C86D|6491    |;
                        LDA.W #$0002                         ;80C86F|A90200  |;
                        STA.B $8D                            ;80C872|858D    |;
                        JSL.L CODE_80C898                    ;80C874|2298C880|;
@@ -7966,11 +7966,11 @@
           CODE_80C898:
                        STZ.W $1D83                          ;80C898|9C831D  |;
                        STZ.W $1D87                          ;80C89B|9C871D  |;
-                       LDA.B $91                            ;80C89E|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;80C89E|A591    |;
                        PHA                                  ;80C8A0|48      |;
                        JSL.L CODE_9EC107                    ;80C8A1|2207C19E|;
                        STZ.W $15D4                          ;80C8A5|9CD415  |;
-                       LDA.B $91                            ;80C8A8|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;80C8A8|A591    |;
                        BEQ CODE_80C8B2                      ;80C8AA|F006    |;
                        LDA.W #$0002                         ;80C8AC|A90200  |;
                        STA.W $15D4                          ;80C8AF|8DD415  |;
@@ -7978,10 +7978,10 @@
           CODE_80C8B2:
                        JSL.L CODE_9F8433                    ;80C8B2|2233849F|;
                        PLA                                  ;80C8B6|68      |;
-                       STA.B $91                            ;80C8B7|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;80C8B7|8591    |;
                        LDA.W #$0000                         ;80C8B9|A90000  |;
                        STA.W $1E8D                          ;80C8BC|8D8D1E  |;
-                       LDA.B $91                            ;80C8BF|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;80C8BF|A591    |;
                        BEQ CODE_80C8C9                      ;80C8C1|F006    |;
                        LDA.W #$000C                         ;80C8C3|A90C00  |;
                        STA.W $1E8D                          ;80C8C6|8D8D1E  |;
@@ -7991,7 +7991,7 @@
  
           CODE_80C8CC:
                        LDA.W $19F6,Y                        ;80C8CC|B9F619  |;
-                       CMP.B $91                            ;80C8CF|C591    |;
+                       CMP.B zpCurntTeamLoopVal             ;80C8CF|C591    |;
                        BEQ CODE_80C8E2                      ;80C8D1|F00F    |;
                        INY                                  ;80C8D3|C8      |;
                        INY                                  ;80C8D4|C8      |;
@@ -8006,7 +8006,7 @@
  
           CODE_80C8E5:
                        JSL.L CODE_9EC72D                    ;80C8E5|222DC79E|;
-                       LDA.B $91                            ;80C8E9|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;80C8E9|A591    |;
                        BEQ CODE_80C918                      ;80C8EB|F02B    |;
                        LDA.W $1D85                          ;80C8ED|AD851D  |;
  
@@ -8159,7 +8159,7 @@
                        JSL.L CODE_9DE0E9                    ;80CA0B|22E9E09D|;
                        LDA.W #$0001                         ;80CA0F|A90100  |;
                        STA.B $A5                            ;80CA12|85A5    |;
-                       LDA.B $91                            ;80CA14|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;80CA14|A591    |;
                        BEQ CODE_80CA1D                      ;80CA16|F005    |;
                        LDA.W #$0002                         ;80CA18|A90200  |;
                        STA.B $A5                            ;80CA1B|85A5    |;
@@ -8172,7 +8172,7 @@
                        db $9C,$CA                           ;80CA2C|        |;
  
           CODE_80CA2E:
-                       LDX.B $91                            ;80CA2E|A691    |;
+                       LDX.B zpCurntTeamLoopVal             ;80CA2E|A691    |;
                        LDA.W $1C98,X                        ;80CA30|BD981C  |;
                        STA.L $7E3454                        ;80CA33|8F54347E|;
                        LDA.W #$FFFF                         ;80CA37|A9FFFF  |;
@@ -8212,7 +8212,7 @@
                        BRA CODE_80CA70                      ;80CA9A|80D4    |;
  
           CODE_80CA9C:
-                       LDY.B $91                            ;80CA9C|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;80CA9C|A491    |;
                        BNE CODE_80CAA9                      ;80CA9E|D009    |;
                        SEP #$20                             ;80CAA0|E220    |;
                        LDA.W $1D71                          ;80CAA2|AD711D  |;
@@ -8419,7 +8419,7 @@
                        STA.B $8F                            ;80CC55|858F    |;
                        LDA.W $1C98                          ;80CC57|AD981C  |;
                        STA.B $A9                            ;80CC5A|85A9    |;
-                       LDA.B $91                            ;80CC5C|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;80CC5C|A591    |;
                        BEQ CODE_80CC65                      ;80CC5E|F005    |;
                        LDA.W $1C9A                          ;80CC60|AD9A1C  |;
                        STA.B $A9                            ;80CC63|85A9    |;
@@ -8497,7 +8497,7 @@
                        STA.B $97                            ;80CCFE|8597    |;
                        LDA.W #$1D71                         ;80CD00|A9711D  |;
                        STA.B $95                            ;80CD03|8595    |;
-                       LDA.B $91                            ;80CD05|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;80CD05|A591    |;
                        BEQ CODE_80CD13                      ;80CD07|F00A    |;
                        LDA.W #$0000                         ;80CD09|A90000  |;
                        STA.B $97                            ;80CD0C|8597    |;
@@ -8527,7 +8527,7 @@
                        DEC A                                ;80CD3E|3A      |;
                        STA.L $7E345A                        ;80CD3F|8F5A347E|;
                        PHX                                  ;80CD43|DA      |;
-                       LDX.B $91                            ;80CD44|A691    |;
+                       LDX.B zpCurntTeamLoopVal             ;80CD44|A691    |;
                        LDA.W $1C98,X                        ;80CD46|BD981C  |;
                        CMP.W #$0018                         ;80CD49|C91800  |;
                        BCC CODE_80CD61                      ;80CD4C|9013    |;
@@ -8579,7 +8579,7 @@
                        STA.B $97                            ;80CDCB|8597    |;
                        LDA.W #$1D71                         ;80CDCD|A9711D  |;
                        STA.B $95                            ;80CDD0|8595    |;
-                       LDA.B $91                            ;80CDD2|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;80CDD2|A591    |;
                        BEQ CODE_80CDE0                      ;80CDD4|F00A    |;
                        LDA.W #$0000                         ;80CDD6|A90000  |;
                        STA.B $97                            ;80CDD9|8597    |;
@@ -8587,7 +8587,7 @@
                        STA.B $95                            ;80CDDE|8595    |;
  
           CODE_80CDE0:
-                       LDY.B $91                            ;80CDE0|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;80CDE0|A491    |;
                        LDA.W #$009C                         ;80CDE2|A99C00  |;
                        STA.B $8F                            ;80CDE5|858F    |;
                        LDA.W $1CDC,Y                        ;80CDE7|B9DC1C  |;
@@ -8618,7 +8618,7 @@
                        STA.B $8F                            ;80CE16|858F    |;
                        LDA.W #$1D71                         ;80CE18|A9711D  |;
                        STA.B $8D                            ;80CE1B|858D    |;
-                       LDA.B $91                            ;80CE1D|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;80CE1D|A591    |;
                        BEQ CODE_80CE2B                      ;80CE1F|F00A    |;
                        LDA.W #$0000                         ;80CE21|A90000  |;
                        STA.B $8F                            ;80CE24|858F    |;
@@ -8707,7 +8707,7 @@
                        STA.B $97                            ;80CEEA|8597    |;
                        LDA.W #$1D71                         ;80CEEC|A9711D  |;
                        STA.B $95                            ;80CEEF|8595    |;
-                       LDA.B $91                            ;80CEF1|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;80CEF1|A591    |;
                        BEQ CODE_80CEFF                      ;80CEF3|F00A    |;
                        LDA.W #$0000                         ;80CEF5|A90000  |;
                        STA.B $97                            ;80CEF8|8597    |;
@@ -8999,7 +8999,7 @@
                        ASL A                                ;80D23B|0A      |;
                        ASL A                                ;80D23C|0A      |;
                        STA.B $A5                            ;80D23D|85A5    |;
-                       LDY.B $91                            ;80D23F|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;80D23F|A491    |;
                        LDA.W $1DA7                          ;80D241|ADA71D  |;
                        INC A                                ;80D244|1A      |;
                        STA.B $95                            ;80D245|8595    |;
@@ -9074,7 +9074,7 @@
                        STA.B $8F                            ;80D2D3|858F    |;
                        LDA.W #$1D71                         ;80D2D5|A9711D  |;
                        STA.B $8D                            ;80D2D8|858D    |;
-                       LDA.B $91                            ;80D2DA|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;80D2DA|A591    |;
                        BEQ CODE_80D2E8                      ;80D2DC|F00A    |;
                        LDA.W #$0000                         ;80D2DE|A90000  |;
                        STA.B $8F                            ;80D2E1|858F    |;

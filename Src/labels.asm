@@ -7,6 +7,10 @@
  
                        clock_remaining_time = $9E1632
                        GoalieInNetHmAw = $9E17AA
+                       CurntTeamLoopVal = $9E0091; !^ 00 Home 02 Away ^!
+                       JyPadBtnPrss = $9E0776
+                       JyPadHmAwy = $9E1C84; !^ 01 Home 02 Away ^!
+                       zpCurntTeamLoopVal = $000091; !^ 00 Home 02 Away ^!
                        LOOSE_OP_808185 = $808185
                        LOOSE_OP_808468 = $808468
                        LOOSE_OP_8084FF = $8084FF
