@@ -23,7 +23,7 @@ Please see the [Installation / Setup](https://github.com/Mhopkinsinc/NHL94SNESVa
         - Modify timing of when CPU pulls goalie if it is trailing:
             - Change how early the goalie is pulled
             - Change if the goalie is pulled when behind by 1, 2, 3 or more goals
-        - Pull Goalie During Game Play with L+R Trigger buttons (Coming Soon)
+        - Pull Goalie During Game Play with L+R Trigger buttons
 
     - Run "1 - Compile Roms" task in Visual Studio Code Task Runner.
         - This task creates .smc and .sfc version of the rom in the Output folder.
