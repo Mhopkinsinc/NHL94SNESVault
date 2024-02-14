@@ -353,16 +353,16 @@
                        STA.W $0D1F                          ;9F8391|8D1F0D  |;
                        LDA.W #$0010                         ;9F8394|A91000  |;
                        TRB.W $15D8                          ;9F8397|1CD815  |;
-                       LDA.B $91                            ;9F839A|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9F839A|A591    |;
                        PHA                                  ;9F839C|48      |;
                        LDA.W #$0000                         ;9F839D|A90000  |;
-                       STA.B $91                            ;9F83A0|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9F83A0|8591    |;
                        JSL.L CODE_9B9334                    ;9F83A2|2234939B|;
                        LDA.W #$0002                         ;9F83A6|A90200  |;
-                       STA.B $91                            ;9F83A9|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9F83A9|8591    |;
                        JSL.L CODE_9B9334                    ;9F83AB|2234939B|;
                        PLA                                  ;9F83AF|68      |;
-                       STA.B $91                            ;9F83B0|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9F83B0|8591    |;
                        LDA.L $7E34C8                        ;9F83B2|AFC8347E|;
                        STA.W $1C90                          ;9F83B6|8D901C  |;
                        STA.W $1C92                          ;9F83B9|8D921C  |;
@@ -429,10 +429,10 @@
                        TCS                                  ;9F843B|1B      |;
  
           CODE_9F843C:
-                       STZ.B $91                            ;9F843C|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9F843C|6491    |;
                        JSL.L CODE_9FDD9D                    ;9F843E|229DDD9F|;
                        LDA.W #$0002                         ;9F8442|A90200  |;
-                       STA.B $91                            ;9F8445|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9F8445|8591    |;
                        JSL.L CODE_9FDD9D                    ;9F8447|229DDD9F|;
                        STZ.W $0CC7                          ;9F844B|9CC70C  |;
                        JSL.L CODE_8086A9                    ;9F844E|22A98680|;
@@ -1068,7 +1068,7 @@ Real_Time_Pen_Clock_2:
                        BNE CODE_9F89B2                      ;9F898C|D024    |;
                        LDA.W #$0001                         ;9F898E|A90100  |;
                        STA.W $0ADD,Y                        ;9F8991|99DD0A  |;
-                       LDA.W $0776,Y                        ;9F8994|B97607  |;
+                       LDA.W JyPadBtnPrss,Y                 ;9F8994|B97607  |;
                        STA.B $B1                            ;9F8997|85B1    |;
                        LDA.W $0AAE,Y                        ;9F8999|B9AE0A  |;
                        STA.B $AD                            ;9F899C|85AD    |;
@@ -1804,7 +1804,7 @@ Real_Time_Pen_Clock_2:
                        LDA.L $7E34BC                        ;9F967B|AFBC347E|;
                        CMP.W #$0004                         ;9F967F|C90400  |;
                        BNE CODE_9F96B8                      ;9F9682|D034    |;
-                       LDA.W $1C84                          ;9F9684|AD841C  |;
+                       LDA.W JyPadHmAwy                     ;9F9684|AD841C  |;
                        ORA.W $1C86                          ;9F9687|0D861C  |;
                        ORA.W $1C88                          ;9F968A|0D881C  |;
                        ORA.W $1C8A                          ;9F968D|0D8A1C  |;
@@ -1814,7 +1814,7 @@ Real_Time_Pen_Clock_2:
  
           CODE_9F9698:
                        PHX                                  ;9F9698|DA      |;
-                       LDA.W $1C84,X                        ;9F9699|BD841C  |;
+                       LDA.W JyPadHmAwy,X                   ;9F9699|BD841C  |;
                        BEQ CODE_9F96AF                      ;9F969C|F011    |;
                        TXA                                  ;9F969E|8A      |;
                        LSR A                                ;9F969F|4A      |;
@@ -1834,7 +1834,7 @@ Real_Time_Pen_Clock_2:
                        RTL                                  ;9F96B7|6B      |;
  
           CODE_9F96B8:
-                       LDA.W $1C84                          ;9F96B8|AD841C  |;
+                       LDA.W JyPadHmAwy                     ;9F96B8|AD841C  |;
                        ORA.W $1C86                          ;9F96BB|0D861C  |;
                        ORA.W $1C88                          ;9F96BE|0D881C  |;
                        ORA.W $1C8A                          ;9F96C1|0D8A1C  |;
@@ -1958,7 +1958,7 @@ Real_Time_Pen_Clock_2:
                        db $DA,$00                           ;9F97D6|        |;
                        db $E3,$00                           ;9F97D8|        |;
                        ASL.B $A5                            ;9F97DA|06A5    |;
-                       LDA.B $91                            ;9F97DC|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9F97DC|A591    |;
                        BEQ CODE_9F97E3                      ;9F97DE|F003    |;
                        LDA.W #$0034                         ;9F97E0|A93400  |;
  
@@ -1997,7 +1997,7 @@ Real_Time_Pen_Clock_2:
                        db $00,$49,$6E,$6A,$20,$47,$20,$04   ;9F9861|        |;
                        db $00,$20,$20,$04,$00,$20,$43       ;9F9869|        |;
                        ASL.B $A5                            ;9F9870|06A5    |;
-                       LDA.B $91                            ;9F9872|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9F9872|A591    |;
                        BEQ CODE_9F9879                      ;9F9874|F003    |;
                        LDA.W #$0034                         ;9F9876|A93400  |;
  
@@ -2089,7 +2089,7 @@ Real_Time_Pen_Clock_2:
                        ASL A                                ;9F9934|0A      |;
                        STA.B $00                            ;9F9935|8500    |;
                        STZ.B $A7                            ;9F9937|64A7    |;
-                       LDY.B $91                            ;9F9939|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9F9939|A491    |;
                        BEQ CODE_9F9945                      ;9F993B|F008    |;
                        LDA.B $00                            ;9F993D|A500    |;
                        CLC                                  ;9F993F|18      |;
@@ -2545,7 +2545,7 @@ Real_Time_Pen_Clock_2:
                        PLA                                  ;9F9C4F|68      |;
                        STA.B $8F                            ;9F9C50|858F    |;
                        STZ.B $B1                            ;9F9C52|64B1    |;
-                       STZ.B $91                            ;9F9C54|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9F9C54|6491    |;
                        JSL.L CODE_9F9DB0                    ;9F9C56|22B09D9F|;
                        LDA.B $8F                            ;9F9C5A|A58F    |;
                        PHA                                  ;9F9C5C|48      |;
@@ -2561,10 +2561,10 @@ Real_Time_Pen_Clock_2:
                        PLA                                  ;9F9C71|68      |;
                        STA.B $8F                            ;9F9C72|858F    |;
                        INC.B $B1                            ;9F9C74|E6B1    |;
-                       INC.B $91                            ;9F9C76|E691    |;
-                       INC.B $91                            ;9F9C78|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9F9C76|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9F9C78|E691    |;
                        JSL.L CODE_9F9DB0                    ;9F9C7A|22B09D9F|;
-                       STZ.B $91                            ;9F9C7E|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9F9C7E|6491    |;
                        LDA.W #$0002                         ;9F9C80|A90200  |;
                        STA.B $95                            ;9F9C83|8595    |;
                        LDA.W $15D4                          ;9F9C85|ADD415  |;
@@ -2572,7 +2572,7 @@ Real_Time_Pen_Clock_2:
                        BNE CODE_9F9C94                      ;9F9C8B|D007    |;
                        STZ.B $95                            ;9F9C8D|6495    |;
                        LDA.W #$0002                         ;9F9C8F|A90200  |;
-                       STA.B $91                            ;9F9C92|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9F9C92|8591    |;
  
           CODE_9F9C94:
                        LDA.B $8F                            ;9F9C94|A58F    |;
@@ -2589,9 +2589,9 @@ Real_Time_Pen_Clock_2:
                        PLA                                  ;9F9CAB|68      |;
                        STA.B $8F                            ;9F9CAC|858F    |;
                        JSL.L CODE_9F9DFA                    ;9F9CAE|22FA9D9F|;
-                       LDX.B $91                            ;9F9CB2|A691    |;
+                       LDX.B zpCurntTeamLoopVal             ;9F9CB2|A691    |;
                        LDA.B $95                            ;9F9CB4|A595    |;
-                       STA.B $91                            ;9F9CB6|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9F9CB6|8591    |;
                        STX.B $95                            ;9F9CB8|8695    |;
                        LDA.B $8F                            ;9F9CBA|A58F    |;
                        PHA                                  ;9F9CBC|48      |;
@@ -2721,7 +2721,7 @@ Real_Time_Pen_Clock_2:
  
           CODE_9F9DB0:
                        JSL.L CODE_9FBD66                    ;9F9DB0|2266BD9F|;
-                       LDY.B $91                            ;9F9DB4|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9F9DB4|A491    |;
                        LDA.W Score_HmAw,Y                   ;9F9DB6|B98E17  |;
                        STA.B $A5                            ;9F9DB9|85A5    |;
                        JSL.L CODE_9F9E15                    ;9F9DBB|22159E9F|;
@@ -2784,9 +2784,9 @@ Real_Time_Pen_Clock_2:
           CODE_9F9E24:
                        LDA.W #$0001                         ;9F9E24|A90100  |;
                        STA.L $7E3462                        ;9F9E27|8F62347E|;
-                       LDA.B $91                            ;9F9E2B|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9F9E2B|A591    |;
                        PHA                                  ;9F9E2D|48      |;
-                       STZ.B $91                            ;9F9E2E|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9F9E2E|6491    |;
                        LDA.W $1C98                          ;9F9E30|AD981C  |;
                        STA.B $A9                            ;9F9E33|85A9    |;
                        LDA.W #$0014                         ;9F9E35|A91400  |;
@@ -2795,14 +2795,14 @@ Real_Time_Pen_Clock_2:
                        STA.W $0D11                          ;9F9E3E|8D110D  |;
                        JSL.L CODE_9FBE08                    ;9F9E41|2208BE9F|;
                        LDA.W #$0002                         ;9F9E45|A90200  |;
-                       STA.B $91                            ;9F9E48|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9F9E48|8591    |;
                        LDA.W #$0003                         ;9F9E4A|A90300  |;
                        STA.W $0D0F                          ;9F9E4D|8D0F0D  |;
                        LDA.W $1C9A                          ;9F9E50|AD9A1C  |;
                        STA.B $A9                            ;9F9E53|85A9    |;
                        JSL.L CODE_9FBE08                    ;9F9E55|2208BE9F|;
                        PLA                                  ;9F9E59|68      |;
-                       STA.B $91                            ;9F9E5A|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9F9E5A|8591    |;
                        LDA.W #$0000                         ;9F9E5C|A90000  |;
                        STA.L $7E3462                        ;9F9E5F|8F62347E|;
                        LDA.W #$0000                         ;9F9E63|A90000  |;
@@ -3115,7 +3115,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $8D                            ;9FA16B|858D    |;
                        PLA                                  ;9FA16D|68      |;
                        STA.B $8F                            ;9FA16E|858F    |;
-                       STZ.B $91                            ;9FA170|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9FA170|6491    |;
                        JSL.L CODE_9FA1B8                    ;9FA172|22B8A19F|;
                        LDA.B $8F                            ;9FA176|A58F    |;
                        PHA                                  ;9FA178|48      |;
@@ -3131,7 +3131,7 @@ Real_Time_Pen_Clock_2:
                        PLA                                  ;9FA18D|68      |;
                        STA.B $8F                            ;9FA18E|858F    |;
                        LDA.W #$0002                         ;9FA190|A90200  |;
-                       STA.B $91                            ;9FA193|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FA193|8591    |;
                        JSL.L CODE_9FA1B8                    ;9FA195|22B8A19F|;
                        STX.B $87                            ;9FA199|8687    |;
                        LDX.W #$000E                         ;9FA19B|A20E00  |;
@@ -3159,7 +3159,7 @@ Real_Time_Pen_Clock_2:
                        RTL                                  ;9FA1B7|6B      |;
  
           CODE_9FA1B8:
-                       LDA.B $91                            ;9FA1B8|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FA1B8|A591    |;
                        BEQ CODE_9FA1BF                      ;9FA1BA|F003    |;
                        LDA.W #$001A                         ;9FA1BC|A91A00  |;
  
@@ -3174,7 +3174,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $A5                            ;9FA1CB|85A5    |;
                        BIT.W #$0080                         ;9FA1CD|898000  |;
                        BNE CODE_9FA1EB                      ;9FA1D0|D019    |;
-                       LDA.B $91                            ;9FA1D2|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FA1D2|A591    |;
                        BEQ CODE_9FA1D9                      ;9FA1D4|F003    |;
                        LDA.W #$0034                         ;9FA1D6|A93400  |;
  
@@ -3189,7 +3189,7 @@ Real_Time_Pen_Clock_2:
                        BRA CODE_9FA1C1                      ;9FA1E9|80D6    |;
  
           CODE_9FA1EB:
-                       LDA.B $91                            ;9FA1EB|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FA1EB|A591    |;
                        BEQ CODE_9FA1F2                      ;9FA1ED|F003    |;
                        LDA.W #$001A                         ;9FA1EF|A91A00  |;
  
@@ -3204,7 +3204,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $A5                            ;9FA1FE|85A5    |;
                        BIT.W #$0080                         ;9FA200|898000  |;
                        BNE CODE_9FA1B7                      ;9FA203|D0B2    |;
-                       LDA.B $91                            ;9FA205|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FA205|A591    |;
                        BEQ CODE_9FA20C                      ;9FA207|F003    |;
                        LDA.W #$0034                         ;9FA209|A93400  |;
  
@@ -3221,7 +3221,7 @@ Real_Time_Pen_Clock_2:
                        LDA.W $0D11                          ;9FA21E|AD110D  |;
                        CMP.W #$000B                         ;9FA221|C90B00  |;
                        BCS CODE_9FA1B7                      ;9FA224|B091    |;
-                       LDA.B $91                            ;9FA226|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FA226|A591    |;
                        BEQ CODE_9FA22D                      ;9FA228|F003    |;
                        LDA.W #$0034                         ;9FA22A|A93400  |;
  
@@ -3233,7 +3233,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $AD                            ;9FA236|85AD    |;
                        LDA.W #$009C                         ;9FA238|A99C00  |;
                        STA.B $8F                            ;9FA23B|858F    |;
-                       LDY.B $91                            ;9FA23D|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FA23D|A491    |;
                        LDA.W $1CDC,Y                        ;9FA23F|B9DC1C  |;
                        STA.B $8D                            ;9FA242|858D    |;
                        LDY.W #$0000                         ;9FA244|A00000  |;
@@ -3636,10 +3636,10 @@ Real_Time_Pen_Clock_2:
                        LDA.W #$FFFF                         ;9FA6BA|A9FFFF  |;
                        STA.W $1D55                          ;9FA6BD|8D551D  |;
                        STA.W $1D57                          ;9FA6C0|8D571D  |;
-                       STZ.B $91                            ;9FA6C3|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9FA6C3|6491    |;
                        JSL.L CODE_9FDE13                    ;9FA6C5|2213DE9F|;
-                       INC.B $91                            ;9FA6C9|E691    |;
-                       INC.B $91                            ;9FA6CB|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9FA6C9|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9FA6CB|E691    |;
                        JSL.L CODE_9FDE13                    ;9FA6CD|2213DE9F|;
                        LDA.W #$007E                         ;9FA6D1|A97E00  |;
                        STA.B $9B                            ;9FA6D4|859B    |;
@@ -3673,13 +3673,13 @@ Real_Time_Pen_Clock_2:
  
           CODE_9FA718:
                        JSL.L CODE_9D8000                    ;9FA718|2200809D|;
-                       STZ.B $91                            ;9FA71C|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9FA71C|6491    |;
                        LDY.W #$0002                         ;9FA71E|A00200  |;
                        LDA.B [$99],Y                        ;9FA721|B799    |;
                        BIT.W #$0080                         ;9FA723|898000  |;
                        BEQ CODE_9FA72C                      ;9FA726|F004    |;
-                       INC.B $91                            ;9FA728|E691    |;
-                       INC.B $91                            ;9FA72A|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9FA728|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9FA72A|E691    |;
  
           CODE_9FA72C:
                        LDA.W #$009F                         ;9FA72C|A99F00  |;
@@ -3689,7 +3689,7 @@ Real_Time_Pen_Clock_2:
                        LDY.W #$0003                         ;9FA736|A00300  |;
                        LDA.B [$99],Y                        ;9FA739|B799    |;
                        AND.W #$00FF                         ;9FA73B|29FF00  |;
-                       LDY.B $91                            ;9FA73E|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FA73E|A491    |;
                        BEQ CODE_9FA746                      ;9FA740|F004    |;
                        CLC                                  ;9FA742|18      |;
                        ADC.W #$001A                         ;9FA743|691A00  |;
@@ -3921,11 +3921,11 @@ Real_Time_Pen_Clock_2:
                        LDA.W #$003C                         ;9FA9AC|A93C00  |;
                        STA.W $0D4F                          ;9FA9AF|8D4F0D  |;
                        JSL.L CODE_9FCDAC                    ;9FA9B2|22ACCD9F|;
-                       STZ.B $91                            ;9FA9B6|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9FA9B6|6491    |;
                        JSL.L CODE_9FD407                    ;9FA9B8|2207D49F|;
                        JSL.L CODE_9FCE1D                    ;9FA9BC|221DCE9F|;
-                       INC.B $91                            ;9FA9C0|E691    |;
-                       INC.B $91                            ;9FA9C2|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9FA9C0|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9FA9C2|E691    |;
                        JSL.L CODE_9FD407                    ;9FA9C4|2207D49F|;
                        JSL.L CODE_9FCE1D                    ;9FA9C8|221DCE9F|;
                        JSL.L CODE_9FD252                    ;9FA9CC|2252D29F|;
@@ -4006,14 +4006,14 @@ Real_Time_Pen_Clock_2:
                        LDA.B $A9                            ;9FAA5E|A5A9    |;
                        CMP.W #$0004                         ;9FAA60|C90400  |;
                        BNE CODE_9FAA86                      ;9FAA63|D021    |;
-                       STZ.B $91                            ;9FAA65|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9FAA65|6491    |;
                        LDA.W $1503,X                        ;9FAA67|BD0315  |;
                        BEQ CODE_9FAA70                      ;9FAA6A|F004    |;
-                       INC.B $91                            ;9FAA6C|E691    |;
-                       INC.B $91                            ;9FAA6E|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9FAA6C|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9FAA6E|E691    |;
  
           CODE_9FAA70:
-                       LDY.B $91                            ;9FAA70|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FAA70|A491    |;
                        LDA.W $12A3,X                        ;9FAA72|BDA312  |;
                        AND.W #$00FF                         ;9FAA75|29FF00  |;
                        STA.W $179A,Y                        ;9FAA78|999A17  |;
@@ -4363,7 +4363,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $A9                            ;9FAD10|85A9    |;
                        JSL.L CODE_9D8000                    ;9FAD12|2200809D|;
                        LDA.W $1E91                          ;9FAD16|AD911E  |;
-                       STA.B $91                            ;9FAD19|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FAD19|8591    |;
                        LDA.W #$0005                         ;9FAD1B|A90500  |;
                        STA.W $0D11                          ;9FAD1E|8D110D  |;
                        LDA.W $1E8F                          ;9FAD21|AD8F1E  |;
@@ -4396,7 +4396,7 @@ Real_Time_Pen_Clock_2:
                        INC.W $0D11                          ;9FAD5F|EE110D  |;
                        LDA.W $1E91                          ;9FAD62|AD911E  |;
                        EOR.W #$0002                         ;9FAD65|490200  |;
-                       STA.B $91                            ;9FAD68|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FAD68|8591    |;
                        TAY                                  ;9FAD6A|A8      |;
                        LDA.W GoalieInNetHmAw,Y              ;9FAD6B|B9AA17  |;
                        STA.B $A5                            ;9FAD6E|85A5    |;
@@ -4849,7 +4849,7 @@ Real_Time_Pen_Clock_2:
                        BNE CODE_9FB197                      ;9FB1A7|D0EE    |;
  
           CODE_9FB1A9:
-                       STY.B $91                            ;9FB1A9|8491    |;
+                       STY.B zpCurntTeamLoopVal             ;9FB1A9|8491    |;
                        LDX.B $95                            ;9FB1AB|A695    |;
                        JSL.L CODE_9EC4F3                    ;9FB1AD|22F3C49E|;
  
@@ -5176,7 +5176,7 @@ Real_Time_Pen_Clock_2:
                        BPL CODE_9FB517                      ;9FB52F|10E6    |;
                        LDA.W $1023,X                        ;9FB531|BD2310  |;
                        BPL CODE_9FB517                      ;9FB534|10E1    |;
-                       STZ.B $91                            ;9FB536|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9FB536|6491    |;
                        LDA.W #$0001                         ;9FB538|A90100  |;
                        STA.B $A5                            ;9FB53B|85A5    |;
                        INC A                                ;9FB53D|1A      |;
@@ -5987,10 +5987,10 @@ Real_Time_Pen_Clock_2:
                        LDA.W #$8000                         ;9FBC64|A90080  |;
                        STA.B $10                            ;9FBC67|8510    |;
                        LDA.W #$000C                         ;9FBC69|A90C00  |;
-                       STA.B $91                            ;9FBC6C|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FBC6C|8591    |;
  
           CODE_9FBC6E:
-                       LDY.B $91                            ;9FBC6E|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FBC6E|A491    |;
                        LDA.W $0AE7,Y                        ;9FBC70|B9E70A  |;
                        CMP.W #$000F                         ;9FBC73|C90F00  |;
                        BNE CODE_9FBC7B                      ;9FBC76|D003    |;
@@ -6102,8 +6102,8 @@ Real_Time_Pen_Clock_2:
                        BNE CODE_9FBD10                      ;9FBD45|D0C9    |;
  
           CODE_9FBD47:
-                       DEC.B $91                            ;9FBD47|C691    |;
-                       DEC.B $91                            ;9FBD49|C691    |;
+                       DEC.B zpCurntTeamLoopVal             ;9FBD47|C691    |;
+                       DEC.B zpCurntTeamLoopVal             ;9FBD49|C691    |;
                        BMI CODE_9FBD50                      ;9FBD4B|3003    |;
                        JMP.W CODE_9FBC6E                    ;9FBD4D|4C6EBC  |;
  
@@ -6220,7 +6220,7 @@ Real_Time_Pen_Clock_2:
                        RTL                                  ;9FBE07|6B      |;
  
           CODE_9FBE08:
-                       LDA.B $91                            ;9FBE08|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FBE08|A591    |;
                        PHA                                  ;9FBE0A|48      |;
                        PHX                                  ;9FBE0B|DA      |;
                        LDA.W $0D0F                          ;9FBE0C|AD0F0D  |;
@@ -6308,7 +6308,7 @@ Real_Time_Pen_Clock_2:
                        LDA.W #$009A                         ;9FBEA1|A99A00  |;
                        STA.B $93                            ;9FBEA4|8593    |;
                        LDA.W #$E9A3                         ;9FBEA6|A9A3E9  |;
-                       STA.B $91                            ;9FBEA9|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FBEA9|8591    |;
                        LDA.W $0D11                          ;9FBEAB|AD110D  |;
                        ASL A                                ;9FBEAE|0A      |;
                        ASL A                                ;9FBEAF|0A      |;
@@ -6324,7 +6324,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $C7                            ;9FBEC0|85C7    |;
  
           CODE_9FBEC2:
-                       LDA.B [$91],Y                        ;9FBEC2|B791    |;
+                       LDA.B [zpCurntTeamLoopVal],Y         ;9FBEC2|B791    |;
                        CLC                                  ;9FBEC4|18      |;
                        ADC.L $7E35CE                        ;9FBEC5|6FCE357E|;
                        CLC                                  ;9FBEC9|18      |;
@@ -6340,7 +6340,7 @@ Real_Time_Pen_Clock_2:
                        BNE CODE_9FBEC2                      ;9FBEDB|D0E5    |;
  
           CODE_9FBEDD:
-                       LDA.B [$91],Y                        ;9FBEDD|B791    |;
+                       LDA.B [zpCurntTeamLoopVal],Y         ;9FBEDD|B791    |;
                        CLC                                  ;9FBEDF|18      |;
                        ADC.L $7E35CE                        ;9FBEE0|6FCE357E|;
                        CLC                                  ;9FBEE4|18      |;
@@ -6358,7 +6358,7 @@ Real_Time_Pen_Clock_2:
           CODE_9FBEF8:
                        PLX                                  ;9FBEF8|FA      |;
                        PLA                                  ;9FBEF9|68      |;
-                       STA.B $91                            ;9FBEFA|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FBEFA|8591    |;
                        RTL                                  ;9FBEFC|6B      |;
  
           CODE_9FBEFD:
@@ -6975,7 +6975,7 @@ Real_Time_Pen_Clock_2:
                        PHA                                  ;9FC374|48      |;
                        LDA.B $A7                            ;9FC375|A5A7    |;
                        PHA                                  ;9FC377|48      |;
-                       LDA.B $91                            ;9FC378|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FC378|A591    |;
                        PHA                                  ;9FC37A|48      |;
                        LDA.B $93                            ;9FC37B|A593    |;
                        PHA                                  ;9FC37D|48      |;
@@ -7035,7 +7035,7 @@ Real_Time_Pen_Clock_2:
                        PLA                                  ;9FC3E9|68      |;
                        STA.B $93                            ;9FC3EA|8593    |;
                        PLA                                  ;9FC3EC|68      |;
-                       STA.B $91                            ;9FC3ED|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FC3ED|8591    |;
                        PLA                                  ;9FC3EF|68      |;
                        STA.B $A7                            ;9FC3F0|85A7    |;
                        PLA                                  ;9FC3F2|68      |;
@@ -7048,25 +7048,25 @@ Real_Time_Pen_Clock_2:
                        PHA                                  ;9FC3FA|48      |;
                        LDA.B $A7                            ;9FC3FB|A5A7    |;
                        PHA                                  ;9FC3FD|48      |;
-                       LDA.B $91                            ;9FC3FE|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FC3FE|A591    |;
                        PHA                                  ;9FC400|48      |;
                        LDA.B $93                            ;9FC401|A593    |;
                        PHA                                  ;9FC403|48      |;
-                       STZ.B $91                            ;9FC404|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9FC404|6491    |;
                        LDA.W $1636                          ;9FC406|AD3616  |;
                        STA.B $A5                            ;9FC409|85A5    |;
                        BPL CODE_9FC416                      ;9FC40B|1009    |;
                        AND.W #$00FF                         ;9FC40D|29FF00  |;
                        STA.B $A5                            ;9FC410|85A5    |;
-                       INC.B $91                            ;9FC412|E691    |;
-                       INC.B $91                            ;9FC414|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9FC412|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9FC414|E691    |;
  
           CODE_9FC416:
                        JSL.L CODE_9FC372                    ;9FC416|2272C39F|;
                        PLA                                  ;9FC41A|68      |;
                        STA.B $93                            ;9FC41B|8593    |;
                        PLA                                  ;9FC41D|68      |;
-                       STA.B $91                            ;9FC41E|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FC41E|8591    |;
                        PLA                                  ;9FC420|68      |;
                        STA.B $A7                            ;9FC421|85A7    |;
                        PLA                                  ;9FC423|68      |;
@@ -7078,7 +7078,7 @@ Real_Time_Pen_Clock_2:
                        PHA                                  ;9FC429|48      |;
                        LDA.B $A7                            ;9FC42A|A5A7    |;
                        PHA                                  ;9FC42C|48      |;
-                       LDA.B $91                            ;9FC42D|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FC42D|A591    |;
                        PHA                                  ;9FC42F|48      |;
                        LDA.B $93                            ;9FC430|A593    |;
                        PHA                                  ;9FC432|48      |;
@@ -7099,7 +7099,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $A5                            ;9FC452|85A5    |;
                        CLC                                  ;9FC454|18      |;
                        ADC.B $89                            ;9FC455|6589    |;
-                       STA.B $91                            ;9FC457|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FC457|8591    |;
                        LDA.B $8B                            ;9FC459|A58B    |;
                        STA.B $93                            ;9FC45B|8593    |;
                        INC.B $89                            ;9FC45D|E689    |;
@@ -7125,7 +7125,7 @@ Real_Time_Pen_Clock_2:
                        STA.B [$8D]                          ;9FC480|878D    |;
                        INC.B $8D                            ;9FC482|E68D    |;
                        LDA.B $89                            ;9FC484|A589    |;
-                       CMP.B $91                            ;9FC486|C591    |;
+                       CMP.B zpCurntTeamLoopVal             ;9FC486|C591    |;
                        BNE CODE_9FC47C                      ;9FC488|D0F2    |;
                        JSL.L CODE_9ECE06                    ;9FC48A|2206CE9E|;
                        PLA                                  ;9FC48E|68      |;
@@ -7135,7 +7135,7 @@ Real_Time_Pen_Clock_2:
                        PLA                                  ;9FC494|68      |;
                        STA.B $93                            ;9FC495|8593    |;
                        PLA                                  ;9FC497|68      |;
-                       STA.B $91                            ;9FC498|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FC498|8591    |;
                        PLA                                  ;9FC49A|68      |;
                        STA.B $A7                            ;9FC49B|85A7    |;
                        PLA                                  ;9FC49D|68      |;
@@ -7153,7 +7153,7 @@ Real_Time_Pen_Clock_2:
                        PHA                                  ;9FC4D2|48      |;
                        LDA.B $A7                            ;9FC4D3|A5A7    |;
                        PHA                                  ;9FC4D5|48      |;
-                       LDA.B $91                            ;9FC4D6|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FC4D6|A591    |;
                        PHA                                  ;9FC4D8|48      |;
                        LDA.B $93                            ;9FC4D9|A593    |;
                        PHA                                  ;9FC4DB|48      |;
@@ -7193,7 +7193,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $A5                            ;9FC520|85A5    |;
                        CLC                                  ;9FC522|18      |;
                        ADC.B $89                            ;9FC523|6589    |;
-                       STA.B $91                            ;9FC525|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FC525|8591    |;
                        LDA.B $8B                            ;9FC527|A58B    |;
                        STA.B $93                            ;9FC529|8593    |;
                        INC.B $89                            ;9FC52B|E689    |;
@@ -7222,7 +7222,7 @@ Real_Time_Pen_Clock_2:
                        STA.B [$8D]                          ;9FC555|878D    |;
                        INC.B $8D                            ;9FC557|E68D    |;
                        LDA.B $89                            ;9FC559|A589    |;
-                       CMP.B $91                            ;9FC55B|C591    |;
+                       CMP.B zpCurntTeamLoopVal             ;9FC55B|C591    |;
                        BNE CODE_9FC551                      ;9FC55D|D0F2    |;
                        JSL.L CODE_9ECE06                    ;9FC55F|2206CE9E|;
                        PLA                                  ;9FC563|68      |;
@@ -7232,7 +7232,7 @@ Real_Time_Pen_Clock_2:
                        PLA                                  ;9FC569|68      |;
                        STA.B $93                            ;9FC56A|8593    |;
                        PLA                                  ;9FC56C|68      |;
-                       STA.B $91                            ;9FC56D|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FC56D|8591    |;
                        PLA                                  ;9FC56F|68      |;
                        STA.B $A7                            ;9FC570|85A7    |;
                        PLA                                  ;9FC572|68      |;
@@ -7423,20 +7423,20 @@ Real_Time_Pen_Clock_2:
                        RTL                                  ;9FC701|6B      |;
  
           CODE_9FC702:
-                       STZ.B $91                            ;9FC702|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9FC702|6491    |;
                        JSL.L CODE_9FC70D                    ;9FC704|220DC79F|;
                        LDA.W #$0002                         ;9FC708|A90200  |;
-                       STA.B $91                            ;9FC70B|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FC70B|8591    |;
  
           CODE_9FC70D:
-                       LDY.B $91                            ;9FC70D|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FC70D|A491    |;
                        LDA.W #$0006                         ;9FC70F|A90600  |;
                        STA.W $17A6,Y                        ;9FC712|99A617  |;
                        LDA.W #$0032                         ;9FC715|A93200  |;
                        STA.B $A5                            ;9FC718|85A5    |;
  
           CODE_9FC71A:
-                       LDA.B $91                            ;9FC71A|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FC71A|A591    |;
                        BEQ CODE_9FC721                      ;9FC71C|F003    |;
                        LDA.W #$0034                         ;9FC71E|A93400  |;
  
@@ -7454,7 +7454,7 @@ Real_Time_Pen_Clock_2:
           CODE_9FC732:
                        LDA.W #$009C                         ;9FC732|A99C00  |;
                        STA.B $8B                            ;9FC735|858B    |;
-                       LDY.B $91                            ;9FC737|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FC737|A491    |;
                        LDA.W $1CDC,Y                        ;9FC739|B9DC1C  |;
                        STA.B $89                            ;9FC73C|8589    |;
                        LDY.W #$0000                         ;9FC73E|A00000  |;
@@ -7480,17 +7480,17 @@ Real_Time_Pen_Clock_2:
                        BEQ CODE_9FC764                      ;9FC75A|F008    |;
                        STZ.B $8D                            ;9FC75C|648D    |;
                        LDA.W #$0002                         ;9FC75E|A90200  |;
-                       STA.B $91                            ;9FC761|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FC761|8591    |;
                        RTL                                  ;9FC763|6B      |;
  
           CODE_9FC764:
                        LDA.W #$0002                         ;9FC764|A90200  |;
                        STA.B $8D                            ;9FC767|858D    |;
-                       STZ.B $91                            ;9FC769|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9FC769|6491    |;
                        RTL                                  ;9FC76B|6B      |;
  
           CODE_9FC76C:
-                       STZ.B $91                            ;9FC76C|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9FC76C|6491    |;
                        LDA.W #$0001                         ;9FC76E|A90100  |;
                        STA.B $93                            ;9FC771|8593    |;
                        LDX.W $0AC6                          ;9FC773|AEC60A  |;
@@ -7510,8 +7510,8 @@ Real_Time_Pen_Clock_2:
                        LDA.W $1C84,X                        ;9FC792|BD841C  |;
                        CMP.W #$0001                         ;9FC795|C90100  |;
                        BEQ CODE_9FC79E                      ;9FC798|F004    |;
-                       INC.B $91                            ;9FC79A|E691    |;
-                       INC.B $91                            ;9FC79C|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9FC79A|E691    |;
+                       INC.B zpCurntTeamLoopVal             ;9FC79C|E691    |;
  
           CODE_9FC79E:
                        RTL                                  ;9FC79E|6B      |;
@@ -7726,7 +7726,7 @@ Real_Time_Pen_Clock_2:
                        PHA                                  ;9FC93F|48      |;
                        LDA.B $8B                            ;9FC940|A58B    |;
                        PHA                                  ;9FC942|48      |;
-                       LDY.B $91                            ;9FC943|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FC943|A491    |;
                        LDA.W $1CDC,Y                        ;9FC945|B9DC1C  |;
                        STA.B $89                            ;9FC948|8589    |;
                        LDA.W #$009C                         ;9FC94A|A99C00  |;
@@ -8051,7 +8051,7 @@ Real_Time_Pen_Clock_2:
                        LDA.W #$FFFF                         ;9FCC0D|A9FFFF  |;
                        STA.B $AD                            ;9FCC10|85AD    |;
                        LDX.W #$0000                         ;9FCC12|A20000  |;
-                       LDA.W $1C84,Y                        ;9FCC15|B9841C  |;
+                       LDA.W JyPadHmAwy,Y                   ;9FCC15|B9841C  |;
                        CMP.W #$0001                         ;9FCC18|C90100  |;
                        BEQ CODE_9FCC20                      ;9FCC1B|F003    |;
                        LDX.W #$000C                         ;9FCC1D|A20C00  |;
@@ -8230,7 +8230,7 @@ Real_Time_Pen_Clock_2:
                        PHX                                  ;9FCD6B|DA      |;
                        LDY.B $B5                            ;9FCD6C|A4B5    |;
                        LDX.W #$0000                         ;9FCD6E|A20000  |;
-                       LDA.W $1C84,Y                        ;9FCD71|B9841C  |;
+                       LDA.W JyPadHmAwy,Y                   ;9FCD71|B9841C  |;
                        CMP.W #$0001                         ;9FCD74|C90100  |;
                        BEQ CODE_9FCD7C                      ;9FCD77|F003    |;
                        LDX.W #$000C                         ;9FCD79|A20C00  |;
@@ -8343,7 +8343,7 @@ Real_Time_Pen_Clock_2:
                        CPX.W #$0010                         ;9FCE38|E01000  |;
                        BNE CODE_9FCE33                      ;9FCE3B|D0F6    |;
                        LDX.B $87                            ;9FCE3D|A687    |;
-                       LDY.B $91                            ;9FCE3F|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FCE3F|A491    |;
                        LDA.W $1766,Y                        ;9FCE41|B96617  |;
                        STA.B $95                            ;9FCE44|8595    |;
                        LDA.W #$0005                         ;9FCE46|A90500  |;
@@ -8377,7 +8377,7 @@ Real_Time_Pen_Clock_2:
                        AND.W #$00FF                         ;9FCE81|29FF00  |;
                        ASL A                                ;9FCE84|0A      |;
                        STA.B $B1                            ;9FCE85|85B1    |;
-                       LDA.B $91                            ;9FCE87|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FCE87|A591    |;
                        BEQ CODE_9FCE8E                      ;9FCE89|F003    |;
                        LDA.W #$0034                         ;9FCE8B|A93400  |;
  
@@ -8913,10 +8913,10 @@ Real_Time_Pen_Clock_2:
                        CPX.W #$0010                         ;9FD26E|E01000  |;
                        BNE CODE_9FD269                      ;9FD271|D0F6    |;
                        LDX.B $87                            ;9FD273|A687    |;
-                       STZ.B $91                            ;9FD275|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9FD275|6491    |;
                        JSL.L CODE_9FD2A7                    ;9FD277|22A7D29F|;
                        LDA.W #$0002                         ;9FD27B|A90200  |;
-                       STA.B $91                            ;9FD27E|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FD27E|8591    |;
                        JSL.L CODE_9FD2A7                    ;9FD280|22A7D29F|;
                        STX.B $87                            ;9FD284|8687    |;
                        LDX.W #$000E                         ;9FD286|A20E00  |;
@@ -8944,7 +8944,7 @@ Real_Time_Pen_Clock_2:
                        RTL                                  ;9FD2A6|6B      |;
  
           CODE_9FD2A7:
-                       LDY.B $91                            ;9FD2A7|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FD2A7|A491    |;
                        LDA.W $17DE,Y                        ;9FD2A9|B9DE17  |;
                        AND.W #$FFEF                         ;9FD2AC|29EFFF  |;
                        STA.W $17DE,Y                        ;9FD2AF|99DE17  |;
@@ -9043,7 +9043,7 @@ Real_Time_Pen_Clock_2:
                        CPX.W #$0014                         ;9FD422|E01400  |;
                        BNE CODE_9FD41D                      ;9FD425|D0F6    |;
                        LDX.B $87                            ;9FD427|A687    |;
-                       LDY.B $91                            ;9FD429|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FD429|A491    |;
                        LDX.W $1766,Y                        ;9FD42B|BE6617  |;
                        STX.B $95                            ;9FD42E|8695    |;
                        LDA.W #$0005                         ;9FD430|A90500  |;
@@ -9075,7 +9075,7 @@ Real_Time_Pen_Clock_2:
                        DEC.B $B9                            ;9FD464|C6B9    |;
                        LDA.W #$0005                         ;9FD466|A90500  |;
                        STA.B $B1                            ;9FD469|85B1    |;
-                       LDY.B $91                            ;9FD46B|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FD46B|A491    |;
                        LDX.W $1766,Y                        ;9FD46D|BE6617  |;
                        DEX                                  ;9FD470|CA      |;
                        DEX                                  ;9FD471|CA      |;
@@ -9141,7 +9141,7 @@ Real_Time_Pen_Clock_2:
                        DEC.B $B9                            ;9FD4DC|C6B9    |;
                        LDA.W #$0005                         ;9FD4DE|A90500  |;
                        STA.B $B1                            ;9FD4E1|85B1    |;
-                       LDY.B $91                            ;9FD4E3|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FD4E3|A491    |;
                        LDX.W $1766,Y                        ;9FD4E5|BE6617  |;
                        DEX                                  ;9FD4E8|CA      |;
                        DEX                                  ;9FD4E9|CA      |;
@@ -9238,14 +9238,14 @@ Real_Time_Pen_Clock_2:
                        STA.B $8B                            ;9FD588|858B    |;
                        LDA.W #$D6B7                         ;9FD58A|A9B7D6  |;
                        STA.B $89                            ;9FD58D|8589    |;
-                       LDA.B $91                            ;9FD58F|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FD58F|A591    |;
                        CMP.W $1E91                          ;9FD591|CD911E  |;
                        BNE CODE_9FD5A3                      ;9FD594|D00D    |;
                        INC.B $89                            ;9FD596|E689    |;
                        BRA CODE_9FD5A3                      ;9FD598|8009    |;
  
           CODE_9FD59A:
-                       LDY.B $91                            ;9FD59A|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FD59A|A491    |;
                        LDA.W GoalieInNetHmAw,Y              ;9FD59C|B9AA17  |;
                        BPL CODE_9FD5A3                      ;9FD59F|1002    |;
                        INC.B $89                            ;9FD5A1|E689    |;
@@ -9264,7 +9264,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $95                            ;9FD5B6|8595    |;
                        PLA                                  ;9FD5B8|68      |;
                        STA.B $97                            ;9FD5B9|8597    |;
-                       LDY.B $91                            ;9FD5BB|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FD5BB|A491    |;
                        LDA.W $1796,Y                        ;9FD5BD|B99617  |;
                        ASL A                                ;9FD5C0|0A      |;
                        ASL A                                ;9FD5C1|0A      |;
@@ -9306,7 +9306,7 @@ Real_Time_Pen_Clock_2:
                        REP #$20                             ;9FD5FB|C220    |;
                        LDA.B $B9                            ;9FD5FD|A5B9    |;
                        BNE CODE_9FD61C                      ;9FD5FF|D01B    |;
-                       LDY.B $91                            ;9FD601|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FD601|A491    |;
                        LDA.W GoalieInNetHmAw,Y              ;9FD603|B9AA17  |;
                        INC A                                ;9FD606|1A      |;
                        STA.B $B1                            ;9FD607|85B1    |;
@@ -9344,7 +9344,7 @@ Real_Time_Pen_Clock_2:
                        DEC A                                ;9FD63E|3A      |;
                        ASL A                                ;9FD63F|0A      |;
                        STA.B $B1                            ;9FD640|85B1    |;
-                       LDA.B $91                            ;9FD642|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FD642|A591    |;
                        BEQ CODE_9FD649                      ;9FD644|F003    |;
                        LDA.W #$0034                         ;9FD646|A93400  |;
  
@@ -9425,7 +9425,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $A9                            ;9FD6DA|85A9    |;
                        DEC.B $A5                            ;9FD6DC|C6A5    |;
                        ASL.B $A5                            ;9FD6DE|06A5    |;
-                       LDA.B $91                            ;9FD6E0|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FD6E0|A591    |;
                        BEQ CODE_9FD6E7                      ;9FD6E2|F003    |;
                        LDA.W #$0034                         ;9FD6E4|A93400  |;
  
@@ -9497,11 +9497,11 @@ Real_Time_Pen_Clock_2:
                        PHA                                  ;9FD7BA|48      |;
                        LDA.B $AF                            ;9FD7BB|A5AF    |;
                        PHA                                  ;9FD7BD|48      |;
-                       LDA.B $91                            ;9FD7BE|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FD7BE|A591    |;
                        EOR.W #$0002                         ;9FD7C0|490200  |;
                        TAY                                  ;9FD7C3|A8      |;
                        LDA.W $17A6,Y                        ;9FD7C4|B9A617  |;
-                       LDY.B $91                            ;9FD7C7|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FD7C7|A491    |;
                        SEC                                  ;9FD7C9|38      |;
                        SBC.W $17A6,Y                        ;9FD7CA|F9A617  |;
                        STA.B $AD                            ;9FD7CD|85AD    |;
@@ -9511,7 +9511,7 @@ Real_Time_Pen_Clock_2:
                        db $15,$00,$85,$A5                   ;9FD7E1|        |;
  
           CODE_9FD7E5:
-                       LDY.B $91                            ;9FD7E5|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FD7E5|A491    |;
                        LDA.W $1796,Y                        ;9FD7E7|B99617  |;
                        STA.B $A9                            ;9FD7EA|85A9    |;
                        LDA.B $A5                            ;9FD7EC|A5A5    |;
@@ -9871,14 +9871,14 @@ Real_Time_Pen_Clock_2:
                        PLY                                  ;9FDC0C|7A      |;
                        BIT.W #$0008                         ;9FDC0D|890800  |;
                        BNE CODE_9FDC4B                      ;9FDC10|D039    |;
-                       STZ.B $91                            ;9FDC12|6491    |;
+                       STZ.B zpCurntTeamLoopVal             ;9FDC12|6491    |;
                        LDA.W #$0002                         ;9FDC14|A90200  |;
                        STA.B $8D                            ;9FDC17|858D    |;
                        LDA.W $1503,X                        ;9FDC19|BD0315  |;
                        BEQ CODE_9FDC25                      ;9FDC1C|F007    |;
                        STZ.B $8D                            ;9FDC1E|648D    |;
                        LDA.W #$0002                         ;9FDC20|A90200  |;
-                       STA.B $91                            ;9FDC23|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FDC23|8591    |;
  
           CODE_9FDC25:
                        JSL.L CODE_9FDD19                    ;9FDC25|2219DD9F|;
@@ -9952,7 +9952,7 @@ Real_Time_Pen_Clock_2:
                        LDA.W #$0002                         ;9FDCC0|A90200  |;
  
           CODE_9FDCC3:
-                       STA.B $91                            ;9FDCC3|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FDCC3|8591    |;
                        BEQ CODE_9FDCCA                      ;9FDCC5|F003    |;
                        LDA.W #$0034                         ;9FDCC7|A93400  |;
  
@@ -9970,12 +9970,12 @@ Real_Time_Pen_Clock_2:
                        PHA                                  ;9FDCEB|48      |;
                        LDA.B $A9                            ;9FDCEC|A5A9    |;
                        PHA                                  ;9FDCEE|48      |;
-                       LDA.B $91                            ;9FDCEF|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FDCEF|A591    |;
                        PHA                                  ;9FDCF1|48      |;
                        LDX.B $89                            ;9FDCF2|A689    |;
                        JSL.L CODE_9FDCB2                    ;9FDCF4|22B2DC9F|;
                        PLA                                  ;9FDCF8|68      |;
-                       STA.B $91                            ;9FDCF9|8591    |;
+                       STA.B zpCurntTeamLoopVal             ;9FDCF9|8591    |;
                        PLA                                  ;9FDCFB|68      |;
                        STA.B $A9                            ;9FDCFC|85A9    |;
                        PLA                                  ;9FDCFE|68      |;
@@ -10017,7 +10017,7 @@ Real_Time_Pen_Clock_2:
                        LDA.W #$0005                         ;9FDD35|A90500  |;
                        STA.B $AD                            ;9FDD38|85AD    |;
                        STA.B $AD                            ;9FDD3A|85AD    |;
-                       LDY.B $91                            ;9FDD3C|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FDD3C|A491    |;
                        LDA.W $1766,Y                        ;9FDD3E|B96617  |;
                        STA.B $89                            ;9FDD41|8589    |;
  
@@ -10030,7 +10030,7 @@ Real_Time_Pen_Clock_2:
                        AND.W #$00FF                         ;9FDD4F|29FF00  |;
                        ASL A                                ;9FDD52|0A      |;
                        STA.B $B1                            ;9FDD53|85B1    |;
-                       LDA.B $91                            ;9FDD55|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FDD55|A591    |;
                        BEQ CODE_9FDD5C                      ;9FDD57|F003    |;
                        LDA.W #$0034                         ;9FDD59|A93400  |;
  
@@ -10082,7 +10082,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $A5                            ;9FDDA0|85A5    |;
  
           CODE_9FDDA2:
-                       LDA.B $91                            ;9FDDA2|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FDDA2|A591    |;
                        BEQ CODE_9FDDA9                      ;9FDDA4|F003    |;
                        LDA.W #$0034                         ;9FDDA6|A93400  |;
  
@@ -10215,7 +10215,7 @@ Real_Time_Pen_Clock_2:
  
           CODE_9FE089:
                        STZ.B $A5                            ;9FE089|64A5    |;
-                       LDA.B $91                            ;9FE08B|A591    |;
+                       LDA.B zpCurntTeamLoopVal             ;9FE08B|A591    |;
                        BNE CODE_9FE091                      ;9FE08D|D002    |;
                        INC.B $A5                            ;9FE08F|E6A5    |;
  
@@ -10599,7 +10599,7 @@ Real_Time_Pen_Clock_2:
                        JSL.L CODE_9FC76C                    ;9FE3BA|226CC79F|;
                        JSL.L CODE_9ED300                    ;9FE3BE|2200D39E|;
                        JSL.L CODE_9FC76C                    ;9FE3C2|226CC79F|;
-                       LDY.B $91                            ;9FE3C6|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FE3C6|A491    |;
                        LDA.B $A9                            ;9FE3C8|A5A9    |;
                        BIT.W #$8180                         ;9FE3CA|898081  |;
                        BNE CODE_9FE3EB                      ;9FE3CD|D01C    |;
@@ -10632,7 +10632,7 @@ Real_Time_Pen_Clock_2:
                        BIT.W #$8380                         ;9FE401|898083  |;
                        BEQ CODE_9FE415                      ;9FE404|F00F    |;
                        JSL.L CODE_9FC76C                    ;9FE406|226CC79F|;
-                       LDY.B $91                            ;9FE40A|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FE40A|A491    |;
                        LDA.W $1C90,Y                        ;9FE40C|B9901C  |;
                        EOR.W #$0001                         ;9FE40F|490100  |;
                        STA.W $1C90,Y                        ;9FE412|99901C  |;
@@ -10643,7 +10643,7 @@ Real_Time_Pen_Clock_2:
                        BIT.W #$8380                         ;9FE41A|898083  |;
                        BEQ CODE_9FE42E                      ;9FE41D|F00F    |;
                        JSL.L CODE_9FC76C                    ;9FE41F|226CC79F|;
-                       LDY.B $91                            ;9FE423|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FE423|A491    |;
                        LDA.W Def_Ctrl,Y                     ;9FE425|B9941C  |;
                        EOR.W #$0001                         ;9FE428|490100  |; Turns Def Control On or Off with EOR of current value
                        STA.W Def_Ctrl,Y                     ;9FE42B|99941C  |;
@@ -10654,7 +10654,7 @@ Real_Time_Pen_Clock_2:
                        BIT.W #$8080                         ;9FE433|898080  |;
                        BEQ CODE_9FE42E                      ;9FE436|F0F6    |;
                        JSL.L CODE_9FC76C                    ;9FE438|226CC79F|;
-                       LDY.B $91                            ;9FE43C|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FE43C|A491    |;
                        LDA.W $17E2,Y                        ;9FE43E|B9E217  |;
                        DEC A                                ;9FE441|3A      |;
                        BMI CODE_9FE4BC                      ;9FE442|3078    |;
@@ -10691,7 +10691,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $8D                            ;9FE488|858D    |;
                        PLA                                  ;9FE48A|68      |;
                        STA.B $8F                            ;9FE48B|858F    |;
-                       LDY.B $91                            ;9FE48D|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FE48D|A491    |;
                        LDA.W $1C98,Y                        ;9FE48F|B9981C  |;
                        JSL.L CODE_9BC5AB                    ;9FE492|22ABC59B|;
                        LDA.B [$8D]                          ;9FE496|A78D    |;
@@ -10874,7 +10874,7 @@ Real_Time_Pen_Clock_2:
                        PLA                                  ;9FE66E|68      |;
                        ASL A                                ;9FE66F|0A      |;
                        TAX                                  ;9FE670|AA      |;
-                       LDA.W $1C84,X                        ;9FE671|BD841C  |;
+                       LDA.W JyPadHmAwy,X                   ;9FE671|BD841C  |;
                        EOR.W #$FFFF                         ;9FE674|49FFFF  |;
                        INC A                                ;9FE677|1A      |;
                        CMP.W $0AC6                          ;9FE678|CDC60A  |;
@@ -10925,7 +10925,7 @@ Real_Time_Pen_Clock_2:
           CODE_9FE6F2:
                        LDA.W $0D2F                          ;9FE6F2|AD2F0D  |;
                        BEQ CODE_9FE712                      ;9FE6F5|F01B    |;
-                       LDA.W $1C84                          ;9FE6F7|AD841C  |;
+                       LDA.W JyPadHmAwy                     ;9FE6F7|AD841C  |;
                        ORA.W $1C86                          ;9FE6FA|0D861C  |;
                        ORA.W $1C88                          ;9FE6FD|0D881C  |;
                        ORA.W $1C8A                          ;9FE700|0D8A1C  |;
@@ -10941,7 +10941,7 @@ Real_Time_Pen_Clock_2:
                        JMP.W CODE_9FE618                    ;9FE718|4C18E6  |;
  
           CODE_9FE71B:
-                       LDA.W $1C84                          ;9FE71B|AD841C  |;
+                       LDA.W JyPadHmAwy                     ;9FE71B|AD841C  |;
                        ORA.W $1C86                          ;9FE71E|0D861C  |;
                        ORA.W $1C88                          ;9FE721|0D881C  |;
                        ORA.W $1C8A                          ;9FE724|0D8A1C  |;
@@ -11408,7 +11408,7 @@ Real_Time_Pen_Clock_2:
  
           CODE_9FEB4E:
                        JSL.L CODE_9FC76C                    ;9FEB4E|226CC79F|;
-                       LDY.B $91                            ;9FEB52|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FEB52|A491    |;
                        LDA.W $17AA,Y                        ;9FEB54|B9AA17  |;
                        BPL CODE_9FEB5C                      ;9FEB57|1003    |;
                        JMP.W CODE_9FEC60                    ;9FEB59|4C60EC  |;
@@ -11478,7 +11478,7 @@ Real_Time_Pen_Clock_2:
  
           CODE_9FEBC2:
                        JSL.L CODE_9FC76C                    ;9FEBC2|226CC79F|;
-                       LDY.B $91                            ;9FEBC6|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FEBC6|A491    |;
                        LDA.W $1C90,Y                        ;9FEBC8|B9901C  |;
                        BEQ CODE_9FEBD9                      ;9FEBCB|F00C    |;
                        LDA.W #$009F                         ;9FEBCD|A99F00  |;
@@ -11515,7 +11515,7 @@ Real_Time_Pen_Clock_2:
  
           CODE_9FEC07:
                        JSL.L CODE_9FC76C                    ;9FEC07|226CC79F|;
-                       LDY.B $91                            ;9FEC0B|A491    |;
+                       LDY.B zpCurntTeamLoopVal             ;9FEC0B|A491    |;
                        LDA.W Def_Ctrl,Y                     ;9FEC0D|B9941C  |;
                        BEQ CODE_9FEC1E                      ;9FEC10|F00C    |;
                        LDA.W #$009F                         ;9FEC12|A99F00  |;
