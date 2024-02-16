@@ -5879,7 +5879,7 @@
           CODE_9EB0C8:
                        LDY.W $19D4,X                        ;9EB0C8|BCD419  |;
                        BMI CODE_9EB0D6                      ;9EB0CB|3009    |;
-                       LDA.W JyPadBtnPrss,Y                 ;9EB0CD|B97607  |;
+                       LDA.W JoyPad,Y                       ;9EB0CD|B97607  |;
                        AND.W #$FFF0                         ;9EB0D0|29F0FF  |;
                        BEQ CODE_9EB0D6                      ;9EB0D3|F001    |;
                        RTL                                  ;9EB0D5|6B      |;
@@ -6310,10 +6310,12 @@
                        ADC.B [$8D],Y                        ;9EB411|778D    |;
                        STA.B $8D                            ;9EB413|858D    |;
                        LDA.B [$8D]                          ;9EB415|A78D    |;
-                       AND.W #$00FF                         ;9EB417|29FF00  |;
+                       JMP.W One_Min_Pen                    ;9EB417|4C5BFB  |; Hijack for one min penalities
+          CODE_9EB41A:
                        BEQ CODE_9EB3E5                      ;9EB41A|F0C9    |;
                        CMP.W #$0001                         ;9EB41C|C90100  |;
                        BEQ CODE_9EB3E5                      ;9EB41F|F0C4    |;
+          CODE_9EB421:
                        LDA.W #$0400                         ;9EB421|A90004  |;
                        TSB.W $15D8                          ;9EB424|0CD815  |;
                        LDA.W $0AD3                          ;9EB427|ADD30A  |;
@@ -7753,8 +7755,8 @@
                        LDA.B $8D                            ;9EC172|A58D    |;
                        PHA                                  ;9EC174|48      |;
                        LDA.B $8F                            ;9EC175|A58F    |;
-                       PHA                                  ;9EC177|48      |;
-                       JSR.W One_Min_Pen                    ;9EC178|205BFB  |; One_Min_Pen Code Injection
+                       PHA                                  ;9EC177|48      |;                       
+                       LDA.W $15DA                          ;9EC178|ADDA15  |;
                        BEQ CODE_9EC180                      ;9EC17B|F003    |;
                        JMP.W CODE_9EC265                    ;9EC17D|4C65C2  |;
  
@@ -9621,7 +9623,7 @@
                        STA.B zpCurntTeamLoopVal             ;9ED0BD|8591    |;
  
           CODE_9ED0BF:
-                       JSR.W ManualPullGoalie               ;9ED0BF|206DFB  |; Hijack For Manual Pull Goalie
+                       JSR.W ManualPullGoalie               ;9ED0BF|206EFB  |; Hijack For Manual Pull Goalie
                        NOP                                  ;9ED0C2|EA      |;
                        NOP                                  ;9ED0C3|EA      |;
                        BMI CODE_9ED0FC                      ;9ED0C4|3036    |;
@@ -10124,7 +10126,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        SEC                                  ;9ED5C5|38      |;
                        SBC.W $0DB7,X                        ;9ED5C6|FDB70D  |;
                        STA.B $A9                            ;9ED5C9|85A9    |;
-                       LDA.W JyPadBtnPrss,Y                 ;9ED5CB|B97607  |;
+                       LDA.W JoyPad,Y                       ;9ED5CB|B97607  |;
                        BIT.W #$4000                         ;9ED5CE|890040  |;
                        BNE UNREACH_9ED5E8                   ;9ED5D1|D015    |;
                        LDA.W $0AB8,Y                        ;9ED5D3|B9B80A  |;
@@ -10412,7 +10414,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        BMI CODE_9ED871                      ;9ED85F|3010    |;
                        CPX.W $0AD9                          ;9ED861|ECD90A  |;
                        BEQ CODE_9ED86E                      ;9ED864|F008    |;
-                       LDA.W JyPadBtnPrss,Y                 ;9ED866|B97607  |;
+                       LDA.W JoyPad,Y                       ;9ED866|B97607  |;
                        BIT.W #$0080                         ;9ED869|898000  |;
                        BNE CODE_9ED8A4                      ;9ED86C|D036    |;
  
@@ -14677,64 +14679,66 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        RTL                                  ;9EFB5A|6B      |;
  
           One_Min_Pen:                       
-                       LDA.B $AD                            ;9EFB5B|A5AD    |; Load the value at memory location $0000AD into the Accumulator
-                       CMP.W #$203C                         ;9EFB5D|C93C20  |; Compare the Accumulator with the immediate value $20C3 // C3 is 60 in decimal 1 minute pen.
-                       BNE .not1min                         ;9EFB60|D007    |;  If the values are not equal, branch to the code labeled 'notEqual'
-                       LDA.W #$0001                         ;9EFB62|A90100  |; Load the immediate value $0001 into the Accumulator
-                       STA.W $15DA                          ;9EFB65|8DDA15  |; Store the value in the Accumulator at memory location $15DA
-                       RTS                                  ;9EFB68|60      |; Return to subroutine
+                       CMP.W #$0401                         ;9EFB5B|C90104  |; Compare to #0401 Value for 1 min penalties
+                       BEQ .hit                             ;9EFB5E|F005    |; 1 min pen jump to hit
+                       CMP.W #$0A01                         ;9EFB60|C9010A  |; Cmp to #0A01 Roughing Pen is different
+                       BNE .done                            ;9EFB63|D003    |; Not a penalty so were done
+                       .hit:
+                       JMP.W CODE_9EB421                    ;9EFB65|4C21B4  |; 1 min Penalty so JMP to B421
  
-            .not1min:
-                       LDA.W $15DA                          ;9EFB69|ADDA15  |; Run original code that was hijacked
-                       RTS                                  ;9EFB6C|60      |; Return to subroutine
+            .done:                       
+                       AND.W #$00FF                         ;9EFB68|29FF00  |; Run hijacked code
+ 
+                       JMP.W CODE_9EB41A                    ;9EFB6B|4C1AB4  |; Jmp to next instruction B41A
 
      ManualPullGoalie:
-                       LDX.W #$0000                         ;9EFB6D|A20000  |;
-                       LDY.W CurntTeamLoopVal               ;9EFB70|AC9100  |;
+                       LDX.W #$0000                         ;9EFB6E|A20000  |;
+                       LDY.W CurntTeamLoopVal               ;9EFB71|AC9100  |; Loop Runs for 00 Home 02 Away
 
             CheckGoalie:
-                       LDA.W GoalieInNetHmAw,Y              ;9EFB73|B9AA17  |; 17AA is Home 17AC is Away
-                       CMP.W #$FF00                         ;9EFB76|C900FF  |; FF00 indicates the goalie is out of the net due to penalty
-                       BNE CheckJoypad                      ;9EFB79|D001    |;
-                       RTS                                  ;9EFB7B|60      |;
+                       LDA.W GoalieInNetHmAw,Y              ;9EFB74|B9AA17  |; 17AA is Home 17AC is Away
+                       CMP.W #$FF00                         ;9EFB77|C900FF  |; FF00 indicates the goalie is out of the net due to penalty
+                       BNE CheckJoypad                      ;9EFB7A|D001    |; Goalie Check is good, check joypad
+                       RTS                                  ;9EFB7C|60      |; Goalie is out of the net due to penalty RTS
  
 
             CheckJoypad:    
-                       LDA.W JyPadHmAwyLookupTable,Y        ;9EFB7C|B9B4FB  |;
-                       CMP.W JyPadHmAwy,X                   ;9EFB7F|DD841C  |;
-                       BEQ .hit                             ;9EFB82|F009    |;
-                       INX                                  ;9EFB84|E8      |;
+                       LDA.W JyPadHmAwyLookupTable,Y        ;9EFB7D|B9B5FB  |;
+                       CMP.W JyPadHmAwy,X                   ;9EFB80|DD841C  |;
+                       BEQ CheckIfLRPressed                 ;9EFB83|F009    |; Joypad match
                        INX                                  ;9EFB85|E8      |;
-                       CPX.W #$0004                         ;9EFB86|E00400  |;
-                       BNE CheckJoypad                      ;9EFB89|D0F1    |;
-                       BRA Done                             ;9EFB8B|8021    |;
+                       INX                                  ;9EFB86|E8      |;
+                       CPX.W #$0004                         ;9EFB87|E00400  |;
+                       BNE CheckJoypad                      ;9EFB8A|D0F1    |; Loop and check other joypad
+                       BRA Done                             ;9EFB8C|8021    |; No Matched joypads were done
             
-            .hit:
-                       LDA.W JyPadBtnPrss,X                 ;9EFB8D|BD7607  |;
-                       AND.W #$00FF                         ;9EFB90|29FF00  |;
-                       CMP.W #$0030                         ;9EFB93|C93000  |; L+R Trigger Pressed
-                       BNE Done                             ;9EFB96|D016    |;
+ 
+     CheckIfLRPressed:
+                       LDA.W JoyPad,X                       ;9EFB8E|BD7607  |;
+                       AND.W #$00FF                         ;9EFB91|29FF00  |;
+                       CMP.W #$0030                         ;9EFB94|C93000  |; L+R Trigger Pressed
+                       BNE Done                             ;9EFB97|D016    |; L+R Not Pressed, were done
 
             PullOrInsertGoalie:
-                       LDA.W GoalieInNetHmAw,Y              ;9EFB98|B9AA17  |;
-                       BEQ .set                             ;9EFB9B|F007    |; If the value is 0000, set #$FFFF
-                       CMP.W #$FFFF                         ;9EFB9D|C9FFFF  |;
-                       BEQ .set                             ;9EFBA0|F002    |; If the value is FFFF, set #$0000
-                       BRA Done                             ;9EFBA2|800A    |; If the value is neither FFFor 0000, we're done
-                 .set:
-                       EOR.W #$FFFF                         ;9EFBA4|49FFFF  |;
-                       STA.W GoalieInNetHmAw,Y              ;9EFBA7|99AA17  |; Store the value back to GoalieInNetHmAw
-                       JSL.L CODE_9FD407                    ;9EFBAA|2207D49F|; Call the subroutine at $9FD407 To start the goalie animation
+                       LDA.W GoalieInNetHmAw,Y              ;9EFB99|B9AA17  |;
+                       BEQ .setFFor00                       ;9EFB9C|F007    |;
+                       CMP.W #$FFFF                         ;9EFB9E|C9FFFF  |;
+                       BEQ .setFFor00                       ;9EFBA1|F002    |;
+                       BRA Done                             ;9EFBA3|800A    |; If the value is neither FFFF or 0000, we're done
+           .setFFor00:
+                       EOR.W #$FFFF                         ;9EFBA5|49FFFF  |; If FFFF set to 0000 If 0000 set to FFFF
+                       STA.W GoalieInNetHmAw,Y              ;9EFBA8|99AA17  |; Store the value back to GoalieInNetHmAw
+                       JSL.L CODE_9FD407                    ;9EFBAB|2207D49F|; Call the subroutine at $9FD407 To start the goalie animation
 
             Done:
-                       LDY.B zpCurntTeamLoopVal             ;9EFBAE|A491    |;
-                       LDA.W GoalieInNetHmAw,Y              ;9EFBB0|B9AA17  |;
-                       RTS                                  ;9EFBB3|60      |;
+                       LDY.B zpCurntTeamLoopVal             ;9EFBAF|A491    |; Run Original Hijacked code & RTS
+                       LDA.W GoalieInNetHmAw,Y              ;9EFBB1|B9AA17  |; Run Original Hijacked code & RTS
+                       RTS                                  ;9EFBB4|60      |;
  
 
 JyPadHmAwyLookupTable:
-                       dw $0001                             ;9EFBB4|        |;
-                       dw $0002                             ;9EFBB6|        |;
+                       dw $0001                             ;9EFBB5|        |;
+                       dw $0002                             ;9EFBB7|        |;
             
              padbyte $FF
              pad $9F8000

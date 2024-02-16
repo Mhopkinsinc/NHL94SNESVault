@@ -1068,7 +1068,7 @@ Real_Time_Pen_Clock_2:
                        BNE CODE_9F89B2                      ;9F898C|D024    |;
                        LDA.W #$0001                         ;9F898E|A90100  |;
                        STA.W $0ADD,Y                        ;9F8991|99DD0A  |;
-                       LDA.W JyPadBtnPrss,Y                 ;9F8994|B97607  |;
+                       LDA.W JoyPad,Y                       ;9F8994|B97607  |;
                        STA.B $B1                            ;9F8997|85B1    |;
                        LDA.W $0AAE,Y                        ;9F8999|B9AE0A  |;
                        STA.B $AD                            ;9F899C|85AD    |;

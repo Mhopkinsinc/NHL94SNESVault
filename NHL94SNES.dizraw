@@ -1,84 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ProjectXmlSerializer-Root xmlns:exs="https://extendedxmlserializer.github.io/v2" xmlns:ns1="clr-namespace:Diz.Core.model;assembly=Diz.Core" xmlns:ns2="clr-namespace:Diz.Core.model.snes;assembly=Diz.Core" xmlns:sys="https://extendedxmlserializer.github.io/system" xmlns:ns3="clr-namespace:IX.Observable;assembly=IX.Observable" xmlns:ns4="clr-namespace:Diz.Core.export;assembly=Diz.Core" SaveVersion="102" Watermark="DiztinGUIsh" Extra1="" Extra2="" xmlns="clr-namespace:Diz.Core.serialization.xml_serializer;assembly=Diz.Core">
-  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="1014532">
+<ProjectXmlSerializer-Root xmlns:exs="https://extendedxmlserializer.github.io/v2" xmlns:ns1="clr-namespace:Diz.Core.model;assembly=Diz.Core" xmlns:ns2="clr-namespace:Diz.Core.model.snes;assembly=Diz.Core" xmlns:sys="https://extendedxmlserializer.github.io/system" xmlns:ns3="clr-namespace:System.Collections.Generic;assembly=System.Collections" xmlns:ns4="clr-namespace:Diz.Core.export;assembly=Diz.Core" SaveVersion="102" Watermark="DiztinGUIsh" Extra1="" Extra2="" xmlns="clr-namespace:Diz.Core.serialization.xml_serializer;assembly=Diz.Core">
+  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="996375">
     <LogWriterSettings Format="%label:-22% %code:37%;%pc%|%bytes%|; %comment%" DataPerLine="8" Unlabeled="ShowInPoints" Structure="OneBankPerFile" NewLine="true" OutputExtraWhitespace="true" GenerateFullLine="false" IncludeUnusedLabels="true" PrintLabelSpecificComments="true" RomSizeOverride="-1" FileOrFolderOutPath="DizExport\" OutputToString="false" ErrorFilename="errors.txt" />
     <ProjectSettings exs:member="" BsnesUsageMapImportOnlyChangedUnmarked="true">
       <RomBytesOutputFormatSettings CompressGroupBlock="true" CompressUsingTable1="true" InsertCommentIntoOutputLinesEveryNBytes="2048" />
     </ProjectSettings>
     <Data RomMapMode="LoRom" RomSpeed="FastRom">
-      <Comments AutomaticallyCaptureSubItems="false" HistoryLevels="50">
-        <sys:Item Key="10266349" Value="All Stars East Mario Lemieux" />
-        <sys:Item Key="10266199" Value="Start of All Stars East Header (85) bytes" />
-        <sys:Item Key="10484516" Value="Run Original Code we Hijacked" />
-        <sys:Item Key="10484520" Value="Enable Def Control On (0001) or Off (0000) via LDA" />
-        <sys:Item Key="10484523" Value="Store A into :1C94 Home Defense Control" />
-        <sys:Item Key="10484526" Value="Store A into :1C96 Away Defense Control" />
-        <sys:Item Key="10484529" Value="Used for Debug in Emulator" />
-        <sys:Item Key="10484531" Value="Return from this Subroutine" />
-        <sys:Item Key="10266285" Value="Terminator" />
-        <sys:Item Key="10266284" Value="Length of Next Players Name + 2" />
-        <sys:Item Key="10453884" Value="hijack to call our def control code" />
-        <sys:Item Key="10471090" Value="Called When Ron Barr Intro Screen Ends, Sets Starting Home + Away Goalie" />
-        <sys:Item Key="10471093" Value="0000 = 1st Goalie 0100 = 2nd Goalie 0200 = 3rd goalie FFFF = No Goalie" />
-        <sys:Item Key="10471094" Value="17AA Home 17AC Away" />
-        <sys:Item Key="10472954" Value="PenCalled 5th (in the box)" />
-        <sys:Item Key="10473102" Value="PenCalled 6th" />
-        <sys:Item Key="10473301" Value="PenCalled 2nd" />
-        <sys:Item Key="10401195" Value="Sub routine to Add Stats, 198Ax = Pen Minutes" />
-        <sys:Item Key="10401202" Value="Get Current Number of pen minutes for the player Load into A register" />
-        <sys:Item Key="10401334" Value="Pen Called 3rd already has 2078 also called when penalty ticks down every second" />
-        <sys:Item Key="10419035" Value="Load the value at memory location $0000AD into the Accumulator" />
-        <sys:Item Key="10419040" Value=" If the values are not equal, branch to the code labeled 'notEqual'" />
-        <sys:Item Key="10419045" Value="Store the value in the Accumulator at memory location $15DA" />
-        <sys:Item Key="10419048" Value="Return to subroutine" />
-        <sys:Item Key="10419037" Value="Compare the Accumulator with the immediate value $20C3 // C3 is 60 in decimal 1 minute pen." />
+      <Comments>
+        <sys:Item Key="8421488" Value="Mode 7 Settings" />
+        <sys:Item Key="8436659" Value="Logo Decompression function" />
+        <sys:Item Key="10194482" Value="# of Goalies" />
         <sys:Item Key="10194499" Value="Edit Lines # Of players at positon " />
         <sys:Item Key="10194508" Value="# of Goalies" />
-        <sys:Item Key="10194482" Value="# of Goalies" />
-        <sys:Item Key="8421488" Value="Mode 7 Settings" />
-        <sys:Item Key="10266087" Value="Anaheim" />
-        <sys:Item Key="10266091" Value="Boston" />
-        <sys:Item Key="10266095" Value="Buffalo" />
-        <sys:Item Key="10266099" Value="Calgary" />
-        <sys:Item Key="10266103" Value="Chicago" />
-        <sys:Item Key="10266115" Value="Edmonton" />
-        <sys:Item Key="10266107" Value="Dallas" />
-        <sys:Item Key="10266111" Value="Detroit" />
-        <sys:Item Key="10266119" Value="Florida" />
-        <sys:Item Key="10266123" Value="Hartford" />
-        <sys:Item Key="10266127" Value="LA Kings" />
-        <sys:Item Key="10266131" Value="Montreal" />
-        <sys:Item Key="10266135" Value="New Jersey" />
-        <sys:Item Key="10266139" Value="New York Islanders" />
-        <sys:Item Key="10266143" Value="New York Rangers" />
-        <sys:Item Key="10266147" Value="Ottawa" />
-        <sys:Item Key="10266151" Value="Philly" />
-        <sys:Item Key="10266155" Value="Pittsburgh" />
-        <sys:Item Key="10266159" Value="Quebec" />
-        <sys:Item Key="10266163" Value="San Jose" />
-        <sys:Item Key="10266167" Value="St Louis" />
-        <sys:Item Key="10266171" Value="Tampa Bay" />
-        <sys:Item Key="10266175" Value="Toronto" />
-        <sys:Item Key="10266179" Value="Vancouver" />
-        <sys:Item Key="10266183" Value="Washington" />
-        <sys:Item Key="10266187" Value="Winnipeg" />
-        <sys:Item Key="10266191" Value="All Stars East" />
-        <sys:Item Key="10266195" Value="All Stars West" />
-        <sys:Item Key="10282087" Value="Jersey Number Decimal" />
-        <sys:Item Key="10282074" Value="Player Name Length plus 2" />
+        <sys:Item Key="10257671" Value="Something to do with Player Stats &amp; Team Roster Screen" />
+        <sys:Item Key="10262051" Value="? Called During Change of Player Portrai on Game Setup" />
+        <sys:Item Key="10262089" Value="PTR Table For Banner Text Per Team" />
         <sys:Item Key="10262090" Value="PTR ANH Banner Text" />
         <sys:Item Key="10262092" Value="PTR BOS Banner Text" />
+        <sys:Item Key="10262094" Value="PTR BUF Banner Text" />
+        <sys:Item Key="10262096" Value="PTR CALl Banner Text" />
+        <sys:Item Key="10262098" Value="PTR CHI Banner Text" />
         <sys:Item Key="10262100" Value="PTR DAL Banner Text" />
         <sys:Item Key="10262102" Value="PTR DET Banner Text" />
         <sys:Item Key="10262104" Value="PTR EDM Banner Text" />
-        <sys:Item Key="10262094" Value="PTR BUF Banner Text" />
-        <sys:Item Key="10262098" Value="PTR CHI Banner Text" />
-        <sys:Item Key="10262096" Value="PTR CALl Banner Text" />
         <sys:Item Key="10262106" Value="PTR FLA Banner Text" />
         <sys:Item Key="10262108" Value="PTR HFD Banner Text" />
-        <sys:Item Key="10262114" Value="PTR NJ Banner Text" />
         <sys:Item Key="10262110" Value="PTR LA Banner Text" />
         <sys:Item Key="10262112" Value="PTR MTL Banner Text" />
+        <sys:Item Key="10262114" Value="PTR NJ Banner Text" />
         <sys:Item Key="10262116" Value="PTR NYI Banner Text" />
         <sys:Item Key="10262118" Value="PTR NYR Banner Text" />
         <sys:Item Key="10262120" Value="PTR OTT Banner Text" />
@@ -90,11 +39,10 @@
         <sys:Item Key="10262132" Value="PTR TB Banner Text" />
         <sys:Item Key="10262134" Value="PTR TOR Banner Text" />
         <sys:Item Key="10262136" Value="PTR VAN Banner Text" />
-        <sys:Item Key="10262142" Value="PTR ASE Banner Text" />
         <sys:Item Key="10262138" Value="PTR WSH Banner Text" />
         <sys:Item Key="10262140" Value="PTR  WPG Banner Text" />
+        <sys:Item Key="10262142" Value="PTR ASE Banner Text" />
         <sys:Item Key="10262144" Value="PTR ASW Banner Text" />
-        <sys:Item Key="10262089" Value="PTR Table For Banner Text Per Team" />
         <sys:Item Key="10262145" Value="Banner Text ANH" />
         <sys:Item Key="10262153" Value="Banner Text BOS" />
         <sys:Item Key="10262160" Value="Banner Text BUF" />
@@ -123,49 +71,65 @@
         <sys:Item Key="10262371" Value="Banner Text WPG" />
         <sys:Item Key="10262380" Value="Banner Text ASE" />
         <sys:Item Key="10262393" Value="Banner Text ASW" />
-        <sys:Item Key="10262051" Value="? Called During Change of Player Portrai on Game Setup" />
-        <sys:Item Key="10257671" Value="Something to do with Player Stats &amp; Team Roster Screen" />
-        <sys:Item Key="8436659" Value="Logo Decompression function" />
-        <sys:Item Key="10329286" Value="Default Away Team" />
-        <sys:Item Key="10329284" Value="Default Home Team" />
+        <sys:Item Key="10266087" Value="Anaheim" />
+        <sys:Item Key="10266091" Value="Boston" />
+        <sys:Item Key="10266095" Value="Buffalo" />
+        <sys:Item Key="10266099" Value="Calgary" />
+        <sys:Item Key="10266103" Value="Chicago" />
+        <sys:Item Key="10266107" Value="Dallas" />
+        <sys:Item Key="10266111" Value="Detroit" />
+        <sys:Item Key="10266115" Value="Edmonton" />
+        <sys:Item Key="10266119" Value="Florida" />
+        <sys:Item Key="10266123" Value="Hartford" />
+        <sys:Item Key="10266127" Value="LA Kings" />
+        <sys:Item Key="10266131" Value="Montreal" />
+        <sys:Item Key="10266135" Value="New Jersey" />
+        <sys:Item Key="10266139" Value="New York Islanders" />
+        <sys:Item Key="10266143" Value="New York Rangers" />
+        <sys:Item Key="10266147" Value="Ottawa" />
+        <sys:Item Key="10266151" Value="Philly" />
+        <sys:Item Key="10266155" Value="Pittsburgh" />
+        <sys:Item Key="10266159" Value="Quebec" />
+        <sys:Item Key="10266163" Value="San Jose" />
+        <sys:Item Key="10266167" Value="St Louis" />
+        <sys:Item Key="10266171" Value="Tampa Bay" />
+        <sys:Item Key="10266175" Value="Toronto" />
+        <sys:Item Key="10266179" Value="Vancouver" />
+        <sys:Item Key="10266183" Value="Washington" />
+        <sys:Item Key="10266187" Value="Winnipeg" />
+        <sys:Item Key="10266191" Value="All Stars East" />
+        <sys:Item Key="10266195" Value="All Stars West" />
+        <sys:Item Key="10266199" Value="Start of All Stars East Header (85) bytes" />
+        <sys:Item Key="10266284" Value="Length of Next Players Name + 2" />
+        <sys:Item Key="10266285" Value="Terminator" />
+        <sys:Item Key="10266349" Value="All Stars East Mario Lemieux" />
+        <sys:Item Key="10282074" Value="Player Name Length plus 2" />
+        <sys:Item Key="10282087" Value="Jersey Number Decimal" />
+        <sys:Item Key="10284377" Value="Playoffs?" />
         <sys:Item Key="10329282" Value="Default Play Mode 0000 for Regular season, 0100 for Continue Playoffs, 0200 for New Playoffs etc" />
+        <sys:Item Key="10329284" Value="Default Home Team" />
+        <sys:Item Key="10329286" Value="Default Away Team" />
         <sys:Item Key="10329288" Value="Period Length" />
         <sys:Item Key="10329290" Value="Penalties" />
         <sys:Item Key="10329292" Value="Line Changes" />
         <sys:Item Key="10329294" Value="Goalies" />
         <sys:Item Key="10329296" Value="??" />
-        <sys:Item Key="10459950" Value="5 minute period length" />
-        <sys:Item Key="10459952" Value="10 min period length" />
-        <sys:Item Key="10459956" Value="30 second period length" />
-        <sys:Item Key="10333399" Value="Period Length (3)" />
         <sys:Item Key="10333393" Value="Array of words[0-5] that control the number of options for each menu entry on game setup screen" />
         <sys:Item Key="10333395" Value="Home Team (28)" />
         <sys:Item Key="10333397" Value="Away Team (28)" />
+        <sys:Item Key="10333399" Value="Period Length (3)" />
         <sys:Item Key="10333401" Value="Penalities (3)" />
         <sys:Item Key="10333403" Value="Line Changes (3)" />
         <sys:Item Key="10333405" Value="Goalie Control (2)" />
-        <sys:Item Key="10471074" Value="OT Period Length" />
-        <sys:Item Key="10284377" Value="Playoffs?" />
-        <sys:Item Key="10477853" Value="Load Pause Game Menu" />
-        <sys:Item Key="10465462" Value="Game Play Is In Progress" />
-        <sys:Item Key="10454461" Value="Decrease Period Timer by 1 second" />
-        <sys:Item Key="10478632" Value="Turns Def Control On or Off with EOR of current value" />
-        <sys:Item Key="10459954" Value="20 min period length" />
+        <sys:Item Key="10400791" Value="Hijack for one min penalities" />
+        <sys:Item Key="10401195" Value="Sub routine to Add Stats, 198Ax = Pen Minutes" />
+        <sys:Item Key="10401202" Value="Get Current Number of pen minutes for the player Load into A register" />
+        <sys:Item Key="10401334" Value="Pen Called 3rd already has 2078 also called when penalty ticks down every second" />
         <sys:Item Key="10403685" Value="003C makes this real time" />
-        <sys:Item Key="10454631" Value="003C makes this real time" />
-        <sys:Item Key="10454453" Value="0444 makes this real time" />
-        <sys:Item Key="10404216" Value="One_Min_Pen Code Injection" />
-        <sys:Item Key="10419042" Value="Load the immediate value $0001 into the Accumulator" />
-        <sys:Item Key="10419049" Value="Run original code that was hijacked" />
-        <sys:Item Key="10419052" Value="Return to subroutine" />
-        <sys:Item Key="10408264" Value="cpu pull goalie goal difference limit" />
-        <sys:Item Key="10408272" Value="cpu pull goalie value used for time to pull goalie" />
-        <sys:Item Key="10408243" Value="Check If 3rd Period (0 Based)" />
+        <sys:Item Key="10408127" Value="Hijack For Manual Pull Goalie" />
         <sys:Item Key="10408240" Value="Load Period" />
+        <sys:Item Key="10408243" Value="Check If 3rd Period (0 Based)" />
         <sys:Item Key="10408246" Value="Not 3rd Period End Function" />
-        <sys:Item Key="10408266" Value="Goal difference is &gt;= 2; End function" />
-        <sys:Item Key="10408271" Value="Compare remaining time to 61 seoncds" />
-        <sys:Item Key="10408268" Value="Load remaining time left in period" />
         <sys:Item Key="10408248" Value="CPU Team Home Away Value 0 Home 2 Away" />
         <sys:Item Key="10408250" Value="Load CPU Score" />
         <sys:Item Key="10408253" Value="Non CPU Team Home or Away Value 0 Home Away 2" />
@@ -173,25 +137,89 @@
         <sys:Item Key="10408259" Value="If CPU is winning; End function" />
         <sys:Item Key="10408261" Value="If Tied; End Function" />
         <sys:Item Key="10408263" Value="Goal difference upper limit" />
+        <sys:Item Key="10408264" Value="cpu pull goalie goal difference limit" />
+        <sys:Item Key="10408266" Value="Goal difference is &gt;= 2; End function" />
+        <sys:Item Key="10408268" Value="Load remaining time left in period" />
+        <sys:Item Key="10408271" Value="Compare remaining time to 61 seoncds" />
+        <sys:Item Key="10408272" Value="cpu pull goalie value used for time to pull goalie" />
         <sys:Item Key="10408274" Value="remaining time is &gt; 61 seconds; end function" />
         <sys:Item Key="10408276" Value="? Not sure what this mem value is" />
         <sys:Item Key="10408280" Value="? Not sure what this mem value is" />
-        <sys:Item Key="10408295" Value="Not over center; End Function" />
-        <sys:Item Key="10408289" Value="Check If puck is over center?" />
-        <sys:Item Key="10408297" Value="Value contains Home or Away Team Loop 02 Away 00 Home" />
         <sys:Item Key="10408283" Value="Not sure what this jump bypasses" />
+        <sys:Item Key="10408289" Value="Check If puck is over center?" />
+        <sys:Item Key="10408295" Value="Not over center; End Function" />
+        <sys:Item Key="10408297" Value="Value contains Home or Away Team Loop 02 Away 00 Home" />
         <sys:Item Key="10408299" Value="Load the Goalie value" />
-        <sys:Item Key="10408127" Value="Hijack For Manual Pull Goalie" />
-        <sys:Item Key="10419059" Value="17AA is Home 17AC is Away" />
-        <sys:Item Key="10419062" Value="FF00 indicates the goalie is out of the net due to penalty" />
-        <sys:Item Key="10419091" Value="L+R Trigger Pressed" />
-        <sys:Item Key="10419099" Value="If the value is 0000, set #$FFFF" />
-        <sys:Item Key="10419104" Value="If the value is FFFF, set #$0000" />
-        <sys:Item Key="10419106" Value="If the value is neither FFFor 0000, we're done" />
-        <sys:Item Key="10419111" Value="Store the value back to GoalieInNetHmAw" />
-        <sys:Item Key="10419114" Value="Call the subroutine at $9FD407 To start the goalie animation" />
+        <sys:Item Key="10419035" Value="Compare to #0401 Value for 1 min penalties" />
+        <sys:Item Key="10419038" Value="1 min pen jump to hit" />
+        <sys:Item Key="10419040" Value="Cmp to #0A01 Roughing Pen is different" />
+        <sys:Item Key="10419043" Value="Not a penalty so were done" />
+        <sys:Item Key="10419045" Value="1 min Penalty so JMP to B421" />
+        <sys:Item Key="10419048" Value="Run hijacked code" />
+        <sys:Item Key="10419051" Value="Jmp to next instruction B41A" />
+        <sys:Item Key="10419057" Value="Loop Runs for 00 Home 02 Away" />
+        <sys:Item Key="10419060" Value="17AA is Home 17AC is Away" />
+        <sys:Item Key="10419063" Value="FF00 indicates the goalie is out of the net due to penalty" />
+        <sys:Item Key="10419066" Value="Goalie Check is good, check joypad" />
+        <sys:Item Key="10419068" Value="Goalie is out of the net due to penalty RTS" />
+        <sys:Item Key="10419075" Value="Joypad match" />
+        <sys:Item Key="10419082" Value="Loop and check other joypad" />
+        <sys:Item Key="10419084" Value="No Matched joypads were done" />
+        <sys:Item Key="10419092" Value="L+R Trigger Pressed" />
+        <sys:Item Key="10419095" Value="L+R Not Pressed, were done" />
+        <sys:Item Key="10419107" Value="If the value is neither FFFF or 0000, we're done" />
+        <sys:Item Key="10419109" Value="If FFFF set to 0000 If 0000 set to FFFF" />
+        <sys:Item Key="10419112" Value="Store the value back to GoalieInNetHmAw" />
+        <sys:Item Key="10419115" Value="Call the subroutine at $9FD407 To start the goalie animation" />
+        <sys:Item Key="10419119" Value="Run Original Hijacked code &amp; RTS" />
+        <sys:Item Key="10419121" Value="Run Original Hijacked code &amp; RTS" />
+        <sys:Item Key="10453884" Value="hijack to call our def control code" />
+        <sys:Item Key="10454453" Value="0444 makes this real time" />
+        <sys:Item Key="10454461" Value="Decrease Period Timer by 1 second" />
+        <sys:Item Key="10454631" Value="003C makes this real time" />
+        <sys:Item Key="10459950" Value="5 minute period length" />
+        <sys:Item Key="10459952" Value="10 min period length" />
+        <sys:Item Key="10459954" Value="20 min period length" />
+        <sys:Item Key="10459956" Value="30 second period length" />
+        <sys:Item Key="10465462" Value="Game Play Is In Progress" />
+        <sys:Item Key="10471074" Value="OT Period Length" />
+        <sys:Item Key="10471090" Value="Called When Ron Barr Intro Screen Ends, Sets Starting Home + Away Goalie" />
+        <sys:Item Key="10471093" Value="0000 = 1st Goalie 0100 = 2nd Goalie 0200 = 3rd goalie FFFF = No Goalie" />
+        <sys:Item Key="10471094" Value="17AA Home 17AC Away" />
+        <sys:Item Key="10472954" Value="PenCalled 5th (in the box)" />
+        <sys:Item Key="10473102" Value="PenCalled 6th" />
+        <sys:Item Key="10473301" Value="PenCalled 2nd" />
+        <sys:Item Key="10477853" Value="Load Pause Game Menu" />
+        <sys:Item Key="10478632" Value="Turns Def Control On or Off with EOR of current value" />
+        <sys:Item Key="10484516" Value="Run Original Code we Hijacked" />
+        <sys:Item Key="10484520" Value="Enable Def Control On (0001) or Off (0000) via LDA" />
+        <sys:Item Key="10484523" Value="Store A into :1C94 Home Defense Control" />
+        <sys:Item Key="10484526" Value="Store A into :1C96 Away Defense Control" />
+        <sys:Item Key="10484529" Value="Used for Debug in Emulator" />
+        <sys:Item Key="10484531" Value="Return from this Subroutine" />
       </Comments>
       <Labels>
+        <sys:Item Key="145">
+          <Value exs:type="ns1:Label" Name="zpCurntTeamLoopVal" Comment="00 Home 02 Away" />
+        </sys:Item>
+        <sys:Item Key="6058">
+          <Value exs:type="ns1:Label" Name="Selected_Goalie" Comment="" />
+        </sys:Item>
+        <sys:Item Key="6060">
+          <Value exs:type="ns1:Label" Name="Selected_Goalie_Awy" Comment="" />
+        </sys:Item>
+        <sys:Item Key="7316">
+          <Value exs:type="ns1:Label" Name="Def_Ctrl" Comment="Def Control On or Off 1c94+y = Home 1c94 = Away" />
+        </sys:Item>
+        <sys:Item Key="7318">
+          <Value exs:type="ns1:Label" Name="Def_Ctrl_Awy" Comment="Def Control On or Off 1c96 = Away" />
+        </sys:Item>
+        <sys:Item Key="8436659">
+          <Value exs:type="ns1:Label" Name="LoadGameSetupScreen" Comment="" />
+        </sys:Item>
+        <sys:Item Key="8441409">
+          <Value exs:type="ns1:Label" Name="Shootout_Edit_Lines" Comment="" />
+        </sys:Item>
         <sys:Item Key="8454122">
           <Value exs:type="ns1:Label" Name="Native_NMI" Comment="" />
         </sys:Item>
@@ -201,212 +229,191 @@
         <sys:Item Key="8454142">
           <Value exs:type="ns1:Label" Name="Emulation_RESET" Comment="" />
         </sys:Item>
+        <sys:Item Key="10262089">
+          <Value exs:type="ns1:Label" Name="Banner_Team_Text_PTR" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10266087">
+          <Value exs:type="ns1:Label" Name="Team_PTR" Comment="Team Data Pointer for each Team" />
+        </sys:Item>
+        <sys:Item Key="10266199">
+          <Value exs:type="ns1:Label" Name="Team_Data_ASE" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10266884">
+          <Value exs:type="ns1:Label" Name="Team_Data_ASW" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10267564">
+          <Value exs:type="ns1:Label" Name="Team_Data_BOS" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10268210">
+          <Value exs:type="ns1:Label" Name="Team_Data_BUF" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10268865">
+          <Value exs:type="ns1:Label" Name="Team_Data_CGY" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10269504">
+          <Value exs:type="ns1:Label" Name="Team_Data_CHI" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10270167">
+          <Value exs:type="ns1:Label" Name="Team_Data_DET" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10270877">
+          <Value exs:type="ns1:Label" Name="Team_Data_EDM" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10271517">
+          <Value exs:type="ns1:Label" Name="Team_Data_HFD" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10272178">
+          <Value exs:type="ns1:Label" Name="Team_Data_LA" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10272847">
+          <Value exs:type="ns1:Label" Name="Team_Data_DAL" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10273499">
+          <Value exs:type="ns1:Label" Name="Team_Data_MTL" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10274174">
+          <Value exs:type="ns1:Label" Name="Team_Data_NJD" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10274859">
+          <Value exs:type="ns1:Label" Name="Team_Data_NYI" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10275484">
+          <Value exs:type="ns1:Label" Name="Team_Data_NYR" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10276102">
+          <Value exs:type="ns1:Label" Name="Team_Data_OTW" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10276780">
+          <Value exs:type="ns1:Label" Name="Team_Data_PHI" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10277431">
+          <Value exs:type="ns1:Label" Name="Team_Data_PIT" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10278098">
+          <Value exs:type="ns1:Label" Name="Team_Data_QUE" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10278752">
+          <Value exs:type="ns1:Label" Name="Team_Data_SJ" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10279380">
+          <Value exs:type="ns1:Label" Name="Team_Data_STL" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10280010">
+          <Value exs:type="ns1:Label" Name="Team_Data_TB" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10280668">
+          <Value exs:type="ns1:Label" Name="Team_Data_TOR" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10281342">
+          <Value exs:type="ns1:Label" Name="Team_Data_VAN" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10281989">
+          <Value exs:type="ns1:Label" Name="Team_Data_WPG" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10282669">
+          <Value exs:type="ns1:Label" Name="Team_Data_WSH" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10283341">
+          <Value exs:type="ns1:Label" Name="Team_Data_FLA" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10283855">
+          <Value exs:type="ns1:Label" Name="Team_Data_ANH" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10329282">
+          <Value exs:type="ns1:Label" Name="DefaultGameSetupValues" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10333393">
+          <Value exs:type="ns1:Label" Name="Game_Setup_Menus_Arry_Sizes" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10354833">
+          <Value exs:type="ns1:Label" Name="CurntTeamLoopVal" Comment="00 Home 02 Away" />
+        </sys:Item>
+        <sys:Item Key="10356598">
+          <Value exs:type="ns1:Label" Name="JoyPad" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10360368">
+          <Value exs:type="ns1:Label" Name="period" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10360370">
+          <Value exs:type="ns1:Label" Name="clock_remaining_time" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10360718">
+          <Value exs:type="ns1:Label" Name="Score_HmAw" Comment="178E Home 1790 Away Score" />
+        </sys:Item>
+        <sys:Item Key="10360746">
+          <Value exs:type="ns1:Label" Name="GoalieInNetHmAw" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10361988">
+          <Value exs:type="ns1:Label" Name="JyPadHmAwy" Comment="01 Home 02 Away" />
+        </sys:Item>
+        <sys:Item Key="10403685">
+          <Value exs:type="ns1:Label" Name="Real_Time_Pen_Clock" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10408240">
+          <Value exs:type="ns1:Label" Name="fn_cpu_pull_goalie_3rdperiod" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10408293">
+          <Value exs:type="ns1:Label" Name="skipsbc" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10408312">
+          <Value exs:type="ns1:Label" Name="fn_end_cpu_pull_goalie_3rdperiod" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419035">
+          <Value exs:type="ns1:Label" Name="One_Min_Pen" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419045">
+          <Value exs:type="ns1:Label" Name=".hit" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419048">
+          <Value exs:type="ns1:Label" Name=".done" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419054">
+          <Value exs:type="ns1:Label" Name="ManualPullGoalie" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419060">
+          <Value exs:type="ns1:Label" Name="CheckGoalie" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419069">
+          <Value exs:type="ns1:Label" Name="CheckJoypad" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419086">
+          <Value exs:type="ns1:Label" Name="CheckIfLRPressed" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419097">
+          <Value exs:type="ns1:Label" Name="PullOrInsertGoalie" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419109">
+          <Value exs:type="ns1:Label" Name=".setFFor00" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419119">
+          <Value exs:type="ns1:Label" Name="Done" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419125">
+          <Value exs:type="ns1:Label" Name="JyPadHmAwyLookupTable" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10454453">
+          <Value exs:type="ns1:Label" Name="Real_Time_Clock_Speed" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10454631">
+          <Value exs:type="ns1:Label" Name="Real_Time_Pen_Clock_2" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10459950">
+          <Value exs:type="ns1:Label" Name="Period_Length_Arry" Comment="" />
+        </sys:Item>
         <sys:Item Key="10459952">
           <Value exs:type="ns1:Label" Name="Ten_min_per" Comment="" />
         </sys:Item>
-        <sys:Item Key="7318">
-          <Value exs:type="ns1:Label" Name="Def_Ctrl_Awy" Comment="Def Control On or Off 1c96 = Away" />
+        <sys:Item Key="10459954">
+          <Value exs:type="ns1:Label" Name="Twenty_Min_Per" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10459956">
+          <Value exs:type="ns1:Label" Name="Thirty_Sec_Per" Comment="" />
         </sys:Item>
         <sys:Item Key="10471090">
           <Value exs:type="ns1:Label" Name="Set_Default_Goalie" Comment="" />
         </sys:Item>
         <sys:Item Key="10484516">
           <Value exs:type="ns1:Label" Name="Enable_DefControl" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10419035">
-          <Value exs:type="ns1:Label" Name="One_Min_Pen" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10419049">
-          <Value exs:type="ns1:Label" Name=".not1min" Comment="" />
-        </sys:Item>
-        <sys:Item Key="8441409">
-          <Value exs:type="ns1:Label" Name="Shootout_Edit_Lines" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10266087">
-          <Value exs:type="ns1:Label" Name="Team_PTR" Comment="Team Data Pointer for each Team" />
-        </sys:Item>
-        <sys:Item Key="10283855">
-          <Value exs:type="ns1:Label" Name="Team_Data_ANH" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10283341">
-          <Value exs:type="ns1:Label" Name="Team_Data_FLA" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10282669">
-          <Value exs:type="ns1:Label" Name="Team_Data_WSH" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10281989">
-          <Value exs:type="ns1:Label" Name="Team_Data_WPG" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10281342">
-          <Value exs:type="ns1:Label" Name="Team_Data_VAN" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10280668">
-          <Value exs:type="ns1:Label" Name="Team_Data_TOR" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10280010">
-          <Value exs:type="ns1:Label" Name="Team_Data_TB" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10279380">
-          <Value exs:type="ns1:Label" Name="Team_Data_STL" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10278752">
-          <Value exs:type="ns1:Label" Name="Team_Data_SJ" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10278098">
-          <Value exs:type="ns1:Label" Name="Team_Data_QUE" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10277431">
-          <Value exs:type="ns1:Label" Name="Team_Data_PIT" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10276780">
-          <Value exs:type="ns1:Label" Name="Team_Data_PHI" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10276102">
-          <Value exs:type="ns1:Label" Name="Team_Data_OTW" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10275484">
-          <Value exs:type="ns1:Label" Name="Team_Data_NYR" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10274859">
-          <Value exs:type="ns1:Label" Name="Team_Data_NYI" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10274174">
-          <Value exs:type="ns1:Label" Name="Team_Data_NJD" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10273499">
-          <Value exs:type="ns1:Label" Name="Team_Data_MTL" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10272847">
-          <Value exs:type="ns1:Label" Name="Team_Data_DAL" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10272178">
-          <Value exs:type="ns1:Label" Name="Team_Data_LA" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10271517">
-          <Value exs:type="ns1:Label" Name="Team_Data_HFD" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10270877">
-          <Value exs:type="ns1:Label" Name="Team_Data_EDM" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10270167">
-          <Value exs:type="ns1:Label" Name="Team_Data_DET" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10269504">
-          <Value exs:type="ns1:Label" Name="Team_Data_CHI" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10268865">
-          <Value exs:type="ns1:Label" Name="Team_Data_CGY" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10268210">
-          <Value exs:type="ns1:Label" Name="Team_Data_BUF" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10267564">
-          <Value exs:type="ns1:Label" Name="Team_Data_BOS" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10266884">
-          <Value exs:type="ns1:Label" Name="Team_Data_ASW" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10266199">
-          <Value exs:type="ns1:Label" Name="Team_Data_ASE" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10262089">
-          <Value exs:type="ns1:Label" Name="Banner_Team_Text_PTR" Comment="" />
-        </sys:Item>
-        <sys:Item Key="8436659">
-          <Value exs:type="ns1:Label" Name="LoadGameSetupScreen" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10329282">
-          <Value exs:type="ns1:Label" Name="DefaultGameSetupValues" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10459950">
-          <Value exs:type="ns1:Label" Name="Period_Length_Arry" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10459954">
-          <Value exs:type="ns1:Label" Name="Twenty_Min_Per" Comment="" />
-        </sys:Item>
-        <sys:Item Key="7316">
-          <Value exs:type="ns1:Label" Name="Def_Ctrl" Comment="Def Control On or Off 1c94+y = Home 1c94 = Away" />
-        </sys:Item>
-        <sys:Item Key="10459956">
-          <Value exs:type="ns1:Label" Name="Thirty_Sec_Per" Comment="" />
-        </sys:Item>
-        <sys:Item Key="6060">
-          <Value exs:type="ns1:Label" Name="Selected_Goalie_Awy" Comment="" />
-        </sys:Item>
-        <sys:Item Key="6058">
-          <Value exs:type="ns1:Label" Name="Selected_Goalie" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10333393">
-          <Value exs:type="ns1:Label" Name="Game_Setup_Menus_Arry_Sizes" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10454453">
-          <Value exs:type="ns1:Label" Name="Real_Time_Clock_Speed" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10403685">
-          <Value exs:type="ns1:Label" Name="Real_Time_Pen_Clock" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10454631">
-          <Value exs:type="ns1:Label" Name="Real_Time_Pen_Clock_2" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10360718">
-          <Value exs:type="ns1:Label" Name="Score_HmAw" Comment="178E Home 1790 Away Score" />
-        </sys:Item>
-        <sys:Item Key="10408240">
-          <Value exs:type="ns1:Label" Name="fn_cpu_pull_goalie_3rdperiod" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10360368">
-          <Value exs:type="ns1:Label" Name="period" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10408307">
-          <Value exs:type="ns1:Label" Name="" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10408312">
-          <Value exs:type="ns1:Label" Name="fn_end_cpu_pull_goalie_3rdperiod" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10360370">
-          <Value exs:type="ns1:Label" Name="clock_remaining_time" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10360746">
-          <Value exs:type="ns1:Label" Name="GoalieInNetHmAw" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10408293">
-          <Value exs:type="ns1:Label" Name="skipsbc" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10419053">
-          <Value exs:type="ns1:Label" Name="ManualPullGoalie" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10419059">
-          <Value exs:type="ns1:Label" Name="CheckGoalie" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10419068">
-          <Value exs:type="ns1:Label" Name="CheckJoypad" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10419085">
-          <Value exs:type="ns1:Label" Name=".hit" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10419118">
-          <Value exs:type="ns1:Label" Name="Done" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10419108">
-          <Value exs:type="ns1:Label" Name=".set" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10419096">
-          <Value exs:type="ns1:Label" Name="PullOrInsertGoalie" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10419124">
-          <Value exs:type="ns1:Label" Name="JyPadHmAwyLookupTable" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10354833">
-          <Value exs:type="ns1:Label" Name="CurntTeamLoopVal" Comment="00 Home 02 Away" />
-        </sys:Item>
-        <sys:Item Key="10356598">
-          <Value exs:type="ns1:Label" Name="JyPadBtnPrss" Comment="" />
-        </sys:Item>
-        <sys:Item Key="10361988">
-          <Value exs:type="ns1:Label" Name="JyPadHmAwy" Comment="01 Home 02 Away" />
-        </sys:Item>
-        <sys:Item Key="145">
-          <Value exs:type="ns1:Label" Name="zpCurntTeamLoopVal" Comment="00 Home 02 Away" />
         </sys:Item>
       </Labels>
       <RomBytes>
@@ -1612,6 +1619,32 @@ r 100 U
 +09B
 +09B
 +09B
++F9E
+.B9E
++B9E
+.B9E
+.B9E
++B9E
+.B9E
+.B9E
++09E
+.09E
++Q9E
++09B
++09B
++09B
+.09B
+.09B
++09B
+.09B
+.09B
++09B
+.09B
+.09B
+.09B
++09B
++09B
++09B
 +09B
 .09B
 +B9B
@@ -1623,43 +1656,17 @@ r 100 U
 +B9B
 .B9B
 +09B
-+09B
-+09B
-+09B
-.09B
-.09B
-+09B
-.09B
-.09B
-+09B
-.09B
-.09B
-.09B
-+09B
-+09B
-+09B
-+09B
-.09B
-+B9B
-.B9B
-.B9B
-+B9B
-.B9B
-.B9B
-+B9B
-.B9B
-+09B
-+09B
-+09B
-.09B
-.09B
-+09B
-.09B
-.09B
-+09B
-.09B
-+09B
-+09B
++E9E
++09E
+.09E
+.09E
++E9E
+.09E
+.09E
++I9E
+.09E
++09E
++Q9E
 +09B
 +09B
 .09B
@@ -1765,20 +1772,20 @@ r 11 U
 +09B
 .09B
 +09B
-+09B
-.09B
-.09B
-+09B
-.09B
-+09B
-.09B
-.09B
-.09B
-+09B
-.09B
-.09B
-.09B
-+09B
++E9E
+.09E
+.09E
++I9E
+.09E
++I9E
+.09E
+.09E
+.09E
++I9E
+.09E
+.09E
+.09E
++E9B
 .09B
 .09B
 .09B
@@ -73406,7 +73413,7 @@ U
 .09E
 +09E
 .09E
-+09E
++E9E
 .09E
 +09E
 .09E
@@ -73459,17 +73466,14 @@ U
 +09E
 .09E
 .09E
-+09E
++M9E
 .09E
 +09E
 .09E
 .09E
-+09E
++I9E
 .09E
-+09E
-.09E
-.09E
-+09E
++E9E
 .09E
 .09E
 +09E
@@ -73477,15 +73481,18 @@ U
 .09E
 +09E
 .09E
-+09E
+.09E
++I9E
+.09E
++I9E
 .09E
 .09E
 .09E
-+09E
++I9E
 .09E
 .09E
 .09E
-+09E
++M9E
 .09E
 .09E
 .09E
@@ -88490,54 +88497,55 @@ r 12 U
 +09E
 +E9E
 .09E
-+09E
 .09E
++I9E
 .09E
 +I9E
 .I9E
-+09F
-.I9F
-.09F
-+09F
-.09F
-.09F
-+Q9F
-+E9E
+.09E
++I9E
+.09E
++c9E
+.09E
+.09E
++U9E
+.E9E
+.Q9E
++c9E
 .Q9E
 .E9E
-+Q9E
-+E9E
-.09E
-.Q9E
 +09E
 .Q9E
 .09E
-+09E
-.09E
-.09E
-+09E
-.09E
-.09E
-+I9E
-.09E
 +Q9E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
+.I9E
++I9E
+.Q9E
++U9E
 +E9E
 .09E
 .09E
 +09E
 .09E
-.09E
+.I9E
 +I9E
 .09E
 +09E
 +09E
 +09E
 .09E
-.09E
+.I9E
 +I9E
-.09E
+.Y9E
 +Y9E
-.09E
+.E9E
 +E9E
 .09E
 .09E
@@ -88546,42 +88554,42 @@ r 12 U
 .09E
 +09E
 .09E
-.09E
+.I9E
 +I9E
 .09E
 +09E
 .09E
-.09E
+.I9E
 +I9E
 .09E
 +09E
 .09E
-.09E
+.I9E
 +I9E
-.09E
+.Y9E
 +Y9E
-.09E
+.E9E
 +E9E
 .09E
 .09E
 +09E
 .09E
-.09E
+.I9E
 +I9E
 .09E
 .09E
-.09E
+.E9E
 +E9E
 .09E
 +09E
 .09E
-.09E
-+Q9E
+.Q9E
++w9E
 Eg
 E
 E
 E
-r 1096 U
+r 1095 U
 +09F
 ;pos=0F8000
 .09F
@@ -91964,33 +91972,33 @@ r 10 U
 .09B
 .09B
 +09B
-+09B
-.09B
-.09B
-+09B
-.09B
-.09B
-+09B
-.09B
-.09B
-+09B
-.09B
-.09B
-+09B
-.09B
-.09B
-.09B
-+09B
-+09B
-.09B
-.09B
-.09B
-+09B
-.09B
-.09B
-+09B
-.09B
-+09B
++E9E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
+.09E
+.09E
++Q9E
++M9E
+.09E
+.09E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
++Q9E
 r 51 U
 +09F
 .09F
@@ -99312,71 +99320,71 @@ r 18 U
 +09E
 .09E
 +09E
-+09B
-.09B
-+09B
-.09B
-.09B
-+09B
-.09B
-+09B
-+09B
-+09B
-+09B
-.09B
-.09B
-+09B
-.09B
-+09B
-.09B
-+09B
-.09B
-+09B
-.09B
-.09B
-+09B
-.09B
-+09B
-+09B
-+09B
-+09B
-.09B
-.09B
-+09B
-.09B
-+09B
-.09B
-+09B
-.09B
-.09B
-+09B
-+09B
-+09B
-+09B
-+09B
-.09B
-.09B
-+09B
-.09B
-.09B
-+09B
-+09B
-+09B
-+09B
-+09B
-.09B
-.09B
-+09B
-.09B
-.09B
-+09B
-.09B
-.09B
-.09B
-+09B
-.09B
-.09B
-.09B
++E9E
+.09E
++09E
+.09E
+.09E
++E9E
+.09E
++09E
++09E
++09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++E9E
+.09E
++09E
++09E
++09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
++09E
++09E
++09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
++09E
++09E
++09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
+.09E
++I9E
+.09E
+.09E
+.09E
 +09B
 .09B
 .09B

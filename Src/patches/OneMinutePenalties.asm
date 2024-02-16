@@ -44,9 +44,8 @@
         else ; One Minute Penalties are Disabled Restore Original Code
             
             if !DizImport != 1      ;Restore Original if DizImport is not enabled
-                org $9EC178         ;Remove Hijack to new function
-                padLong $15DAAD     ;Restore Original Code
-                pad $9EC17B                
+                org $9EB417         ;Remove Hijack to new function
+                AND.W #$00FF
             endif
 
     endif
