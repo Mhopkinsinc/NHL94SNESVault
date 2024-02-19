@@ -5,6 +5,7 @@
                        Def_Ctrl_Awy = $001C96; !^ Def Control On or Off 1c96 = Away ^!
                        CurntTeamLoopVal = $9E0091; !^ 00 Home 02 Away ^!
                        JoyPad = $9E0776
+                       PauseScreenActive = $9E15DA
                        period = $9E1630
                        clock_remaining_time = $9E1632
                        Score_HmAw = $9E178E; !^ 178E Home 1790 Away Score ^!
