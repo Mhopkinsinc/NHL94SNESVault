@@ -5484,7 +5484,7 @@
                        STA.B $A9                            ;9BC05F|85A9    |;
  
           CODE_9BC061:
-                       LDA.W $15DA                          ;9BC061|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9BC061|ADDA15  |;
                        BEQ CODE_9BC072                      ;9BC064|F00C    |;
                        LDA.B $A5                            ;9BC066|A5A5    |;
                        LDY.B $A9                            ;9BC068|A4A9    |;
@@ -5569,7 +5569,7 @@
                        STA.B $A9                            ;9BC0FA|85A9    |;
  
           CODE_9BC0FC:
-                       LDA.W $15DA                          ;9BC0FC|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9BC0FC|ADDA15  |;
                        BEQ CODE_9BC10D                      ;9BC0FF|F00C    |;
                        LDA.B $A5                            ;9BC101|A5A5    |;
                        LDY.B $A9                            ;9BC103|A4A9    |;

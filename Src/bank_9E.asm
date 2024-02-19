@@ -1592,7 +1592,7 @@
  
           CODE_9E8C35:
                        STZ.W $0CDB                          ;9E8C35|9CDB0C  |;
-                       LDA.W $15DA                          ;9E8C38|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9E8C38|ADDA15  |;
                        BEQ CODE_9E8C45                      ;9E8C3B|F008    |;
                        LDA.B $AD                            ;9E8C3D|A5AD    |;
                        LDY.B $B1                            ;9E8C3F|A4B1    |;
@@ -4313,7 +4313,7 @@
                        LDY.W #$0010                         ;9EA44A|A01000  |;
                        LDA.B [$89],Y                        ;9EA44D|B789    |;
                        STA.B $A9                            ;9EA44F|85A9    |;
-                       LDA.W $15DA                          ;9EA451|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9EA451|ADDA15  |;
                        BNE CODE_9EA425                      ;9EA454|D0CF    |;
  
           CODE_9EA456:
@@ -6016,7 +6016,7 @@
                        RTL                                  ;9EB1E4|6B      |;
  
           CODE_9EB1E5:
-                       LDA.W $15DA                          ;9EB1E5|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9EB1E5|ADDA15  |;
                        BEQ CODE_9EB1ED                      ;9EB1E8|F003    |;
                        JMP.W CODE_9EB2B4                    ;9EB1EA|4CB4B2  |;
  
@@ -6649,7 +6649,7 @@
           CODE_9EB6A5:
                        LDA.W #$0000                         ;9EB6A5|A90000  |;
                        STA.B [$89]                          ;9EB6A8|8789    |;
-                       LDA.W $15DA                          ;9EB6AA|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9EB6AA|ADDA15  |;
                        BEQ CODE_9EB6B2                      ;9EB6AD|F003    |;
                        db $4C,$A1,$B4                       ;9EB6AF|        |;
  
@@ -6790,16 +6790,25 @@
                        LDA.W $15D6                          ;9EB7AF|ADD615  |;
                        BNE CODE_9EB7FB                      ;9EB7B2|D047    |;
                        LDA.B $A5                            ;9EB7B4|A5A5    |;
-                       CMP.W #$0005                         ;9EB7B6|C90500  |;
+                       CMP.W #$0005                         ;9EB7B6|C90500  |; Penalty Countdown CMP 5 Seconds
                        BCS CODE_9EB7FB                      ;9EB7B9|B040    |;
-                       db $C9,$01,$00,$F0,$0E,$A9,$00,$70   ;9EB7BB|        |;
-                       db $85,$64,$A9,$05,$00,$22,$7D,$A1   ;9EB7C3|        |;
-                       db $80,$80,$2D,$A9,$00,$70,$85,$64   ;9EB7CB|        |;
-                       db $A9,$05,$00,$22,$7D,$A1,$80,$DA   ;9EB7D3|        |;
-                       db $A8,$E2,$20,$B9,$F2,$08,$C9,$02   ;9EB7DB|        |;
-                       db $D0,$13,$A9,$03,$99,$F2,$08,$C2   ;9EB7E3|        |;
-                       db $20,$98,$0A,$A8,$A9,$59,$06,$99   ;9EB7EB|        |;
-                       db $4A,$09,$8D,$AF,$0C,$C2,$20,$FA   ;9EB7F3|        |;
+                       CMP.W #$0001                         ;9EB7BB|C90100  |; Penalty Countdown CMP 1 Seconds
+                       BEQ CODE_9EB7CE                      ;9EB7BE|F00E    |; 1 Second Left BRA
+                       LDA.W #$7000                         ;9EB7C0|A90070  |; SFX
+                       STA.B $64                            ;9EB7C3|8564    |; SFX
+                       LDA.W #$0005                         ;9EB7C5|A90500  |; SFX
+                       JSL.L CODE_80A17D                    ;9EB7C8|227DA180|; JMP Function Play SFX
+                       BRA CODE_9EB7FB                      ;9EB7CC|802D    |;
+          CODE_9EB7CE:
+                       LDA.W #$7000                         ;9EB7CE|A90070  |; SFX
+                       STA.B $64                            ;9EB7D1|8564    |; SFX
+                       LDA.W #$0005                         ;9EB7D3|A90500  |; SFX
+                       JSL.L CODE_80A17D                    ;9EB7D6|227DA180|; JMP Play SFX
+                       db $DA,$A8,$E2,$20,$B9,$F2,$08,$C9   ;9EB7DA|        |;
+                       db $02,$D0,$13,$A9,$03,$99,$F2,$08   ;9EB7E2|        |;
+                       db $C2,$20,$98,$0A,$A8,$A9,$59,$06   ;9EB7EA|        |;
+                       db $99,$4A,$09,$8D,$AF,$0C,$C2,$20   ;9EB7F2|        |;
+                       db $FA                               ;9EB7FA|        |;
  
           CODE_9EB7FB:
                        JSL.L CODE_9FA3D7                    ;9EB7FB|22D7A39F|;
@@ -6870,7 +6879,7 @@
                        RTL                                  ;9EB889|6B      |;
  
           CODE_9EB88A:
-                       LDA.W $15DA                          ;9EB88A|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9EB88A|ADDA15  |;
                        BEQ CODE_9EB892                      ;9EB88D|F003    |;
                        db $4C,$4B,$B9                       ;9EB88F|        |;
  
@@ -7488,7 +7497,7 @@
                        STA.W $1624                          ;9EBEF4|8D2416  |;
                        LDA.W #$FFFF                         ;9EBEF7|A9FFFF  |;
                        STA.W $0F43,X                        ;9EBEFA|9D430F  |;
-                       LDA.W $15DA                          ;9EBEFD|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9EBEFD|ADDA15  |;
                        BNE CODE_9EBF0A                      ;9EBF00|D008    |;
                        LDA.W #$0171                         ;9EBF02|A97101  |;
                        STA.W $0D97,X                        ;9EBF05|9D970D  |;
@@ -7640,8 +7649,11 @@
                        LDA.W $1852,Y                        ;9EC00B|B95218  |;
                        CMP.W #$0006                         ;9EC00E|C90600  |;
                        BPL CODE_9EBFDD                      ;9EC011|10CA    |;
-                       db $B9,$52,$18,$D0,$04,$22,$71,$C0   ;9EC013|        |;
-                       db $9E,$6B                           ;9EC01B|        |;
+                       LDA.W $1852,Y                        ;9EC013|B95218  |;
+                       BNE UNREACH_9EC01C                   ;9EC016|D004    |;
+                       db $22,$71,$C0,$9E                   ;9EC018|        |;
+       UNREACH_9EC01C:
+                       db $6B                               ;9EC01C|        |;
  
        UNREACH_9EC01D:
                        db $3A,$99,$52,$18,$89,$00,$08,$D0   ;9EC01D|        |;
@@ -7756,7 +7768,7 @@
                        PHA                                  ;9EC174|48      |;
                        LDA.B $8F                            ;9EC175|A58F    |;
                        PHA                                  ;9EC177|48      |;                       
-                       LDA.W $15DA                          ;9EC178|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9EC178|ADDA15  |;
                        BEQ CODE_9EC180                      ;9EC17B|F003    |;
                        JMP.W CODE_9EC265                    ;9EC17D|4C65C2  |;
  
@@ -9636,7 +9648,7 @@
                        LDY.B zpCurntTeamLoopVal             ;9ED0D6|A491    |;
                        LDA.W $15D4                          ;9ED0D8|ADD415  |;
                        BIT.W #$0008                         ;9ED0DB|890800  |;
-                       BNE CODE_9ED0EF                      ;9ED0DE|D00F    |;
+                       BNE Pen_PullGoalie                   ;9ED0DE|D00F    |;
                        LDA.W $19D0,Y                        ;9ED0E0|B9D019  |;
                        BNE CODE_9ED0FC                      ;9ED0E3|D017    |;
                        LDA.W $0DD3                          ;9ED0E5|ADD30D  |;
@@ -9644,7 +9656,7 @@
                        JSL.L fn_cpu_pull_goalie_3rdperiod   ;9ED0EA|2230D19E|;
                        RTL                                  ;9ED0EE|6B      |;
  
-          CODE_9ED0EF:
+       Pen_PullGoalie:
                        LDA.W GoalieInNetHmAw,Y              ;9ED0EF|B9AA17  |;
                        ORA.W #$FF00                         ;9ED0F2|0900FF  |;
                        STA.W GoalieInNetHmAw,Y              ;9ED0F5|99AA17  |;
@@ -13237,7 +13249,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDA.W $0DD3                          ;9EEF42|ADD30D  |;
                        STA.W $0DB7,X                        ;9EEF45|9DB70D  |;
                        STZ.W $0DFB                          ;9EEF48|9CFB0D  |;
-                       LDA.W $15DA                          ;9EEF4B|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9EEF4B|ADDA15  |;
                        BEQ CODE_9EEF54                      ;9EEF4E|F004    |;
                        INC.W $0D55,X                        ;9EEF50|FE550D  |;
                        RTL                                  ;9EEF53|6B      |;
@@ -14420,7 +14432,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
           CODE_9EF980:
                        LDA.W #$7FFF                         ;9EF980|A9FF7F  |;
                        STA.W $1628                          ;9EF983|8D2816  |;
-                       LDA.W $15DA                          ;9EF986|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9EF986|ADDA15  |;
                        BEQ CODE_9EF991                      ;9EF989|F006    |;
                        LDA.W #$003C                         ;9EF98B|A93C00  |;
                        STA.W $1628                          ;9EF98E|8D2816  |;
@@ -14572,7 +14584,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDA.L $7E35CA                        ;9EFA85|AFCA357E|;
                        ORA.W #$2000                         ;9EFA89|090020  |;
                        STA.B $C5                            ;9EFA8C|85C5    |;
-                       LDA.W $15DA                          ;9EFA8E|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9EFA8E|ADDA15  |;
                        BEQ CODE_9EFAA8                      ;9EFA91|F015    |;
                        LDA.L $7E35C8                        ;9EFA93|AFC8357E|;
                        STA.B $C5                            ;9EFA97|85C5    |;
@@ -14639,7 +14651,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDA.W #$0002                         ;9EFB07|A90200  |;
                        STA.W $0D0F                          ;9EFB0A|8D0F0D  |;
                        STA.W $0D11                          ;9EFB0D|8D110D  |;
-                       LDA.W $15DA                          ;9EFB10|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9EFB10|ADDA15  |;
                        BEQ CODE_9EFB21                      ;9EFB13|F00C    |;
                        db $A9,$0D,$00,$8D,$0F,$0D,$A9,$0F   ;9EFB15|        |;
                        db $00,$8D,$11,$0D                   ;9EFB1D|        |;
@@ -14703,42 +14715,46 @@ fn_end_cpu_pull_goalie_3rdperiod:
  
 
             CheckJoypad:    
-                       LDA.W JyPadHmAwyLookupTable,Y        ;9EFB7D|B9B5FB  |;
+                       LDA.W JyPadHmAwyLookupTable,Y        ;9EFB7D|B9C1FB  |;
                        CMP.W JyPadHmAwy,X                   ;9EFB80|DD841C  |;
                        BEQ CheckIfLRPressed                 ;9EFB83|F009    |; Joypad match
                        INX                                  ;9EFB85|E8      |;
                        INX                                  ;9EFB86|E8      |;
                        CPX.W #$0004                         ;9EFB87|E00400  |;
                        BNE CheckJoypad                      ;9EFB8A|D0F1    |; Loop and check other joypad
-                       BRA Done                             ;9EFB8C|8021    |; No Matched joypads were done
+                       BRA Done                             ;9EFB8C|802D    |; No Matched joypads were done
             
  
      CheckIfLRPressed:
                        LDA.W JoyPad,X                       ;9EFB8E|BD7607  |;
                        AND.W #$00FF                         ;9EFB91|29FF00  |;
                        CMP.W #$0030                         ;9EFB94|C93000  |; L+R Trigger Pressed
-                       BNE Done                             ;9EFB97|D016    |; L+R Not Pressed, were done
+                       BNE Done                             ;9EFB97|D022    |; L+R Not Pressed, were done
 
             PullOrInsertGoalie:
                        LDA.W GoalieInNetHmAw,Y              ;9EFB99|B9AA17  |;
                        BEQ .setFFor00                       ;9EFB9C|F007    |;
                        CMP.W #$FFFF                         ;9EFB9E|C9FFFF  |;
                        BEQ .setFFor00                       ;9EFBA1|F002    |;
-                       BRA Done                             ;9EFBA3|800A    |; If the value is neither FFFF or 0000, we're done
+                       BRA Done                             ;9EFBA3|8016    |; If the value is neither FFFF or 0000, we're done
            .setFFor00:
                        EOR.W #$FFFF                         ;9EFBA5|49FFFF  |; If FFFF set to 0000 If 0000 set to FFFF
                        STA.W GoalieInNetHmAw,Y              ;9EFBA8|99AA17  |; Store the value back to GoalieInNetHmAw
-                       JSL.L CODE_9FD407                    ;9EFBAB|2207D49F|; Call the subroutine at $9FD407 To start the goalie animation
+                       JSL.L CODE_9FD407                    ;9EFBAB|2207D49F|; Call the subroutine at $9FD407 To start the goalie animation                                                                      
+                       LDA.W #$7000                         ;9EFBAF|A90070  |; Setup for SFX fnc
+                       STA.B $64                            ;9EFBB2|8564    |;
+                       LDA.W #$0005                         ;9EFBB4|A90500  |; #05 Sets Beep SFX
+                       JSL.L CODE_80A17D                    ;9EFBB7|227DA180|; Call To SFX Routine - Play Beep When L+R Pressed
 
             Done:
-                       LDY.B zpCurntTeamLoopVal             ;9EFBAF|A491    |; Run Original Hijacked code & RTS
-                       LDA.W GoalieInNetHmAw,Y              ;9EFBB1|B9AA17  |; Run Original Hijacked code & RTS
-                       RTS                                  ;9EFBB4|60      |;
+                       LDY.B zpCurntTeamLoopVal             ;9EFBBB|A491    |; Run Original Hijacked code & RTS
+                       LDA.W GoalieInNetHmAw,Y              ;9EFBBD|B9AA17  |;
+                       RTS                                  ;9EFBC0|60      |;
  
 
 JyPadHmAwyLookupTable:
-                       dw $0001                             ;9EFBB5|        |;
-                       dw $0002                             ;9EFBB7|        |;
+                       dw $0001                             ;9EFBC1|        |;
+                       dw $0002                             ;9EFBC3|        |;
             
              padbyte $FF
              pad $9F8000

@@ -655,7 +655,7 @@ Real_Time_Clock_Speed:
                        JSL.L CODE_9B9F7A                    ;9F864A|227A9F9B|;
                        JSL.L CODE_9C9930                    ;9F864E|2230999C|;
                        JSL.L CODE_9FA626                    ;9F8652|2226A69F|;
-                       LDA.W $15DA                          ;9F8656|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9F8656|ADDA15  |;
                        BNE CODE_9F8685                      ;9F8659|D02A    |;
                        LDA.W $0CF7                          ;9F865B|ADF70C  |;
                        SEC                                  ;9F865E|38      |;
@@ -1052,7 +1052,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $BD                            ;9F8969|85BD    |;
                        CPX.W $0AD9                          ;9F896B|ECD90A  |;
                        BNE CODE_9F897E                      ;9F896E|D00E    |;
-                       LDA.W $15DA                          ;9F8970|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9F8970|ADDA15  |;
                        BNE CODE_9F897E                      ;9F8973|D009    |;
                        LDA.W #$0000                         ;9F8975|A90000  |;
                        STA.B $B5                            ;9F8978|85B5    |;
@@ -1167,7 +1167,7 @@ Real_Time_Pen_Clock_2:
                        BEQ CODE_9F8AD1                      ;9F8A6F|F060    |;
                        LDA.W $1283,X                        ;9F8A71|BD8312  |;
                        AND.W #$8000                         ;9F8A74|290080  |;
-                       ORA.W $15DA                          ;9F8A77|0DDA15  |;
+                       ORA.W PauseScreenActive              ;9F8A77|0DDA15  |;
                        BNE CODE_9F8AD1                      ;9F8A7A|D055    |;
                        LDA.W $0D55,X                        ;9F8A7C|BD550D  |;
                        CMP.W #$FFE7                         ;9F8A7F|C9E7FF  |;
@@ -1643,7 +1643,7 @@ Real_Time_Pen_Clock_2:
                        JSL.L CODE_808F2F                    ;9F9393|222F8F80|;
                        PLX                                  ;9F9397|FA      |;
                        JSL.L CODE_9C9786                    ;9F9398|2286979C|;
-                       LDA.W $15DA                          ;9F939C|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9F939C|ADDA15  |;
                        PHA                                  ;9F939F|48      |;
                        LDA.W $15D8                          ;9F93A0|ADD815  |;
                        PHA                                  ;9F93A3|48      |;
@@ -3455,7 +3455,7 @@ Real_Time_Pen_Clock_2:
                        PLA                                  ;9FA4BE|68      |;
                        STA.B $8F                            ;9FA4BF|858F    |;
           CODE_9FA4C1:
-                       LDA.W $15DA                          ;9FA4C1|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9FA4C1|ADDA15  |;
                        BNE CODE_9FA4D0                      ;9FA4C4|D00A    |;
                        db $AD,$11,$0D,$38,$E9,$05,$00,$8D   ;9FA4C6|        |;
                        db $11,$0D                           ;9FA4CE|        |;
@@ -3557,7 +3557,7 @@ Real_Time_Pen_Clock_2:
                        TYA                                  ;9FA5B6|98      |;
                        SBC.W $0D53                          ;9FA5B7|ED530D  |;
                        BNE CODE_9FA5E9                      ;9FA5BA|D02D    |;
-                       LDA.W $15DA                          ;9FA5BC|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9FA5BC|ADDA15  |;
                        BEQ CODE_9FA5E9                      ;9FA5BF|F028    |;
                        LDA.W $1A10                          ;9FA5C1|AD101A  |;
                        BEQ CODE_9FA5E9                      ;9FA5C4|F023    |;
@@ -5653,7 +5653,7 @@ Real_Time_Pen_Clock_2:
                        db $D1,$0A                           ;9FB9CA|        |;
  
           CODE_9FB9CC:
-                       STZ.W $15DA                          ;9FB9CC|9CDA15  |;
+                       STZ.W PauseScreenActive              ;9FB9CC|9CDA15  |;
                        LDA.W #$03E7                         ;9FB9CF|A9E703  |;
                        STA.W $0D23                          ;9FB9D2|8D230D  |;
                        JSL.L CODE_9CA19B                    ;9FB9D5|229BA19C|;
@@ -6755,7 +6755,7 @@ Real_Time_Pen_Clock_2:
                        db $6B                               ;9FC1CD|        |;
  
           CODE_9FC1CE:
-                       LDA.W $15DA                          ;9FC1CE|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9FC1CE|ADDA15  |;
                        BEQ CODE_9FC1E1                      ;9FC1D1|F00E    |;
                        LDA.B $A5                            ;9FC1D3|A5A5    |;
                        BIT.W #$0008                         ;9FC1D5|890800  |;

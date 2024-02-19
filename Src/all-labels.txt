@@ -42,12 +42,14 @@
 ;!^!-USED-!                        Game_Setup_Menus_Arry_Sizes = $9DACD1
 ;!^!-UNUSED-!                        CurntTeamLoopVal = $9E0091; !^ 00 Home 02 Away ^!
 ;!^!-UNUSED-!                        JoyPad = $9E0776
+;!^!-UNUSED-!                        PauseScreenActive = $9E15DA
 ;!^!-UNUSED-!                        period = $9E1630
 ;!^!-UNUSED-!                        clock_remaining_time = $9E1632
 ;!^!-UNUSED-!                        Score_HmAw = $9E178E; !^ 178E Home 1790 Away Score ^!
 ;!^!-UNUSED-!                        GoalieInNetHmAw = $9E17AA
 ;!^!-UNUSED-!                        JyPadHmAwy = $9E1C84; !^ 01 Home 02 Away ^!
 ;!^!-USED-!                        Real_Time_Pen_Clock = $9EBF65
+;!^!-USED-!                        Pen_PullGoalie = $9ED0EF
 ;!^!-USED-!                        fn_cpu_pull_goalie_3rdperiod = $9ED130
 ;!^!-USED-!                        skipsbc = $9ED165
 ;!^!-USED-!                        fn_end_cpu_pull_goalie_3rdperiod = $9ED178
@@ -60,8 +62,10 @@
 ;!^!-USED-!                        CheckIfLRPressed = $9EFB8E
 ;!^!-USED-!                        PullOrInsertGoalie = $9EFB99
 ;!^!-USED-!                        .setFFor00 = $9EFBA5
-;!^!-USED-!                        Done = $9EFBAF
-;!^!-USED-!                        JyPadHmAwyLookupTable = $9EFBB5
+;!^!-USED-!  
+;!^!-UNUSED-!  
+;!^!-USED-!                        Done = $9EFBBB
+;!^!-USED-!                        JyPadHmAwyLookupTable = $9EFBC1
 ;!^!-USED-!                        Real_Time_Clock_Speed = $9F85B5
 ;!^!-USED-!                        Real_Time_Pen_Clock_2 = $9F8667
 ;!^!-USED-!                        Period_Length_Arry = $9F9B2E
@@ -2721,6 +2725,7 @@
 ;!^!-USED-!                        CODE_9EB76A = $9EB76A
 ;!^!-USED-!                        CODE_9EB784 = $9EB784
 ;!^!-USED-!                        CODE_9EB791 = $9EB791
+;!^!-USED-!                        CODE_9EB7CE = $9EB7CE
 ;!^!-USED-!                        CODE_9EB7FB = $9EB7FB
 ;!^!-USED-!                        CODE_9EB851 = $9EB851
 ;!^!-USED-!                        CODE_9EB85D = $9EB85D
@@ -2791,6 +2796,7 @@
 ;!^!-USED-!                        CODE_9EBFF4 = $9EBFF4
 ;!^!-USED-!                        CODE_9EC000 = $9EC000
 ;!^!-USED-!                        CODE_9EC007 = $9EC007
+;!^!-USED-!                        UNREACH_9EC01C = $9EC01C
 ;!^!-USED-!                        UNREACH_9EC01D = $9EC01D
 ;!^!-USED-!                        CODE_9EC042 = $9EC042
 ;!^!-USED-!                        UNREACH_9EC059 = $9EC059
@@ -2991,7 +2997,6 @@
 ;!^!-USED-!                        CODE_9ED09B = $9ED09B
 ;!^!-USED-!                        CODE_9ED0A8 = $9ED0A8
 ;!^!-USED-!                        CODE_9ED0BF = $9ED0BF
-;!^!-USED-!                        CODE_9ED0EF = $9ED0EF
 ;!^!-USED-!                        CODE_9ED0FC = $9ED0FC
 ;!^!-USED-!                        CODE_9ED0FD = $9ED0FD
 ;!^!-USED-!                        CODE_9ED10F = $9ED10F

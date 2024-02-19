@@ -2996,7 +2996,7 @@
                        BNE CODE_9CA107                      ;9CA0EF|D016    |;
  
           CODE_9CA0F1:
-                       LDA.W $15DA                          ;9CA0F1|ADDA15  |;
+                       LDA.W PauseScreenActive              ;9CA0F1|ADDA15  |;
                        BNE CODE_9CA101                      ;9CA0F4|D00B    |;
                        LDA.W #$0171                         ;9CA0F6|A97101  |;
                        STA.W $0D97,X                        ;9CA0F9|9D970D  |;
