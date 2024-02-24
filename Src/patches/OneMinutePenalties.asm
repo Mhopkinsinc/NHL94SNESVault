@@ -56,18 +56,20 @@
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     if !PatchROM == 1 && !One_Minute_Penalties == 1
     
-    org $9EFB5B
+    org $9EB417    
+    JMP.W $9EFB5B                                           ;9EB417|4C5BFB  |; Hijack for one min penalities
     
+    org $9EFB5B    
     One_Min_Pen:                       
                        CMP.W #$0401                         ;9EFB5B|C90104  |; Compare to #0401 Value for 1 min penalties
                        BEQ .hit                             ;9EFB5E|F005    |; 1 min pen jump to hit
                        CMP.W #$0A01                         ;9EFB60|C9010A  |; Cmp to #0A01 Roughing Pen is different
                        BNE .done                            ;9EFB63|D003    |; Not a penalty so were done
                        .hit:
-                       JMP.W $9EB421                    ;9EFB65|4C21B4  |; 1 min Penalty so JMP to B421
+                       JMP.W $9EB421                        ;9EFB65|4C21B4  |; 1 min Penalty so JMP to B421
  
             .done:                       
                        AND.W #$00FF                         ;9EFB68|29FF00  |; Run hijacked code
  
-                       JMP.W $9EB41A                    ;9EFB6B|4C1AB4  |; Jmp to next instruction B41A
+                       JMP.W $9EB41A                        ;9EFB6B|4C1AB4  |; Jmp to next instruction B41A
     endif

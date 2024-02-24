@@ -23,6 +23,11 @@
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     if !PatchROM == 1 && !Manual_Pull_Goalie == 1
     
+    org $9ED0BF
+    JSR.W $9EFB6E                                           ;9ED0BF|206EFB  |; Hijack For Manual Pull Goalie
+                       NOP                                  ;9ED0C2|EA      |;
+                       NOP                                  ;9ED0C3|EA      |;
+    
     org $9EFB6E
     ManualPullGoalie:
                        LDX.W #$0000                         ;9EFB6E|A20000  |;
