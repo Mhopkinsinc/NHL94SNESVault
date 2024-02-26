@@ -62,8 +62,6 @@
 ;!^!-USED-!                        CheckIfLRPressed = $9EFB8E
 ;!^!-USED-!                        PullOrInsertGoalie = $9EFB99
 ;!^!-USED-!                        .setFFor00 = $9EFBA5
-;!^!-USED-!  
-;!^!-UNUSED-!  
 ;!^!-USED-!                        Done = $9EFBBB
 ;!^!-USED-!                        JyPadHmAwyLookupTable = $9EFBC1
 ;!^!-USED-!                        Real_Time_Clock_Speed = $9F85B5
@@ -72,7 +70,7 @@
 ;!^!-USED-!                        Ten_min_per = $9F9B30
 ;!^!-USED-!                        Twenty_Min_Per = $9F9B32
 ;!^!-USED-!                        Thirty_Sec_Per = $9F9B34
-;!^!-USED-!                        Set_Default_Goalie = $9FC6B2
+;!^!-USED-!                        Set_Default_Goalie = $9FC6B2; !^ HiJack to Enable Def Control ^!
 ;!^!-USED-!                        Enable_DefControl = $9FFB24
 ;!^!-UNUSED-!                        CODE_00801A = $00801A
 ;!^!-UNUSED-!                        CODE_008147 = $008147

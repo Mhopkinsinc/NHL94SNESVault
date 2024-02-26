@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProjectXmlSerializer-Root xmlns:exs="https://extendedxmlserializer.github.io/v2" xmlns:ns1="clr-namespace:Diz.Core.model;assembly=Diz.Core" xmlns:ns2="clr-namespace:Diz.Core.model.snes;assembly=Diz.Core" xmlns:sys="https://extendedxmlserializer.github.io/system" xmlns:ns3="clr-namespace:System.Collections.Generic;assembly=System.Collections" xmlns:ns4="clr-namespace:Diz.Core.export;assembly=Diz.Core" SaveVersion="102" Watermark="DiztinGUIsh" Extra1="" Extra2="" xmlns="clr-namespace:Diz.Core.serialization.xml_serializer;assembly=Diz.Core">
-  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="1033906">
+  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="998046">
     <LogWriterSettings Format="%label:-22% %code:37%;%pc%|%bytes%|; %comment%" DataPerLine="8" Unlabeled="ShowInPoints" Structure="OneBankPerFile" NewLine="true" OutputExtraWhitespace="true" GenerateFullLine="false" IncludeUnusedLabels="false" PrintLabelSpecificComments="true" RomSizeOverride="-1" FileOrFolderOutPath="DizExport\" OutputToString="false" ErrorFilename="errors.txt" />
     <ProjectSettings exs:member="" BsnesUsageMapImportOnlyChangedUnmarked="true">
       <RomBytesOutputFormatSettings CompressGroupBlock="true" CompressUsingTable1="true" InsertCommentIntoOutputLinesEveryNBytes="2048" />
@@ -136,6 +136,7 @@
         <sys:Item Key="10401745" Value="SFX" />
         <sys:Item Key="10401747" Value="SFX" />
         <sys:Item Key="10401750" Value="JMP Play SFX" />
+        <sys:Item Key="10402472" Value="Hijack to skip Interference Penalty BRA" />
         <sys:Item Key="10403685" Value="003C makes this real time" />
         <sys:Item Key="10408127" Value="Hijack For Manual Pull Goalie" />
         <sys:Item Key="10408240" Value="Load Period" />
@@ -161,6 +162,7 @@
         <sys:Item Key="10408295" Value="Not over center; End Function" />
         <sys:Item Key="10408297" Value="Value contains Home or Away Team Loop 02 Away 00 Home" />
         <sys:Item Key="10408299" Value="Load the Goalie value" />
+        <sys:Item Key="10409422" Value="Manual Goalie Control Logix when X is pressed" />
         <sys:Item Key="10419035" Value="Compare to #0401 Value for 1 min penalties" />
         <sys:Item Key="10419038" Value="1 min pen jump to hit" />
         <sys:Item Key="10419040" Value="Cmp to #0A01 Roughing Pen is different" />
@@ -95529,7 +95531,21 @@ r 83 U
 +09E
 .09E
 +09E
-r 31 U
+U
+U
+U
+U
+U
+T
+T
+T
+T
+r 9 U
+r 9 T
+U
+U
+U
+U
 +09E
 .09E
 .09E
