@@ -7143,7 +7143,7 @@
                        LDA.W $0F23,Y                        ;9EBAA1|B9230F  |;
                        SEC                                  ;9EBAA4|38      |;
                        SBC.W #$001F                         ;9EBAA5|E91F00  |;
-                       BMI CODE_9EBA67                      ;9EBAA8|30BD    |;
+                       BMI CODE_9EBA67                      ;9EBAA8|30BD    |; Hijack to skip Interference Penalty BRA
                        LDA.W $1283,X                        ;9EBAAA|BD8312  |;
                        BIT.W #$4000                         ;9EBAAD|890040  |;
                        BNE CODE_9EBA67                      ;9EBAB0|D0B5    |;
