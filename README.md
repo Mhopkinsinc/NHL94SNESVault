@@ -1,9 +1,8 @@
 # NHL 94' SNESVault
-Project "Back to the Ice": Decompiling NHL '94 on SNES, Slaying Bugs, Hacking the Puck, and Power-Playing Enhancements!
-Please see the [Installation / Setup](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki) section for instructions and tutorials.
+Decompiling NHL '94 on SNES + ROM Hacks. This project includes an [app](https://github.com/Mhopkinsinc/NHL94SNESVault/releases) to apply hacks and bug fixes to an existing ROM. <br>
+If your a developer and want to modify or build the rom, please see the Development Setup below.
 
 ## Installation
-
 - To Patch an existing ROM or create a new ROM, download the [app](https://github.com/Mhopkinsinc/NHL94SNESVault/releases) in the releases section. Windows and MacOS versions are available.
 
 ![image](https://github.com/Mhopkinsinc/NHL94SNESVault/assets/6633388/6dfc8ace-fe90-44b7-96f7-1b7e95d78e2d)
