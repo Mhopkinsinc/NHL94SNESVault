@@ -1,0 +1,6 @@
+on SNES this is the puck's X location: 3808 (EE0)
+puck X speed: 46962 (B772)
+puck Y location: 3840 (F00)
+Y speed: 46964 (B774)
+all are 1-byte values
+then I do pythagoras on the speeds to get the combined speed. which is in some kind of pixels per tick units... then I apply some arbitrary multiplier to convert it to miles per hour (I just picked a value that made Brett Hull's shot like 105 MPH)

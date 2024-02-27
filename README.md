@@ -4,15 +4,17 @@ Please see the [Installation / Setup](https://github.com/Mhopkinsinc/NHL94SNESVa
 
 ## Installation
 
-- Just want to try out some of the hacks? Download the latest [app](https://github.com/Mhopkinsinc/NHL94SNESVault/releases) in the releases section to enable / configure some of the available hacks.
+- To Patch an existing ROM or create a new ROM, download the [app](https://github.com/Mhopkinsinc/NHL94SNESVault/releases) in the releases section. Windows and MacOS versions are available.
+
+![image](https://github.com/Mhopkinsinc/NHL94SNESVault/assets/6633388/6dfc8ace-fe90-44b7-96f7-1b7e95d78e2d)
   
-- Dev Install [Git](https://git-scm.com/downloads) & [Visual Studio Code](https://code.visualstudio.com/download) and Clone this Repo. [Not technically required, but makes life easier]
+- For Development Setup, Install [Git](https://git-scm.com/downloads) & [Visual Studio Code](https://code.visualstudio.com/download) and Clone this Repo.
     
     - Detailed [Windows](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki/Windows) Install / Setup Instructions
     - Detailed [Mac](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki/macOS) Install / Setup Instructions
     - Detailed [Linux](https://github.com/Mhopkinsinc/NHL94SNESVault/wiki/Linux) Install / Setup Instructions
 
-## Building
+## Building the project
 
 - If you just want to build the rom and turn certain hacks on and off:
     - Edit Src/Config.asm to set your Rom preferences
@@ -47,4 +49,3 @@ Please see the [Installation / Setup](https://github.com/Mhopkinsinc/NHL94SNESVa
 - This project is intended for educational purposes and should be used ethically and legally. Please ensure that you adhere to the following guidelines when using the tools and files provided in this repository.
     
     - A legally obtained copy of the ROM that corresponds to the files and tools in this repository. This project does not endorse or promote piracy. Ownership of the original ROM is mandatory.
-
