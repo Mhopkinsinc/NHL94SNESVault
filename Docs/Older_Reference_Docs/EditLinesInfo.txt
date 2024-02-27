@@ -1,0 +1,80 @@
+Tile Index:		66
+Pallett Index:	3
+Tile Address:	$6660.w
+Pallett Address	$B0
+16x16
+
+617B6 = Home Body Checks
+617B8 = Away Body Checks
+617Ba = Home Team Pass Attempts
+195B = Shots
+
+Keep everything that hasn't changed (Equal to previous value) 5x
+Remove anyting that is 0 (!= value 0)
+Remove anything that is 65535 (!= value 65535)
+
+EDIT LINES
+Bank 9B
+9B8E43  8D A3 1D       STA $1DA3 //Code that sets number of forwards/Defense for edit lines
+
+CODE_9B8719
+Shootout_Edit_Lines
+
+1DA3 = # of Players at selected postion (D) or (F)
+1DAB = Index # where first player in that position is.
+1DA7 = Index of where to start the first player in the list (G) (F) (D) (Should be # of goalies on team +1)
+1DAF = # of players to display in the edit player box
+1D76
+1D77
+
+Overwrite 1DA3 with #16 hex 22 decimal # of F/D on the team 16 for montreal
+overwrite 1DA7 with #02 hex 2 decimal starting postion of first F on the team (really # of goalies) so 2 for montreal
+CODE_9B8E3D
+CODE_9B8E4F
+
+MTL Example (Normal):
+Defense:
+1DA3 = 08  	Dec = 8
+1DA7 = 10	Dec = 16
+1DAB = 10	Dec = 16
+
+Forwards:
+1DA3 = 0E  	Dec = 14
+1DA7 = 02	Dec = 02
+1DAB = 02	Dec = 02
+1DAF =
+
+MTL Example (ShootOut):
+Defense:
+1D9B =		Currently selected player during edit from 0-8 before scrolling up or down		
+1DA3 = 16  	Dec = 22
+1DA7 = 10	Dec = 09
+1DAB = 02	Dec = 02
+1DB9 =		Currentlry selected player in the shootout list 0-5
+
+Forwards:
+1DA3 = 16  	Dec = 22
+1DA7 = 02	Dec = 02
+1DAB = 02	Dec = 02
+
+
+
+MTL
+1DA3 = 16 hex 22 decimal
+1DAB = 03 hex 03 decimal
+1DA7 = 03 hex 03 decimal
+1DAF =
+
+
+
+Penalities
+(Home Pen 1) $1856 = Hex value of the penalty in seconds
+(Home Pen 2) $1872 = Hex value of the penalty in seconds
+(Home Pen 2) $1874 = Hex value of the penalty in seconds
+
+9EB638  99 52 18       STA $1852,Y
+
+Pull Goalie With Different Button Press:
+
+17AC,17AB Away Goalie
+$1C84 = joypad 1 $1c86 = Joypad2
