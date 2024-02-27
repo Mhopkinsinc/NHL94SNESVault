@@ -1,8 +1,3 @@
-                       lorom
-                       
-                       incsrc "labels.asm"
-                       incsrc "config.asm"
-                       incsrc "DizSettings.asm"
                        incsrc "patches/CPUPullGoalie.asm"
                        incsrc "patches/ManualPullGoalie.asm"
                        incsrc "patches/30SecondPeriods.asm"

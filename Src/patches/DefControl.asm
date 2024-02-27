@@ -27,9 +27,10 @@
             NOP                                  ;9F837F|EA      |;
             
             org $9FFB24
-            JSL.L $9FC6B2                        ;9FFB24|22B2C69F|; Run Original Code we Hijacked
-            LDA.W #$0001                         ;9FFB28|A90000  |; Enable Def Control On (0001) or Off (0000)
-            STA.W Def_Ctrl                       ;9FFB2B|8D941C  |; Store A into :1C94 Home Defense Control
-            STA.W Def_Ctrl_Awy                   ;9FFB2E|8D961C  |; Store A into :1C96 Away Defense Control                       
-            RTS                                  ;9FFB33|60      |; Return from this Subroutine
+            
+                       JSL.L Set_Default_Goalie             ;9FFB24|22B2C69F|; Run Original Code we Hijacked
+                       LDA.W #$0001                         ;9FFB28|A90100  |; Enable Def Control On (0001)
+                       STA.W Def_Ctrl                       ;9FFB2B|8D941C  |; Enable Home Defense Control (1C94)
+                       STA.W Def_Ctrl_Awy                   ;9FFB2E|8D961C  |; Enable Away Defense Control (1C96)
+                       RTS                                  ;9FFB31|60      |; Return from this Subroutine
     endif

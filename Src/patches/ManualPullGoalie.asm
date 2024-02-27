@@ -66,19 +66,18 @@
            .setFFor00:
                        EOR.W #$FFFF                         ;9EFBA5|49FFFF  |; If FFFF set to 0000 If 0000 set to FFFF
                        STA.W GoalieInNetHmAw,Y              ;9EFBA8|99AA17  |; Store the value back to GoalieInNetHmAw
-                       JSL.L $9FD407                        ;9EFBAB|2207D49F|; Call the subroutine at $9FD407 To start the goalie animation                                                                      
+                       JSL.L CODE_9FD407                    ;9EFBAB|2207D49F|; Call the subroutine at $9FD407 To start the goalie animation                                                                      
                        LDA.W #$7000                         ;9EFBAF|A90070  |; Setup for SFX fnc
                        STA.B $64                            ;9EFBB2|8564    |;
                        LDA.W #$0005                         ;9EFBB4|A90500  |; #05 Sets Beep SFX
-                       JSL.L $80A17D                        ;9EFBB7|227DA180|; Call To SFX Routine - Play Beep When L+R Pressed
+                       JSL.L CODE_80A17D                    ;9EFBB7|227DA180|; Call To SFX Routine - Play Beep When L+R Pressed
 
             Done:
                        LDY.B zpCurntTeamLoopVal             ;9EFBBB|A491    |; Run Original Hijacked code & RTS
                        LDA.W GoalieInNetHmAw,Y              ;9EFBBD|B9AA17  |;
-                       RTS                                  ;9EFBC0|60      |;
- 
+                       RTS                                  ;9EFBC0|60      |; 
 
-    JyPadHmAwyLookupTable:
+JyPadHmAwyLookupTable:
                        dw $0001                             ;9EFBC1|        |;
                        dw $0002                             ;9EFBC3|        |;
     endif
