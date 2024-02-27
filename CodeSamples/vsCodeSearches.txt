@@ -1,0 +1,7 @@
+//Regular Expression Searches used in VSCode
+
+// Searches for Beep sfx setup
+LDA\.W\s+#\$7000.*\n.*STA\.B\s+\$64.*\n.*LDA\.W\s+#\$0005
+
+// Searches for sfx setup LAD #$7000 STA$64
+LDA\.W\s+#\$7000.*\n.*STA\.B\s+\$64.*\n.
