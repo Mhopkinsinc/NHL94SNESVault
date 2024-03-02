@@ -5,4 +5,5 @@
                        incsrc "patches/Interference.asm"
                        incsrc "patches/OneMinutePenalties.asm"
                        incsrc "patches/DefControl.asm"
+                       incsrc "patches/PenaltyShot.asm"
                        
