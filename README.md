@@ -5,7 +5,7 @@ If your a developer and want to modify or build the rom, please see the Developm
 ## Installation
 - To Patch an existing ROM or create a new ROM, download the [app](https://github.com/Mhopkinsinc/NHL94SNESVault/releases) in the releases section. Windows and MacOS versions are available.
 
-![image](https://github.com/Mhopkinsinc/NHL94SNESVault/assets/6633388/6dfc8ace-fe90-44b7-96f7-1b7e95d78e2d)
+![image](https://github.com/Mhopkinsinc/NHL94SNESVault/assets/6633388/20ccde37-569f-4ce2-91e7-fb9910b42892)
   
 - For Development Setup, Install [Git](https://git-scm.com/downloads) & [Visual Studio Code](https://code.visualstudio.com/download) and Clone this Repo.
     
