@@ -337,9 +337,9 @@
                        INC A                                ;9F8365|1A      |;
                        STA.L $7E347A                        ;9F8366|8F7A347E|;
                        STZ.W $15D4                          ;9F836A|9CD415  |;
-                       LDA.L $7E34C4                        ;9F836D|AFC4347E|;
+                       LDA.L PenaltiesOnOff                 ;9F836D|AFC4347E|;
                        CMP.W #$0001                         ;9F8371|C90100  |;
-                       BNE CODE_9F837C                      ;9F8374|D006    |;
+                       BNE CODE_9F837C                      ;9F8374|D006    |; Penalties Off or Offsieds On Branch to 837C
                        db $A9,$20,$00,$0C,$D4,$15           ;9F8376|        |;
  
           CODE_9F837C:
@@ -769,7 +769,7 @@ Real_Time_Pen_Clock_2:
           CODE_9F8738:
                        CPX.W $0D07                          ;9F8738|EC070D  |;
                        BNE CODE_9F8742                      ;9F873B|D005    |;
-                       LDA.W $1E89                          ;9F873D|AD891E  |;
+                       LDA.W OneTimerFlg                    ;9F873D|AD891E  |;
                        BNE CODE_9F8796                      ;9F8740|D054    |;
  
           CODE_9F8742:
@@ -1731,9 +1731,9 @@ Real_Time_Pen_Clock_2:
                        LDA.W #$7000                         ;9F9489|A90070  |;
                        STA.B $64                            ;9F948C|8564    |;
                        LDA.W #$0012                         ;9F948E|A91200  |;
-                       JSL.L CODE_80A17D                    ;9F9491|227DA180|;
+                       JSL.L fn_PlaySFX                     ;9F9491|227DA180|;
                        LDA.W #$0013                         ;9F9495|A91300  |;
-                       JSL.L CODE_80A17D                    ;9F9498|227DA180|;
+                       JSL.L fn_PlaySFX                     ;9F9498|227DA180|;
                        LDA.W #$FFFF                         ;9F949C|A9FFFF  |;
                        STA.W $0CAD                          ;9F949F|8DAD0C  |;
                        STA.W $0CB3                          ;9F94A2|8DB30C  |;
@@ -3758,10 +3758,12 @@ Real_Time_Pen_Clock_2:
                        STA.B $A5                            ;9FA811|85A5    |;
                        LDX.B $95                            ;9FA813|A695    |;
                        RTL                                  ;9FA815|6B      |;
-                       db $0D,$00,$BF,$0F,$03,$47,$4F,$41   ;9FA816|        |;
-                       db $4C,$21,$BF,$0C,$05,$12,$00,$BF   ;9FA81E|        |;
-                       db $0C,$03,$48,$41,$54,$20,$54,$52   ;9FA826|        |;
-                       db $49,$43,$4B,$21,$BF,$0C,$05       ;9FA82E|        |;
+                       db $0D,$00,$BF,$0F,$03               ;9FA816|        |;
+                       db "GOAL"                            ;9FA81B|        |;
+                       db $21,$BF,$0C,$05,$12,$00,$BF,$0C   ;9FA81F|        |;
+                       db $03                               ;9FA827|        |;
+                       db "HAT TRICK"                       ;9FA828|        |;
+                       db $21,$BF,$0C,$05                   ;9FA831|        |;
                        LDA.W $1283,X                        ;9FA835|BD8312  |;
                        BIT.W #$0002                         ;9FA838|890200  |;
                        BNE CODE_9FA840                      ;9FA83B|D003    |;
@@ -3795,9 +3797,9 @@ Real_Time_Pen_Clock_2:
                        LDA.W #$7000                         ;9FA868|A90070  |;
                        STA.B $64                            ;9FA86B|8564    |;
                        LDA.W #$0012                         ;9FA86D|A91200  |;
-                       JSL.L CODE_80A17D                    ;9FA870|227DA180|;
+                       JSL.L fn_PlaySFX                     ;9FA870|227DA180|;
                        LDA.W #$0013                         ;9FA874|A91300  |;
-                       JSL.L CODE_80A17D                    ;9FA877|227DA180|;
+                       JSL.L fn_PlaySFX                     ;9FA877|227DA180|;
                        LDA.W #$FFFF                         ;9FA87B|A9FFFF  |;
                        STA.W $0CAD                          ;9FA87E|8DAD0C  |;
                        STA.W $0CB3                          ;9FA881|8DB30C  |;
@@ -3986,7 +3988,7 @@ Real_Time_Pen_Clock_2:
  
           CODE_9FAA3D:
                        BEQ CODE_9FAA8A                      ;9FAA3D|F04B    |;
-                       LDA.W $1E9B                          ;9FAA3F|AD9B1E  |;
+                       LDA.W IsPenaltyShot                  ;9FAA3F|AD9B1E  |;
                        BEQ CODE_9FAA59                      ;9FAA42|F015    |;
                        PHX                                  ;9FAA44|DA      |;
                        LDX.W #$0008                         ;9FAA45|A20800  |;
@@ -4026,12 +4028,12 @@ Real_Time_Pen_Clock_2:
                        JSL.L CODE_9E8C0E                    ;9FAA86|220E8C9E|;
  
           CODE_9FAA8A:
-                       LDA.W $17A6                          ;9FAA8A|ADA617  |;
+                       LDA.W PlyrsOnIceCountHm              ;9FAA8A|ADA617  |;
                        STA.B $B5                            ;9FAA8D|85B5    |;
                        LDX.B $95                            ;9FAA8F|A695    |;
                        LDA.W $1503,X                        ;9FAA91|BD0315  |;
                        BEQ CODE_9FAA9B                      ;9FAA94|F005    |;
-                       LDA.W $17A8                          ;9FAA96|ADA817  |;
+                       LDA.W PlyrsOnIceCountAwy             ;9FAA96|ADA817  |;
                        STA.B $B5                            ;9FAA99|85B5    |;
  
           CODE_9FAA9B:
@@ -4050,7 +4052,7 @@ Real_Time_Pen_Clock_2:
                        CLC                                  ;9FAAB2|18      |;
                        ADC.B $B5                            ;9FAAB3|65B5    |;
                        STA.B $8D                            ;9FAAB5|858D    |;
-                       LDA.W $1E9B                          ;9FAAB7|AD9B1E  |;
+                       LDA.W IsPenaltyShot                  ;9FAAB7|AD9B1E  |;
                        BEQ CODE_9FAAC6                      ;9FAABA|F00A    |;
                        LDA.W #$009F                         ;9FAABC|A99F00  |;
                        STA.B $8F                            ;9FAABF|858F    |;
@@ -4191,7 +4193,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $95                            ;9FABBB|8595    |;
                        PLA                                  ;9FABBD|68      |;
                        STA.B $97                            ;9FABBE|8597    |;
-                       LDA.W $1E9B                          ;9FABC0|AD9B1E  |;
+                       LDA.W IsPenaltyShot                  ;9FABC0|AD9B1E  |;
                        BEQ CODE_9FAC25                      ;9FABC3|F060    |;
                        LDX.W #$0008                         ;9FABC5|A20800  |;
  
@@ -4322,7 +4324,7 @@ Real_Time_Pen_Clock_2:
                        LDA.L DATA8_9AD6A8                   ;9FACBD|AFA8D69A|;
                        STA.B $C8                            ;9FACC1|85C8    |;
                        CLC                                  ;9FACC3|18      |;
-                       LDA.W $1E9B                          ;9FACC4|AD9B1E  |;
+                       LDA.W IsPenaltyShot                  ;9FACC4|AD9B1E  |;
                        BNE CODE_9FACFC                      ;9FACC7|D033    |;
  
           CODE_9FACC9:
@@ -4453,7 +4455,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $A5                            ;9FAE38|85A5    |;
                        LDX.B $95                            ;9FAE3A|A695    |;
                        STA.W $1003,X                        ;9FAE3C|9D0310  |;
-                       LDA.W $1E9B                          ;9FAE3F|AD9B1E  |;
+                       LDA.W IsPenaltyShot                  ;9FAE3F|AD9B1E  |;
                        BEQ CODE_9FAE4A                      ;9FAE42|F006    |;
                        LDA.W #$00B4                         ;9FAE44|A9B400  |;
                        STA.W $1003,X                        ;9FAE47|9D0310  |;
@@ -4519,7 +4521,7 @@ Real_Time_Pen_Clock_2:
                        SBC.B $C5                            ;9FAEC3|E5C5    |;
                        STA.W $1003,X                        ;9FAEC5|9D0310  |;
                        BPL CODE_9FAF1E                      ;9FAEC8|1054    |;
-                       LDA.W $1E9B                          ;9FAECA|AD9B1E  |;
+                       LDA.W IsPenaltyShot                  ;9FAECA|AD9B1E  |;
                        BEQ CODE_9FAED6                      ;9FAECD|F007    |;
                        JSL.L CODE_9FB092                    ;9FAECF|2292B09F|;
                        JMP.W CODE_9FAFBE                    ;9FAED3|4CBEAF  |;
@@ -4562,7 +4564,7 @@ Real_Time_Pen_Clock_2:
                        RTL                                  ;9FAF41|6B      |;
  
           CODE_9FAF42:
-                       LDA.W $1E9B                          ;9FAF42|AD9B1E  |;
+                       LDA.W IsPenaltyShot                  ;9FAF42|AD9B1E  |;
                        BNE CODE_9FAF97                      ;9FAF45|D050    |;
                        LDA.B $8F                            ;9FAF47|A58F    |;
                        PHA                                  ;9FAF49|48      |;
@@ -7759,7 +7761,7 @@ Real_Time_Pen_Clock_2:
  
           CODE_9FC988:
                        JSL.L CODE_9CA58C                    ;9FC988|228CA59C|;
-                       LDA.W $1E9B                          ;9FC98C|AD9B1E  |;
+                       LDA.W IsPenaltyShot                  ;9FC98C|AD9B1E  |;
                        BNE CODE_9FC9B2                      ;9FC98F|D021    |;
                        LDY.W #$0008                         ;9FC991|A00800  |;
  
@@ -8871,7 +8873,7 @@ Real_Time_Pen_Clock_2:
                        LSR A                                ;9FD238|4A      |;
                        BIT.B #$00                           ;9FD239|8900    |;
                        BEQ CODE_9FD23F                      ;9FD23B|F002    |;
-                       db $09,$00                           ;9FD23D|        |;
+                       ORA.B #$00                           ;9FD23D|0900    |;
  
           CODE_9FD23F:
                        CLC                                  ;9FD23F|18      |;
@@ -9232,7 +9234,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $8B                            ;9FD579|858B    |;
                        LDA.W #$D6B0                         ;9FD57B|A9B0D6  |;
                        STA.B $89                            ;9FD57E|8589    |;
-                       LDA.W $1E9B                          ;9FD580|AD9B1E  |;
+                       LDA.W IsPenaltyShot                  ;9FD580|AD9B1E  |;
                        BEQ CODE_9FD59A                      ;9FD583|F015    |;
                        LDA.W #$0080                         ;9FD585|A98000  |;
                        STA.B $8B                            ;9FD588|858B    |;
@@ -9272,7 +9274,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $A5                            ;9FD5C3|85A5    |;
                        ADC.B $8D                            ;9FD5C5|658D    |;
                        STA.B $8D                            ;9FD5C7|858D    |;
-                       LDA.W $17A6,Y                        ;9FD5C9|B9A617  |;
+                       LDA.W PlyrsOnIceCountHm,Y            ;9FD5C9|B9A617  |;
                        STA.B $B5                            ;9FD5CC|85B5    |;
                        BRA CODE_9FD61C                      ;9FD5CE|804C    |;
  
@@ -9288,7 +9290,7 @@ Real_Time_Pen_Clock_2:
                        STA.B [$99],Y                        ;9FD5E0|9799    |;
                        LDA.B $B9                            ;9FD5E2|A5B9    |;
                        BEQ CODE_9FD5F1                      ;9FD5E4|F00B    |;
-                       LDA.W $1E9B                          ;9FD5E6|AD9B1E  |;
+                       LDA.W IsPenaltyShot                  ;9FD5E6|AD9B1E  |;
                        BEQ CODE_9FD5F1                      ;9FD5E9|F006    |;
                        LDA.W $1E8F                          ;9FD5EB|AD8F1E  |;
                        INC A                                ;9FD5EE|1A      |;
@@ -9500,10 +9502,10 @@ Real_Time_Pen_Clock_2:
                        LDA.B zpCurntTeamLoopVal             ;9FD7BE|A591    |;
                        EOR.W #$0002                         ;9FD7C0|490200  |;
                        TAY                                  ;9FD7C3|A8      |;
-                       LDA.W $17A6,Y                        ;9FD7C4|B9A617  |;
+                       LDA.W PlyrsOnIceCountHm,Y            ;9FD7C4|B9A617  |;
                        LDY.B zpCurntTeamLoopVal             ;9FD7C7|A491    |;
                        SEC                                  ;9FD7C9|38      |;
-                       SBC.W $17A6,Y                        ;9FD7CA|F9A617  |;
+                       SBC.W PlyrsOnIceCountHm,Y            ;9FD7CA|F9A617  |;
                        STA.B $AD                            ;9FD7CD|85AD    |;
                        BEQ CODE_9FD7E5                      ;9FD7CF|F014    |;
                        db $A5,$A5,$18,$69,$15,$00,$85,$A5   ;9FD7D1|        |;

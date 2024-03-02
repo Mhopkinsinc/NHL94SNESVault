@@ -365,7 +365,7 @@
           CODE_9E82E2:
                        STA.W $1003,X                        ;9E82E2|9D0310  |;
                        JSL.L CODE_9EC417                    ;9E82E5|2217C49E|;
-                       LDA.W $1E8B                          ;9E82E9|AD8B1E  |;
+                       LDA.W BreakAwayActive_flg            ;9E82E9|AD8B1E  |;
                        BEQ CODE_9E830D                      ;9E82EC|F01F    |;
                        LDA.W $0DB7,X                        ;9E82EE|BDB70D  |;
                        STA.B $A5                            ;9E82F1|85A5    |;
@@ -2136,8 +2136,8 @@
                        LDA.W $0AD9                          ;9E909E|ADD90A  |;
                        BPL CODE_9E90AD                      ;9E90A1|100A    |;
                        JSL.L CODE_9EC791                    ;9E90A3|2291C79E|;
-                       STZ.W $1E8B                          ;9E90A7|9C8B1E  |;
-                       STZ.W $1E89                          ;9E90AA|9C891E  |;
+                       STZ.W BreakAwayActive_flg            ;9E90A7|9C8B1E  |;
+                       STZ.W OneTimerFlg                    ;9E90AA|9C891E  |;
  
           CODE_9E90AD:
                        RTL                                  ;9E90AD|6B      |;
@@ -2335,8 +2335,8 @@
  
           CODE_9E9246:
                        JSL.L CODE_9EF213                    ;9E9246|2213F29E|;
-                       STZ.W $1E8B                          ;9E924A|9C8B1E  |;
-                       STZ.W $1E89                          ;9E924D|9C891E  |;
+                       STZ.W BreakAwayActive_flg            ;9E924A|9C8B1E  |;
+                       STZ.W OneTimerFlg                    ;9E924D|9C891E  |;
                        LDA.W #$0009                         ;9E9250|A90900  |;
                        JSL.L CODE_9C9ABC                    ;9E9253|22BC9A9C|;
                        LDA.L $7E35E0                        ;9E9257|AFE0357E|;
@@ -3311,8 +3311,8 @@
                        LDA.W #$0003                         ;9E9A50|A90300  |;
                        JSL.L CODE_9C9ABC                    ;9E9A53|22BC9A9C|;
                        JSL.L CODE_9EC791                    ;9E9A57|2291C79E|;
-                       STZ.W $1E8B                          ;9E9A5B|9C8B1E  |;
-                       STZ.W $1E89                          ;9E9A5E|9C891E  |;
+                       STZ.W BreakAwayActive_flg            ;9E9A5B|9C8B1E  |;
+                       STZ.W OneTimerFlg                    ;9E9A5E|9C891E  |;
  
           CODE_9E9A61:
                        LDY.B zpCurntTeamLoopVal             ;9E9A61|A491    |;
@@ -3339,9 +3339,9 @@
                        TRB.W $15DC                          ;9E9A92|1CDC15  |;
                        BEQ CODE_9E9AB1                      ;9E9A95|F01A    |;
                        LDY.B $8D                            ;9E9A97|A48D    |;
-                       LDA.W $1792,Y                        ;9E9A99|B99217  |;
+                       LDA.W GmStat_FceOffWins,Y            ;9E9A99|B99217  |;
                        INC A                                ;9E9A9C|1A      |;
-                       STA.W $1792,Y                        ;9E9A9D|999217  |;
+                       STA.W GmStat_FceOffWins,Y            ;9E9A9D|999217  |;
                        LDA.L $7E35E0                        ;9E9AA0|AFE0357E|;
                        CLC                                  ;9E9AA4|18      |;
                        ADC.W #$00C8                         ;9E9AA5|69C800  |;
@@ -3356,9 +3356,9 @@
                        CMP.W $0D07                          ;9E9AB8|CD070D  |;
                        BNE CODE_9E9AC6                      ;9E9ABB|D009    |;
                        LDY.B $8D                            ;9E9ABD|A48D    |;
-                       LDA.W $17BA,Y                        ;9E9ABF|B9BA17  |;
+                       LDA.W GmStat_PassesMade,Y            ;9E9ABF|B9BA17  |;
                        INC A                                ;9E9AC2|1A      |;
-                       STA.W $17BA,Y                        ;9E9AC3|99BA17  |;
+                       STA.W GmStat_PassesMade,Y            ;9E9AC3|99BA17  |;
  
           CODE_9E9AC6:
                        LDA.W #$000C                         ;9E9AC6|A90C00  |;
@@ -3939,8 +3939,8 @@
                        SEC                                  ;9EA167|38      |;
                        SBC.W $1483,X                        ;9EA168|FD8314  |;
                        STA.B $A5                            ;9EA16B|85A5    |;
-                       LDA.L $7E34C4                        ;9EA16D|AFC4347E|;
-                       BEQ CODE_9EA175                      ;9EA171|F002    |;
+                       LDA.L PenaltiesOnOff                 ;9EA16D|AFC4347E|;
+                       BEQ CODE_9EA175                      ;9EA171|F002    |; Penalties Off Branch A175
                        ASL.B $A5                            ;9EA173|06A5    |;
  
           CODE_9EA175:
@@ -4222,20 +4222,32 @@
           CODE_9EA388:
                        JSL.L CODE_9EA3F1                    ;9EA388|22F1A39E|;
                        JSL.L CODE_9EC042                    ;9EA38C|2242C09E|;
-                       BEQ CODE_9EA3AD                      ;9EA390|F01B    |;
-                       db $AD,$8D,$1E,$10,$16,$A4,$91,$8C   ;9EA392|        |;
-                       db $8D,$1E,$B9,$D4,$19,$8D,$93,$1E   ;9EA39A|        |;
-                       db $A9,$24,$00,$85,$A5,$22,$5E,$B8   ;9EA3A2|        |;
-                       db $9E,$80,$21                       ;9EA3AA|        |;
+                       BEQ CODE_9EA3AD                      ;9EA390|F01B    |; If zero Branch to A3AD
+                       LDA.W $1E8D                          ;9EA392|AD8D1E  |;
+                       BPL CODE_9EA3AD                      ;9EA395|1016    |;
+                       LDY.B zpCurntTeamLoopVal             ;9EA397|A491    |;
+                       STY.W $1E8D                          ;9EA399|8C8D1E  |;
+                       LDA.W $19D4,Y                        ;9EA39C|B9D419  |;
+                       STA.W $1E93                          ;9EA39F|8D931E  |;
+                       LDA.W #$0024                         ;9EA3A2|A92400  |;
+                       STA.B $A5                            ;9EA3A5|85A5    |;
+                       JSL.L CODE_9EB85E                    ;9EA3A7|225EB89E|;
+                       BRA CODE_9EA3CE                      ;9EA3AB|8021    |;
  
           CODE_9EA3AD:
                        JSL.L CODE_9EC124                    ;9EA3AD|2224C19E|;
                        LDA.B $A5                            ;9EA3B1|A5A5    |;
                        CMP.W #$0001                         ;9EA3B3|C90100  |;
                        BCS CODE_9EA3CE                      ;9EA3B6|B016    |;
-                       db $A9,$28,$00,$85,$A5,$BD,$A3,$11   ;9EA3B8|        |;
-                       db $C9,$A6,$F3,$F0,$05,$A9,$20,$00   ;9EA3C0|        |;
-                       db $85,$A5,$22,$5E,$B8,$9E           ;9EA3C8|        |;
+                       LDA.W #$0028                         ;9EA3B8|A92800  |;
+                       STA.B $A5                            ;9EA3BB|85A5    |;
+                       LDA.W $11A3,X                        ;9EA3BD|BDA311  |;
+                       CMP.W #$F3A6                         ;9EA3C0|C9A6F3  |;
+                       BEQ CODE_9EA3CA                      ;9EA3C3|F005    |;
+                       LDA.W #$0020                         ;9EA3C5|A92000  |;
+                       STA.B $A5                            ;9EA3C8|85A5    |;
+          CODE_9EA3CA:
+                       JSL.L CODE_9EB85E                    ;9EA3CA|225EB89E|;
  
           CODE_9EA3CE:
                        LDX.B zpCurntTeamLoopVal             ;9EA3CE|A691    |;
@@ -5990,27 +6002,27 @@
  
           CODE_9EB1BF:
                        LDY.B $A9                            ;9EB1BF|A4A9    |;
-                       LDA.W $1752,Y                        ;9EB1C1|B95217  |;
+                       LDA.W GmStat_AtckZneTme,Y            ;9EB1C1|B95217  |;
                        INC A                                ;9EB1C4|1A      |;
-                       STA.W $1752,Y                        ;9EB1C5|995217  |;
+                       STA.W GmStat_AtckZneTme,Y            ;9EB1C5|995217  |;
  
           CODE_9EB1C8:
                        RTL                                  ;9EB1C8|6B      |;
  
           CODE_9EB1C9:
                        STZ.B $A9                            ;9EB1C9|64A9    |;
-                       LDA.W $17A6                          ;9EB1CB|ADA617  |;
+                       LDA.W PlyrsOnIceCountHm              ;9EB1CB|ADA617  |;
                        SEC                                  ;9EB1CE|38      |;
-                       SBC.W $17A8                          ;9EB1CF|EDA817  |;
+                       SBC.W PlyrsOnIceCountAwy             ;9EB1CF|EDA817  |;
                        BEQ CODE_9EB1E4                      ;9EB1D2|F010    |;
                        BPL CODE_9EB1DB                      ;9EB1D4|1005    |;
                        db $A9,$02,$00,$85,$A9               ;9EB1D6|        |;
  
           CODE_9EB1DB:
                        LDY.B $A9                            ;9EB1DB|A4A9    |;
-                       LDA.W $1756,Y                        ;9EB1DD|B95617  |;
+                       LDA.W GmStat_PPMins,Y                ;9EB1DD|B95617  |;
                        INC A                                ;9EB1E0|1A      |;
-                       STA.W $1756,Y                        ;9EB1E1|995617  |;
+                       STA.W GmStat_PPMins,Y                ;9EB1E1|995617  |;
  
           CODE_9EB1E4:
                        RTL                                  ;9EB1E4|6B      |;
@@ -6252,7 +6264,7 @@
                        LDA.W #$7000                         ;9EB39E|A90070  |;
                        STA.B $64                            ;9EB3A1|8564    |;
                        LDA.W #$0015                         ;9EB3A3|A91500  |;
-                       JSL.L CODE_80A17D                    ;9EB3A6|227DA180|;
+                       JSL.L fn_PlaySFX                     ;9EB3A6|227DA180|;
                        STZ.W $1620                          ;9EB3AA|9C2016  |;
                        LDA.W #$0004                         ;9EB3AD|A90400  |;
                        TSB.W $15D4                          ;9EB3B0|0CD415  |;
@@ -6497,13 +6509,13 @@
  
           CODE_9EB582:
                        LDY.B zpCurntTeamLoopVal             ;9EB582|A491    |;
-                       LDA.W $174A,Y                        ;9EB584|B94A17  |;
+                       LDA.W GmStat_PenaltyCnt,Y            ;9EB584|B94A17  |;
                        INC A                                ;9EB587|1A      |;
-                       STA.W $174A,Y                        ;9EB588|994A17  |;
-                       LDA.W $174E,Y                        ;9EB58B|B94E17  |;
+                       STA.W GmStat_PenaltyCnt,Y            ;9EB588|994A17  |;
+                       LDA.W GmStat_PenaltyMins,Y           ;9EB58B|B94E17  |;
                        CLC                                  ;9EB58E|18      |;
                        ADC.B $AD                            ;9EB58F|65AD    |;
-                       STA.W $174E,Y                        ;9EB591|994E17  |;
+                       STA.W GmStat_PenaltyMins,Y           ;9EB591|994E17  |;
                        LDA.W $12A3,X                        ;9EB594|BDA312  |;
                        AND.W #$00FF                         ;9EB597|29FF00  |;
                        ORA.B $A5                            ;9EB59A|05A5    |;
@@ -6667,7 +6679,7 @@
                        JSL.L CODE_9E8C18                    ;9EB6C8|22188C9E|;
  
           CODE_9EB6CC:
-                       LDA.W $1E9B                          ;9EB6CC|AD9B1E  |;
+                       LDA.W IsPenaltyShot                  ;9EB6CC|AD9B1E  |;
                        BNE CODE_9EB6E0                      ;9EB6CF|D00F    |;
                        STZ.B zpCurntTeamLoopVal             ;9EB6D1|6491    |;
                        JSL.L CODE_9EB6F7                    ;9EB6D3|22F7B69E|;
@@ -6728,7 +6740,7 @@
                        BPL CODE_9EB701                      ;9EB72B|10D4    |;
                        LDY.B zpCurntTeamLoopVal             ;9EB72D|A491    |;
                        LDA.B $A9                            ;9EB72F|A5A9    |;
-                       STA.W $17A6,Y                        ;9EB731|99A617  |;
+                       STA.W PlyrsOnIceCountHm,Y            ;9EB731|99A617  |;
                        RTL                                  ;9EB734|6B      |;
  
           CODE_9EB735:
@@ -6738,9 +6750,9 @@
                        STZ.B zpCurntTeamLoopVal             ;9EB73E|6491    |;
                        LDA.W #$0002                         ;9EB740|A90200  |;
                        STA.B $95                            ;9EB743|8595    |;
-                       LDA.W $17A6                          ;9EB745|ADA617  |;
+                       LDA.W PlyrsOnIceCountHm              ;9EB745|ADA617  |;
                        SEC                                  ;9EB748|38      |;
-                       SBC.W $17A8                          ;9EB749|EDA817  |;
+                       SBC.W PlyrsOnIceCountAwy             ;9EB749|EDA817  |;
                        STA.B $A5                            ;9EB74C|85A5    |;
                        BNE CODE_9EB753                      ;9EB74E|D003    |;
                        JMP.W CODE_9EB851                    ;9EB750|4C51B8  |;
@@ -6797,13 +6809,13 @@
                        LDA.W #$7000                         ;9EB7C0|A90070  |; SFX
                        STA.B $64                            ;9EB7C3|8564    |; SFX
                        LDA.W #$0005                         ;9EB7C5|A90500  |; SFX
-                       JSL.L CODE_80A17D                    ;9EB7C8|227DA180|; JMP Function Play SFX
+                       JSL.L fn_PlaySFX                     ;9EB7C8|227DA180|; JMP Function Play SFX
                        BRA CODE_9EB7FB                      ;9EB7CC|802D    |;
           CODE_9EB7CE:
                        LDA.W #$7000                         ;9EB7CE|A90070  |; SFX
                        STA.B $64                            ;9EB7D1|8564    |; SFX
                        LDA.W #$0005                         ;9EB7D3|A90500  |; SFX
-                       JSL.L CODE_80A17D                    ;9EB7D6|227DA180|; JMP Play SFX
+                       JSL.L fn_PlaySFX                     ;9EB7D6|227DA180|; JMP Play SFX
                        db $DA,$A8,$E2,$20,$B9,$F2,$08,$C9   ;9EB7DA|        |;
                        db $02,$D0,$13,$A9,$03,$99,$F2,$08   ;9EB7E2|        |;
                        db $C2,$20,$98,$0A,$A8,$A9,$59,$06   ;9EB7EA|        |;
@@ -6858,16 +6870,16 @@
  
           CODE_9EB85E:
                        LDA.W $15D6                          ;9EB85E|ADD615  |;
-                       BNE CODE_9EB889                      ;9EB861|D026    |;
+                       BNE .done                            ;9EB861|D026    |;
                        LDA.W $163A                          ;9EB863|AD3A16  |;
-                       BNE CODE_9EB889                      ;9EB866|D021    |;
+                       BNE .done                            ;9EB866|D021    |;
                        LDA.B $A5                            ;9EB868|A5A5    |;
                        CMP.W #$000C                         ;9EB86A|C90C00  |;
                        BEQ CODE_9EB88A                      ;9EB86D|F01B    |;
                        CMP.W #$0024                         ;9EB86F|C92400  |;
                        BEQ CODE_9EB88A                      ;9EB872|F016    |;
-                       LDA.L $7E34C4                        ;9EB874|AFC4347E|;
-                       BEQ CODE_9EB889                      ;9EB878|F00F    |;
+                       LDA.L PenaltiesOnOff                 ;9EB874|AFC4347E|;
+                       BEQ .done                            ;9EB878|F00F    |; If Penalties Off were done
                        LDA.W $15D4                          ;9EB87A|ADD415  |;
                        BIT.W #$0020                         ;9EB87D|892000  |;
                        BNE CODE_9EB88A                      ;9EB880|D008    |;
@@ -6875,7 +6887,7 @@
                        CMP.W #$0012                         ;9EB884|C91200  |;
                        BNE CODE_9EB88A                      ;9EB887|D001    |;
  
-          CODE_9EB889:
+                .done:
                        RTL                                  ;9EB889|6B      |;
  
           CODE_9EB88A:
@@ -7051,10 +7063,10 @@
  
           CODE_9EB9D5:
                        LDY.B zpCurntTeamLoopVal             ;9EB9D5|A491    |;
-                       LDA.W $17A6,Y                        ;9EB9D7|B9A617  |;
+                       LDA.W PlyrsOnIceCountHm,Y            ;9EB9D7|B9A617  |;
                        LDY.B $8D                            ;9EB9DA|A48D    |;
                        SEC                                  ;9EB9DC|38      |;
-                       SBC.W $17A6,Y                        ;9EB9DD|F9A617  |;
+                       SBC.W PlyrsOnIceCountHm,Y            ;9EB9DD|F9A617  |;
                        BEQ CODE_9EBA36                      ;9EB9E0|F054    |;
                        BMI CODE_9EBA36                      ;9EB9E2|3052    |;
                        LDA.B $8D                            ;9EB9E4|A58D    |;
@@ -7229,7 +7241,7 @@
  
           CODE_9EBBD7:
                        LDY.B $95                            ;9EBBD7|A495    |;
-                       LDA.W $17A6,Y                        ;9EBBD9|B9A617  |;
+                       LDA.W PlyrsOnIceCountHm,Y            ;9EBBD9|B9A617  |;
                        CMP.W #$0006                         ;9EBBDC|C90600  |;
                        BEQ CODE_9EBC23                      ;9EBBDF|F042    |;
                        db $A5,$A5,$38,$E5,$B1,$85,$A5,$A5   ;9EBBE1|        |;
@@ -7251,8 +7263,8 @@
                        BNE CODE_9EBCA3                      ;9EBC29|D078    |;
                        LDA.W $0F43,X                        ;9EBC2B|BD430F  |;
                        BEQ CODE_9EBCA3                      ;9EBC2E|F073    |;
-                       LDA.L $7E34C4                        ;9EBC30|AFC4347E|;
-                       BNE CODE_9EBC4F                      ;9EBC34|D019    |;
+                       LDA.L PenaltiesOnOff                 ;9EBC30|AFC4347E|;
+                       BNE CODE_9EBC4F                      ;9EBC34|D019    |; If Penalties On Branch BC4F
                        db $B9,$D4,$19,$30,$14,$A9,$10,$00   ;9EBC36|        |;
                        db $18,$79,$83,$14,$38,$FD,$E3,$12   ;9EBC3E|        |;
                        db $22,$85,$B3,$9B,$C9,$0C,$00,$90   ;9EBC46|        |;
@@ -7511,7 +7523,7 @@
                        RTL                                  ;9EBF10|6B      |;
  
           CODE_9EBF11:
-                       LDA.W $1E9B                          ;9EBF11|AD9B1E  |;
+                       LDA.W IsPenaltyShot                  ;9EBF11|AD9B1E  |;
                        ORA.W $163A                          ;9EBF14|0D3A16  |;
                        ORA.W $1D81                          ;9EBF17|0D811D  |;
                        BNE CODE_9EBF43                      ;9EBF1A|D027    |;
@@ -7669,37 +7681,103 @@
                        LDA.B zpCurntTeamLoopVal             ;9EC04A|A591    |;
                        CMP.W $0AD9                          ;9EC04C|CDD90A  |;
                        BNE CODE_9EC06D                      ;9EC04F|D01C    |;
-                       LDA.W $1E8B                          ;9EC051|AD8B1E  |;
-                       BNE UNREACH_9EC059                   ;9EC054|D003    |;
-                       JMP.W CODE_9EC06D                    ;9EC056|4C6DC0  |;
+                       LDA.W BreakAwayActive_flg            ;9EC051|AD8B1E  |;
+                       BNE CODE_9EC059                      ;9EC054|D003    |;Breakaway Branch to c059
+                       JMP.W CODE_9EC06D                    ;9EC056|4C6DC0  |; Not a Breakaway JMP to 0C6D
  
-       UNREACH_9EC059:
-                       db $22,$4B,$C6,$9E,$AD,$38,$16,$8D   ;9EC059|        |;
-                       db $8B,$1E,$D0,$03,$4C,$6D,$C0,$A9   ;9EC061|        |;
-                       db $FF,$FF,$80,$03                   ;9EC069|        |;
+          CODE_9EC059:
+                       JSL.L Chk_Puc_Xing_BrkWay            ;9EC059|224BC69E|; Check if still breakaway
+                       LDA.W BreakAwayTrigger_flg           ;9EC05D|AD3816  |;
+                       STA.W BreakAwayActive_flg            ;9EC060|8D8B1E  |;
+                       BNE CODE_9EC068                      ;9EC063|D003    |; Breakaway flag set, Setup for Penalty Shot
+                       JMP.W CODE_9EC06D                    ;9EC065|4C6DC0  |; Breakaway flag clear, Setup for NO Penalty Shot
+          CODE_9EC068:
+                       LDA.W #$FFFF                         ;9EC068|A9FFFF  |; Active Breakaway, Setup PenaltyShot Flag #$FFFF
+                       BRA CODE_9EC070                      ;9EC06B|8003    |; Skip to end of function RTL
  
           CODE_9EC06D:
-                       LDA.W #$0000                         ;9EC06D|A90000  |;
+                       LDA.W #$0000                         ;9EC06D|A90000  |; Dont Call Penalty Shot
+          CODE_9EC070:
                        RTL                                  ;9EC070|6B      |;
-                       db $86,$87,$A2,$00,$00,$B5,$A5,$48   ;9EC071|        |;
-                       db $E8,$E8,$E0,$10,$00,$D0,$F6,$A6   ;9EC079|        |;
-                       db $87,$86,$87,$A2,$00,$00,$B5,$89   ;9EC081|        |;
-                       db $48,$E8,$E8,$E0,$10,$00,$D0,$F6   ;9EC089|        |;
-                       db $A6,$87,$A4,$91,$BE,$66,$17,$CA   ;9EC091|        |;
-                       db $CA,$E8,$E8,$BD,$43,$0F,$10,$F9   ;9EC099|        |;
-                       db $A5,$A5,$4A,$85,$B1,$A4,$91,$B9   ;9EC0A1|        |;
-                       db $A6,$17,$85,$A9,$1A,$99,$A6,$17   ;9EC0A9|        |;
-                       db $A9,$01,$00,$0C,$DE,$17,$0C,$E0   ;9EC0B1|        |;
-                       db $17,$A9,$80,$00,$85,$8B,$A9,$B0   ;9EC0B9|        |;
-                       db $D6,$85,$89,$B9,$AA,$17,$10,$02   ;9EC0C1|        |;
-                       db $E6,$89,$A4,$A9,$B7,$89,$29,$FF   ;9EC0C9|        |;
-                       db $00,$9D,$43,$0F,$86,$95,$22,$D0   ;9EC0D1|        |;
-                       db $CE,$9F,$22,$F6,$CE,$9F,$BD,$83   ;9EC0D9|        |;
-                       db $12,$09,$00,$10,$9D,$83,$12,$86   ;9EC0E1|        |;
-                       db $87,$A2,$0E,$00,$68,$95,$89,$CA   ;9EC0E9|        |;
-                       db $CA,$10,$F9,$A6,$87,$86,$87,$A2   ;9EC0F1|        |;
-                       db $0E,$00,$68,$95,$A5,$CA,$CA,$10   ;9EC0F9|        |;
-                       db $F9,$A6,$87,$A6,$95,$6B           ;9EC101|        |;
+                       STX.B $87                            ;9EC071|8687    |;
+                       LDX.W #$0000                         ;9EC073|A20000  |;
+ 
+          CODE_9EC076:
+                       LDA.B $A5,X                          ;9EC076|B5A5    |;
+                       PHA                                  ;9EC078|48      |;
+                       INX                                  ;9EC079|E8      |;
+                       INX                                  ;9EC07A|E8      |;
+                       CPX.W #$0010                         ;9EC07B|E01000  |;
+                       BNE CODE_9EC076                      ;9EC07E|D0F6    |;
+                       LDX.B $87                            ;9EC080|A687    |;
+                       STX.B $87                            ;9EC082|8687    |;
+                       LDX.W #$0000                         ;9EC084|A20000  |;
+          CODE_9EC087:
+                       LDA.B $89,X                          ;9EC087|B589    |;
+                       PHA                                  ;9EC089|48      |;
+                       INX                                  ;9EC08A|E8      |;
+                       INX                                  ;9EC08B|E8      |;
+                       CPX.W #$0010                         ;9EC08C|E01000  |;
+                       BNE CODE_9EC087                      ;9EC08F|D0F6    |;
+                       LDX.B $87                            ;9EC091|A687    |;
+                       LDY.B zpCurntTeamLoopVal             ;9EC093|A491    |;
+                       LDX.W $1766,Y                        ;9EC095|BE6617  |;
+                       DEX                                  ;9EC098|CA      |;
+                       DEX                                  ;9EC099|CA      |;
+          CODE_9EC09A:
+                       INX                                  ;9EC09A|E8      |;
+                       INX                                  ;9EC09B|E8      |;
+                       LDA.W $0F43,X                        ;9EC09C|BD430F  |;
+                       BPL CODE_9EC09A                      ;9EC09F|10F9    |;
+                       LDA.B $A5                            ;9EC0A1|A5A5    |;
+                       LSR A                                ;9EC0A3|4A      |;
+                       STA.B $B1                            ;9EC0A4|85B1    |;
+                       LDY.B zpCurntTeamLoopVal             ;9EC0A6|A491    |;
+                       LDA.W PlyrsOnIceCountHm,Y            ;9EC0A8|B9A617  |;
+                       STA.B $A9                            ;9EC0AB|85A9    |;
+                       INC A                                ;9EC0AD|1A      |;
+                       STA.W PlyrsOnIceCountHm,Y            ;9EC0AE|99A617  |;
+                       LDA.W #$0001                         ;9EC0B1|A90100  |;
+                       TSB.W $17DE                          ;9EC0B4|0CDE17  |;
+                       TSB.W $17E0                          ;9EC0B7|0CE017  |;
+                       LDA.W #$0080                         ;9EC0BA|A98000  |;
+                       STA.B $8B                            ;9EC0BD|858B    |;
+                       LDA.W #$D6B0                         ;9EC0BF|A9B0D6  |;
+                       STA.B $89                            ;9EC0C2|8589    |;
+                       LDA.W GoalieInNetHmAw,Y              ;9EC0C4|B9AA17  |;
+                       BPL CODE_9EC0CB                      ;9EC0C7|1002    |;
+                       INC.B $89                            ;9EC0C9|E689    |;
+          CODE_9EC0CB:
+                       LDY.B $A9                            ;9EC0CB|A4A9    |;
+                       LDA.B [$89],Y                        ;9EC0CD|B789    |;
+                       AND.W #$00FF                         ;9EC0CF|29FF00  |;
+                       STA.W $0F43,X                        ;9EC0D2|9D430F  |;
+                       STX.B $95                            ;9EC0D5|8695    |;
+                       JSL.L CODE_9FCED0                    ;9EC0D7|22D0CE9F|;
+                       JSL.L CODE_9FCEF6                    ;9EC0DB|22F6CE9F|;
+                       LDA.W $1283,X                        ;9EC0DF|BD8312  |;
+                       ORA.W #$1000                         ;9EC0E2|090010  |;
+                       STA.W $1283,X                        ;9EC0E5|9D8312  |;
+                       STX.B $87                            ;9EC0E8|8687    |;
+                       LDX.W #$000E                         ;9EC0EA|A20E00  |;
+          CODE_9EC0ED:
+                       PLA                                  ;9EC0ED|68      |;
+                       STA.B $89,X                          ;9EC0EE|9589    |;
+                       DEX                                  ;9EC0F0|CA      |;
+                       DEX                                  ;9EC0F1|CA      |;
+                       BPL CODE_9EC0ED                      ;9EC0F2|10F9    |;
+                       LDX.B $87                            ;9EC0F4|A687    |;
+                       STX.B $87                            ;9EC0F6|8687    |;
+                       LDX.W #$000E                         ;9EC0F8|A20E00  |;
+          CODE_9EC0FB:
+                       PLA                                  ;9EC0FB|68      |;
+                       STA.B $A5,X                          ;9EC0FC|95A5    |;
+                       DEX                                  ;9EC0FE|CA      |;
+                       DEX                                  ;9EC0FF|CA      |;
+                       BPL CODE_9EC0FB                      ;9EC100|10F9    |;
+                       LDX.B $87                            ;9EC102|A687    |;
+                       LDX.B $95                            ;9EC104|A695    |;
+                       RTL                                  ;9EC106|6B      |;
  
           CODE_9EC107:
                        LDA.W #$001F                         ;9EC107|A91F00  |;
@@ -8132,9 +8210,9 @@
           CODE_9EC5CB:
                        LDA.B $A5                            ;9EC5CB|A5A5    |;
                        BMI CODE_9EC5A7                      ;9EC5CD|30D8    |;
-                       LDA.W $17A6                          ;9EC5CF|ADA617  |;
+                       LDA.W PlyrsOnIceCountHm              ;9EC5CF|ADA617  |;
                        SEC                                  ;9EC5D2|38      |;
-                       SBC.W $17A8                          ;9EC5D3|EDA817  |;
+                       SBC.W PlyrsOnIceCountAwy             ;9EC5D3|EDA817  |;
                        STA.B $A5                            ;9EC5D6|85A5    |;
                        LDA.W $1503,Y                        ;9EC5D8|B90315  |;
                        BEQ CODE_9EC5E5                      ;9EC5DB|F008    |;
@@ -8169,8 +8247,8 @@
           CODE_9EC64A:
                        RTL                                  ;9EC64A|6B      |;
  
-          CODE_9EC64B:
-                       STZ.W $1638                          ;9EC64B|9C3816  |;
+  Chk_Puc_Xing_BrkWay:
+                       STZ.W BreakAwayTrigger_flg           ;9EC64B|9C3816  |;
                        LDA.W $0AD9                          ;9EC64E|ADD90A  |;
                        BPL CODE_9EC656                      ;9EC651|1003    |;
                        JMP.W CODE_9EC6E6                    ;9EC653|4CE6C6  |;
@@ -8256,54 +8334,54 @@
                        BPL CODE_9EC6CB                      ;9EC6DE|10EB    |;
  
           CODE_9EC6E0:
-                       STZ.W $1638                          ;9EC6E0|9C3816  |;
-                       INC.W $1638                          ;9EC6E3|EE3816  |;
+                       STZ.W BreakAwayTrigger_flg           ;9EC6E0|9C3816  |; Reset BreakAwayTriggeredFlag
+                       INC.W BreakAwayTrigger_flg           ;9EC6E3|EE3816  |; Set BreakAwayTriggered Flag
  
           CODE_9EC6E6:
                        RTL                                  ;9EC6E6|6B      |;
  
-          CODE_9EC6E7:
-                       JSL.L CODE_9EC64B                    ;9EC6E7|224BC69E|;
-                       LDA.W $1638                          ;9EC6EB|AD3816  |;
-                       STA.W $1E8B                          ;9EC6EE|8D8B1E  |;
-                       BEQ CODE_9EC72C                      ;9EC6F1|F039    |;
-                       LDA.W $1E9B                          ;9EC6F3|AD9B1E  |;
-                       BNE CODE_9EC704                      ;9EC6F6|D00C    |;
-                       LDA.W #$7000                         ;9EC6F8|A90070  |;
-                       STA.B $64                            ;9EC6FB|8564    |;
-                       LDA.W #$0005                         ;9EC6FD|A90500  |;
-                       JSL.L CODE_80A17D                    ;9EC700|227DA180|;
+    fn_BreakawayLogic:
+                       JSL.L Chk_Puc_Xing_BrkWay            ;9EC6E7|224BC69E|; Sets BreakAwayTrigger_flg
+                       LDA.W BreakAwayTrigger_flg           ;9EC6EB|AD3816  |;
+                       STA.W BreakAwayActive_flg            ;9EC6EE|8D8B1E  |;
+                       BEQ .done                            ;9EC6F1|F039    |; Not a Breakaway were done
+                       LDA.W IsPenaltyShot                  ;9EC6F3|AD9B1E  |;
+                       BNE .skipSFXpenaltyshot              ;9EC6F6|D00C    |; Skip sfx if Penalty shot
+                       LDA.W #$7000                         ;9EC6F8|A90070  |; sfx setup
+                       STA.B $64                            ;9EC6FB|8564    |; sfx setup
+                       LDA.W #$0005                         ;9EC6FD|A90500  |; sfx beep
+                       JSL.L fn_PlaySFX                     ;9EC700|227DA180|; Play sfx
  
-          CODE_9EC704:
-                       LDA.W $19BE                          ;9EC704|ADBE19  |;
+  .skipSFXpenaltyshot:
+                       LDA.W $19BE                          ;9EC704|ADBE19  |; $19BE Something to do with chance of a penalty occuring
                        CLC                                  ;9EC707|18      |;
                        ADC.W #$0014                         ;9EC708|691400  |;
-                       BMI CODE_9EC710                      ;9EC70B|3003    |;
+                       BMI .HmwAwyChk                       ;9EC70B|3003    |; Negative don't add to 14 Hex to $19BE
                        STA.W $19BE                          ;9EC70D|8DBE19  |;
  
-          CODE_9EC710:
+           .HmwAwyChk:
                        PHY                                  ;9EC710|5A      |;
                        LDY.W #$0000                         ;9EC711|A00000  |;
                        LDA.W $0AD9                          ;9EC714|ADD90A  |;
                        CMP.W #$000C                         ;9EC717|C90C00  |;
-                       BMI CODE_9EC71F                      ;9EC71A|3003    |;
-                       LDY.W #$0002                         ;9EC71C|A00200  |;
+                       BMI .checkifpenalyshot               ;9EC71A|3003    |; If Negative, Home team stats
+                       LDY.W #$0002                         ;9EC71C|A00200  |; Positive, switch to away team stats by loading 2
  
-          CODE_9EC71F:
-                       LDA.W $1E9B                          ;9EC71F|AD9B1E  |;
-                       BNE CODE_9EC72B                      ;9EC722|D007    |;
-                       LDA.W $17C2,Y                        ;9EC724|B9C217  |;
-                       INC A                                ;9EC727|1A      |;
-                       STA.W $17C2,Y                        ;9EC728|99C217  |;
+   .checkifpenalyshot:
+                       LDA.W IsPenaltyShot                  ;9EC71F|AD9B1E  |;
+                       BNE .skipGameStats                   ;9EC722|D007    |; Penalty shot skip adding to game stats
+                       LDA.W GmStat_BrkAwayAttmpts,Y        ;9EC724|B9C217  |;
+                       INC A                                ;9EC727|1A      |; Add 1 to BreakAway Stat
+                       STA.W GmStat_BrkAwayAttmpts,Y        ;9EC728|99C217  |;
  
-          CODE_9EC72B:
+       .skipGameStats:
                        PLY                                  ;9EC72B|7A      |;
  
-          CODE_9EC72C:
+                .done:
                        RTL                                  ;9EC72C|6B      |;
  
           CODE_9EC72D:
-                       LDA.W $1E9B                          ;9EC72D|AD9B1E  |;
+                       LDA.W IsPenaltyShot                  ;9EC72D|AD9B1E  |;
                        BNE CODE_9EC790                      ;9EC730|D05E    |;
                        LDA.W $1E8D                          ;9EC732|AD8D1E  |;
                        CMP.W #$000C                         ;9EC735|C90C00  |;
@@ -8323,18 +8401,18 @@
                        EOR.W #$0002                         ;9EC74F|490200  |;
                        TAY                                  ;9EC752|A8      |;
                        LDA.W #$0001                         ;9EC753|A90100  |;
-                       STA.W $17A6,Y                        ;9EC756|99A617  |;
+                       STA.W PlyrsOnIceCountHm,Y            ;9EC756|99A617  |;
                        LDY.W $1E91                          ;9EC759|AC911E  |;
                        LDA.W #$0001                         ;9EC75C|A90100  |;
-                       STA.W $17A6,Y                        ;9EC75F|99A617  |;
+                       STA.W PlyrsOnIceCountHm,Y            ;9EC75F|99A617  |;
                        PLY                                  ;9EC762|7A      |;
                        PHX                                  ;9EC763|DA      |;
                        LDX.W $1E8D                          ;9EC764|AE8D1E  |;
                        LDA.W $12A3,X                        ;9EC767|BDA312  |;
                        STA.W $1E8F                          ;9EC76A|8D8F1E  |;
                        PLX                                  ;9EC76D|FA      |;
-                       STZ.W $1E9B                          ;9EC76E|9C9B1E  |;
-                       INC.W $1E9B                          ;9EC771|EE9B1E  |;
+                       STZ.W IsPenaltyShot                  ;9EC76E|9C9B1E  |;
+                       INC.W IsPenaltyShot                  ;9EC771|EE9B1E  |;
                        LDA.L $7E3136                        ;9EC774|AF36317E|;
                        STA.W $1E97                          ;9EC778|8D971E  |;
                        LDA.L $7E3138                        ;9EC77B|AF38317E|;
@@ -8350,10 +8428,10 @@
           CODE_9EC791:
                        LDA.W $163A                          ;9EC791|AD3A16  |;
                        BEQ CODE_9EC7BD                      ;9EC794|F027    |;
-                       LDA.W $1E9B                          ;9EC796|AD9B1E  |;
+                       LDA.W IsPenaltyShot                  ;9EC796|AD9B1E  |;
                        BEQ CODE_9EC7BD                      ;9EC799|F022    |;
                        PHX                                  ;9EC79B|DA      |;
-                       STZ.W $1E9B                          ;9EC79C|9C9B1E  |;
+                       STZ.W IsPenaltyShot                  ;9EC79C|9C9B1E  |;
                        LDA.W #$FFFF                         ;9EC79F|A9FFFF  |;
                        STA.W $1E8D                          ;9EC7A2|8D8D1E  |;
                        LDA.W #$000A                         ;9EC7A5|A90A00  |;
@@ -10139,7 +10217,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        SBC.W $0DB7,X                        ;9ED5C6|FDB70D  |;
                        STA.B $A9                            ;9ED5C9|85A9    |;
                        LDA.W JoyPad,Y                       ;9ED5CB|B97607  |;
-                       BIT.W #$4000                         ;9ED5CE|890040  |;
+                       BIT.W #$4000                         ;9ED5CE|890040  |; Manual Goalie Control Logix when X is pressed
                        BNE UNREACH_9ED5E8                   ;9ED5D1|D015    |;
                        LDA.W $0AB8,Y                        ;9ED5D3|B9B80A  |;
                        BIT.W #$0040                         ;9ED5D6|894000  |;
@@ -11728,11 +11806,11 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        JSL.L CODE_809099                    ;9EE28D|22999080|;
                        LDA.B $0A                            ;9EE291|A50A    |;
                        STA.W $0D05                          ;9EE293|8D050D  |;
-                       LDA.W $1E8B                          ;9EE296|AD8B1E  |;
+                       LDA.W BreakAwayActive_flg            ;9EE296|AD8B1E  |;
                        BEQ CODE_9EE2A5                      ;9EE299|F00A    |;
-                       JSL.L CODE_9EC64B                    ;9EE29B|224BC69E|;
-                       LDA.W $1638                          ;9EE29F|AD3816  |;
-                       STA.W $1E8B                          ;9EE2A2|8D8B1E  |;
+                       JSL.L Chk_Puc_Xing_BrkWay            ;9EE29B|224BC69E|;
+                       LDA.W BreakAwayTrigger_flg           ;9EE29F|AD3816  |;
+                       STA.W BreakAwayActive_flg            ;9EE2A2|8D8B1E  |;
  
           CODE_9EE2A5:
                        LDX.B $E4                            ;9EE2A5|A6E4    |;
@@ -12434,14 +12512,14 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDY.W #$0002                         ;9EE861|A00200  |;
  
           CODE_9EE864:
-                       LDA.W $17D6,Y                        ;9EE864|B9D617  |;
+                       LDA.W GmStat_OneTmrAtmpt,Y           ;9EE864|B9D617  |;
                        INC A                                ;9EE867|1A      |;
-                       STA.W $17D6,Y                        ;9EE868|99D617  |;
+                       STA.W GmStat_OneTmrAtmpt,Y           ;9EE868|99D617  |;
                        PLY                                  ;9EE86B|7A      |;
  
           CODE_9EE86C:
                        LDA.W #$0001                         ;9EE86C|A90100  |;
-                       STA.W $1E89                          ;9EE86F|8D891E  |;
+                       STA.W OneTimerFlg                    ;9EE86F|8D891E  |;
                        LDA.W $19BE                          ;9EE872|ADBE19  |;
                        CLC                                  ;9EE875|18      |;
                        ADC.W #$000A                         ;9EE876|690A00  |;
@@ -12796,9 +12874,9 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDA.W $15D6                          ;9EEB32|ADD615  |;
                        BNE CODE_9EEB40                      ;9EEB35|D009    |;
                        LDY.B zpCurntTeamLoopVal             ;9EEB37|A491    |;
-                       LDA.W $17BE,Y                        ;9EEB39|B9BE17  |;
+                       LDA.W GmStat_PasCmplt,Y              ;9EEB39|B9BE17  |;
                        INC A                                ;9EEB3C|1A      |;
-                       STA.W $17BE,Y                        ;9EEB3D|99BE17  |;
+                       STA.W GmStat_PasCmplt,Y              ;9EEB3D|99BE17  |;
  
           CODE_9EEB40:
                        LDX.W $0B9D,Y                        ;9EEB40|BE9D0B  |;
@@ -13646,22 +13724,22 @@ fn_end_cpu_pull_goalie_3rdperiod:
  
           CODE_9EF262:
                        LDA.W $0000,Y                        ;9EF262|B90000  |;
-                       INC A                                ;9EF265|1A      |;
+                       INC A                                ;9EF265|1A      |; Shot On Net
                        STA.W $0000,Y                        ;9EF266|990000  |;
                        LDY.B zpCurntTeamLoopVal             ;9EF269|A491    |;
                        BNE CODE_9EF28A                      ;9EF26B|D01D    |;
-                       LDA.W $17A6                          ;9EF26D|ADA617  |;
+                       LDA.W PlyrsOnIceCountHm              ;9EF26D|ADA617  |;
                        SEC                                  ;9EF270|38      |;
-                       SBC.W $17A8                          ;9EF271|EDA817  |;
+                       SBC.W PlyrsOnIceCountAwy             ;9EF271|EDA817  |;
                        BEQ CODE_9EF2A5                      ;9EF274|F02F    |;
                        db $30,$09,$AD,$5A,$17,$1A,$8D,$5A   ;9EF276|        |;
                        db $17,$80,$24,$AD,$5E,$17,$1A,$8D   ;9EF27E|        |;
                        db $5E,$17,$80,$1B                   ;9EF286|        |;
  
           CODE_9EF28A:
-                       LDA.W $17A8                          ;9EF28A|ADA817  |;
+                       LDA.W PlyrsOnIceCountAwy             ;9EF28A|ADA817  |;
                        SEC                                  ;9EF28D|38      |;
-                       SBC.W $17A6                          ;9EF28E|EDA617  |;
+                       SBC.W PlyrsOnIceCountHm              ;9EF28E|EDA617  |;
                        BEQ CODE_9EF2A5                      ;9EF291|F012    |;
                        BMI CODE_9EF29E                      ;9EF293|3009    |;
                        db $AD,$5C,$17,$1A,$8D,$5C,$17,$80   ;9EF295|        |;
@@ -13806,29 +13884,45 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDA.W Score_HmAw,Y                   ;9EF38B|B98E17  |;
                        INC A                                ;9EF38E|1A      |;
                        STA.W Score_HmAw,Y                   ;9EF38F|998E17  |;
-                       LDA.W $17A6                          ;9EF392|ADA617  |;
+                       LDA.W PlyrsOnIceCountHm              ;9EF392|ADA617  |;
                        SEC                                  ;9EF395|38      |;
-                       SBC.W $17A8                          ;9EF396|EDA817  |;
+                       SBC.W PlyrsOnIceCountAwy             ;9EF396|EDA817  |;
                        BEQ CODE_9EF3AE                      ;9EF399|F013    |;
-                       db $30,$06,$A4,$91,$F0,$0D,$80,$04   ;9EF39B|        |;
-                       db $A4,$91,$D0,$07,$B9,$62,$17,$1A   ;9EF3A3|        |;
-                       db $99,$62,$17                       ;9EF3AB|        |;
+                       BMI CODE_9EF3A3                      ;9EF39B|3006    |;
+                       LDY.B zpCurntTeamLoopVal             ;9EF39D|A491    |;
+                       BEQ CODE_9EF3AE                      ;9EF39F|F00D    |;
+                       BRA CODE_9EF3A7                      ;9EF3A1|8004    |;
+          CODE_9EF3A3:
+                       LDY.B zpCurntTeamLoopVal             ;9EF3A3|A491    |;
+                       BNE CODE_9EF3AE                      ;9EF3A5|D007    |;
+          CODE_9EF3A7:
+                       LDA.W GmStat_SHGoals,Y               ;9EF3A7|B96217  |;
+                       INC A                                ;9EF3AA|1A      |;
+                       STA.W GmStat_SHGoals,Y               ;9EF3AB|996217  |;
  
           CODE_9EF3AE:
-                       LDA.W $1E9B                          ;9EF3AE|AD9B1E  |;
-                       BNE CODE_9EF3C3                      ;9EF3B1|D010    |;
-                       db $AD,$8B,$1E,$F0,$14,$A4,$91,$B9   ;9EF3B3|        |;
-                       db $C6,$17,$1A,$99,$C6,$17,$80,$09   ;9EF3BB|        |;
+                       LDA.W IsPenaltyShot                  ;9EF3AE|AD9B1E  |;
+                       BNE CODE_9EF3C3                      ;9EF3B1|D010    |; Penalty Shot so Branch to F3C3
+                       LDA.W BreakAwayActive_flg            ;9EF3B3|AD8B1E  |;
+                       BEQ CODE_9EF3CC                      ;9EF3B6|F014    |; If its not a BreakAway Branch to F3CC
+                       LDY.B zpCurntTeamLoopVal             ;9EF3B8|A491    |;
+                       LDA.W GmStat_BrkAwayMade,Y           ;9EF3BA|B9C617  |;
+                       INC A                                ;9EF3BD|1A      |; Add 1 to the Break Away Made Stat
+                       STA.W GmStat_BrkAwayMade,Y           ;9EF3BE|99C617  |;
+                       BRA CODE_9EF3CC                      ;9EF3C1|8009    |;
  
           CODE_9EF3C3:
                        LDY.B zpCurntTeamLoopVal             ;9EF3C3|A491    |;
-                       LDA.W $17CE,Y                        ;9EF3C5|B9CE17  |;
-                       INC A                                ;9EF3C8|1A      |;
-                       STA.W $17CE,Y                        ;9EF3C9|99CE17  |;
-                       LDA.W $1E89                          ;9EF3CC|AD891E  |;
+                       LDA.W GmStat_PnltyShotMade,Y         ;9EF3C5|B9CE17  |;
+                       INC A                                ;9EF3C8|1A      |; Add 1 to Penalty Shot Made Game Stat
+                       STA.W GmStat_PnltyShotMade,Y         ;9EF3C9|99CE17  |;
+          CODE_9EF3CC:
+                       LDA.W OneTimerFlg                    ;9EF3CC|AD891E  |;
                        BEQ CODE_9EF3DA                      ;9EF3CF|F009    |;
-                       db $A4,$91,$B9,$DA,$17,$1A,$99,$DA   ;9EF3D1|        |;
-                       db $17                               ;9EF3D9|        |;
+                       LDY.B zpCurntTeamLoopVal             ;9EF3D1|A491    |;
+                       LDA.W GmStat_OneTimrMade,Y           ;9EF3D3|B9DA17  |;
+                       INC A                                ;9EF3D6|1A      |;Add 1 to One Timers Made
+                       STA.W GmStat_OneTimrMade,Y           ;9EF3D7|99DA17  |;
  
           CODE_9EF3DA:
                        JSL.L CODE_80A349                    ;9EF3DA|2249A380|;
@@ -13859,8 +13953,8 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDA.B $83                            ;9EF424|A583    |;
                        STA.W $0D2B                          ;9EF426|8D2B0D  |;
                        JSL.L CODE_9EC791                    ;9EF429|2291C79E|;
-                       STZ.W $1E8B                          ;9EF42D|9C8B1E  |;
-                       STZ.W $1E89                          ;9EF430|9C891E  |;
+                       STZ.W BreakAwayActive_flg            ;9EF42D|9C8B1E  |;
+                       STZ.W OneTimerFlg                    ;9EF430|9C891E  |;
                        PHX                                  ;9EF433|DA      |;
                        LDA.W period                         ;9EF434|AD3016  |;
                        ASL A                                ;9EF437|0A      |;
@@ -13911,10 +14005,10 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDA.W #$0002                         ;9EF497|A90200  |;
                        CLC                                  ;9EF49A|18      |;
                        LDY.B zpCurntTeamLoopVal             ;9EF49B|A491    |;
-                       ADC.W $17A6,Y                        ;9EF49D|79A617  |;
+                       ADC.W PlyrsOnIceCountHm,Y            ;9EF49D|79A617  |;
                        LDY.B $8D                            ;9EF4A0|A48D    |;
                        SEC                                  ;9EF4A2|38      |;
-                       SBC.W $17A6,Y                        ;9EF4A3|F9A617  |;
+                       SBC.W PlyrsOnIceCountHm,Y            ;9EF4A3|F9A617  |;
                        LDY.B zpCurntTeamLoopVal             ;9EF4A6|A491    |;
                        BEQ CODE_9EF4AD                      ;9EF4A8|F003    |;
                        ORA.W #$0080                         ;9EF4AA|098000  |;
@@ -14291,7 +14385,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        BMI CODE_9EF829                      ;9EF7C5|3062    |;
  
           CODE_9EF7C7:
-                       JSL.L CODE_9EC6E7                    ;9EF7C7|22E7C69E|;
+                       JSL.L fn_BreakawayLogic              ;9EF7C7|22E7C69E|;
                        LDA.W $15D4                          ;9EF7CB|ADD415  |;
                        BIT.W #$0020                         ;9EF7CE|892000  |;
                        BNE UNREACH_9EF7D6                   ;9EF7D1|D003    |;
@@ -14337,7 +14431,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        BMI CODE_9EF829                      ;9EF853|30D4    |;
  
           CODE_9EF855:
-                       JSL.L CODE_9EC6E7                    ;9EF855|22E7C69E|;
+                       JSL.L fn_BreakawayLogic              ;9EF855|22E7C69E|;
                        LDA.W $15D4                          ;9EF859|ADD415  |;
                        BIT.W #$0020                         ;9EF85C|892000  |;
                        BNE UNREACH_9EF864                   ;9EF85F|D003    |;
@@ -14744,14 +14838,12 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDA.W #$7000                         ;9EFBAF|A90070  |; Setup for SFX fnc
                        STA.B $64                            ;9EFBB2|8564    |;
                        LDA.W #$0005                         ;9EFBB4|A90500  |; #05 Sets Beep SFX
-                       JSL.L CODE_80A17D                    ;9EFBB7|227DA180|; Call To SFX Routine - Play Beep When L+R Pressed
+                       JSL.L fn_PlaySFX                     ;9EFBB7|227DA180|; Call To SFX Routine - Play Beep When L+R Pressed
 
             Done:
                        LDY.B zpCurntTeamLoopVal             ;9EFBBB|A491    |; Run Original Hijacked code & RTS
                        LDA.W GoalieInNetHmAw,Y              ;9EFBBD|B9AA17  |;
                        RTS                                  ;9EFBC0|60      |;
- 
-
 JyPadHmAwyLookupTable:
                        dw $0001                             ;9EFBC1|        |;
                        dw $0002                             ;9EFBC3|        |;

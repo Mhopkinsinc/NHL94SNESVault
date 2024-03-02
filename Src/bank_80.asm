@@ -3134,7 +3134,7 @@
                        db $3F,$3F,$3F                       ;80A179|        |;
                        db $3F                               ;80A17C|        |;
  
-          CODE_80A17D:
+           fn_PlaySFX:
                        PHX                                  ;80A17D|DA      |;
                        PHY                                  ;80A17E|5A      |;
                        PHB                                  ;80A17F|8B      |;
@@ -3283,14 +3283,37 @@
                        db $C5,$4E,$D0,$05,$20,$F7,$AB,$80   ;80A28E|        |;
                        db $07,$E8,$E8,$C8,$C0,$08,$D0,$ED   ;80A296|        |;
                        db $E2,$20,$EE,$E5,$07,$28,$AB,$7A   ;80A29E|        |;
-                       db $FA,$6B,$DA,$5A,$8B,$08,$E2,$30   ;80A2A6|        |;
-                       db $CE,$E5,$07,$48,$A5,$50,$48,$AB   ;80A2AE|        |;
-                       db $68,$0A,$A8,$C2,$20,$B7,$34,$18   ;80A2B6|        |;
-                       db $65,$34,$85,$4E,$A2,$00,$9B,$BD   ;80A2BE|        |;
-                       db $2A,$09,$C5,$4E,$D0,$03,$20,$C7   ;80A2C6|        |;
-                       db $AB,$E8,$E8,$C8,$C0,$08,$D0,$EF   ;80A2CE|        |;
-                       db $E2,$20,$EE,$E5,$07,$28,$AB,$7A   ;80A2D6|        |;
-                       db $FA,$6B                           ;80A2DE|        |;
+                       db $FA,$6B                           ;80A2A6|        |;
+ 
+          CODE_80A2A8:
+                       PHX                                  ;80A2A8|DA      |;
+                       PHY                                  ;80A2A9|5A      |;
+                       PHB                                  ;80A2AA|8B      |;
+                       PHP                                  ;80A2AB|08      |;
+                       SEP #$30                             ;80A2AC|E230    |;
+                       DEC.W $07E5                          ;80A2AE|CEE507  |;
+                       PHA                                  ;80A2B1|48      |;
+                       LDA.B $50                            ;80A2B2|A550    |;
+                       PHA                                  ;80A2B4|48      |;
+                       PLB                                  ;80A2B5|AB      |;
+                       PLA                                  ;80A2B6|68      |;
+                       ASL A                                ;80A2B7|0A      |;
+                       TAY                                  ;80A2B8|A8      |;
+                       REP #$20                             ;80A2B9|C220    |;
+                       LDA.B [$34],Y                        ;80A2BB|B734    |;
+                       CLC                                  ;80A2BD|18      |;
+                       ADC.B $34                            ;80A2BE|6534    |;
+                       STA.B $4E                            ;80A2C0|854E    |;
+                       LDX.B #$00                           ;80A2C2|A200    |;
+                       TXY                                  ;80A2C4|9B      |;
+                       LDA.W $092A,X                        ;80A2C5|BD2A09  |;
+                       CMP.B $4E                            ;80A2C8|C54E    |;
+                       BNE UNREACH_80A2CF                   ;80A2CA|D003    |;
+                       JSR.W CODE_80ABC7                    ;80A2CC|20C7AB  |;
+       UNREACH_80A2CF:
+                       db $E8,$E8,$C8,$C0,$08,$D0,$EF,$E2   ;80A2CF|        |;
+                       db $20,$EE,$E5,$07,$28,$AB,$7A,$FA   ;80A2D7|        |;
+                       db $6B                               ;80A2DF|        |;
  
           CODE_80A2E0:
                        PHP                                  ;80A2E0|08      |;

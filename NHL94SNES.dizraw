@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProjectXmlSerializer-Root xmlns:exs="https://extendedxmlserializer.github.io/v2" xmlns:ns1="clr-namespace:Diz.Core.model;assembly=Diz.Core" xmlns:ns2="clr-namespace:Diz.Core.model.snes;assembly=Diz.Core" xmlns:sys="https://extendedxmlserializer.github.io/system" xmlns:ns3="clr-namespace:System.Collections.Generic;assembly=System.Collections" xmlns:ns4="clr-namespace:Diz.Core.export;assembly=Diz.Core" SaveVersion="102" Watermark="DiztinGUIsh" Extra1="" Extra2="" xmlns="clr-namespace:Diz.Core.serialization.xml_serializer;assembly=Diz.Core">
-  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="998046">
+  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="999691">
     <LogWriterSettings Format="%label:-22% %code:37%;%pc%|%bytes%|; %comment%" DataPerLine="8" Unlabeled="ShowInPoints" Structure="OneBankPerFile" NewLine="true" OutputExtraWhitespace="true" GenerateFullLine="false" IncludeUnusedLabels="false" PrintLabelSpecificComments="true" RomSizeOverride="-1" FileOrFolderOutPath="DizExport\" OutputToString="false" ErrorFilename="errors.txt" />
     <ProjectSettings exs:member="" BsnesUsageMapImportOnlyChangedUnmarked="true">
       <RomBytesOutputFormatSettings CompressGroupBlock="true" CompressUsingTable1="true" InsertCommentIntoOutputLinesEveryNBytes="2048" />
@@ -13,6 +13,8 @@
         <sys:Item Key="10194499" Value="Edit Lines # Of players at positon " />
         <sys:Item Key="10194508" Value="# of Goalies" />
         <sys:Item Key="10257671" Value="Something to do with Player Stats &amp; Team Roster Screen" />
+        <sys:Item Key="10259913" Value="Penalties ON Branck 8DD7" />
+        <sys:Item Key="10260470" Value="Penalties On Branch 9002" />
         <sys:Item Key="10262051" Value="? Called During Change of Player Portrai on Game Setup" />
         <sys:Item Key="10262089" Value="PTR Table For Banner Text Per Team" />
         <sys:Item Key="10262090" Value="PTR ANH Banner Text" />
@@ -121,6 +123,8 @@
         <sys:Item Key="10333401" Value="Penalities (3)" />
         <sys:Item Key="10333403" Value="Line Changes (3)" />
         <sys:Item Key="10333405" Value="Goalie Control (2)" />
+        <sys:Item Key="10396017" Value="Penalties Off Branch A175" />
+        <sys:Item Key="10396560" Value="If zero Branch to A3AD" />
         <sys:Item Key="10400791" Value="Hijack for one min penalities" />
         <sys:Item Key="10401195" Value="Sub routine to Add Stats, 198Ax = Pen Minutes" />
         <sys:Item Key="10401202" Value="Get Current Number of pen minutes for the player Load into A register" />
@@ -136,8 +140,34 @@
         <sys:Item Key="10401745" Value="SFX" />
         <sys:Item Key="10401747" Value="SFX" />
         <sys:Item Key="10401750" Value="JMP Play SFX" />
+        <sys:Item Key="10401912" Value="If Penalties Off were done" />
         <sys:Item Key="10402472" Value="Hijack to skip Interference Penalty BRA" />
+        <sys:Item Key="10402868" Value="If Penalties On Branch BC4F" />
         <sys:Item Key="10403685" Value="003C makes this real time" />
+        <sys:Item Key="10403924" Value="Breakaway Branch to c059" />
+        <sys:Item Key="10403926" Value="Not a Breakaway JMP to 0C6D" />
+        <sys:Item Key="10403929" Value="Check if still breakaway" />
+        <sys:Item Key="10403939" Value="Breakaway flag set, Setup for Penalty Shot" />
+        <sys:Item Key="10403941" Value="Breakaway flag clear, Setup for NO Penalty Shot" />
+        <sys:Item Key="10403944" Value="Active Breakaway, Setup PenaltyShot Flag #$FFFF" />
+        <sys:Item Key="10403947" Value="Skip to end of function RTL" />
+        <sys:Item Key="10403949" Value="Dont Call Penalty Shot" />
+        <sys:Item Key="10405600" Value="Reset BreakAwayTriggeredFlag" />
+        <sys:Item Key="10405603" Value="Set BreakAwayTriggered Flag" />
+        <sys:Item Key="10405607" Value="Sets BreakAwayTrigger_flg" />
+        <sys:Item Key="10405617" Value="Not a Breakaway were done" />
+        <sys:Item Key="10405622" Value="Skip sfx if Penalty shot" />
+        <sys:Item Key="10405624" Value="sfx setup" />
+        <sys:Item Key="10405627" Value="sfx setup" />
+        <sys:Item Key="10405629" Value="sfx beep" />
+        <sys:Item Key="10405632" Value="Play sfx" />
+        <sys:Item Key="10405636" Value="$19BE Something to do with chance of a penalty occuring" />
+        <sys:Item Key="10405643" Value="Negative don't add to 14 Hex to $19BE" />
+        <sys:Item Key="10405658" Value="If Negative, Home team stats" />
+        <sys:Item Key="10405660" Value="Positive, switch to away team stats by loading 2" />
+        <sys:Item Key="10405666" Value="Penalty shot skip adding to game stats" />
+        <sys:Item Key="10405671" Value="Add 1 to BreakAway Stat" />
+        <sys:Item Key="10405686" Value="If zero RTL" />
         <sys:Item Key="10408127" Value="Hijack For Manual Pull Goalie" />
         <sys:Item Key="10408240" Value="Load Period" />
         <sys:Item Key="10408243" Value="Check If 3rd Period (0 Based)" />
@@ -163,6 +193,12 @@
         <sys:Item Key="10408297" Value="Value contains Home or Away Team Loop 02 Away 00 Home" />
         <sys:Item Key="10408299" Value="Load the Goalie value" />
         <sys:Item Key="10409422" Value="Manual Goalie Control Logix when X is pressed" />
+        <sys:Item Key="10416741" Value="Shot On Net" />
+        <sys:Item Key="10417073" Value="Penalty Shot so Branch to F3C3" />
+        <sys:Item Key="10417078" Value="If its not a BreakAway Branch to F3CC" />
+        <sys:Item Key="10417085" Value="Add 1 to the Break Away Made Stat" />
+        <sys:Item Key="10417096" Value="Add 1 to Penalty Shot Made Game Stat" />
+        <sys:Item Key="10417110" Value="Add 1 to One Timers Made" />
         <sys:Item Key="10419035" Value="Compare to #0401 Value for 1 min penalties" />
         <sys:Item Key="10419038" Value="1 min pen jump to hit" />
         <sys:Item Key="10419040" Value="Cmp to #0A01 Roughing Pen is different" />
@@ -188,6 +224,7 @@
         <sys:Item Key="10419124" Value="#05 Sets Beep SFX" />
         <sys:Item Key="10419127" Value="Call To SFX Routine - Play Beep When L+R Pressed" />
         <sys:Item Key="10419131" Value="Run Original Hijacked code &amp; RTS" />
+        <sys:Item Key="10453876" Value="Penalties Off or Offsieds On Branch to 837C" />
         <sys:Item Key="10453884" Value="hijack to call our def control code" />
         <sys:Item Key="10454453" Value="0444 makes this real time" />
         <sys:Item Key="10454461" Value="Decrease Period Timer by 1 second" />
@@ -227,6 +264,12 @@
         </sys:Item>
         <sys:Item Key="7318">
           <Value exs:type="ns1:Label" Name="Def_Ctrl_Awy" Comment="Def Control On or Off 1c96 = Away" />
+        </sys:Item>
+        <sys:Item Key="8271044">
+          <Value exs:type="ns1:Label" Name="PenaltiesOnOff" Comment="" />
+        </sys:Item>
+        <sys:Item Key="8429949">
+          <Value exs:type="ns1:Label" Name="fn_PlaySFX" Comment="" />
         </sys:Item>
         <sys:Item Key="8436659">
           <Value exs:type="ns1:Label" Name="LoadGameSetupScreen" Comment="" />
@@ -354,17 +397,107 @@
         <sys:Item Key="10360370">
           <Value exs:type="ns1:Label" Name="clock_remaining_time" Comment="" />
         </sys:Item>
+        <sys:Item Key="10360376">
+          <Value exs:type="ns1:Label" Name="BreakAwayTrigger_flg" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10360650">
+          <Value exs:type="ns1:Label" Name="GmStat_PenaltyCnt" Comment="# of Penalties" />
+        </sys:Item>
+        <sys:Item Key="10360654">
+          <Value exs:type="ns1:Label" Name="GmStat_PenaltyMins" Comment="Penalty Mins" />
+        </sys:Item>
+        <sys:Item Key="10360658">
+          <Value exs:type="ns1:Label" Name="GmStat_AtckZneTme" Comment="Attack Zone Time" />
+        </sys:Item>
+        <sys:Item Key="10360662">
+          <Value exs:type="ns1:Label" Name="GmStat_PPMins" Comment="PP Minutes" />
+        </sys:Item>
+        <sys:Item Key="10360674">
+          <Value exs:type="ns1:Label" Name="GmStat_SHGoals" Comment="Short Handed Goals" />
+        </sys:Item>
+        <sys:Item Key="10360698">
+          <Value exs:type="ns1:Label" Name="GmStat_Shots" Comment="Shots On Net" />
+        </sys:Item>
+        <sys:Item Key="10360700">
+          <Value exs:type="ns1:Label" Name="GmStat_ShotsAwy" Comment="Shots ON Net Away" />
+        </sys:Item>
         <sys:Item Key="10360718">
           <Value exs:type="ns1:Label" Name="Score_HmAw" Comment="178E Home 1790 Away Score" />
+        </sys:Item>
+        <sys:Item Key="10360722">
+          <Value exs:type="ns1:Label" Name="GmStat_FceOffWins" Comment="FaceOff Wins" />
+        </sys:Item>
+        <sys:Item Key="10360742">
+          <Value exs:type="ns1:Label" Name="PlyrsOnIceCountHm" Comment="Player Count ON Ice" />
+        </sys:Item>
+        <sys:Item Key="10360744">
+          <Value exs:type="ns1:Label" Name="PlyrsOnIceCountAwy" Comment="Player Count On Ice" />
         </sys:Item>
         <sys:Item Key="10360746">
           <Value exs:type="ns1:Label" Name="GoalieInNetHmAw" Comment="" />
         </sys:Item>
+        <sys:Item Key="10360762">
+          <Value exs:type="ns1:Label" Name="GmStat_PassesMade" Comment="Passes Made" />
+        </sys:Item>
+        <sys:Item Key="10360766">
+          <Value exs:type="ns1:Label" Name="GmStat_PasCmplt" Comment="Passes Complete" />
+        </sys:Item>
+        <sys:Item Key="10360770">
+          <Value exs:type="ns1:Label" Name="GmStat_BrkAwayAttmpts" Comment="Breakaway Attempts" />
+        </sys:Item>
+        <sys:Item Key="10360774">
+          <Value exs:type="ns1:Label" Name="GmStat_BrkAwayMade" Comment="Breakaways Made" />
+        </sys:Item>
+        <sys:Item Key="10360782">
+          <Value exs:type="ns1:Label" Name="GmStat_PnltyShotMade" Comment="Penalty Shots Made" />
+        </sys:Item>
+        <sys:Item Key="10360790">
+          <Value exs:type="ns1:Label" Name="GmStat_OneTmrAtmpt" Comment="One Timer Attempts" />
+        </sys:Item>
+        <sys:Item Key="10360794">
+          <Value exs:type="ns1:Label" Name="GmStat_OneTimrMade" Comment="On Timers Made" />
+        </sys:Item>
         <sys:Item Key="10361988">
           <Value exs:type="ns1:Label" Name="JyPadHmAwy" Comment="01 Home 02 Away" />
         </sys:Item>
+        <sys:Item Key="10362505">
+          <Value exs:type="ns1:Label" Name="OneTimerFlg" Comment="OneTimer" />
+        </sys:Item>
+        <sys:Item Key="10362507">
+          <Value exs:type="ns1:Label" Name="BreakAwayActive_flg" Comment="Break Away Flag 01" />
+        </sys:Item>
+        <sys:Item Key="10362523">
+          <Value exs:type="ns1:Label" Name="IsPenaltyShot" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10401929">
+          <Value exs:type="ns1:Label" Name=".done" Comment="" />
+        </sys:Item>
         <sys:Item Key="10403685">
           <Value exs:type="ns1:Label" Name="Real_Time_Pen_Clock" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10405451">
+          <Value exs:type="ns1:Label" Name="Chk_Puc_Xing_BrkWay" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10405606">
+          <Value exs:type="ns1:Label" Name="CODE_9EC6E6" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10405607">
+          <Value exs:type="ns1:Label" Name="fn_BreakawayLogic" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10405636">
+          <Value exs:type="ns1:Label" Name=".skipSFXpenaltyshot" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10405648">
+          <Value exs:type="ns1:Label" Name=".HmwAwyChk" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10405663">
+          <Value exs:type="ns1:Label" Name=".checkifpenalyshot" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10405675">
+          <Value exs:type="ns1:Label" Name=".skipGameStats" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10405676">
+          <Value exs:type="ns1:Label" Name=".done" Comment="" />
         </sys:Item>
         <sys:Item Key="10408175">
           <Value exs:type="ns1:Label" Name="Pen_PullGoalie" Comment="" />
@@ -5142,7 +5275,48 @@ U
 +09E
 +09E
 +09E
-r 114 U
+r 58 U
++E9E
++09E
++09E
++09E
++D9E
+.D9E
++D9E
+.D9E
+.D9E
++D9E
++D9E
+.D9E
++D9E
++D9E
++D9E
++D9E
++D9E
++B9E
+.B9E
++B9E
+.B9E
++B9E
++B9E
+.B9E
++B9E
+.B9E
++B9E
+.B9E
++B9E
++B9E
+.B9E
+.B9E
++B9E
+.B9E
++J9E
+.B9E
++J9E
+.B9E
+.B9E
+UE
+r 16 U
 +09E
 +09E
 .09E
@@ -5248,44 +5422,7 @@ U
 .D9E
 +D9E
 +09E
-+D9E
-+D9E
-.D9E
-+D9E
-.D9E
-+D9E
-.D9E
-.D9E
-+D9E
-.D9E
-.D9E
-+D9E
-.D9E
-.D9E
-+D9E
-.D9E
-+D9E
-.D9E
-+D9E
-.D9E
-.D9E
-+D9E
-.D9E
-+D9E
-.D9E
-+D9E
-.D9E
-.D9E
-+D9E
-.D9E
-+D8
-.D8
-.D8
-+D9E
-+D9E
-+D9E
-+D9E
-.D9E
++E9E
 +D9E
 .D9E
 +D9E
@@ -5297,7 +5434,44 @@ U
 .D9E
 .D9E
 +D9E
+.D9E
+.D9E
 +D9E
+.D9E
++D9E
+.D9E
++H9E
+.D9E
+.D9E
++D9E
+.D9E
++L9E
+.D9E
++D9E
+.D9E
+.D9E
++L9E
+.D9E
++L9E
+.D9E
+.D9E
++H9E
++D9E
++D9E
++L9E
+.D9E
++D9E
+.D9E
++D9E
+.D9E
++L9E
+.D9E
+.D9E
++D9E
+.D9E
+.D9E
++09E
++Q9E
 +09B
 .09B
 .09B
@@ -5391,41 +5565,41 @@ U
 .D8
 +D8
 +C8
-+D8
++H9E
++D9E
+.D9E
++D9E
+.D9E
++D9E
++D9E
++D9E
++D9E
++B9E
+.B9E
++B9E
+.B9E
+.B9E
++F9E
+.B9E
+.B9E
++B9E
+.B9E
+.B9E
++B9E
++B9E
++B9E
++B9E
+.B9E
++J9E
+.B9E
++D9E
++T9E
 +D8
 .D8
-+D8
 .D8
-+D8
-+D8
-+D8
-+D8
-+D8
 .D8
 +B8
 .B8
-.B8
-+B8
-.B8
-.B8
-+B8
-.B8
-.B8
-+B8
-+B8
-+B8
-+B8
-.B8
-+B8
-.B8
-+B8
-+D8
-+D8
-.D8
-.D8
-.D8
-+B8
-.B8
 +D8
 .D8
 +D8
@@ -5505,33 +5679,33 @@ U
 .D8
 .D8
 +D8
-+D8
-.D8
-.D8
-+D8
-.D8
-+D8
-.D8
-+D8
-.D8
-.D8
-+D8
-.D8
-.D8
-+D8
-.D8
-+D8
-.D8
-.D8
-+D8
-.D8
-.D8
-+D8
-.D8
-+D8
-.D8
-.D8
-+D8
++H9E
+.D9E
+.D9E
++L9E
+.D9E
++D9E
+.D9E
++D9E
+.D9E
+.D9E
++D9E
+.D9E
+.D9E
++D9E
+.D9E
++D9E
+.D9E
+.D9E
++H9E
+.D9E
+.D9E
++L9E
+.D9E
++D9E
+.D9E
+.D9E
++T9E
 +D8
 .D8
 .D8
@@ -7066,54 +7240,54 @@ U
 +D8
 .D8
 +D8
-+D8
-.D8
-+B8
-.B8
-.B8
-+B8
-.B8
-.B8
-+B8
-.B8
-+B8
-.B8
-.B8
-+B8
-.B8
-+B8
-.B8
-.B8
-+B8
-.B8
-.B8
-.B8
-+B8
-.B8
-.B8
-+B8
-.B8
-.B8
-.B8
-+B8
-.B8
-+D8
-.D8
-+D8
-.D8
-.D8
-+D8
-.D8
-+D8
-.D8
-.D8
-+D8
-.D8
-+D8
-.D8
-+D8
-.D8
-.D8
++F9E
+.B9E
++B9E
+.B9E
+.B9E
++B9E
+.B9E
+.B9E
++J9E
+.B9E
++B9E
+.B9E
+.B9E
++J9E
+.B9E
++B9E
+.B9E
+.B9E
++B9E
+.B9E
+.B9E
+.B9E
++B9E
+.B9E
+.B9E
++B9E
+.B9E
+.B9E
+.B9E
++H9E
+.D9E
++D9E
+.D9E
++D9E
+.D9E
+.D9E
++D9E
+.D9E
++D9E
+.D9E
+.D9E
++D9E
+.D9E
++D9E
+.D9E
++b9E
+.D9E
+.D9E
 +B8
 .B8
 +D8
@@ -37220,44 +37394,79 @@ A
 A
 A
 A
-r 14 U
+U
+U
+U
+U
+U
+U
+Ug
+U
+U
+U
+U
+U
+U
+U
 A
 A
 U
 U
 U
 U
-+09E
-.09E
-+C9E
-.C9E
++G9E
 .C9E
 +C9E
 .C9E
+.C9E
 +09E
 .09E
 +09E
-+09E
-.09E
-.09E
 .09E
 +09E
-.09E
-r 23 U
-+09E
-.09E
-.09E
 +09E
 .09E
 .09E
 .09E
++I9E
+.09E
 +09E
+.09E
++I9E
 .09E
 +09E
 .09E
 .09E
 .09E
 +09E
+.09E
+.09E
++I9E
+.09E
++09E
++09E
++09E
+.09E
+.09E
+.09E
++I9E
+.09E
+.09E
+.09E
++E9E
+.09E
+.09E
++09E
+.09E
+.09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
+.09E
++E9E
 .09E
 +C9E
 .C9E
@@ -65004,7 +65213,7 @@ r 32 A
 .09E
 .09E
 +09E
-+09E
++E9E
 .09E
 .09E
 +09E
@@ -65014,7 +65223,7 @@ r 32 A
 +09E
 .09E
 .09E
-+09E
++E9E
 .09E
 .09E
 +09E
@@ -65030,19 +65239,19 @@ r 32 A
 .09E
 .09E
 +09E
-+09E
-.09E
 +C9E
 .C9E
 +C9E
 .C9E
-.C9E
 +C9E
 .C9E
+.C9E
++09E
+.09E
 +09E
 .09E
 .09E
-+09E
++Q9E
 +09E
 .09E
 .09E
@@ -69757,10 +69966,10 @@ A
 .09E
 +09E
 .09E
-r 27 U
 +09E
 .09E
 .09E
++I9E
 .09E
 +09E
 .09E
@@ -69769,8 +69978,55 @@ r 27 U
 .09E
 +09E
 .09E
-r 22 U
+.09E
 +09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++I9E
+.09E
+.09E
+.09E
++Y9E
+.09E
++E9E
+.09E
+.09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++M9E
+.09E
+.09E
+.09E
++E9E
 .09E
 +09E
 .09E
@@ -74520,7 +74776,7 @@ U
 U
 U
 +09E
-+09E
++E9E
 .09E
 .09E
 +09E
@@ -75920,12 +76176,180 @@ r 37 U
 +09E
 .09E
 .09E
-r 20 U
++I9E
+.09E
+.09E
+.09E
 +09E
 .09E
 .09E
 +09E
-r 150 U
+.09E
+.09E
++I9E
+.09E
++Y9E
+.09E
+.09E
++E9E
+.09E
+.09E
++Y9E
+.09E
++E9E
+.09E
+.09E
++E9E
++09E
+.09E
++09E
+.09E
+.09E
++E9E
+.09E
++09E
++09E
++09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++E9E
+.09E
++09E
++09E
++09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
++09E
++E9E
++09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
++09E
++09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
++E9E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++I9E
+.09E
+.09E
+.09E
++I9E
+.09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++E9E
++09E
+.09E
++09E
++09E
++I9E
+.09E
++09E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++E9E
++09E
+.09E
++09E
++09E
++I9E
+.09E
++09E
+.09E
++09E
+.09E
++Q9E
 +09E
 .09E
 .09E
@@ -76632,7 +77056,7 @@ U
 .09E
 r 80 U
 +09E
-+09E
++E9E
 .09E
 .09E
 +09E
@@ -86987,36 +87411,77 @@ U
 .09E
 +09E
 .09E
-r 19 U
-+09E
-.09E
++I9E
 .09E
 +09E
 .09E
-r 16 U
-+09E
++I9E
 .09E
-+09E
++Y9E
 .09E
++E9E
 .09E
-+09E
-+09E
++I9E
 .09E
-.09E
-+09E
++E9E
 .09E
 .09E
 +09E
-.09E
-r 9 U
 +09E
 .09E
+.09E
++E9E
 .09E
 .09E
 +09E
 .09E
++09E
+.09E
+.09E
++I9E
 .09E
 +09E
+.09E
++09E
+.09E
+.09E
++09E
++09E
+.09E
+.09E
++Y9E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
++09E
+.09E
+.09E
++E9E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
++09E
+.09E
+.09E
++09E
++09E
+.09E
+.09E
++M9E
+.09E
+.09E
+.09E
++09E
+.09E
+.09E
++I9E
 .09E
 .09E
 .09E
@@ -104137,24 +104602,15 @@ r 18 U
 +09E
 .09E
 +09E
-+09E
++E9E
 .09E
 .09E
 +09E
 .09E
-+09E
++I9E
 .09E
 +09E
 .09E
-.09E
-+09E
-.09E
-+09E
-.09E
-.09E
-+09E
-.09E
-+09E
 .09E
 +09E
 .09E
@@ -104165,9 +104621,18 @@ r 18 U
 .09E
 +09E
 .09E
++09E
+.09E
++09E
 .09E
 .09E
-U
++09E
+.09E
++Y9E
+.09E
+.09E
+.09E
+UE
 A
 A
 A
@@ -104175,9 +104640,9 @@ A
 A
 A
 A
++E9E
 +09E
 +09E
-+09E
 .09E
 .09E
 +09E
@@ -104191,13 +104656,13 @@ A
 +09E
 .09E
 .09E
-+09E
++I9E
 .09E
 +09E
 .09E
 +09E
 .09E
-+09E
++E9E
 .09E
 +09E
 .09E
@@ -104215,12 +104680,12 @@ A
 .09E
 +09E
 .09E
-+09E
++I9E
 .09E
 +09E
 .09E
 .09E
-+09E
++E9E
 .09E
 +09E
 +09E
@@ -104239,7 +104704,7 @@ A
 .09E
 +09E
 .09E
-+09E
++I9E
 .09E
 +09E
 .09E
@@ -104251,9 +104716,9 @@ A
 +09E
 .09E
 .09E
-+09E
++I9E
 .09E
-+09E
++M9E
 .09E
 .09E
 .09E
@@ -104263,15 +104728,15 @@ A
 +09E
 .09E
 .09E
-+09E
++E9E
 .09E
-+09E
++I9E
 .09E
 +09E
 .09E
 .09E
++E9E
 +09E
-+09E
 .09E
 +09E
 +09E
@@ -104325,12 +104790,12 @@ A
 +09E
 .09E
 .09E
-+09E
++I9E
 .09E
-+09E
++Y9E
 .09E
 .09E
-+09E
++E9E
 .09E
 .09E
 +09E
@@ -104473,8 +104938,8 @@ A
 +09E
 .09E
 .09E
++E9E
 +09E
-+09E
 .09E
 +09E
 +09E
@@ -104489,7 +104954,7 @@ A
 .09E
 +09E
 .09E
-+09E
++E9E
 .09E
 +09E
 +09E
@@ -104501,7 +104966,7 @@ A
 .09E
 +09E
 .09E
-+09E
++I9E
 .09E
 +09E
 .09E
@@ -104546,7 +105011,7 @@ A
 +09E
 .09E
 .09E
-+09E
++I9E
 .09E
 .09E
 .09E
@@ -104575,7 +105040,7 @@ A
 +09E
 .09E
 .09E
-+09E
++I9E
 .09E
 .09E
 .09E
@@ -104994,48 +105459,48 @@ A
 +09E
 .09E
 .09E
-+09E
 +09E
 +09E
 +09E
++E9E
 .09E
 +09E
 +09E
 +09E
 .09E
 +09E
-+09E
-.09E
-+C9E
-.C9E
-.C9E
-+C9E
-+C9E
 +C9E
 .C9E
 +C9E
 .C9E
-U
-U
+.C9E
++C9E
 +C9E
 +C9E
 .C9E
-+C9E
++K9E
 .C9E
 +C9E
 .C9E
++G9E
 +C9E
+.C9E
++K9E
 .C9E
 +C9E
 .C9E
-+C9E
++G9E
+.C9E
++K9E
 .C9E
 +C9E
 .C9E
++E9E
+.09E
 +09E
 .09E
 .09E
-+09E
++Q9E
 +09E
 .09E
 +09E

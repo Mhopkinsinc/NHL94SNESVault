@@ -913,8 +913,8 @@
                        STA.W $1DA3                          ;9C8DBC|8DA31D  |;
                        LDA.W #$0010                         ;9C8DBF|A91000  |;
                        STA.W $1E15                          ;9C8DC2|8D151E  |;
-                       LDA.L $7E34C4                        ;9C8DC5|AFC4347E|;
-                       BNE CODE_9C8DD7                      ;9C8DC9|D00C    |;
+                       LDA.L PenaltiesOnOff                 ;9C8DC5|AFC4347E|;
+                       BNE CODE_9C8DD7                      ;9C8DC9|D00C    |; Penalties ON Branck 8DD7
                        db $A9,$0B,$00,$8D,$A3,$1D,$A9,$00   ;9C8DCB|        |;
                        db $00,$8D,$15,$1E                   ;9C8DD3|        |;
  
@@ -1136,8 +1136,8 @@
                        STA.B $8F                            ;9C8FEB|858F    |;
                        LDA.W #$9168                         ;9C8FED|A96891  |;
                        STA.B $8D                            ;9C8FF0|858D    |;
-                       LDA.L $7E34C4                        ;9C8FF2|AFC4347E|;
-                       BNE CODE_9C9002                      ;9C8FF6|D00A    |;
+                       LDA.L PenaltiesOnOff                 ;9C8FF2|AFC4347E|;
+                       BNE CODE_9C9002                      ;9C8FF6|D00A    |; Penalties On Branch 9002
                        db $A9,$9C,$00,$85,$8F,$A9,$58,$92   ;9C8FF8|        |;
                        db $85,$8D                           ;9C9000|        |;
  
@@ -2149,7 +2149,7 @@
                        LDA.W #$7000                         ;9C99D0|A90070  |;
                        STA.B $64                            ;9C99D3|8564    |;
                        LDA.L UNREACH_9C9A71,X               ;9C99D5|BF719A9C|;
-                       JSL.L CODE_80A17D                    ;9C99D9|227DA180|;
+                       JSL.L fn_PlaySFX                     ;9C99D9|227DA180|;
                        LDA.W #$0003                         ;9C99DD|A90300  |;
                        STA.L $7E35E8                        ;9C99E0|8FE8357E|;
  
@@ -2203,7 +2203,7 @@
                        LDA.W #$7000                         ;9C9A45|A90070  |;
                        STA.B $64                            ;9C9A48|8564    |;
                        LDA.L UNREACH_9C9A71,X               ;9C9A4A|BF719A9C|;
-                       JSL.L CODE_80A17D                    ;9C9A4E|227DA180|;
+                       JSL.L fn_PlaySFX                     ;9C9A4E|227DA180|;
                        RTL                                  ;9C9A52|6B      |;
  
           CODE_9C9A53:
@@ -2230,15 +2230,22 @@
                        PHX                                  ;9C9A88|DA      |;
                        LDA.L $7E35E6                        ;9C9A89|AFE6357E|;
                        BEQ CODE_9C9AA6                      ;9C9A8D|F017    |;
-                       db $C5,$14,$F0,$20,$AF,$E6,$35,$7E   ;9C9A8F|        |;
-                       db $C9,$03,$00,$90,$17,$0A,$AA,$BF   ;9C9A97|        |;
-                       db $71,$9A,$9C,$22,$A8,$A2,$80       ;9C9A9F|        |;
+                       CMP.B $14                            ;9C9A8F|C514    |;
+                       BEQ CODE_9C9AB3                      ;9C9A91|F020    |;
+                       LDA.L $7E35E6                        ;9C9A93|AFE6357E|;
+                       CMP.W #$0003                         ;9C9A97|C90300  |;
+                       BCC CODE_9C9AB3                      ;9C9A9A|9017    |;
+                       ASL A                                ;9C9A9C|0A      |;
+                       TAX                                  ;9C9A9D|AA      |;
+                       LDA.L UNREACH_9C9A71,X               ;9C9A9E|BF719A9C|;
+                       JSL.L CODE_80A2A8                    ;9C9AA2|22A8A280|;
  
           CODE_9C9AA6:
                        LDA.W #$0000                         ;9C9AA6|A90000  |;
                        STA.L $7E35E8                        ;9C9AA9|8FE8357E|;
                        LDA.B $14                            ;9C9AAD|A514    |;
                        STA.L $7E35E6                        ;9C9AAF|8FE6357E|;
+          CODE_9C9AB3:
                        SEP #$20                             ;9C9AB3|E220    |;
                        INC.W $07E5                          ;9C9AB5|EEE507  |;
                        REP #$20                             ;9C9AB8|C220    |;
@@ -2313,7 +2320,7 @@
                        LDA.B $09                            ;9C9B2D|A509    |;
                        STA.B $0C                            ;9C9B2F|850C    |;
                        LDA.B $12                            ;9C9B31|A512    |;
-                       JSL.L CODE_80A17D                    ;9C9B33|227DA180|;
+                       JSL.L fn_PlaySFX                     ;9C9B33|227DA180|;
                        TAY                                  ;9C9B37|A8      |;
                        SEP #$20                             ;9C9B38|E220    |;
                        DEC.W $07E5                          ;9C9B3A|CEE507  |;
