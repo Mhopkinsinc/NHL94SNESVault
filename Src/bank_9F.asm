@@ -6799,7 +6799,7 @@ Real_Time_Pen_Clock_2:
                        LDA.W $17DE,Y                        ;9FC219|B9DE17  |;
                        PLY                                  ;9FC21C|7A      |;
                        BIT.W #$0008                         ;9FC21D|890800  |;
-                       BNE UNREACH_9FC273                   ;9FC220|D051    |;
+                       BNE CODE_9FC273                      ;9FC220|D051    |;
  
           CODE_9FC222:
                        LDA.B $A9                            ;9FC222|A5A9    |;
@@ -6824,7 +6824,7 @@ Real_Time_Pen_Clock_2:
                        BEQ CODE_9FC287                      ;9FC24C|F039    |;
                        LDA.B $A9                            ;9FC24E|A5A9    |;
                        BIT.W #$0020                         ;9FC250|892000  |;
-                       BNE UNREACH_9FC27F                   ;9FC253|D02A    |;
+                       BNE CODE_9FC27F                      ;9FC253|D02A    |;
                        BIT.W #$0010                         ;9FC255|891000  |;
                        BNE CODE_9FC283                      ;9FC258|D029    |;
                        LDA.W $0D07                          ;9FC25A|AD070D  |;
@@ -6841,8 +6841,8 @@ Real_Time_Pen_Clock_2:
           CODE_9FC26F:
                        JML.L CODE_9FB30F                    ;9FC26F|5C0FB39F|;
  
-       UNREACH_9FC273:
-                       db $5C,$33,$D7,$9F                   ;9FC273|        |;
+          CODE_9FC273:
+                       JML.L UNREACH_9FD733                 ;9FC273|5C33D79F|;
  
           CODE_9FC277:
                        JML.L CODE_9EA24C                    ;9FC277|5C4CA29E|;
@@ -6850,8 +6850,8 @@ Real_Time_Pen_Clock_2:
           CODE_9FC27B:
                        JML.L CODE_9FCBB6                    ;9FC27B|5CB6CB9F|;
  
-       UNREACH_9FC27F:
-                       db $5C,$4D,$CD,$9F                   ;9FC27F|        |;
+          CODE_9FC27F:
+                       JML.L CODE_9FCD4D                    ;9FC27F|5C4DCD9F|;
  
           CODE_9FC283:
                        JML.L CODE_9FCD2F                    ;9FC283|5C2FCD9F|;
@@ -6933,8 +6933,8 @@ Real_Time_Pen_Clock_2:
           CODE_9FC322:
                        JML.L CODE_9EE6D2                    ;9FC322|5CD2E69E|;
  
-       UNREACH_9FC326:
-                       db $5C,$B6,$CB,$9F                   ;9FC326|        |;
+          CODE_9FC326:
+                       JML.L CODE_9FCBB6                    ;9FC326|5CB6CB9F|;
  
           CODE_9FC32A:
                        JML.L CODE_9EE17A                    ;9FC32A|5C7AE19E|;
@@ -6947,7 +6947,7 @@ Real_Time_Pen_Clock_2:
                        BEQ CODE_9FC371                      ;9FC334|F03B    |;
                        LDA.B $A9                            ;9FC336|A5A9    |;
                        BIT.W #$8000                         ;9FC338|890080  |;
-                       BNE UNREACH_9FC326                   ;9FC33B|D0E9    |;
+                       BNE CODE_9FC326                      ;9FC33B|D0E9    |;
                        BIT.W #$0040                         ;9FC33D|894000  |;
                        BEQ CODE_9FC345                      ;9FC340|F003    |;
                        JMP.W CODE_9FC2BA                    ;9FC342|4CBAC2  |;
@@ -7937,7 +7937,7 @@ Real_Time_Pen_Clock_2:
                        BNE CODE_9FCB4F                      ;9FCB41|D00C    |;
                        STY.B $B5                            ;9FCB43|84B5    |;
                        TYA                                  ;9FCB45|98      |;
-                       STA.W $0AFD,X                        ;9FCB46|9DFD0A  |;
+                       STA.W $0AFD,X                        ;9FCB46|9DFD0A  |; Used To swap goalie control when teammates
                        JSL.L CODE_9FCB68                    ;9FCB49|2268CB9F|;
  
           CODE_9FCB4D:
@@ -7948,7 +7948,7 @@ Real_Time_Pen_Clock_2:
                        DEY                                  ;9FCB4F|88      |;
                        DEY                                  ;9FCB50|88      |;
                        BPL CODE_9FCB56                      ;9FCB51|1003    |;
-                       db $A0,$08,$00                       ;9FCB53|        |;
+                       LDY.W #$0008                         ;9FCB53|A00800  |;
  
           CODE_9FCB56:
                        DEC.B $14                            ;9FCB56|C614    |;
@@ -8199,10 +8199,24 @@ Real_Time_Pen_Clock_2:
                        BPL CODE_9FCD00                      ;9FCD05|10F9    |;
                        LDX.B $87                            ;9FCD07|A687    |;
                        RTL                                  ;9FCD09|6B      |;
-                       db $A0,$00,$00,$E0,$0C,$00,$90,$03   ;9FCD0A|        |;
-                       db $A0,$0C,$00,$B9,$D4,$19,$10,$05   ;9FCD12|        |;
-                       db $B9,$43,$0F,$10,$04,$C8,$C8,$80   ;9FCD1A|        |;
-                       db $F2,$DA,$22,$69,$CD,$9F,$FA,$6B   ;9FCD22|        |;
+                       LDY.W #$0000                         ;9FCD0A|A00000  |;
+                       CPX.W #$000C                         ;9FCD0D|E00C00  |;
+                       BCC CODE_9FCD15                      ;9FCD10|9003    |;
+                       LDY.W #$000C                         ;9FCD12|A00C00  |;
+          CODE_9FCD15:
+                       LDA.W $19D4,Y                        ;9FCD15|B9D419  |;
+                       BPL CODE_9FCD1F                      ;9FCD18|1005    |;
+                       LDA.W $0F43,Y                        ;9FCD1A|B9430F  |;
+                       BPL CODE_9FCD23                      ;9FCD1D|1004    |;
+          CODE_9FCD1F:
+                       INY                                  ;9FCD1F|C8      |;
+                       INY                                  ;9FCD20|C8      |;
+                       BRA CODE_9FCD15                      ;9FCD21|80F2    |;
+          CODE_9FCD23:
+                       PHX                                  ;9FCD23|DA      |;
+                       JSL.L CODE_9FCD69                    ;9FCD24|2269CD9F|;
+                       PLX                                  ;9FCD28|FA      |;
+                       RTL                                  ;9FCD29|6B      |;
  
           CODE_9FCD2A:
                        LDA.W #$0000                         ;9FCD2A|A90000  |;
@@ -8212,20 +8226,33 @@ Real_Time_Pen_Clock_2:
                        LDY.W #$0000                         ;9FCD2F|A00000  |;
                        CPX.W #$000C                         ;9FCD32|E00C00  |;
                        BCC CODE_9FCD3A                      ;9FCD35|9003    |;
-                       db $A0,$02,$00                       ;9FCD37|        |;
+                       LDY.W #$0002                         ;9FCD37|A00200  |;
  
           CODE_9FCD3A:
-                       LDA.W Def_Ctrl,Y                     ;9FCD3A|B9941C  |;
-                       BNE UNREACH_9FCD40                   ;9FCD3D|D001    |;
+                       LDA.W Def_Ctrl,Y                     ;9FCD3A|B9941C  |; Right Trigger Code
+                       BNE CODE_9FCD40                      ;9FCD3D|D001    |;
                        RTL                                  ;9FCD3F|6B      |;
  
-       UNREACH_9FCD40:
-                       db $A9,$02,$00,$BC,$C3,$14,$D0,$21   ;9FCD40|        |;
-                       db $A9,$01,$00,$80,$1C,$A0,$00,$00   ;9FCD48|        |;
-                       db $E0,$0C,$00,$90,$03,$A0,$02,$00   ;9FCD50|        |;
-                       db $B9,$94,$1C,$D0,$01,$6B,$A9,$01   ;9FCD58|        |;
-                       db $00,$BC,$C3,$14,$D0,$03,$A9,$02   ;9FCD60|        |;
-                       db $00                               ;9FCD68|        |;
+          CODE_9FCD40:
+                       LDA.W #$0002                         ;9FCD40|A90200  |;
+                       LDY.W $14C3,X                        ;9FCD43|BCC314  |;
+                       BNE CODE_9FCD69                      ;9FCD46|D021    |;
+                       LDA.W #$0001                         ;9FCD48|A90100  |;
+                       BRA CODE_9FCD69                      ;9FCD4B|801C    |;
+          CODE_9FCD4D:
+                       LDY.W #$0000                         ;9FCD4D|A00000  |;
+                       CPX.W #$000C                         ;9FCD50|E00C00  |;
+                       BCC CODE_9FCD58                      ;9FCD53|9003    |;
+                       LDY.W #$0002                         ;9FCD55|A00200  |;
+          CODE_9FCD58:
+                       LDA.W Def_Ctrl,Y                     ;9FCD58|B9941C  |; Left Trigger Code
+                       BNE CODE_9FCD5E                      ;9FCD5B|D001    |;
+                       RTL                                  ;9FCD5D|6B      |;
+          CODE_9FCD5E:
+                       LDA.W #$0001                         ;9FCD5E|A90100  |;
+                       LDY.W $14C3,X                        ;9FCD61|BCC314  |;
+                       BNE CODE_9FCD69                      ;9FCD64|D003    |;
+                       LDA.W #$0002                         ;9FCD66|A90200  |;
  
           CODE_9FCD69:
                        STA.B $A9                            ;9FCD69|85A9    |;
@@ -8427,7 +8454,7 @@ Real_Time_Pen_Clock_2:
           CODE_9FCED0:
                        LDA.W $0F43,X                        ;9FCED0|BD430F  |;
                        STA.B $A5                            ;9FCED3|85A5    |;
-                       BMI UNREACH_9FCEEE                   ;9FCED5|3017    |;
+                       BMI CODE_9FCEEE                      ;9FCED5|3017    |;
                        LDA.W #$009F                         ;9FCED7|A99F00  |;
                        STA.B $8B                            ;9FCEDA|858B    |;
                        LDA.W #$CEEF                         ;9FCEDC|A9EFCE  |;
@@ -8438,8 +8465,8 @@ Real_Time_Pen_Clock_2:
                        STA.B $A5                            ;9FCEE8|85A5    |;
                        JML.L CODE_9E8C18                    ;9FCEEA|5C188C9E|;
  
-       UNREACH_9FCEEE:
-                       db $6B                               ;9FCEEE|        |;
+          CODE_9FCEEE:
+                       RTL                                  ;9FCEEE|6B      |;
                        db $07,$02,$02,$03,$05,$03,$05       ;9FCEEF|        |;
  
           CODE_9FCEF6:
@@ -9473,6 +9500,7 @@ Real_Time_Pen_Clock_2:
                        LDA.W #$0000                         ;9FD72D|A90000  |;
                        STA.B $A9                            ;9FD730|85A9    |;
                        RTL                                  ;9FD732|6B      |;
+       UNREACH_9FD733:
                        db $A5,$A9,$48,$64,$91,$BD,$03,$15   ;9FD733|        |;
                        db $F0,$04,$E6,$91,$E6,$91,$A4,$91   ;9FD73B|        |;
                        db $B9,$DE,$17,$89,$01,$00,$F0,$14   ;9FD743|        |;

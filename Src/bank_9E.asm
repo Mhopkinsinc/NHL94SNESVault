@@ -4650,11 +4650,12 @@
                        db $A9,$22,$45,$B4,$9B,$A5,$A5,$C9   ;9EA6DD|        |;
                        db $08,$00,$10,$10,$A5,$A5,$85,$AD   ;9EA6E5|        |;
                        db $9D,$63,$11,$A9,$14,$00,$9D,$E3   ;9EA6ED|        |;
-                       db $14,$4C,$19,$A7,$6B,$A9,$FF,$FF   ;9EA6F5|        |;
-                       db $85,$AD,$E6,$AD,$A5,$89,$18,$65   ;9EA6FD|        |;
-                       db $AD,$A8,$E2,$20,$B9,$BA,$18,$99   ;9EA705|        |;
-                       db $B9,$18,$C2,$30,$89,$80,$00,$F0   ;9EA70D|        |;
-                       db $E9,$C6,$89,$6B                   ;9EA715|        |;
+                       db $14,$4C,$19,$A7,$6B               ;9EA6F5|        |;
+       UNREACH_9EA6FA:
+                       db $A9,$FF,$FF,$85,$AD,$E6,$AD,$A5   ;9EA6FA|        |;
+                       db $89,$18,$65,$AD,$A8,$E2,$20,$B9   ;9EA702|        |;
+                       db $BA,$18,$99,$B9,$18,$C2,$30,$89   ;9EA70A|        |;
+                       db $80,$00,$F0,$E9,$C6,$89,$6B       ;9EA712|        |;
  
           CODE_9EA719:
                        ASL.B $AD                            ;9EA719|06AD    |;
@@ -7614,7 +7615,7 @@
                        TAY                                  ;9EBFB9|A8      |;
                        LDA.W $1852,Y                        ;9EBFBA|B95218  |;
                        BIT.W #$4000                         ;9EBFBD|890040  |;
-                       BNE UNREACH_9EC01D                   ;9EBFC0|D05B    |;
+                       BNE CODE_9EC01D                      ;9EBFC0|D05B    |;
                        DEC.B $A9                            ;9EBFC2|C6A9    |;
                        BMI CODE_9EBF9E                      ;9EBFC4|30D8    |;
                        LDA.B $A5                            ;9EBFC6|A5A5    |;
@@ -7662,17 +7663,27 @@
                        CMP.W #$0006                         ;9EC00E|C90600  |;
                        BPL CODE_9EBFDD                      ;9EC011|10CA    |;
                        LDA.W $1852,Y                        ;9EC013|B95218  |;
-                       BNE UNREACH_9EC01C                   ;9EC016|D004    |;
-                       db $22,$71,$C0,$9E                   ;9EC018|        |;
-       UNREACH_9EC01C:
-                       db $6B                               ;9EC01C|        |;
+                       BNE CODE_9EC01C                      ;9EC016|D004    |;
+                       JSL.L CODE_9EC071                    ;9EC018|2271C09E|;
+          CODE_9EC01C:
+                       RTL                                  ;9EC01C|6B      |;
  
-       UNREACH_9EC01D:
-                       db $3A,$99,$52,$18,$89,$00,$08,$D0   ;9EC01D|        |;
-                       db $03,$4C,$9E,$BF,$89,$00,$10,$D0   ;9EC025|        |;
-                       db $0A,$A9,$00,$10,$99,$52,$18,$5C   ;9EC02D|        |;
-                       db $FA,$A6,$9E,$A9,$00,$00,$99,$52   ;9EC035|        |;
-                       db $18,$5C,$FA,$A6,$9E               ;9EC03D|        |;
+          CODE_9EC01D:
+                       DEC A                                ;9EC01D|3A      |;
+                       STA.W $1852,Y                        ;9EC01E|995218  |;
+                       BIT.W #$0800                         ;9EC021|890008  |;
+                       BNE CODE_9EC029                      ;9EC024|D003    |;
+                       JMP.W CODE_9EBF9E                    ;9EC026|4C9EBF  |;
+          CODE_9EC029:
+                       BIT.W #$1000                         ;9EC029|890010  |;
+                       BNE CODE_9EC038                      ;9EC02C|D00A    |;
+                       LDA.W #$1000                         ;9EC02E|A90010  |;
+                       STA.W $1852,Y                        ;9EC031|995218  |;
+                       JML.L UNREACH_9EA6FA                 ;9EC034|5CFAA69E|;
+          CODE_9EC038:
+                       LDA.W #$0000                         ;9EC038|A90000  |;
+                       STA.W $1852,Y                        ;9EC03B|995218  |;
+                       JML.L UNREACH_9EA6FA                 ;9EC03E|5CFAA69E|;
  
           CODE_9EC042:
                        LDA.W $15D4                          ;9EC042|ADD415  |;
@@ -7699,6 +7710,7 @@
                        LDA.W #$0000                         ;9EC06D|A90000  |; Dont Call Penalty Shot
           CODE_9EC070:
                        RTL                                  ;9EC070|6B      |;
+          CODE_9EC071:
                        STX.B $87                            ;9EC071|8687    |;
                        LDX.W #$0000                         ;9EC073|A20000  |;
  

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProjectXmlSerializer-Root xmlns:exs="https://extendedxmlserializer.github.io/v2" xmlns:ns1="clr-namespace:Diz.Core.model;assembly=Diz.Core" xmlns:ns2="clr-namespace:Diz.Core.model.snes;assembly=Diz.Core" xmlns:sys="https://extendedxmlserializer.github.io/system" xmlns:ns3="clr-namespace:System.Collections.Generic;assembly=System.Collections" xmlns:ns4="clr-namespace:Diz.Core.export;assembly=Diz.Core" SaveVersion="102" Watermark="DiztinGUIsh" Extra1="" Extra2="" xmlns="clr-namespace:Diz.Core.serialization.xml_serializer;assembly=Diz.Core">
-  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="999691">
+  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="1035088">
     <LogWriterSettings Format="%label:-22% %code:37%;%pc%|%bytes%|; %comment%" DataPerLine="8" Unlabeled="ShowInPoints" Structure="OneBankPerFile" NewLine="true" OutputExtraWhitespace="true" GenerateFullLine="false" IncludeUnusedLabels="false" PrintLabelSpecificComments="true" RomSizeOverride="-1" FileOrFolderOutPath="DizExport\" OutputToString="false" ErrorFilename="errors.txt" />
     <ProjectSettings exs:member="" BsnesUsageMapImportOnlyChangedUnmarked="true">
       <RomBytesOutputFormatSettings CompressGroupBlock="true" CompressUsingTable1="true" InsertCommentIntoOutputLinesEveryNBytes="2048" />
@@ -238,6 +238,9 @@
         <sys:Item Key="10471090" Value="Called When Ron Barr Intro Screen Ends, Sets Starting Home + Away Goalie" />
         <sys:Item Key="10471093" Value="0000 = 1st Goalie 0100 = 2nd Goalie 0200 = 3rd goalie FFFF = No Goalie" />
         <sys:Item Key="10471094" Value="17AA Home 17AC Away" />
+        <sys:Item Key="10472262" Value="Used To swap goalie control when teammates" />
+        <sys:Item Key="10472762" Value="Right Trigger Code" />
+        <sys:Item Key="10472792" Value="Left Trigger Code" />
         <sys:Item Key="10472954" Value="PenCalled 5th (in the box)" />
         <sys:Item Key="10473102" Value="PenCalled 6th" />
         <sys:Item Key="10473301" Value="PenCalled 2nd" />
@@ -5305,7 +5308,7 @@ r 58 U
 +B9E
 .B9E
 +B9E
-+B9E
++F9E
 .B9E
 .B9E
 +B9E
@@ -5315,8 +5318,23 @@ r 58 U
 +J9E
 .B9E
 .B9E
-UE
-r 16 U
++F9E
++B9E
++B9E
++B9E
+.B9E
++J9E
+.B9E
++D9E
+.D9E
++D9E
+.D9E
+.D9E
++D9E
++D9E
++D9E
++D9E
++T9E
 +09E
 +09E
 .09E
@@ -70745,7 +70763,9 @@ A
 .09E
 .09E
 .09E
-r 124 U
+r 93 U
+UE
+r 30 U
 +09E
 .09E
 +09E
@@ -76024,7 +76044,7 @@ U
 .09E
 +09E
 .09E
-+09E
++E9E
 .09E
 +09E
 .09E
@@ -76147,12 +76167,48 @@ U
 .09E
 +I9E
 .09E
-U
-U
-U
-U
-UE
-r 37 U
++I9E
+.09E
+.09E
+.09E
++U9E
++09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
++Y9E
+.09E
+.09E
++E9E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++Y9E
+.09E
+.09E
+.09E
++E9E
+.09E
+.09E
++09E
+.09E
+.09E
++Y9E
+.09E
+.09E
+.09E
 +09E
 .09E
 .09E
@@ -76200,7 +76256,7 @@ r 37 U
 .09E
 .09E
 +E9E
-+09E
++E9E
 .09E
 +09E
 .09E
@@ -101910,11 +101966,7 @@ U
 .09E
 .09E
 .09E
-U
-U
-U
-U
-+09E
++Y9E
 .09E
 .09E
 .09E
@@ -101922,10 +101974,14 @@ U
 .09E
 .09E
 .09E
-U
-U
-U
-U
++09E
+.09E
+.09E
+.09E
++Y9E
+.09E
+.09E
+.09E
 +09E
 .09E
 .09E
@@ -102061,10 +102117,10 @@ U
 .09E
 .09E
 .09E
-U
-U
-U
-U
++Y9E
+.09E
+.09E
+.09E
 +09E
 .09E
 .09E
@@ -103812,14 +103868,14 @@ r 91 U
 +09E
 +09E
 .09E
++09E
+.09E
+.09E
++09E
+.09E
++09E
+.09E
 U
-U
-U
-+09E
-.09E
-+09E
-.09E
-U
 +09E
 +09E
 .09E
@@ -103911,7 +103967,7 @@ U
 .09E
 .09E
 +09E
-+09E
++E9E
 .09E
 +09E
 .09E
@@ -104236,7 +104292,38 @@ r 8 +09E
 +09E
 .09E
 +09E
-r 32 U
++09E
+.09E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
+.09E
++E9E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
++E9E
++09E
++Y9E
+.09E
++E9E
++I9E
+.09E
+.09E
+.09E
++09E
++Q9E
 +09E
 .09E
 .09E
@@ -104250,17 +104337,57 @@ r 32 U
 .09E
 +09E
 .09E
-U
-U
-U
++09E
+.09E
+.09E
 +
 .09E
 .09E
 +09E
 .09E
 +09E
-r 41 U
 +09E
+.09E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
+.09E
++Y9E
+.09E
++E9E
+.09E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
+.09E
++E
+.09E
+.09E
++I9E
+.09E
++Q9E
++E9E
+.09E
+.09E
++09E
+.09E
+.09E
++I9E
+.09E
++09E
+.09E
+.09E
++E9E
 .09E
 +09E
 +09E
@@ -104632,7 +104759,7 @@ r 18 U
 .09E
 .09E
 .09E
-UE
++U9E
 A
 A
 A
@@ -106463,7 +106590,8 @@ r 24 U
 +09E
 .09E
 +09E
-r 127 U
+UE
+r 126 U
 +09E
 .09E
 +09E

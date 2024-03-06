@@ -3306,14 +3306,24 @@
                        STA.B $4E                            ;80A2C0|854E    |;
                        LDX.B #$00                           ;80A2C2|A200    |;
                        TXY                                  ;80A2C4|9B      |;
+          CODE_80A2C5:
                        LDA.W $092A,X                        ;80A2C5|BD2A09  |;
                        CMP.B $4E                            ;80A2C8|C54E    |;
-                       BNE UNREACH_80A2CF                   ;80A2CA|D003    |;
+                       BNE CODE_80A2CF                      ;80A2CA|D003    |;
                        JSR.W CODE_80ABC7                    ;80A2CC|20C7AB  |;
-       UNREACH_80A2CF:
-                       db $E8,$E8,$C8,$C0,$08,$D0,$EF,$E2   ;80A2CF|        |;
-                       db $20,$EE,$E5,$07,$28,$AB,$7A,$FA   ;80A2D7|        |;
-                       db $6B                               ;80A2DF|        |;
+          CODE_80A2CF:
+                       INX                                  ;80A2CF|E8      |;
+                       INX                                  ;80A2D0|E8      |;
+                       INY                                  ;80A2D1|C8      |;
+                       CPY.B #$08                           ;80A2D2|C008    |;
+                       BNE CODE_80A2C5                      ;80A2D4|D0EF    |;
+                       SEP #$20                             ;80A2D6|E220    |;
+                       INC.W $07E5                          ;80A2D8|EEE507  |;
+                       PLP                                  ;80A2DB|28      |;
+                       PLB                                  ;80A2DC|AB      |;
+                       PLY                                  ;80A2DD|7A      |;
+                       PLX                                  ;80A2DE|FA      |;
+                       RTL                                  ;80A2DF|6B      |;
  
           CODE_80A2E0:
                        PHP                                  ;80A2E0|08      |;
