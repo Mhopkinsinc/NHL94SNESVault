@@ -23,4 +23,4 @@ jobs:
     - name: Build
       run: |
             cd GUI
-            dotnet publish /p:PublishProfile=FolderProfile.pubxml
+            dotnet publish /p:PublishProfile=Winx86Publish.pubxml
