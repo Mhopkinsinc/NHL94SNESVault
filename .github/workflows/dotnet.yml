@@ -28,4 +28,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
           name: publish-win-x86
-          path: ${{ github.workspace }}/GUI/94Hacks/Publish/**/*
+          path: ${{ github.workspace }}/GUI/94Hacks/publish/**/*
