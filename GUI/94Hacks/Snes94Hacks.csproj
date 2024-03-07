@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ApplicationIcon>.ICO\icon.ico</ApplicationIcon>
+    <Platforms>AnyCPU;x86</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Advanced_SNES_ROM_Utility\**" />
+    <EmbeddedResource Remove="Advanced_SNES_ROM_Utility\**" />
+    <None Remove="Advanced_SNES_ROM_Utility\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include=".ICO\icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>    
+    <PackageReference Include="Microsoft.Build" Version="17.8.3" />    
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />    
+    <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />    
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />    
+    <PackageReference Include="Spectre.Console" Version="0.48.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Advanced_SNES_ROM_Utility\Advanced_SNES_ROM_Utility.csproj" />
+  </ItemGroup>
+
+</Project>
