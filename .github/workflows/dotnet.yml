@@ -27,5 +27,5 @@ jobs:
     - name: Publish File
       uses: actions/upload-artifact@v4
       with:
-          name: publish-win-x86
+          name: Snes94Hacks-$(date +'%Y%m%d')-win-x86
           path: ${{ github.workspace }}/GUI/94Hacks/publish/**/*
