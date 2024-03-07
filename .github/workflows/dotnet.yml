@@ -17,6 +17,8 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: |
+            cd GUI
+            dotnet restore
     - name: Build
       run: dotnet publish /p:PublishProfile=FolderProfile.pubxml
