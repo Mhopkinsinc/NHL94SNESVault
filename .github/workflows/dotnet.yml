@@ -27,5 +27,5 @@ jobs:
     - name: Publish File
       uses: actions/upload-artifact@v4
       with:
-          name: publish-win-x87
-          path: GUI/94Hacks/Publish/Snes94Hacks.exe
+          name: publish-win-x86
+          path: publish/**
