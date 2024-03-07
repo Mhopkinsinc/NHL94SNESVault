@@ -15,7 +15,7 @@ jobs:
     - name: "Set current date as env variable"
       run: |
           echo "builddate=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-          id: version  # this is used on variable path
+      id: version  # this is used on variable path
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
