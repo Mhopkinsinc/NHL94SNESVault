@@ -21,4 +21,6 @@ jobs:
             cd GUI
             dotnet restore
     - name: Build
-      run: dotnet publish /p:PublishProfile=FolderProfile.pubxml
+      run: |
+            cd GUI
+            dotnet publish /p:PublishProfile=FolderProfile.pubxml
