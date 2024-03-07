@@ -24,3 +24,8 @@ jobs:
       run: |
             cd GUI
             dotnet publish /p:PublishProfile=Winx86Publish.pubxml
+    - name: Publish File
+      uses: actions/upload-artifact@v4
+      with:
+          name: publish-win-x87
+          path: GUI/94Hacks/Publish/Snes94Hacks.exe
