@@ -33,7 +33,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
           name: Snes94Hacks-${{ steps.version.outputs.builddate }}-win-x86
-          path: ${{ github.workspace }}/GUI/94Hacks/publish/Winx86/**/*
+          path: ${{ github.workspace }}/GUI/94Hacks/publish/WinX86/**/*
     - name: Publish Osx64 Files
       uses: actions/upload-artifact@v4
       with:
@@ -43,4 +43,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
           name: Snes94Hacks-${{ steps.version.outputs.builddate }}-osx64
-          path: ${{ github.workspace }}/GUI/94Hacks/publish/Osx64/**/*
+          path: ${{ github.workspace }}/GUI/94Hacks/publish/OSX64/**/*
