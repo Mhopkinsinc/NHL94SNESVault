@@ -1,7 +1,7 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: .NET
+name: Win-x86 Release
 
 on: workflow_dispatch
 
@@ -11,9 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+    - name: "Set current date as env variable"
+      run: |
+          echo "builddate=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+      id: version  # this is used on variable path
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
@@ -23,4 +27,9 @@ jobs:
     - name: Build
       run: |
             cd GUI
-            dotnet publish /p:PublishProfile=FolderProfile.pubxml
+            dotnet publish /p:PublishProfile=Winx86Publish.pubxml
+    - name: Publish File
+      uses: actions/upload-artifact@v4
+      with:
+          name: Snes94Hacks-${{ steps.version.outputs.builddate }}-win-x86
+          path: ${{ github.workspace }}/GUI/94Hacks/publish/**/*
