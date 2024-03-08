@@ -27,19 +27,11 @@ jobs:
               dotnet publish /p:PublishProfile=Winx86Publish.pubxml
               dotnet publish /p:PublishProfile=Osx64Publish.pubxml      
       
-      - name: release
-        uses: actions/create-release@v1
-        id: create_release
+      - name: Changelog CI
+        uses: saadmk11/changelog-ci@v1.1.2
         with:
-          draft: false
-          prerelease: false
-          release_name: ${{ steps.version.outputs.builddate }}
-          tag_name: ${{ steps.version.outputs.builddate }}
-#         body_path: CHANGELOG.md
-          body: |
-            Update Body Text Here
-        env:
-          GITHUB_TOKEN: ${{ github.token }}     
+          release_version: ${{ steps.version.outputs.builddate }}
+            
       
       - name: upload darwin artifact
         uses: actions/upload-release-asset@v1
