@@ -35,7 +35,9 @@ jobs:
           prerelease: false
           release_name: ${{ steps.version.outputs.builddate }}
           tag_name: ${{ steps.version.outputs.builddate }}
-          body_path: CHANGELOG.md
+#         body_path: CHANGELOG.md
+          body: |
+            Update Body Text Here
         env:
           GITHUB_TOKEN: ${{ github.token }}     
       
