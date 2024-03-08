@@ -31,6 +31,7 @@ jobs:
         uses: saadmk11/changelog-ci@v1.1.2
         with:
           release_version: ${{ steps.version.outputs.builddate }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
             
       
       - name: upload darwin artifact
