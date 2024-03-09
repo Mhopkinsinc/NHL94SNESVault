@@ -48,8 +48,8 @@ jobs:
     - name: Generate release notes
       id: release_notes
       uses: decathlon/release-notes-generator-action@v3.1.6
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Update release
       uses: ncipollo/release-action@v1
