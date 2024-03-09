@@ -33,8 +33,8 @@ jobs:
     - name: Zip artifacts
       run: |
         sudo apt-get install zip
-        zip -r ${{ github.workspace }}/GUI/94Hacks/publish/WinX86/Snes94Hacks-${{ steps.version.outputs.builddate }}-win-x86.zip ${{ github.workspace }}/GUI/94Hacks/publish/WinX86
-        zip -r ${{ github.workspace }}/GUI/94Hacks/publish/OSX64/Snes94Hacks-${{ steps.version.outputs.builddate }}-osx64.zip ${{ github.workspace }}/GUI/94Hacks/publish/OSX64
+        zip -j ${{ github.workspace }}/GUI/94Hacks/publish/WinX86/Snes94Hacks-${{ steps.version.outputs.builddate }}-win-x86.zip ${{ github.workspace }}/GUI/94Hacks/publish/WinX86
+        zip -j ${{ github.workspace }}/GUI/94Hacks/publish/OSX64/Snes94Hacks-${{ steps.version.outputs.builddate }}-osx64.zip ${{ github.workspace }}/GUI/94Hacks/publish/OSX64
         cd ${{ github.workspace }}/GUI/94Hacks/publish/WinX86
         ls
         cd ${{ github.workspace }}/GUI/94Hacks/publish/OSX64
