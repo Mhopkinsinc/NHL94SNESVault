@@ -47,14 +47,16 @@ jobs:
 
     - name: Generate release notes
       id: release_notes
-      uses: decathlon/release-notes-generator-action@v3.1.6
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo 'Changes:' > notes.md
+        git log --merges --pretty=format:"- %s" $(git describe --tags --abbrev=0)..HEAD >> notes.md
+        cat notes.md
 
     - name: Update release
       uses: ncipollo/release-action@v1
       with:
-        body: ${{ steps.release_notes.outputs.notes }}
+        bodyPath: notes.md
+#       body: ${{ steps.release_notes.outputs.notes }}
         draft: false
         prerelease: false
         tag: ${{ steps.version.outputs.builddate }}
