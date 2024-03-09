@@ -34,13 +34,7 @@ jobs:
       run: |
         sudo apt-get install zip
         zip -r Snes94Hacks-${{ steps.version.outputs.builddate }}-win-x86 ${{ github.workspace }}/GUI/94Hacks/publish/WinX86/**/*
-        zip -r Snes94Hacks-${{ steps.version.outputs.builddate }}-osx64.zip ${{ github.workspace }}/GUI/94Hacks/publish/OSX64/**/*  
-
-    - name: Get current date
-      id: date
-      uses: gerred/actions/current-date@master
-      with:
-        format: YYYY.MM.DD
+        zip -r Snes94Hacks-${{ steps.version.outputs.builddate }}-osx64.zip ${{ github.workspace }}/GUI/94Hacks/publish/OSX64/**/*      
 
     - name: Create Release
       id: create_release
@@ -48,8 +42,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.date.outputs.date }}
-        release_name: NHL94 SNES Vault ${{ steps.date.outputs.date }}
+        tag_name: ${{ steps.version.outputs.builddate }}
+        release_name: NHL94 SNES Vault ${{ steps.version.outputs.builddate }}
 
     - name: Generate release notes
       id: release_notes
@@ -63,7 +57,7 @@ jobs:
         body: ${{ steps.release_notes.outputs.notes }}
         draft: false
         prerelease: false
-        tag: ${{ steps.date.outputs.date }}
+        tag: ${{ steps.version.outputs.builddate }}
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload Release Asset
