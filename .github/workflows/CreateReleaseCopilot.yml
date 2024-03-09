@@ -55,7 +55,7 @@ jobs:
     - name: Update release
       uses: ncipollo/release-action@v1
       with:
-        bodyPath: notes.md
+        bodyFile: notes.md
 #       body: ${{ steps.release_notes.outputs.notes }}
         draft: false
         prerelease: false
