@@ -29,7 +29,8 @@ jobs:
       
       - name: Changelog CI
         uses: saadmk11/changelog-ci@v1.1.2
-        with:
+        with:          
+          config_file: changelog-ci-config.json
           release_version: ${{ steps.version.outputs.builddate }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           commit_changelog: false
@@ -41,7 +42,7 @@ jobs:
           draft: false
           prerelease: false
           release_name: NHL94'' SNES Vault ${{ steps.version.outputs.builddate }}
-          tag_name: ${{ github.ref }}
+          tag_name: ${{ steps.version.outputs.builddate }}
           body: ${{ steps.changelog-ci.outputs.changelog }}
         env:
           GITHUB_TOKEN: ${{ github.token }}            
