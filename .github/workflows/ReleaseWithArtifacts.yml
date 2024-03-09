@@ -32,7 +32,19 @@ jobs:
         with:
           release_version: ${{ steps.version.outputs.builddate }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-            
+          commit_changelog: false
+
+      - name: Release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: NHL94'' SNES Vault ${{ steps.version.outputs.builddate }}
+          tag_name: ${{ github.ref }}
+          body: ${{ steps.changelog-ci.outputs.changelog }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}            
       
       - name: upload darwin artifact
         uses: actions/upload-release-asset@v1
