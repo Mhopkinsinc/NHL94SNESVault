@@ -42,12 +42,15 @@ jobs:
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
+      uses: ncipollo/release-action@v1.14.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.version.outputs.builddate }}
-        release_name: NHL94 SNES Vault ${{ steps.version.outputs.builddate }}            
+        commit: "main"
+        tag: ${{ steps.version.outputs.builddate }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: NHL94 SNES Vault ${{ steps.version.outputs.builddate }}
+        generateReleaseNotes: true          
 
     - name: Upload Release Asset
       id: upload-release-asset1 
