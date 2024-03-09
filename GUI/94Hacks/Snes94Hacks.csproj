@@ -11,8 +11,11 @@
 
   <ItemGroup>
     <Compile Remove="Advanced_SNES_ROM_Utility\**" />
+    <Compile Remove="publish\**" />
     <EmbeddedResource Remove="Advanced_SNES_ROM_Utility\**" />
+    <EmbeddedResource Remove="publish\**" />
     <None Remove="Advanced_SNES_ROM_Utility\**" />
+    <None Remove="publish\**" />
   </ItemGroup>
 
   <ItemGroup>

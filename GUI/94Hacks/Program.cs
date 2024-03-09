@@ -79,12 +79,19 @@ namespace Snes94Hacks
                     .InstructionsText(
                         "[grey](Press [blue]<space>[/] to enable/disable a hack, " +
                         "[green]<enter>[/] to build the rom)[/]")
-                    .AddChoiceGroup("All", new[]
+                    .AddChoiceGroup("Penalties", new[]
                     {
-                            "Def. Control ON", "Show 30 Second Periods", "Real Time Clock",
-                            "Pull Goalie with L+R Triggers", "1 Minute Penalties", "Disable Interference Penalty",
-                            "Disable Penalty Shots"
-                    }));
+                            "1 Minute Penalties", "Disable Interference Penalty","Disable Penalty Shots"
+                    })
+                    .AddChoiceGroup("General", new[]
+                    {
+                            "Def. Control ON", "Show 30 Second Periods", "Real Time Clock"                            
+                    })
+                    .AddChoiceGroup("New Functionality", new[]
+                    {
+                            "Pull Goalie with L+R Triggers"
+                    })
+                    ) ;
 
             var selectedItemsFormatted = string.Join("\n", hacks.Select(hack => $"[blue]{hack}[/]"));
 
