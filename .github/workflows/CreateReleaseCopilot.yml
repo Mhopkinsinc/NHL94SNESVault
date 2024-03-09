@@ -1,4 +1,4 @@
-name: Create Release Copilot
+name: Create Release [Manual]
 
 on:
   workflow_dispatch:
