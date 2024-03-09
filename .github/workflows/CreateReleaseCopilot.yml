@@ -43,24 +43,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ steps.version.outputs.builddate }}
-        release_name: NHL94 SNES Vault ${{ steps.version.outputs.builddate }}
-
-    - name: Generate release notes
-      id: release_notes
-      run: |
-        echo 'Changes:' > notes.md
-        git log --merges --pretty=format:"- %s" $(git describe --tags --abbrev=0)..HEAD >> notes.md
-        cat notes.md
-
-    - name: Update release
-      uses: ncipollo/release-action@v1
-      with:
-        bodyFile: notes.md
-#       body: ${{ steps.release_notes.outputs.notes }}
-        draft: false
-        prerelease: false
-        tag: ${{ steps.version.outputs.builddate }}
-        token: ${{ secrets.GITHUB_TOKEN }}
+        release_name: NHL94 SNES Vault ${{ steps.version.outputs.builddate }}            
 
     - name: Upload Release Asset
       id: upload-release-asset1 
