@@ -1,0 +1,29 @@
+name: Test Release Notes
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: "Set current date as env variable"
+      run: |
+          echo "builddate=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+      id: version  # this is used on variable path
+    
+    - name: Create Release
+      id: create_release
+      uses: ncipollo/release-action@v1.14.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        commit: "main"
+        tag: ${{ steps.version.outputs.builddate }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: NHL94 SNES Vault ${{ steps.version.outputs.builddate }}
+        generateReleaseNotes: true
