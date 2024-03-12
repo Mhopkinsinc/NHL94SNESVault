@@ -6,4 +6,4 @@
                        incsrc "patches/OneMinutePenalties.asm"
                        incsrc "patches/DefControl.asm"
                        incsrc "patches/PenaltyShot.asm"
-                       
+                       incsrc "patches/DisablePosts.asm"                      

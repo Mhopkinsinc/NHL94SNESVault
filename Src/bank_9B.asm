@@ -2819,7 +2819,7 @@
                        CMP.W #$001A                         ;9BA050|C91A00  |;
                        BMI CODE_9BA076                      ;9BA053|3021    |;
                        ASL A                                ;9BA055|0A      |;
-                       ADC.W $0DF9                          ;9BA056|6DF90D  |;
+                       ADC.W PucVertVeloc                   ;9BA056|6DF90D  |;
                        CLC                                  ;9BA059|18      |;
                        ADC.W $0DD3                          ;9BA05A|6DD30D  |;
                        CMP.W #$FEB8                         ;9BA05D|C9B8FE  |;
@@ -2836,7 +2836,7 @@
                        CMP.W #$001A                         ;9BA07C|C91A00  |;
                        BMI CODE_9BA076                      ;9BA07F|30F5    |;
                        ASL A                                ;9BA081|0A      |;
-                       ADC.W $0DF9                          ;9BA082|6DF90D  |;
+                       ADC.W PucVertVeloc                   ;9BA082|6DF90D  |;
                        CLC                                  ;9BA085|18      |;
                        ADC.W $0DD3                          ;9BA086|6DD30D  |;
                        CMP.W #$FE98                         ;9BA089|C998FE  |;
@@ -3552,7 +3552,7 @@
                        INX                                  ;9BA9AF|E8      |;
                        DEC.B $AD                            ;9BA9B0|C6AD    |;
                        BPL CODE_9BA985                      ;9BA9B2|10D1    |;
-                       LDA.W $0DF9                          ;9BA9B4|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9BA9B4|ADF90D  |;
                        STA.W $2180                          ;9BA9B7|8D8021  |;
                        LDA.W $0DFB                          ;9BA9BA|ADFB0D  |;
                        STA.W $2180                          ;9BA9BD|8D8021  |;
@@ -4227,24 +4227,71 @@
                        JSL.L CODE_9BB136                    ;9BAF8B|2236B19B|;
                        LDA.B $C1                            ;9BAF8F|A5C1    |;
                        BEQ CODE_9BAF6E                      ;9BAF91|F0DB    |;
-                       db $AD,$B3,$0C,$29,$FF,$00,$C9,$FF   ;9BAF93|        |;
-                       db $00,$F0,$3A,$C9,$16,$00,$B0,$2D   ;9BAF9B|        |;
-                       db $AD,$B7,$0C,$85,$64,$AD,$B3,$0C   ;9BAFA3|        |;
-                       db $29,$FF,$00,$22,$7D,$A1,$80,$A8   ;9BAFAB|        |;
-                       db $E2,$20,$B9,$F2,$08,$C9,$02,$D0   ;9BAFB3|        |;
-                       db $10,$A9,$03,$99,$F2,$08,$C2,$20   ;9BAFBB|        |;
-                       db $98,$0A,$A8,$AD,$B5,$0C,$99,$4A   ;9BAFC3|        |;
-                       db $09,$C2,$20,$80,$08,$38,$E9,$15   ;9BAFCB|        |;
-                       db $00,$22,$7F,$9A,$9C,$AD,$AD,$0C   ;9BAFD3|        |;
-                       db $29,$FF,$00,$C9,$FF,$00,$F0,$3A   ;9BAFDB|        |;
-                       db $C9,$16,$00,$B0,$2D,$AD,$B1,$0C   ;9BAFE3|        |;
-                       db $85,$64,$AD,$AD,$0C,$29,$FF,$00   ;9BAFEB|        |;
-                       db $22,$7D,$A1,$80,$A8,$E2,$20,$B9   ;9BAFF3|        |;
-                       db $F2,$08,$C9,$02,$D0,$10,$A9,$03   ;9BAFFB|        |;
-                       db $99,$F2,$08,$C2,$20,$98,$0A,$A8   ;9BB003|        |;
-                       db $AD,$AF,$0C,$99,$4A,$09,$C2,$20   ;9BB00B|        |;
-                       db $80,$08,$38,$E9,$15,$00,$22,$7F   ;9BB013|        |;
-                       db $9A,$9C,$4C,$AB,$AB               ;9BB01B|        |;
+                       LDA.W $0CB3                          ;9BAF93|ADB30C  |;
+                       AND.W #$00FF                         ;9BAF96|29FF00  |;
+                       CMP.W #$00FF                         ;9BAF99|C9FF00  |;
+                       BEQ CODE_9BAFD8                      ;9BAF9C|F03A    |;
+                       CMP.W #$0016                         ;9BAF9E|C91600  |;
+                       BCS CODE_9BAFD0                      ;9BAFA1|B02D    |;
+                       LDA.W $0CB7                          ;9BAFA3|ADB70C  |;
+                       STA.B $64                            ;9BAFA6|8564    |;
+                       LDA.W $0CB3                          ;9BAFA8|ADB30C  |;
+                       AND.W #$00FF                         ;9BAFAB|29FF00  |;
+                       JSL.L fn_PlaySFX                     ;9BAFAE|227DA180|;
+                       TAY                                  ;9BAFB2|A8      |;
+                       SEP #$20                             ;9BAFB3|E220    |;
+                       LDA.W $08F2,Y                        ;9BAFB5|B9F208  |;
+                       CMP.B #$02                           ;9BAFB8|C902    |;
+                       BNE CODE_9BAFCC                      ;9BAFBA|D010    |;
+                       LDA.B #$03                           ;9BAFBC|A903    |;
+                       STA.W $08F2,Y                        ;9BAFBE|99F208  |;
+                       REP #$20                             ;9BAFC1|C220    |;
+                       TYA                                  ;9BAFC3|98      |;
+                       ASL A                                ;9BAFC4|0A      |;
+                       TAY                                  ;9BAFC5|A8      |;
+                       LDA.W $0CB5                          ;9BAFC6|ADB50C  |;
+                       STA.W $094A,Y                        ;9BAFC9|994A09  |;
+          CODE_9BAFCC:
+                       REP #$20                             ;9BAFCC|C220    |;
+                       BRA CODE_9BAFD8                      ;9BAFCE|8008    |;
+          CODE_9BAFD0:
+                       SEC                                  ;9BAFD0|38      |;
+                       SBC.W #$0015                         ;9BAFD1|E91500  |;
+                       JSL.L CODE_9C9A7F                    ;9BAFD4|227F9A9C|;
+          CODE_9BAFD8:
+                       LDA.W $0CAD                          ;9BAFD8|ADAD0C  |;
+                       AND.W #$00FF                         ;9BAFDB|29FF00  |;
+                       CMP.W #$00FF                         ;9BAFDE|C9FF00  |;
+                       BEQ CODE_9BB01D                      ;9BAFE1|F03A    |;
+                       CMP.W #$0016                         ;9BAFE3|C91600  |;
+                       BCS CODE_9BB015                      ;9BAFE6|B02D    |;
+                       LDA.W $0CB1                          ;9BAFE8|ADB10C  |;
+                       STA.B $64                            ;9BAFEB|8564    |;
+                       LDA.W $0CAD                          ;9BAFED|ADAD0C  |;
+                       AND.W #$00FF                         ;9BAFF0|29FF00  |;
+                       JSL.L fn_PlaySFX                     ;9BAFF3|227DA180|; Instant Replay SFXs
+                       TAY                                  ;9BAFF7|A8      |;
+                       SEP #$20                             ;9BAFF8|E220    |;
+                       LDA.W $08F2,Y                        ;9BAFFA|B9F208  |;
+                       CMP.B #$02                           ;9BAFFD|C902    |;
+                       BNE CODE_9BB011                      ;9BAFFF|D010    |;
+                       LDA.B #$03                           ;9BB001|A903    |;
+                       STA.W $08F2,Y                        ;9BB003|99F208  |;
+                       REP #$20                             ;9BB006|C220    |;
+                       TYA                                  ;9BB008|98      |;
+                       ASL A                                ;9BB009|0A      |;
+                       TAY                                  ;9BB00A|A8      |;
+                       LDA.W $0CAF                          ;9BB00B|ADAF0C  |;
+                       STA.W $094A,Y                        ;9BB00E|994A09  |;
+          CODE_9BB011:
+                       REP #$20                             ;9BB011|C220    |;
+                       BRA CODE_9BB01D                      ;9BB013|8008    |;
+          CODE_9BB015:
+                       SEC                                  ;9BB015|38      |;
+                       SBC.W #$0015                         ;9BB016|E91500  |;
+                       JSL.L CODE_9C9A7F                    ;9BB019|227F9A9C|;
+          CODE_9BB01D:
+                       JMP.W CODE_9BABAB                    ;9BB01D|4CABAB  |;
  
           CODE_9BB020:
                        LDA.W #$000F                         ;9BB020|A90F00  |;

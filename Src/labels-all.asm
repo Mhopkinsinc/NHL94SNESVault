@@ -48,4 +48,5 @@
                        CODE_80A17D = $80A17D
                        Set_Default_Goalie = $9FC6B2
                        CODE_9EBA67 = $9EBA67
-                       CODE_9EC06D = $9EC06D 
+                       CODE_9EC06D = $9EC06D
+                       jmpToGoalLogic = $9E920F
