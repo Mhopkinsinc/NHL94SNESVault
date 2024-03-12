@@ -6,6 +6,7 @@
                        PenaltiesOnOff = $7E34C4
                        CurntTeamLoopVal = $9E0091; !^ 00 Home 02 Away ^!
                        JoyPad = $9E0776
+                       PucVertVeloc = $9E0DF9
                        PauseScreenActive = $9E15DA
                        period = $9E1630
                        clock_remaining_time = $9E1632

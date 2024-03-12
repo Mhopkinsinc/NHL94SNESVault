@@ -1924,10 +1924,10 @@
           CODE_9E8E91:
                        CPX.W #$001C                         ;9E8E91|E01C00  |;
                        BNE CODE_9E8E8B                      ;9E8E94|D0F5    |;
-                       LDA.W $0DF9                          ;9E8E96|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9E8E96|ADF90D  |;
                        CMP.W #$0021                         ;9E8E99|C92100  |;
                        BPL UNREACH_9E8E8E                   ;9E8E9C|10F0    |;
-                       LDA.W $0DF9                          ;9E8E9E|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9E8E9E|ADF90D  |;
                        CMP.W #$0016                         ;9E8EA1|C91600  |;
                        BCC CODE_9E8E8B                      ;9E8EA4|90E5    |;
                        db $AD,$D3,$0D,$C9,$12,$01,$30,$E0   ;9E8EA6|        |;
@@ -2022,7 +2022,7 @@
                        STA.B $A5                            ;9E8FCB|85A5    |;
                        JSL.L CODE_9EDE5E                    ;9E8FCD|225EDE9E|;
                        LDA.W #$000A                         ;9E8FD1|A90A00  |;
-                       LDY.W $0DF9                          ;9E8FD4|ACF90D  |;
+                       LDY.W PucVertVeloc                   ;9E8FD4|ACF90D  |;
                        CPY.W #$000B                         ;9E8FD7|C00B00  |;
                        BCS CODE_9E8FDF                      ;9E8FDA|B003    |;
                        LDA.W #$0004                         ;9E8FDC|A90400  |;
@@ -2154,7 +2154,7 @@
                        BEQ CODE_9E9116                      ;9E90BE|F056    |;
  
           CODE_9E90C0:
-                       LDA.W $0DF9                          ;9E90C0|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9E90C0|ADF90D  |;
                        CMP.W #$000D                         ;9E90C3|C90D00  |;
                        BPL CODE_9E9116                      ;9E90C6|104E    |;
                        LDY.B zpCurntTeamLoopVal             ;9E90C8|A491    |;
@@ -2305,7 +2305,7 @@
           CODE_9E920C:
                        JMP.W CODE_9E8F42                    ;9E920C|4C428F  |;
  
-          CODE_9E920F:
+       jmpToGoalLogic:
                        JMP.W CODE_9EF319                    ;9E920F|4C19F3  |;
  
           CODE_9E9212:
@@ -2323,21 +2323,21 @@
                        STA.B $A5                            ;9E9229|85A5    |;
                        LDA.W $14DF                          ;9E922B|ADDF14  |;
                        BNE CODE_9E91EC                      ;9E922E|D0BC    |;
-                       LDA.W $0DF9                          ;9E9230|ADF90D  |;
-                       CMP.W #$000D                         ;9E9233|C90D00  |;
-                       BEQ CODE_9E9246                      ;9E9236|F00E    |;
-                       LDA.B $AD                            ;9E9238|A5AD    |;
-                       CMP.W #$0012                         ;9E923A|C91200  |;
-                       BPL CODE_9E9246                      ;9E923D|1007    |;
-                       LDA.B $AD                            ;9E923F|A5AD    |;
-                       CMP.W #$FFEF                         ;9E9241|C9EFFF  |;
-                       BPL CODE_9E920F                      ;9E9244|10C9    |;
+                       LDA.W PucVertVeloc                   ;9E9230|ADF90D  |; Load Pucks Vert Velocity (Height)
+                       CMP.W #$000D                         ;9E9233|C90D00  |; Compare Puck Height to Crossbar Height
+                       BEQ fnPucPostCollision               ;9E9236|F00E    |; Puck hit the Crossbar
+                       LDA.B $AD                            ;9E9238|A5AD    |; Load Pucks Horz Position to center of net
+                       CMP.W #$0012                         ;9E923A|C91200  |; Cmp puck Horz pos to 18 decimal (right post)
+                       BPL fnPucPostCollision               ;9E923D|1007    |; Puck hit the post
+                       LDA.B $AD                            ;9E923F|A5AD    |; Load Pucks Horz Position to center of net
+                       CMP.W #$FFEF                         ;9E9241|C9EFFF  |; Cmp puck Horz pos to (-17) decimal (left post)
+                       BPL jmpToGoalLogic                   ;9E9244|10C9    |; If Positive then Goal; Else Negative Post
  
-          CODE_9E9246:
+   fnPucPostCollision:
                        JSL.L CODE_9EF213                    ;9E9246|2213F29E|;
                        STZ.W BreakAwayActive_flg            ;9E924A|9C8B1E  |;
                        STZ.W OneTimerFlg                    ;9E924D|9C891E  |;
-                       LDA.W #$0009                         ;9E9250|A90900  |;
+                       LDA.W #$0009                         ;9E9250|A90900  |; Setup Post SFX
                        JSL.L CODE_9C9ABC                    ;9E9253|22BC9A9C|;
                        LDA.L $7E35E0                        ;9E9257|AFE0357E|;
                        CLC                                  ;9E925B|18      |;
@@ -2952,7 +2952,7 @@
                        BRA CODE_9E976E                      ;9E9786|80E6    |;
  
           CODE_9E9788:
-                       LDA.W $0DF9                          ;9E9788|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9E9788|ADF90D  |;
                        SEC                                  ;9E978B|38      |;
                        SBC.W #$0010                         ;9E978C|E91000  |;
                        BPL CODE_9E97DC                      ;9E978F|104B    |;
@@ -3037,7 +3037,7 @@
                        BNE CODE_9E97F7                      ;9E9814|D0E1    |;
                        LDA.W $0F43,Y                        ;9E9816|B9430F  |;
                        BEQ CODE_9E97FA                      ;9E9819|F0DF    |;
-                       LDA.W $0DF9                          ;9E981B|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9E981B|ADF90D  |;
                        CMP.W #$0005                         ;9E981E|C90500  |;
                        BPL CODE_9E97F7                      ;9E9821|10D4    |;
                        LDA.W $0E01                          ;9E9823|AD010E  |;
@@ -3262,13 +3262,13 @@
                        LDA.W #$0005                         ;9E99FA|A90500  |;
  
           CODE_9E99FD:
-                       CMP.W $0DF9                          ;9E99FD|CDF90D  |;
+                       CMP.W PucVertVeloc                   ;9E99FD|CDF90D  |;
                        BCC CODE_9E9A0E                      ;9E9A00|900C    |;
                        LDA.B $B1                            ;9E9A02|A5B1    |;
                        SEC                                  ;9E9A04|38      |;
                        SBC.B $B5                            ;9E9A05|E5B5    |;
                        BMI CODE_9E9A11                      ;9E9A07|3008    |;
-                       CMP.W $0DF9                          ;9E9A09|CDF90D  |;
+                       CMP.W PucVertVeloc                   ;9E9A09|CDF90D  |;
                        BCC CODE_9E9A11                      ;9E9A0C|9003    |;
  
           CODE_9E9A0E:
@@ -6264,7 +6264,7 @@
           CODE_9EB39E:
                        LDA.W #$7000                         ;9EB39E|A90070  |;
                        STA.B $64                            ;9EB3A1|8564    |;
-                       LDA.W #$0015                         ;9EB3A3|A91500  |;
+                       LDA.W #$0015                         ;9EB3A3|A91500  |; Ref Whistle SFX
                        JSL.L fn_PlaySFX                     ;9EB3A6|227DA180|;
                        STZ.W $1620                          ;9EB3AA|9C2016  |;
                        LDA.W #$0004                         ;9EB3AD|A90400  |;
@@ -10699,7 +10699,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
           CODE_9ED9C5:
                        CMP.W #$0002                         ;9ED9C5|C90200  |;
                        BCS CODE_9ED987                      ;9ED9C8|B0BD    |;
-                       LDA.W $0DF9                          ;9ED9CA|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9ED9CA|ADF90D  |;
                        SEC                                  ;9ED9CD|38      |;
                        SBC.W #$0008                         ;9ED9CE|E90800  |;
                        BPL CODE_9EDA04                      ;9ED9D1|1031    |;
@@ -11187,7 +11187,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
           CODE_9EDDBD:
                        LDA.W $0E01                          ;9EDDBD|AD010E  |;
                        AND.W #$FF00                         ;9EDDC0|2900FF  |;
-                       ORA.W $0DF9                          ;9EDDC3|0DF90D  |;
+                       ORA.W PucVertVeloc                   ;9EDDC3|0DF90D  |;
                        BEQ CODE_9EDDCB                      ;9EDDC6|F003    |;
                        JMP.W CODE_9E9788                    ;9EDDC8|4C8897  |;
  
@@ -13365,7 +13365,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        RTL                                  ;9EEF7E|6B      |;
  
           CODE_9EEF7F:
-                       LDA.W $0DF9                          ;9EEF7F|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9EEF7F|ADF90D  |;
                        CMP.W #$0008                         ;9EEF82|C90800  |;
                        BPL CODE_9EEF91                      ;9EEF85|100A    |;
                        LDA.B $A5                            ;9EEF87|A5A5    |;
@@ -13375,7 +13375,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
  
           CODE_9EEF91:
                        JSL.L CODE_9EC4F3                    ;9EEF91|22F3C49E|;
-                       LDY.W $0DF9                          ;9EEF95|ACF90D  |;
+                       LDY.W PucVertVeloc                   ;9EEF95|ACF90D  |;
                        CMP.W #$000E                         ;9EEF98|C90E00  |;
                        BMI CODE_9EEFA6                      ;9EEF9B|3009    |;
                        db $A9,$05,$00,$22,$7F,$9A,$9C,$80   ;9EEF9D|        |;
@@ -13412,7 +13412,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        STA.W $0EE4,X                        ;9EEFE4|9DE40E  |;
                        REP #$30                             ;9EEFE7|C230    |;
                        JSL.L CODE_9EDE5E                    ;9EEFE9|225EDE9E|;
-                       LDA.W $0DF9                          ;9EEFED|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9EEFED|ADF90D  |;
                        CMP.W #$0008                         ;9EEFF0|C90800  |;
                        BMI CODE_9EF02A                      ;9EEFF3|3035    |;
                        LDA.B $AD                            ;9EEFF5|A5AD    |;
@@ -13435,7 +13435,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        STA.B $AF                            ;9EF018|85AF    |;
                        CMP.W #$0900                         ;9EF01A|C90009  |;
                        BCC CODE_9EF02B                      ;9EF01D|900C    |;
-                       LDA.W $0DF9                          ;9EF01F|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9EF01F|ADF90D  |;
                        CMP.W #$000C                         ;9EF022|C90C00  |;
                        BMI CODE_9EF02A                      ;9EF025|3003    |;
                        JMP.W CODE_9E9B52                    ;9EF027|4C529B  |;
@@ -13463,7 +13463,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
  
           CODE_9EF04D:
                        STZ.B $AD                            ;9EF04D|64AD    |;
-                       LDA.W $0DF9                          ;9EF04F|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9EF04F|ADF90D  |;
                        CMP.W #$0008                         ;9EF052|C90800  |;
                        BPL CODE_9EF05B                      ;9EF055|1004    |;
                        INC.B $AD                            ;9EF057|E6AD    |;
@@ -14110,7 +14110,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        STY.W $0DD3                          ;9EF578|8CD30D  |;
                        LDA.W #$0600                         ;9EF57B|A90006  |;
                        STA.W $0E01                          ;9EF57E|8D010E  |;
-                       STZ.W $0DF9                          ;9EF581|9CF90D  |;
+                       STZ.W PucVertVeloc                   ;9EF581|9CF90D  |;
                        LDA.W #$FFFF                         ;9EF584|A9FFFF  |;
                        STA.W $0D19                          ;9EF587|8D190D  |;
                        STA.W $0D1D                          ;9EF58A|8D1D0D  |;

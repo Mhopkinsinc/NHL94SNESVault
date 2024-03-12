@@ -85,7 +85,7 @@ namespace Snes94Hacks
                     })
                     .AddChoiceGroup("General", new[]
                     {
-                            "Def. Control ON", "Show 30 Second Periods", "Real Time Clock"                            
+                            "Def. Control ON", "Show 30 Second Periods", "Real Time Clock", "Disable Goal Posts"                            
                     })
                     .AddChoiceGroup("New Functionality", new[]
                     {
@@ -139,7 +139,7 @@ namespace Snes94Hacks
                  }));
             #endregion
 
-            #region AskPatchROMYesNo
+            #region AskToPatchROMYesNo
             // Ask the user if they want to patch an existing ROM, if the user selects yes then ask for the file path.
             // This is also used to handle cross platform where you can't drag and drop on startup. 
             if (string.IsNullOrEmpty(romPath))
@@ -297,7 +297,10 @@ namespace Snes94Hacks
                     {
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!PenaltyShot", "0");
                     }
-
+                    else if (hack == "Disable Goal Posts")
+                    {
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!GoalPosts", "0");
+                    }
 
                 }
                 catch (Exception ex)

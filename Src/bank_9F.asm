@@ -684,7 +684,7 @@ Real_Time_Pen_Clock_2:
                        STA.W $17B0                          ;9F8692|8DB017  |;
                        STA.W $17B2                          ;9F8695|8DB217  |;
                        STA.W $17B4                          ;9F8698|8DB417  |;
-                       LDA.W $0DF9                          ;9F869B|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9F869B|ADF90D  |;
                        STA.W $0DFF                          ;9F869E|8DFF0D  |;
                        LDX.W #$001E                         ;9F86A1|A21E00  |;
  
@@ -786,7 +786,7 @@ Real_Time_Pen_Clock_2:
           CODE_9F8755:
                        CPX.W #$001C                         ;9F8755|E01C00  |;
                        BNE CODE_9F875F                      ;9F8758|D005    |;
-                       LDA.W $0DF9                          ;9F875A|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9F875A|ADF90D  |;
                        BNE CODE_9F8796                      ;9F875D|D037    |;
  
           CODE_9F875F:
@@ -848,7 +848,7 @@ Real_Time_Pen_Clock_2:
           CODE_9F87D9:
                        CPX.W #$001C                         ;9F87D9|E01C00  |;
                        BNE CODE_9F8834                      ;9F87DC|D056    |;
-                       LDA.W $0DF9                          ;9F87DE|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9F87DE|ADF90D  |;
                        BMI CODE_9F8834                      ;9F87E1|3051    |;
                        BNE CODE_9F87EA                      ;9F87E3|D005    |;
                        LDA.W $0E01                          ;9F87E5|AD010E  |;
@@ -868,10 +868,10 @@ Real_Time_Pen_Clock_2:
                        ADC.W $0DFD                          ;9F8801|6DFD0D  |;
                        STA.W $0DFD                          ;9F8804|8DFD0D  |;
                        LDA.B $0A                            ;9F8807|A50A    |;
-                       ADC.W $0DF9                          ;9F8809|6DF90D  |;
-                       STA.W $0DF9                          ;9F880C|8DF90D  |;
+                       ADC.W PucVertVeloc                   ;9F8809|6DF90D  |;
+                       STA.W PucVertVeloc                   ;9F880C|8DF90D  |;
                        BPL CODE_9F8834                      ;9F880F|1023    |;
-                       STZ.W $0DF9                          ;9F8811|9CF90D  |;
+                       STZ.W PucVertVeloc                   ;9F8811|9CF90D  |;
                        STZ.W $0DFD                          ;9F8814|9CFD0D  |;
                        LDA.W $0E01                          ;9F8817|AD010E  |;
                        EOR.W #$FFFF                         ;9F881A|49FFFF  |;
@@ -973,7 +973,7 @@ Real_Time_Pen_Clock_2:
                        BEQ CODE_9F88F6                      ;9F88D9|F01B    |;
  
           CODE_9F88DB:
-                       LDA.W $0DF9                          ;9F88DB|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9F88DB|ADF90D  |;
                        CMP.W #$000D                         ;9F88DE|C90D00  |;
                        BCS CODE_9F88F6                      ;9F88E1|B013    |;
                        LDA.W $0EFF                          ;9F88E3|ADFF0E  |;
@@ -1229,7 +1229,7 @@ Real_Time_Pen_Clock_2:
                        JMP.W CODE_9F8947                    ;9F8AE7|4C4789  |;
  
           CODE_9F8AEA:
-                       LDA.W $0DF9                          ;9F8AEA|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9F8AEA|ADF90D  |;
                        CMP.W #$0018                         ;9F8AED|C91800  |;
                        BCS CODE_9F8B24                      ;9F8AF0|B032    |;
                        LDA.W $0D71                          ;9F8AF2|AD710D  |;
@@ -1248,7 +1248,7 @@ Real_Time_Pen_Clock_2:
                        db $0D                               ;9F8B23|        |;
  
           CODE_9F8B24:
-                       LDA.W $0DF9                          ;9F8B24|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9F8B24|ADF90D  |;
                        BNE CODE_9F8B58                      ;9F8B27|D02F    |;
                        LDA.W $0DD3                          ;9F8B29|ADD30D  |;
                        CMP.W #$FEC2                         ;9F8B2C|C9C2FE  |;
@@ -3875,7 +3875,7 @@ Real_Time_Pen_Clock_2:
                        STA.W $162A                          ;9FA921|8D2A16  |;
                        STA.W $0D19                          ;9FA924|8D190D  |;
                        STA.W $0D1D                          ;9FA927|8D1D0D  |;
-                       STA.W $0DF9                          ;9FA92A|8DF90D  |;
+                       STA.W PucVertVeloc                   ;9FA92A|8DF90D  |;
                        STA.W $0D07                          ;9FA92D|8D070D  |;
                        ASL A                                ;9FA930|0A      |;
                        STA.W $0AD9                          ;9FA931|8DD90A  |;
@@ -4630,7 +4630,7 @@ Real_Time_Pen_Clock_2:
           CODE_9FAFBE:
                        STZ.W $0D71                          ;9FAFBE|9C710D  |;
                        STZ.W $0DD3                          ;9FAFC1|9CD30D  |;
-                       STZ.W $0DF9                          ;9FAFC4|9CF90D  |;
+                       STZ.W PucVertVeloc                   ;9FAFC4|9CF90D  |;
                        STZ.W $0EDF                          ;9FAFC7|9CDF0E  |;
                        STZ.W $0EFF                          ;9FAFCA|9CFF0E  |;
                        STZ.W $0E01                          ;9FAFCD|9C010E  |;
@@ -4866,7 +4866,7 @@ Real_Time_Pen_Clock_2:
                        JSL.L CODE_808658                    ;9FB1C5|22588680|;
                        AND.W #$07FF                         ;9FB1C9|29FF07  |;
                        STA.W $0E01                          ;9FB1CC|8D010E  |;
-                       STZ.W $0DF9                          ;9FB1CF|9CF90D  |;
+                       STZ.W PucVertVeloc                   ;9FB1CF|9CF90D  |;
                        STZ.W $1563,X                        ;9FB1D2|9E6315  |;
                        LDA.W #$0018                         ;9FB1D5|A91800  |;
                        STA.B $A5                            ;9FB1D8|85A5    |;

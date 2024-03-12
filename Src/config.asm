@@ -24,6 +24,11 @@
 !PenaltyShot = 1   ; Enable = 1,  Disable = 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;Enable / Disable Puck Hitting Goal Post
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+!GoalPosts = 1   ; Enable = 1,  Disable = 0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Enable Pull Goalie With L+R Trigger
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 !Manual_Pull_Goalie = 0     ; Enable = 1,  Disable = 0
