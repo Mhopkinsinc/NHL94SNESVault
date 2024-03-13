@@ -3,7 +3,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     if  !GoalPosts  == 0
         
-            org $9E9236         ;JMP to Goal Logic
+            org $9E9230         ;JMP to Goal Logic
             JMP jmpToGoalLogic
 
             print "Goal Posts Disabled"
