@@ -73,7 +73,7 @@ namespace Snes94Hacks
                 new MultiSelectionPrompt<string>()
                     .Title("Select the hacks to enable")
                     .NotRequired() // Not required to have a hack This will build a clean ROM
-                    .PageSize(10)
+                    .PageSize(20)
                     .HighlightStyle(Style.Parse("purple"))
                     .MoreChoicesText("[grey](Move up and down with arrow keys to reveal more hacks)[/]")
                     .InstructionsText(
@@ -90,6 +90,10 @@ namespace Snes94Hacks
                     .AddChoiceGroup("New Functionality", new[]
                     {
                             "Pull Goalie with L+R Triggers"
+                    })
+                    .AddChoiceGroup("Bug Fixes", new[]
+                    {
+                            "Y Button Bug Fix"
                     })
                     ) ;
 
@@ -300,6 +304,10 @@ namespace Snes94Hacks
                     else if (hack == "Disable Goal Posts")
                     {
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!GoalPosts", "0");
+                    }
+                    else if (hack == "Y Button Bug Fix")
+                    {
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Y_Button_Bugfix", "0");
                     }
 
                 }
