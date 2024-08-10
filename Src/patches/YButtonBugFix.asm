@@ -30,7 +30,7 @@
                        LDA.W $14E3,X                        ;9EFBC5|BDE314  |; Loads Selected Player Action [0-?] 0-None 1-Knocked Down/pass 08-Slapshot F342-Speed boost
                        CMP.W #$0001                         ;9EFBC8|C90100  |; Compare to Knocked Down Action 1
                        BEQ .rtl                             ;9EFBCB|F003    |; If Knocked Down RTL
-                       JMP.W CODE_9EA256                    ;9EFBCD|4C56A2  |; Else Go back and continue execution of original code
+                       JMP.W $9EA256                        ;9EFBCD|4C56A2  |; Else Go back and continue execution of original code
                     .rtl:
                        RTL                                  ;9EFBD0|6B      |;
     endif
