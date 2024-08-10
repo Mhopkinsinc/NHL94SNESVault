@@ -307,7 +307,7 @@ namespace Snes94Hacks
                     }
                     else if (hack == "Y Button Bug Fix")
                     {
-                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Y_Button_Bugfix", "0");
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Y_Button_Bugfix", "1");
                     }
 
                 }
