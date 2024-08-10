@@ -23,7 +23,7 @@
     if !PatchROM == 1 && !Y_Button_Bugfix == 1  ;If PatchROM is enabled and Y_Button_Bugfix is enabled then add new code 
             
             org $9EA251
-                            JMP.W Y_But_Bug_Fix                  ;9EA251|BDE314  |; Hijack to New Code
+                            JMP.W $9FFB24                  ;9EA251|BDE314  |; Hijack to New Code
             
             org $9FFB24
             
