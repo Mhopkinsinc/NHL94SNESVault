@@ -19,8 +19,6 @@
 !Interference_Penalty = 1   ; Enable = 1,  Disable = 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-<<<<<<< Updated upstream
-=======
 ;Enable / Disable Penalty Shots
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 !PenaltyShot = 1   ; Enable = 1,  Disable = 0
@@ -36,7 +34,6 @@
 !Y_Button_Bugfix = 0   ; Enable = 1,  Disable = 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
->>>>>>> Stashed changes
 ;Enable Pull Goalie With L+R Trigger
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 !Manual_Pull_Goalie = 0     ; Enable = 1,  Disable = 0
