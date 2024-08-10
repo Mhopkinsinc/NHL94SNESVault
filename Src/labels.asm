@@ -5,6 +5,12 @@
                        Def_Ctrl_Awy = $001C96; !^ Def Control On or Off 1c96 = Away ^!
                        CurntTeamLoopVal = $9E0091; !^ 00 Home 02 Away ^!
                        JoyPad = $9E0776
+<<<<<<< Updated upstream
+=======
+                       PucVertVeloc = $9E0DF9
+                       PStructWeight = $9E12C3; !^ Player Data Weight ^!
+                       PStructJerNum = $9E13C3; !^ Player Data Jersey Number ^!
+>>>>>>> Stashed changes
                        PauseScreenActive = $9E15DA
                        period = $9E1630
                        clock_remaining_time = $9E1632

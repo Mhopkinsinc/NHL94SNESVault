@@ -3524,7 +3524,7 @@
                        LDX.W #$0000                         ;9BA982|A20000  |;
  
           CODE_9BA985:
-                       LDA.W $13C3,X                        ;9BA985|BDC313  |;
+                       LDA.W PStructJerNum,X                ;9BA985|BDC313  |;
                        STA.W $2180                          ;9BA988|8D8021  |;
                        LDA.W $13C5,X                        ;9BA98B|BDC513  |;
                        STA.W $2180                          ;9BA98E|8D8021  |;

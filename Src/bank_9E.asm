@@ -2859,12 +2859,12 @@
                        LDA.B $AA                            ;9E96C9|A5AA    |;
                        STA.B $B9                            ;9E96CB|85B9    |;
                        LDX.B $95                            ;9E96CD|A695    |;
-                       LDA.W $12C3,X                        ;9E96CF|BDC312  |;
+                       LDA.W PStructWeight,X                ;9E96CF|BDC312  |;
                        CLC                                  ;9E96D2|18      |;
                        ADC.W #$008C                         ;9E96D3|698C00  |;
                        STA.B $A5                            ;9E96D6|85A5    |;
                        LDY.B zpCurntTeamLoopVal             ;9E96D8|A491    |;
-                       LDA.W $12C3,Y                        ;9E96DA|B9C312  |;
+                       LDA.W PStructWeight,Y                ;9E96DA|B9C312  |;
                        CLC                                  ;9E96DD|18      |;
                        ADC.W #$008C                         ;9E96DE|698C00  |;
                        STA.B $A9                            ;9E96E1|85A9    |;
@@ -3885,9 +3885,9 @@
                        STA.B $A5                            ;9EA0C9|85A5    |;
                        LDA.B $A5                            ;9EA0CB|A5A5    |;
                        SEC                                  ;9EA0CD|38      |;
-                       SBC.W $12C3,X                        ;9EA0CE|FDC312  |;
+                       SBC.W PStructWeight,X                ;9EA0CE|FDC312  |;
                        CLC                                  ;9EA0D1|18      |;
-                       ADC.W $12C3,Y                        ;9EA0D2|79C312  |;
+                       ADC.W PStructWeight,Y                ;9EA0D2|79C312  |;
                        LSR A                                ;9EA0D5|4A      |;
                        SEC                                  ;9EA0D6|38      |;
                        SBC.W $0F23,Y                        ;9EA0D7|F9230F  |;
@@ -4056,13 +4056,14 @@
                        JML.L CODE_9EA3F1                    ;9EA248|5CF1A39E|;
  
           CODE_9EA24C:
-                       LDA.W $0F43,X                        ;9EA24C|BD430F  |;
-                       BEQ CODE_9EA25E                      ;9EA24F|F00D    |;
-                       LDA.W $14E3,X                        ;9EA251|BDE314  |;
-                       BEQ CODE_9EA25F                      ;9EA254|F009    |;
+                       LDA.W $0F43,X                        ;9EA24C|BD430F  |; Loads Selected Player Position [0-6]
+                       BEQ CODE_9EA25E                      ;9EA24F|F00D    |; If 0 [Goalie] RTL
+                       JMP.W Y_But_Bug_Fix                  ;9EA251|4CC5FB  |; Hijack for Y button Buf Fix
+                       BEQ CODE_9EA25F                      ;9EA254|F009    |; If Action = 0 [None]
+          CODE_9EA256:
                        LDA.W $11A3,X                        ;9EA256|BDA311  |;
-                       CMP.W #$F342                         ;9EA259|C942F3  |;
-                       BNE CODE_9EA25F                      ;9EA25C|D001    |;
+                       CMP.W #$F342                         ;9EA259|C942F3  |; Check if F342 (Speed Boost)
+                       BNE CODE_9EA25F                      ;9EA25C|D001    |; Not a speed boost, continue
  
           CODE_9EA25E:
                        RTL                                  ;9EA25E|6B      |;
@@ -4667,7 +4668,7 @@
                        STZ.B $A9                            ;9EA741|64A9    |;
  
           CODE_9EA743:
-                       LDA.W $12C3,X                        ;9EA743|BDC312  |;
+                       LDA.W PStructWeight,X                ;9EA743|BDC312  |;
                        LSR A                                ;9EA746|4A      |;
                        LSR A                                ;9EA747|4A      |;
                        LSR A                                ;9EA748|4A      |;
@@ -14699,8 +14700,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        JMP.W CODE_9EB421                    ;9EFB65|4C21B4  |; 1 min Penalty so JMP to B421
  
             .done:                       
-                       AND.W #$00FF                         ;9EFB68|29FF00  |; Run hijacked code
- 
+                       AND.W #$00FF                         ;9EFB68|29FF00  |; Run hijacked code 
                        JMP.W CODE_9EB41A                    ;9EFB6B|4C1AB4  |; Jmp to next instruction B41A
 
      ManualPullGoalie:
@@ -14755,6 +14755,14 @@ fn_end_cpu_pull_goalie_3rdperiod:
 JyPadHmAwyLookupTable:
                        dw $0001                             ;9EFBC1|        |;
                        dw $0002                             ;9EFBC3|        |;
+
+       Y_But_Bug_Fix:
+                       LDA.W $14E3,X                        ;9EFBC5|BDE314  |; Loads Selected Player Action [0-?] 0-None 1-Knocked Down/pass 08-Slapshot F342-Speed boost
+                       CMP.W #$0001                         ;9EFBC8|C90100  |; Compare to Knocked Down Action 1
+                       BEQ .rtl                             ;9EFBCB|F003    |; If Knocked Down RTL
+                       JMP.W CODE_9EA256                    ;9EFBCD|4C56A2  |; Go back and continue execution of original code
+                       .rtl:
+                       RTL                                  ;9EFBD0|6B      |;
             
              padbyte $FF
              pad $9F8000

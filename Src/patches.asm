@@ -10,4 +10,10 @@
                        incsrc "patches/Interference.asm"
                        incsrc "patches/OneMinutePenalties.asm"
                        incsrc "patches/DefControl.asm"
+<<<<<<< Updated upstream
                        
+=======
+                       incsrc "patches/PenaltyShot.asm"
+                       incsrc "patches/DisablePosts.asm"
+                       incsrc "patches/YButtonBugfix.asm"
+>>>>>>> Stashed changes
