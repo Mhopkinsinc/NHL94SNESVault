@@ -1,0 +1,596 @@
+The Hot/Cold Bonus gets pulled from a table that's basically generated when you get to the Game Setup screen. 
+A table is generated for each possible player + 1 more (26 rows) and 16 columns. 
+Home and Away has different tables. The table is generated using a RNG subroutine. 
+The subroutine base value is given using a count down timer (stored in D066 and D067 in RAM) 
+from 0x50 to 0x00, which loops until you hit the start button. 
+The value in RAM when you hit the start button is the value it uses to start the RNG. 
+The hot/cold table routine gives the RNG subroutine a value (a limit, this is located in ROM at 0x0F70AC-AD) to limit the results. 
+For classic ROM, this is set to 00 09, which gives a -9/+8 value in the table. 
+The table is populated from the end to the beginning, 
+meaning the last position is filled first (which is garbage data, since the first position is stored without RNG, and more than likely the reason why there is an extra row). 
+Setting this limit to a value like 00 05, causes the variation to be between -5/+4, which means -1/+1 when it comes to real bonus (mod by 3).
+
+
+
+Wgt and Agility:
+
+01:5BA6	17 50	MOVE.B  (A0),$006F(A3)          	xNzvC [A0]=00003B18 [A3]=FFFFB04A   # Info at 3B18 (A0 address) is moved (copied) to offset A3 + 6F (FFFFB04A + 6F = FFFB0B5)
+01:5BAA	16 28	MOVE.B  $0001(A0),D3            	xnzvc [A0]=00003B18 [A3]=FFFFB04A [D3]=0000FFFF  # Data at 1 + A0 is copied into D3 (3B19 is copied into D3, in this case, 84, or the weight and agility of Owen Nolan 8 wgt, 4 agl)
+01:5BAE	02 43	ANDI.W  #$00F0,D3               	xNzvc [A0]=00003B18 [D3]=0000FF84  # Ands 00F0 to D3, to remove everything but the weight (8) 
+01:5BB2	E2 4B	LSR.W   #1,D3                   	xnzvc [D3]=00000080  # Logic Shift Right, 1 bit word length, so makes D3 is 1000 0000 (80) it shifts to 0100 0000 (40) (8 wgt * 8 = 64, or 0x40)
+01:5BB4	17 43	MOVE.B  D3,$0067(A3)            	xnzvc [A3]=FFFFB04A [D3]=00000040  #  Copies D3 (0x40) to offset A3 + 0x67 (FFFB04A + 67 = FFFB0B1)   
+01:5BB8	16 28	MOVE.B  $0001(A0),D3            	xnzvc [A0]=00003B18 [A3]=FFFFB04A [D3]=00000040  # Copies data at 1 + A0 into D3 (84, like above)
+01:5BBC	02 03	ANDI.B  #$0F,D3                 	xNzvc [A0]=00003B18 [D3]=00000084  # Ands 000F to D3, to remove weight and keep agility (4) 
+01:5BC0	31 FC	MOVE.W  #$0003,($BF14)          	xnzvc [D3]=00000004  # Not completely sure. Moves 0003 to the address $BF14?
+01:5BC6	4E B9	JSR     ($000F70E4)             	xnzvc   # JSR to Hot/Cold Routine
+0F:70E4	48 E7	MOVEM.L {d0-a7}[e0 40],-(SP)    	xnzvc [A7]=FFFFFF84  # Pushes registers onto the stack. 
+0F:70E8	32 38	MOVE.W  ($BF14),D1              	xnzvc [A7]=FFFFFF74 [D1]=0000FFFF  # Copies the data at $BF14 to D1 (which is 3)
+0F:70EC	22 7C	MOVE.L  #$FFFFC6CE,A1           	xnzvc [A1]=FFFFCA32 [D1]=00000003  # Copies FFFFC6CE into A1
+0F:70F2	08 2B	BTST    #6,$0062(A3)            	xnzvc [A1]=FFFFC6CE [A3]=FFFFB04A  # Checks if Bit 6 in the data in A3 + 0x62 (FFFB0AC) is set, if not (is 0), sets Z flag
+0F:70F8	67 00	BEQ     #$0008 [0F:7102]        	xnZvc [A3]=FFFFB04A  # Branch on Equal - If above result is 0, jump 8 bytes (It is in this case, Zero flag is set)
+0F:7102	42 41	CLR.W   D1                      	xnZvc [D1]=00000003  # Clears word length of D1
+0F:7104	12 2B	MOVE.B  $0066(A3),D1            	xnZvc [A3]=FFFFB04A [D1]=00000000  # Copies byte data from A3 + 0x66 (FFFB0B0) into D1. This is the Player Index on the team (E = 15th player). 
+0F:7108	E9 41	ASL.W   #4,D1                   	xnzvc [A3]=FFFFB04A [D1]=0000000E  # Shifts D1 1 nibble (4) left, keeping sign (in this case positive)
+0F:710A	D3 FC	ADDA.L  #$000001A2,A1           	xnzvc [A1]=FFFFC6CE [A2]=FFFFC6CE [D1]=000000E0  # Adds 0x1A2 to A1 (FFFC6CE + 1A2 = FFFC870)
+0F:7110	12 31	MOVE.B  $00(A1,D1),D1           	xnzvc [A1]=FFFFC870 [A2]=FFFFC6CE [D1]=000000E0  # Copies byte at A1, with D1 index (E0, so A1 + E0) into D1
+0F:7114	48 81	EXT.W   D1                      	xNzvc [A1]=FFFFC870 [D1]=000000F8  # Sign-extend Word D1 (F8 becomes FFF8)
+0F:7116	48 C1	EXT.L   D1                      	xNzvc [D1]=0000FFF8  # Sign-extend LongWord D1 (FFF8 becomes FFFFFFF8)
+0F:7118	83 FC	DIVS.W  #$0003,D1               	xNzvc [D1]=FFFFFFF8  # Signed-Divide D1 by 3 (FFFFFFF8 / 3, or -8 / 3 = -2r2, or FFFEFFFE - Remainder is 4 MS Nibbles, result is 4 LS Nibbles)
+0F:711C	3F 03	MOVE.W  D3,-(SP)                	xNzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000004  # Pushes value of D3 onto the stack
+0F:711E	E5 43	ASL.W   #2,D3                   	xnzvc [A7]=FFFFFF72 [D3]=00000004  # Sign-shift left D3 2 bits (2) so 00000100 (0x4) becomes 00010000 (0x10) 
+0F:7120	D6 5F	ADD.W   (SP)+,D3                	xnzvc [A7]=FFFFFF72 [D3]=00000010  # Add the data at stack pointer (0x4) to D3 (0x10 + 0x4 = 0x14)
+0F:7122	D6 41	ADD.W   D1,D3                   	xnzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000014  # Add D1 word to D3 (FFFE + 0014 = 0012)
+0F:7124	6B 00	BMI     #$0012 [0F:7138]        	XnzvC [D1]=FFFEFFFE [D3]=00000012  # Branch on Minus - If the above result was negative, jump 0x12 bytes. It was not in this case)
+0F:7128	B6 7C	CMP.W   #$001E,D3               	XnzvC [D3]=00000012  # Compare D3 to 001E. 0012 - 001E = FFF7 (-12 decimal) Negative flag is set.
+0F:712C	6D 00	BLT     #$000C [0F:713A]        	XNzvC [D3]=00000012  # Branch on less than. 12 is less than 1E, so it jumps C bytes to 713A.
+0F:713A	02 43	ANDI.W  #$00FF,D3               	XNzvC [D3]=00000012  # ANDS 00FF to D3, to pass only the lower byte (stays as 0012)
+0F:713E	4C DF	MOVEM.L (SP)+,{a7-d0}[02 07]    	Xnzvc [A7]=FFFFFF74 [D3]=00000012 # pushes stack values back into registers
+0F:7142	4E 75	RTS                             	Xnzvc [A7]=FFFFFF84  # Returns from JSR
+01:5BCC	17 43	MOVE.B  D3,$0068(A3)            	Xnzvc [A3]=FFFFB04A [D3]=00000012 # moves D3 in to data point A3 + 0x0068 (FFFB04A + 0068 = FFFB0B2) 
+
+Speed:
+
+01:5BD0	16 28	MOVE.B  $0002(A0),D3            	Xnzvc [A0]=00003B18 [A3]=FFFFB04A [D3]=00000012  # copies info at A0 + 2 (3B1A) to D3 (Spd and Off Aware, 44)
+01:5BD4	E8 0B	LSR.B   #4,D3                   	Xnzvc [A0]=00003B18 [D3]=00000044  # Logical Shift Right, 4 bits (1 nibble), knocks off Off Aware and leaves Spd
+01:5BD6	31 FC	MOVE.W  #$0004,($BF14)          	xnzvc [D3]=00000004  # Moves 0004 to location $BF14 (possible label in RAM at this location)
+01:5BDC	4E B9	JSR     ($000F70E4)             	xnzvc   # JSR for Hot/Cold
+0F:70E4	48 E7	MOVEM.L {d0-a7}[e0 40],-(SP)    	xnzvc [A7]=FFFFFF84  # Push registers on the stack
+0F:70E8	32 38	MOVE.W  ($BF14),D1              	xnzvc [A7]=FFFFFF74 [D1]=0000FFFF  # Puts 0004 into D1 (from 3 instructions ago)
+0F:70EC	22 7C	MOVE.L  #$FFFFC6CE,A1           	xnzvc [A1]=FFFFCA32 [D1]=00000004  # Moves FFFFC6CE into A1
+0F:70F2	08 2B	BTST    #6,$0062(A3)            	xnzvc [A1]=FFFFC6CE [A3]=FFFFB04A  # Checks if Bit 6 in the data in A3 + 0x62 (FFFB0AC) is set, if not (is 0), sets Z flag
+0F:70F8	67 00	BEQ     #$0008 [0F:7102]        	xnZvc [A3]=FFFFB04A  # Branch on Equal - If above result is 0, jump 8 bytes (It is in this case, Zero flag is set)
+0F:7102	42 41	CLR.W   D1                      	xnZvc [D1]=00000004  # Clears word length of D1
+0F:7104	12 2B	MOVE.B  $0066(A3),D1            	xnZvc [A3]=FFFFB04A [D1]=00000000  # Copies byte data from A3 + 0x66 (FFFB0B0) into D1. This is the Player Index on the team (E = 15th player). 
+0F:7108	E9 41	ASL.W   #4,D1                   	xnzvc [A3]=FFFFB04A [D1]=0000000E  # Shifts D1 1 nibble (4) left, keeping sign (in this case positive)
+0F:710A	D3 FC	ADDA.L  #$000001A2,A1           	xnzvc [A1]=FFFFC6CE [A2]=FFFFC6CE [D1]=000000E0  # Adds 0x1A2 to A1 (FFFC6CE + 1A2 = FFFC870)
+0F:7110	12 31	MOVE.B  $00(A1,D1),D1           	xnzvc [A1]=FFFFC870 [A2]=FFFFC6CE [D1]=000000E0  # Copies byte at A1, with D1 index (E0, so A1 + E0) into D1
+0F:7114	48 81	EXT.W   D1                      	xNzvc [A1]=FFFFC870 [D1]=000000F8  # Sign-extend Word D1 (F8 becomes FFF8) (which is -8 cold)
+0F:7116	48 C1	EXT.L   D1                      	xNzvc [D1]=0000FFF8  # Sign-extend LongWord D1 (FFF8 becomes FFFFFFF8)
+0F:7118	83 FC	DIVS.W  #$0003,D1               	xNzvc [D1]=FFFFFFF8  # Signed-Divide D1 by 3 (FFFFFFF8 / 3, or -8 / 3 = -2r2, or FFFEFFFE - Remainder is 4 MS Nibbles, result is 4 LS Nibbles)
+0F:711C	3F 03	MOVE.W  D3,-(SP)                	xNzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000004  # Pushes value of D3 onto the stack
+0F:711E	E5 43	ASL.W   #2,D3                   	xnzvc [A7]=FFFFFF72 [D3]=00000004  # Sign-shift left D3 2 bits (2) so 00000100 (0x4) becomes 00010000 (0x10) or 4 x 4 = 16 = 0x10 
+0F:7120	D6 5F	ADD.W   (SP)+,D3                	xnzvc [A7]=FFFFFF72 [D3]=00000010  # Add the data at stack pointer (0x4) to D3 (0x10 + 0x4 = 0x14) or 4 x 5 = 20 = 0x14
+0F:7122	D6 41	ADD.W   D1,D3                   	xnzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000014  # Add D1 word to D3 (FFFE + 0014 = 0012) or 18
+0F:7124	6B 00	BMI     #$0012 [0F:7138]        	XnzvC [D1]=FFFEFFFE [D3]=00000012  # Branch on Minus - If the above result was negative, jump 0x12 bytes. It was not in this case)
+0F:7128	B6 7C	CMP.W   #$001E,D3               	XnzvC [D3]=00000012  # Compare D3 to 001E. 0012 (18 decimal) - 001E (30 decimal) = FFF7 (-12 decimal) Negative flag is set.  
+0F:712C	6D 00	BLT     #$000C [0F:713A]        	XNzvC [D3]=00000012  # Branch on less than. 12 is less than 1E, so it jumps C bytes to 713A.
+0F:713A	02 43	ANDI.W  #$00FF,D3               	XNzvC [D3]=00000012  # ANDS 00FF to D3, to pass only the lower byte (stays as 0012)
+0F:713E	4C DF	MOVEM.L (SP)+,{a7-d0}[02 07]    	Xn                   # pushes stack values back into registers
+0F:7142	4E 75	RTS                             	Xnzvc [A7]=FFFFFF84  # Returns from JSR
+01:5BE2	17 43	MOVE.B  D3,$0069(A3)            	Xnzvc [A3]=FFFFB04A [D3]=00000012 # moves D3 in to data point A3 + 0x0068 (FFFB04A + 0069 = FFFB0B3)
+
+Owen Nolan - 4 spd * 5 = 20. It adds -2 (cold bonus) to 20 (=18) and this is stored in spd value.
+
+Offensive Awareness:
+
+01:5BE6	16 28	MOVE.B  $0002(A0),D3            	Xnzvc [A0]=00003B18 [A3]=FFFFB04A [D3]=00000012 
+01:5BEA	02 03	ANDI.B  #$0F,D3                 	Xnzvc [A0]=00003B18 [D3]=00000044 
+01:5BEE	31 FC	MOVE.W  #$0005,($BF14)          	Xnzvc [D3]=00000004 
+
+01:5BF4	4E B9	JSR     ($000F70E4)             	Xnzvc 
+0F:70E4	48 E7	MOVEM.L {d0-a7}[e0 40],-(SP)    	Xnzvc [A7]=FFFFFF84 
+0F:70E8	32 38	MOVE.W  ($BF14),D1              	Xnzvc [A7]=FFFFFF74 [D1]=0000FFFF 
+0F:70EC	22 7C	MOVE.L  #$FFFFC6CE,A1           	Xnzvc [A1]=FFFFCA32 [D1]=00000005 
+0F:70F2	08 2B	BTST    #6,$0062(A3)            	Xnzvc [A1]=FFFFC6CE [A3]=FFFFB04A 
+0F:70F8	67 00	BEQ     #$0008 [0F:7102]        	XnZvc [A3]=FFFFB04A 
+0F:7102	42 41	CLR.W   D1                      	XnZvc [D1]=00000005 
+0F:7104	12 2B	MOVE.B  $0066(A3),D1            	XnZvc [A3]=FFFFB04A [D1]=00000000 
+0F:7108	E9 41	ASL.W   #4,D1                   	Xnzvc [A3]=FFFFB04A [D1]=0000000E 
+0F:710A	D3 FC	ADDA.L  #$000001A2,A1           	xnzvc [A1]=FFFFC6CE [A2]=FFFFC6CE [D1]=000000E0 
+0F:7110	12 31	MOVE.B  $00(A1,D1),D1           	xnzvc [A1]=FFFFC870 [A2]=FFFFC6CE [D1]=000000E0 
+0F:7114	48 81	EXT.W   D1                      	xNzvc [A1]=FFFFC870 [D1]=000000F8 
+0F:7116	48 C1	EXT.L   D1                      	xNzvc [D1]=0000FFF8 
+0F:7118	83 FC	DIVS.W  #$0003,D1               	xNzvc [D1]=FFFFFFF8 
+0F:711C	3F 03	MOVE.W  D3,-(SP)                	xNzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000004 
+0F:711E	E5 43	ASL.W   #2,D3                   	xnzvc [A7]=FFFFFF72 [D3]=00000004 
+0F:7120	D6 5F	ADD.W   (SP)+,D3                	xnzvc [A7]=FFFFFF72 [D3]=00000010 
+0F:7122	D6 41	ADD.W   D1,D3                   	xnzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000014 
+0F:7124	6B 00	BMI     #$0012 [0F:7138]        	XnzvC [D1]=FFFEFFFE [D3]=00000012 
+0F:7128	B6 7C	CMP.W   #$001E,D3               	XnzvC [D3]=00000012 
+0F:712C	6D 00	BLT     #$000C [0F:713A]        	XNzvC [D3]=00000012 
+0F:713A	02 43	ANDI.W  #$00FF,D3               	XNzvC [D3]=00000012 
+0F:713E	4C DF	MOVEM.L (SP)+,{a7-d0}[02 07]    	Xnzvc [A7]=FFFFFF74 [D3]=00000012 
+0F:7142	4E 75	RTS                             	Xnzvc [A7]=FFFFFF84
+
+Above is pretty much the same as before.
+
+01:5BFA	D6 38	ADD.B   ($CF2E),D3              	Xnzvc [D3]=00000012  # I'm going to guess these adds are Home/Away, PP/PK (if needed). They are all 0s in this matchup for some reason. 
+01:5BFE	D6 38	ADD.B   ($CF2F),D3              	xnzvc [D3]=00000012 
+01:5C02	D6 38	ADD.B   ($CF31),D3              	xnzvc [D3]=00000012 
+01:5C06	D6 38	ADD.B   ($CF30),D3              	xnzvc [D3]=00000012 
+01:5C0A	61 00	BSR     #$0178 [01:5D84]        	xnzvc [D3]=00000012  # BSR is a JSR using a label. Here it jumps 0x0178 to 5D84
+01:5D84	4A 03	TST.B   D3                      	xnzvc [D3]=00000012  # Checks if D3 is 0 or negative
+01:5D86	6A 00	BPL     #$0004 [01:5D8C]        	xnzvc [D3]=00000012  # Branch on Plus - Tests if the above set the N flag, it doesn't, so it jumps (result is plus)
+01:5D8C	B6 3C	CMP.B   #$1E,D3                 	xnzvc [D3]=00000012  # Compares 1E to D3, 0x12 - 0x1E = -12 decimal, N flag is set
+01:5D90	6F 00	BLE     #$0006 [01:5D98]        	xNzvC [D3]=00000012  # Branch on Less or Equal - D3 was less (N flag set), so it jumps
+01:5D98	4E 75	RTS                             	xNzvC 		     # Return from BSR
+01:5C0E	E2 0B	LSR.B   #1,D3                   	xNzvC [D3]=00000012  # Shift D3 1 bit right (1100 is now 0110 or 0x09) [Same as / 2]
+01:5C10	0A 03	EORI.B  #$0F,D3                 	xnzvc [D3]=00000009  # XOR D3 with $0F - So, 0000 1001 (0x09) becomes 0000 0110 (0x06)   1011  0100
+01:5C14	06 03	ADDI.B  #$0F,D3                 	xnzvc [D3]=00000006  # Adds $0F to D3 = $0F + $06 = $15 
+01:5C18	E2 0B	LSR.B   #1,D3                   	xnzvc [D3]=00000015  # Logical Shift Right - 0001 0101 becomes 0000 1010 ($0A) [ / 2] 
+01:5C1A	17 43	MOVE.B  D3,$006A(A3)            	XnzvC [A3]=FFFFB04A [D3]=0000000A  # Moves D3 into address A3 + $006A (FFFFB0B4). Offset 6A is Offensive Awareness
+
+Defensive Awareness:
+
+01:5C1E	16 28	MOVE.B  $0003(A0),D3            	Xnzvc [A0]=00003B18 [A3]=FFFFB04A [D3]=0000000A # Grabs D Aware and ShP and puts it into D3
+01:5C22	E8 0B	LSR.B   #4,D3                   	Xnzvc [A0]=00003B18 [D3]=00000034 
+01:5C24	31 FC	MOVE.W  #$0006,($BF14)          	xnzvc [D3]=00000003 
+01:5C2A	4E B9	JSR     ($000F70E4)             	xnzvc 
+0F:70E4	48 E7	MOVEM.L {d0-a7}[e0 40],-(SP)    	xnzvc [A7]=FFFFFF84 
+0F:70E8	32 38	MOVE.W  ($BF14),D1              	xnzvc [A7]=FFFFFF74 [D1]=0000FFFF 
+0F:70EC	22 7C	MOVE.L  #$FFFFC6CE,A1           	xnzvc [A1]=FFFFCA32 [D1]=00000006 
+0F:70F2	08 2B	BTST    #6,$0062(A3)            	xnzvc [A1]=FFFFC6CE [A3]=FFFFB04A 
+0F:70F8	67 00	BEQ     #$0008 [0F:7102]        	xnZvc [A3]=FFFFB04A 
+0F:7102	42 41	CLR.W   D1                      	xnZvc [D1]=00000006 
+0F:7104	12 2B	MOVE.B  $0066(A3),D1            	xnZvc [A3]=FFFFB04A [D1]=00000000 
+0F:7108	E9 41	ASL.W   #4,D1                   	xnzvc [A3]=FFFFB04A [D1]=0000000E 
+0F:710A	D3 FC	ADDA.L  #$000001A2,A1           	xnzvc [A1]=FFFFC6CE [A2]=FFFFC6CE [D1]=000000E0 
+0F:7110	12 31	MOVE.B  $00(A1,D1),D1           	xnzvc [A1]=FFFFC870 [A2]=FFFFC6CE [D1]=000000E0 
+0F:7114	48 81	EXT.W   D1                      	xNzvc [A1]=FFFFC870 [D1]=000000F8 
+0F:7116	48 C1	EXT.L   D1                      	xNzvc [D1]=0000FFF8 
+0F:7118	83 FC	DIVS.W  #$0003,D1               	xNzvc [D1]=FFFFFFF8 
+0F:711C	3F 03	MOVE.W  D3,-(SP)                	xNzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000003 
+0F:711E	E5 43	ASL.W   #2,D3                   	xnzvc [A7]=FFFFFF72 [D3]=00000003 
+0F:7120	D6 5F	ADD.W   (SP)+,D3                	xnzvc [A7]=FFFFFF72 [D3]=0000000C 
+0F:7122	D6 41	ADD.W   D1,D3                   	xnzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=0000000F 
+0F:7124	6B 00	BMI     #$0012 [0F:7138]        	XnzvC [D1]=FFFEFFFE [D3]=0000000D 
+0F:7128	B6 7C	CMP.W   #$001E,D3               	XnzvC [D3]=0000000D 
+0F:712C	6D 00	BLT     #$000C [0F:713A]        	XNzvC [D3]=0000000D 
+0F:713A	02 43	ANDI.W  #$00FF,D3               	XNzvC [D3]=0000000D 
+0F:713E	4C DF	MOVEM.L (SP)+,{a7-d0}[02 07]    	Xnzvc [A7]=FFFFFF74 [D3]=0000000D 
+0F:7142	4E 75	RTS                             	Xnzvc [A7]=FFFFFF84
+
+Above the same as before.
+ 
+01:5C30	D6 38	ADD.B   ($CF31),D3              	Xnzvc [D3]=0000000D  # Adds Home or Away?
+01:5C34	61 00	BSR     #$014E [01:5D84]        	xnzvc [D3]=0000000D  # Jump
+01:5D84	4A 03	TST.B   D3                      	xnzvc [D3]=0000000D  # Checks if D3 is 0 or negative
+01:5D86	6A 00	BPL     #$0004 [01:5D8C]        	xnzvc [D3]=0000000D  # Branch on Plus - Tests if the above set the N flag, it doesn't, so it jumps (result is plus)
+01:5D8C	B6 3C	CMP.B   #$1E,D3                 	xnzvc [D3]=0000000D  # Compares 1E to D3, 0x0D - 0x1E =  -17 decimal, N flag is set 
+01:5D90	6F 00	BLE     #$0006 [01:5D98]        	xNzvC [D3]=0000000D  # Branch on Less or Equal - D3 was less (N flag set), so it jumps
+01:5D98	4E 75	RTS                             	xNzvC 		     # Return from Jump
+01:5C38	E2 0B	LSR.B   #1,D3                   	xNzvC [D3]=0000000D  # Shift D3 1 bit right (1101 is now 0110 or 0x06) [Same as / 2]
+01:5C3A	0A 03	EORI.B  #$0F,D3                 	XnzvC [D3]=00000006  # XOR D3 with $0F - So, 0000 0110 (0x06) becomes 0000 1001 (0x09) 
+01:5C3E	06 03	ADDI.B  #$0F,D3                 	Xnzvc [D3]=00000009  # Adds $0F to D3 = $0F + $09 = $18
+01:5C42	E2 0B	LSR.B   #1,D3                   	xnzvc [D3]=00000018  # Logical Shift Right - 0001 1000 becomes 0001 0100 ($0C) [ / 2] 
+01:5C44	17 43	MOVE.B  D3,$006B(A3)            	xnzvc [A3]=FFFFB04A [D3]=0000000C  # Moves D3 into address A3 + $006B (FFFFB0B5). Offset 6B is Defensive Awareness
+
+Shot Power:
+
+01:5C48	17 68	MOVE.B  $0003(A0),$006C(A3)     	xnzvc [A0]=00003B18 [A3]=FFFFB04A [D3]=0000000C # Moves the D Aware and ShP byte and puts it into offset 6C (ShP)
+01:5C4E	02 2B	ANDI.B  #$0F,$006C(A3)          	xnzvc [A0]=00003B18 [A3]=FFFFB04A  # Mask 0F to remove the D Aware nibble from offset 6C
+01:5C54	16 2B	MOVE.B  $006C(A3),D3            	xnzvc [A3]=FFFFB04A [D3]=0000000C  # Moves offset 6C data into D3 (4 ShP for Nolan). Note: The above is done differently than the Spd/OA byte, but same result
+01:5C58	31 FC	MOVE.W  #$0007,($BF14)          	xnzvc [A3]=FFFFB04A [D3]=00000004  # Puts 7 into BF14 (label). This is the 6th attribute. Don't know where the 7 comes from. Agility was 3.
+
+01:5C5E	4E B9	JSR     ($000F70E4)             	xnzvc 
+0F:70E4	48 E7	MOVEM.L {d0-a7}[e0 40],-(SP)    	xnzvc [A7]=FFFFFF84 
+0F:70E8	32 38	MOVE.W  ($BF14),D1              	xnzvc [A7]=FFFFFF74 [D1]=0000FFFF 
+0F:70EC	22 7C	MOVE.L  #$FFFFC6CE,A1           	xnzvc [A1]=FFFFCA32 [D1]=00000007 
+0F:70F2	08 2B	BTST    #6,$0062(A3)            	xnzvc [A1]=FFFFC6CE [A3]=FFFFB04A 
+0F:70F8	67 00	BEQ     #$0008 [0F:7102]        	xnZvc [A3]=FFFFB04A 
+0F:7102	42 41	CLR.W   D1                      	xnZvc [D1]=00000007 
+0F:7104	12 2B	MOVE.B  $0066(A3),D1            	xnZvc [A3]=FFFFB04A [D1]=00000000 
+0F:7108	E9 41	ASL.W   #4,D1                   	xnzvc [A3]=FFFFB04A [D1]=0000000E 
+0F:710A	D3 FC	ADDA.L  #$000001A2,A1           	xnzvc [A1]=FFFFC6CE [A2]=FFFFC6CE [D1]=000000E0 
+0F:7110	12 31	MOVE.B  $00(A1,D1),D1           	xnzvc [A1]=FFFFC870 [A2]=FFFFC6CE [D1]=000000E0 
+0F:7114	48 81	EXT.W   D1                      	xNzvc [A1]=FFFFC870 [D1]=000000F8 
+0F:7116	48 C1	EXT.L   D1                      	xNzvc [D1]=0000FFF8 
+0F:7118	83 FC	DIVS.W  #$0003,D1               	xNzvc [D1]=FFFFFFF8 
+0F:711C	3F 03	MOVE.W  D3,-(SP)                	xNzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000004 
+0F:711E	E5 43	ASL.W   #2,D3                   	xnzvc [A7]=FFFFFF72 [D3]=00000004 
+0F:7120	D6 5F	ADD.W   (SP)+,D3                	xnzvc [A7]=FFFFFF72 [D3]=00000010 
+0F:7122	D6 41	ADD.W   D1,D3                   	xnzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000014 
+0F:7124	6B 00	BMI     #$0012 [0F:7138]        	XnzvC [D1]=FFFEFFFE [D3]=00000012 
+0F:7128	B6 7C	CMP.W   #$001E,D3               	XnzvC [D3]=00000012 
+0F:712C	6D 00	BLT     #$000C [0F:713A]        	XNzvC [D3]=00000012 
+0F:713A	02 43	ANDI.W  #$00FF,D3               	XNzvC [D3]=00000012 
+0F:713E	4C DF	MOVEM.L (SP)+,{a7-d0}[02 07]    	Xnzvc [A7]=FFFFFF74 [D3]=00000012 
+0F:7142	4E 75	RTS                             	Xnzvc [A7]=FFFFFF84 
+01:5C64	17 43	MOVE.B  D3,$006C(A3)            	Xnzvc [A3]=FFFFB04A [D3]=00000012  # Moves D3 into address A3 + $006C (FFFFB0B6). Offset 6C is Shot Power.
+
+Checking:
+
+01:5C68	16 28	MOVE.B  $0004(A0),D3            	Xnzvc [A0]=00003B18 [A3]=FFFFB04A [D3]=00000012  # Moves the Checking and Hnd byte into D3 
+01:5C6C	E8 0B	LSR.B   #4,D3                   	Xnzvc [A0]=00003B18 [D3]=00000017  # Shifts to remove the Hnd nibble. D3 = Checking
+01:5C6E	31 FC	MOVE.W  #$0008,($BF14)          	xnzvc [D3]=00000001  # Moves 0008 into $BF14 label
+
+01:5C74	4E B9	JSR     ($000F70E4)             	xnzvc 
+0F:70E4	48 E7	MOVEM.L {d0-a7}[e0 40],-(SP)    	xnzvc [A7]=FFFFFF84 
+0F:70E8	32 38	MOVE.W  ($BF14),D1              	xnzvc [A7]=FFFFFF74 [D1]=0000FFFF 
+0F:70EC	22 7C	MOVE.L  #$FFFFC6CE,A1           	xnzvc [A1]=FFFFCA32 [D1]=00000008 
+0F:70F2	08 2B	BTST    #6,$0062(A3)            	xnzvc [A1]=FFFFC6CE [A3]=FFFFB04A 
+0F:70F8	67 00	BEQ     #$0008 [0F:7102]        	xnZvc [A3]=FFFFB04A 
+0F:7102	42 41	CLR.W   D1                      	xnZvc [D1]=00000008 
+0F:7104	12 2B	MOVE.B  $0066(A3),D1            	xnZvc [A3]=FFFFB04A [D1]=00000000 
+0F:7108	E9 41	ASL.W   #4,D1                   	xnzvc [A3]=FFFFB04A [D1]=0000000E 
+0F:710A	D3 FC	ADDA.L  #$000001A2,A1           	xnzvc [A1]=FFFFC6CE [A2]=FFFFC6CE [D1]=000000E0 
+0F:7110	12 31	MOVE.B  $00(A1,D1),D1           	xnzvc [A1]=FFFFC870 [A2]=FFFFC6CE [D1]=000000E0 
+0F:7114	48 81	EXT.W   D1                      	xNzvc [A1]=FFFFC870 [D1]=000000F8 
+0F:7116	48 C1	EXT.L   D1                      	xNzvc [D1]=0000FFF8 
+0F:7118	83 FC	DIVS.W  #$0003,D1               	xNzvc [D1]=FFFFFFF8 
+0F:711C	3F 03	MOVE.W  D3,-(SP)                	xNzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000001 
+0F:711E	E5 43	ASL.W   #2,D3                   	xnzvc [A7]=FFFFFF72 [D3]=00000001 
+0F:7120	D6 5F	ADD.W   (SP)+,D3                	xnzvc [A7]=FFFFFF72 [D3]=00000004 
+0F:7122	D6 41	ADD.W   D1,D3                   	xnzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000005 
+0F:7124	6B 00	BMI     #$0012 [0F:7138]        	XnzvC [D1]=FFFEFFFE [D3]=00000003 
+0F:7128	B6 7C	CMP.W   #$001E,D3               	XnzvC [D3]=00000003 
+0F:712C	6D 00	BLT     #$000C [0F:713A]        	XNzvC [D3]=00000003 
+0F:713A	02 43	ANDI.W  #$00FF,D3               	XNzvC [D3]=00000003 
+0F:713E	4C DF	MOVEM.L (SP)+,{a7-d0}[02 07]    	Xnzvc [A7]=FFFFFF74 [D3]=00000003 
+0F:7142	4E 75	RTS                             	Xnzvc [A7]=FFFFFF84 
+
+01:5C7A	D6 38	ADD.B   ($CF30),D3              	Xnzvc [D3]=00000003  # Adds Bonus at $CF30 
+01:5C7E	61 00	BSR     #$0104 [01:5D84]        	xnzvc [D3]=00000003 
+01:5D84	4A 03	TST.B   D3                      	xnzvc [D3]=00000003  # Checks if D3 is 0 or negative 
+01:5D86	6A 00	BPL     #$0004 [01:5D8C]        	xnzvc [D3]=00000003  # Branch on Plus - Tests if the above set the N flag, it doesn't, so it jumps (result is plus)
+01:5D8C	B6 3C	CMP.B   #$1E,D3                 	xnzvc [D3]=00000003  # Compares 1E to D3, 0x03 - 0x1E, N flag is set 
+01:5D90	6F 00	BLE     #$0006 [01:5D98]        	xNzvC [D3]=00000003  # Branch on Less or Equal - D3 was less (N flag set), so it jumps
+01:5D98	4E 75	RTS                             	xNzvC 
+01:5C82	17 43	MOVE.B  D3,$0075(A3)            	xNzvC [A3]=FFFFB04A [D3]=00000003  # Moves D3 to offset $0075. Offset 75 is Checking
+
+Handedness:
+
+01:5C86	08 AB	BCLR    #3,$0004(A3)            	xnzvc [A3]=FFFFB04A [D3]=00000003  # Clears Bit 4 on data at A3 + 4  (Interesting)
+01:5C8C	17 68	MOVE.B  $0004(A0),$0076(A3)     	xnZvc [A0]=00003B18 [A3]=FFFFB04A  # Moves the Chk/Hnd Byte into Offset 76
+01:5C92	02 2B	ANDI.B  #$01,$0076(A3)          	xnzvc [A0]=00003B18 [A3]=FFFFB04A  # Then, masks only passing the first bit.  
+01:5C98	0A 2B	EORI.B  #$01,$0076(A3)          	xnzvc [A3]=FFFFB04A  # XORs the first bit. So, if it was a 1, it would become a 0. If it's a 0, becomes a 1.   Nolan is a Righty (this is a 1, turned to a 0).
+01:5C9E	66 00	BNE     #$0008 [01:5CA8]        	xnZvc [A3]=FFFFB04A  # Branch if not equal - If Zero flag is not set (not equal), it jumps. In this case, it continues.
+01:5CA2	08 EB	BSET    #3,$0004(A3)            	xnZvc [A3]=FFFFB04A  # Sets the fourth bit of A3 + 4 (Interesting). It will only do this if Hnd = Right (originally an odd value) 
+
+Fighting:
+
+01:5CA8	17 68	MOVE.B  $0004(A0),$0074(A3)     	xnZvc [A0]=00003B18 [A3]=FFFFB04A  # Moves Chk/Hnd byte into offset 74
+01:5CAE	02 2B	ANDI.B  #$0E,$0074(A3)          	xnzvc [A0]=00003B18 [A3]=FFFFB04A  # Masks Offset 74 with 0E, Only passing the 3 MSB bytes of the Hnd Nibble (xxx0), thus ignoring Right/Left
+
+Stick Handling:
+
+01:5CB4	16 28	MOVE.B  $0005(A0),D3            	xnzvc [A0]=00003B18 [A3]=FFFFB04A [D3]=00000003  # Moves the 5th attribute byte (StH/ShA) into D3 
+01:5CB8	E8 0B	LSR.B   #4,D3                   	xnzvc [A0]=00003B18 [D3]=00000044  # Shifts D3 to remove ShA
+01:5CBA	31 FC	MOVE.W  #$000A,($BF14)          	xnzvc [D3]=00000004  # Moves 000A to the label at $BF14 
+
+
+01:5CC0	4E B9	JSR     ($000F70E4)             	xnzvc 
+0F:70E4	48 E7	MOVEM.L {d0-a7}[e0 40],-(SP)    	xnzvc [A7]=FFFFFF84 
+0F:70E8	32 38	MOVE.W  ($BF14),D1              	xnzvc [A7]=FFFFFF74 [D1]=0000FFFF 
+0F:70EC	22 7C	MOVE.L  #$FFFFC6CE,A1           	xnzvc [A1]=FFFFCA32 [D1]=0000000A 
+0F:70F2	08 2B	BTST    #6,$0062(A3)            	xnzvc [A1]=FFFFC6CE [A3]=FFFFB04A 
+0F:70F8	67 00	BEQ     #$0008 [0F:7102]        	xnZvc [A3]=FFFFB04A 
+0F:7102	42 41	CLR.W   D1                      	xnZvc [D1]=0000000A 
+0F:7104	12 2B	MOVE.B  $0066(A3),D1            	xnZvc [A3]=FFFFB04A [D1]=00000000 
+0F:7108	E9 41	ASL.W   #4,D1                   	xnzvc [A3]=FFFFB04A [D1]=0000000E 
+0F:710A	D3 FC	ADDA.L  #$000001A2,A1           	xnzvc [A1]=FFFFC6CE [A2]=FFFFC6CE [D1]=000000E0 
+0F:7110	12 31	MOVE.B  $00(A1,D1),D1           	xnzvc [A1]=FFFFC870 [A2]=FFFFC6CE [D1]=000000E0 
+0F:7114	48 81	EXT.W   D1                      	xNzvc [A1]=FFFFC870 [D1]=000000F8 
+0F:7116	48 C1	EXT.L   D1                      	xNzvc [D1]=0000FFF8 
+0F:7118	83 FC	DIVS.W  #$0003,D1               	xNzvc [D1]=FFFFFFF8 
+0F:711C	3F 03	MOVE.W  D3,-(SP)                	xNzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000004 
+0F:711E	E5 43	ASL.W   #2,D3                   	xnzvc [A7]=FFFFFF72 [D3]=00000004 
+0F:7120	D6 5F	ADD.W   (SP)+,D3                	xnzvc [A7]=FFFFFF72 [D3]=00000010 
+0F:7122	D6 41	ADD.W   D1,D3                   	xnzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000014 
+0F:7124	6B 00	BMI     #$0012 [0F:7138]        	XnzvC [D1]=FFFEFFFE [D3]=00000012 
+0F:7128	B6 7C	CMP.W   #$001E,D3               	XnzvC [D3]=00000012 
+0F:712C	6D 00	BLT     #$000C [0F:713A]        	XNzvC [D3]=00000012 
+0F:713A	02 43	ANDI.W  #$00FF,D3               	XNzvC [D3]=00000012 
+0F:713E	4C DF	MOVEM.L (SP)+,{a7-d0}[02 07]    	Xnzvc [A7]=FFFFFF74 [D3]=00000012 
+0F:7142	4E 75	RTS                             	Xnzvc [A7]=FFFFFF84
+
+ 
+01:5CC6	D6 38	ADD.B   ($CF2E),D3              	Xnzvc [D3]=00000012  # Adds Bonuses. PP, PK, Home?
+01:5CCA	D6 38	ADD.B   ($CF2F),D3              	xnzvc [D3]=00000012 
+01:5CCE	D6 38	ADD.B   ($CF31),D3              	xnzvc [D3]=00000012 
+01:5CD2	61 00	BSR     #$00B0 [01:5D84]        	xnzvc [D3]=00000012 
+01:5D84	4A 03	TST.B   D3                      	xnzvc [D3]=00000012 
+01:5D86	6A 00	BPL     #$0004 [01:5D8C]        	xnzvc [D3]=00000012 
+01:5D8C	B6 3C	CMP.B   #$1E,D3                 	xnzvc [D3]=00000012 
+01:5D90	6F 00	BLE     #$0006 [01:5D98]        	xNzvC [D3]=00000012 
+01:5D98	4E 75	RTS                             	xNzvC 
+01:5CD6	17 43	MOVE.B  D3,$0071(A3)            	xNzvC [A3]=FFFFB04A [D3]=00000012 # Moves D3 to offset $71
+
+Shot Accuracy:
+
+01:5CDA	16 28	MOVE.B  $0005(A0),D3            	xnzvc [A0]=00003B18 [A3]=FFFFB04A [D3]=00000012  # Moves 5th attribute byte into D3 (StH/ShA)
+01:5CDE	02 03	ANDI.B  #$0F,D3                 	xnzvc [A0]=00003B18 [D3]=00000044 # Masks to pass ShA
+01:5CE2	31 FC	MOVE.W  #$000B,($BF14)          	xnzvc [D3]=00000004  # Moves 000B to BF14 label
+ 
+01:5CE8	4E B9	JSR     ($000F70E4)             	xnzvc 
+0F:70E4	48 E7	MOVEM.L {d0-a7}[e0 40],-(SP)    	xnzvc [A7]=FFFFFF84 
+0F:70E8	32 38	MOVE.W  ($BF14),D1              	xnzvc [A7]=FFFFFF74 [D1]=0000FFFF 
+0F:70EC	22 7C	MOVE.L  #$FFFFC6CE,A1           	xnzvc [A1]=FFFFCA32 [D1]=0000000B 
+0F:70F2	08 2B	BTST    #6,$0062(A3)            	xnzvc [A1]=FFFFC6CE [A3]=FFFFB04A 
+0F:70F8	67 00	BEQ     #$0008 [0F:7102]        	xnZvc [A3]=FFFFB04A 
+0F:7102	42 41	CLR.W   D1                      	xnZvc [D1]=0000000B 
+0F:7104	12 2B	MOVE.B  $0066(A3),D1            	xnZvc [A3]=FFFFB04A [D1]=00000000 
+0F:7108	E9 41	ASL.W   #4,D1                   	xnzvc [A3]=FFFFB04A [D1]=0000000E 
+0F:710A	D3 FC	ADDA.L  #$000001A2,A1           	xnzvc [A1]=FFFFC6CE [A2]=FFFFC6CE [D1]=000000E0 
+0F:7110	12 31	MOVE.B  $00(A1,D1),D1           	xnzvc [A1]=FFFFC870 [A2]=FFFFC6CE [D1]=000000E0 
+0F:7114	48 81	EXT.W   D1                      	xNzvc [A1]=FFFFC870 [D1]=000000F8 
+0F:7116	48 C1	EXT.L   D1                      	xNzvc [D1]=0000FFF8 
+0F:7118	83 FC	DIVS.W  #$0003,D1               	xNzvc [D1]=FFFFFFF8 
+0F:711C	3F 03	MOVE.W  D3,-(SP)                	xNzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000004 
+0F:711E	E5 43	ASL.W   #2,D3                   	xnzvc [A7]=FFFFFF72 [D3]=00000004 
+0F:7120	D6 5F	ADD.W   (SP)+,D3                	xnzvc [A7]=FFFFFF72 [D3]=00000010 
+0F:7122	D6 41	ADD.W   D1,D3                   	xnzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000014 
+0F:7124	6B 00	BMI     #$0012 [0F:7138]        	XnzvC [D1]=FFFEFFFE [D3]=00000012 
+0F:7128	B6 7C	CMP.W   #$001E,D3               	XnzvC [D3]=00000012 
+0F:712C	6D 00	BLT     #$000C [0F:713A]        	XNzvC [D3]=00000012 
+0F:713A	02 43	ANDI.W  #$00FF,D3               	XNzvC [D3]=00000012 
+0F:713E	4C DF	MOVEM.L (SP)+,{a7-d0}[02 07]    	Xnzvc [A7]=FFFFFF74 [D3]=00000012 
+0F:7142	4E 75	RTS                             	Xnzvc [A7]=FFFFFF84
+ 
+01:5CEE	D6 38	ADD.B   ($CF2E),D3              	Xnzvc [D3]=00000012 # Adds 3 bonuses
+01:5CF2	D6 38	ADD.B   ($CF2F),D3              	xnzvc [D3]=00000012 
+01:5CF6	D6 38	ADD.B   ($CF31),D3              	xnzvc [D3]=00000012 
+01:5CFA	61 00	BSR     #$0088 [01:5D84]        	xnzvc [D3]=00000012 
+01:5D84	4A 03	TST.B   D3                      	xnzvc [D3]=00000012 
+01:5D86	6A 00	BPL     #$0004 [01:5D8C]        	xnzvc [D3]=00000012 
+01:5D8C	B6 3C	CMP.B   #$1E,D3                 	xnzvc [D3]=00000012 
+01:5D90	6F 00	BLE     #$0006 [01:5D98]        	xNzvC [D3]=00000012 
+01:5D98	4E 75	RTS                             	xNzvC 
+01:5CFE	17 43	MOVE.B  D3,$006D(A3)            	xNzvC [A3]=FFFFB04A [D3]=00000012 # Moves D3 to 6D offset (ShA)
+
+Endurance:
+
+01:5D02	16 28	MOVE.B  $0006(A0),D3            	xnzvc [A0]=00003B18 [A3]=FFFFB04A [D3]=00000012 
+01:5D06	E8 0B	LSR.B   #4,D3                   	xnzvc [A0]=00003B18 [D3]=00000043 
+01:5D08	31 FC	MOVE.W  #$000C,($BF14)          	xnzvc [D3]=00000004 
+
+01:5D0E	4E B9	JSR     ($000F70E4)             	xnzvc 
+0F:70E4	48 E7	MOVEM.L {d0-a7}[e0 40],-(SP)    	xnzvc [A7]=FFFFFF84 
+0F:70E8	32 38	MOVE.W  ($BF14),D1              	xnzvc [A7]=FFFFFF74 [D1]=0000FFFF 
+0F:70EC	22 7C	MOVE.L  #$FFFFC6CE,A1           	xnzvc [A1]=FFFFCA32 [D1]=0000000C 
+0F:70F2	08 2B	BTST    #6,$0062(A3)            	xnzvc [A1]=FFFFC6CE [A3]=FFFFB04A 
+0F:70F8	67 00	BEQ     #$0008 [0F:7102]        	xnZvc [A3]=FFFFB04A 
+0F:7102	42 41	CLR.W   D1                      	xnZvc [D1]=0000000C 
+0F:7104	12 2B	MOVE.B  $0066(A3),D1            	xnZvc [A3]=FFFFB04A [D1]=00000000 
+0F:7108	E9 41	ASL.W   #4,D1                   	xnzvc [A3]=FFFFB04A [D1]=0000000E 
+0F:710A	D3 FC	ADDA.L  #$000001A2,A1           	xnzvc [A1]=FFFFC6CE [A2]=FFFFC6CE [D1]=000000E0 
+0F:7110	12 31	MOVE.B  $00(A1,D1),D1           	xnzvc [A1]=FFFFC870 [A2]=FFFFC6CE [D1]=000000E0 
+0F:7114	48 81	EXT.W   D1                      	xNzvc [A1]=FFFFC870 [D1]=000000F8 
+0F:7116	48 C1	EXT.L   D1                      	xNzvc [D1]=0000FFF8 
+0F:7118	83 FC	DIVS.W  #$0003,D1               	xNzvc [D1]=FFFFFFF8 
+0F:711C	3F 03	MOVE.W  D3,-(SP)                	xNzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000004 
+0F:711E	E5 43	ASL.W   #2,D3                   	xnzvc [A7]=FFFFFF72 [D3]=00000004 
+0F:7120	D6 5F	ADD.W   (SP)+,D3                	xnzvc [A7]=FFFFFF72 [D3]=00000010 
+0F:7122	D6 41	ADD.W   D1,D3                   	xnzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000014 
+0F:7124	6B 00	BMI     #$0012 [0F:7138]        	XnzvC [D1]=FFFEFFFE [D3]=00000012 
+0F:7128	B6 7C	CMP.W   #$001E,D3               	XnzvC [D3]=00000012 
+0F:712C	6D 00	BLT     #$000C [0F:713A]        	XNzvC [D3]=00000012 
+0F:713A	02 43	ANDI.W  #$00FF,D3               	XNzvC [D3]=00000012 
+0F:713E	4C DF	MOVEM.L (SP)+,{a7-d0}[02 07]    	Xnzvc [A7]=FFFFFF74 [D3]=00000012 
+0F:7142	4E 75	RTS                             	Xnzvc [A7]=FFFFFF84 
+
+01:5D14	17 43	MOVE.B  D3,$0072(A3)            	Xnzvc [A3]=FFFFB04A [D3]=00000012 # Moves D3 to 72 offset (End)
+ 
+Roughness:
+
+01:5D18	16 28	MOVE.B  $0006(A0),D3            	Xnzvc [A0]=00003B18 [A3]=FFFFB04A [D3]=00000012 
+01:5D1C	02 03	ANDI.B  #$0F,D3                 	Xnzvc [A0]=00003B18 [D3]=00000043 
+01:5D20	31 FC	MOVE.W  #$000D,($BF14)          	Xnzvc [D3]=00000003
+ 
+01:5D26	4E B9	JSR     ($000F70E4)             	Xnzvc 
+0F:70E4	48 E7	MOVEM.L {d0-a7}[e0 40],-(SP)    	Xnzvc [A7]=FFFFFF84 
+0F:70E8	32 38	MOVE.W  ($BF14),D1              	Xnzvc [A7]=FFFFFF74 [D1]=0000FFFF 
+0F:70EC	22 7C	MOVE.L  #$FFFFC6CE,A1           	Xnzvc [A1]=FFFFCA32 [D1]=0000000D 
+0F:70F2	08 2B	BTST    #6,$0062(A3)            	Xnzvc [A1]=FFFFC6CE [A3]=FFFFB04A 
+0F:70F8	67 00	BEQ     #$0008 [0F:7102]        	XnZvc [A3]=FFFFB04A 
+0F:7102	42 41	CLR.W   D1                      	XnZvc [D1]=0000000D 
+0F:7104	12 2B	MOVE.B  $0066(A3),D1            	XnZvc [A3]=FFFFB04A [D1]=00000000 
+0F:7108	E9 41	ASL.W   #4,D1                   	Xnzvc [A3]=FFFFB04A [D1]=0000000E 
+0F:710A	D3 FC	ADDA.L  #$000001A2,A1           	xnzvc [A1]=FFFFC6CE [A2]=FFFFC6CE [D1]=000000E0 
+0F:7110	12 31	MOVE.B  $00(A1,D1),D1           	xnzvc [A1]=FFFFC870 [A2]=FFFFC6CE [D1]=000000E0 
+0F:7114	48 81	EXT.W   D1                      	xNzvc [A1]=FFFFC870 [D1]=000000F8 
+0F:7116	48 C1	EXT.L   D1                      	xNzvc [D1]=0000FFF8 
+0F:7118	83 FC	DIVS.W  #$0003,D1               	xNzvc [D1]=FFFFFFF8 
+0F:711C	3F 03	MOVE.W  D3,-(SP)                	xNzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000003 
+0F:711E	E5 43	ASL.W   #2,D3                   	xnzvc [A7]=FFFFFF72 [D3]=00000003 
+0F:7120	D6 5F	ADD.W   (SP)+,D3                	xnzvc [A7]=FFFFFF72 [D3]=0000000C 
+0F:7122	D6 41	ADD.W   D1,D3                   	xnzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=0000000F 
+0F:7124	6B 00	BMI     #$0012 [0F:7138]        	XnzvC [D1]=FFFEFFFE [D3]=0000000D 
+0F:7128	B6 7C	CMP.W   #$001E,D3               	XnzvC [D3]=0000000D 
+0F:712C	6D 00	BLT     #$000C [0F:713A]        	XNzvC [D3]=0000000D 
+0F:713A	02 43	ANDI.W  #$00FF,D3               	XNzvC [D3]=0000000D 
+0F:713E	4C DF	MOVEM.L (SP)+,{a7-d0}[02 07]    	Xnzvc [A7]=FFFFFF74 [D3]=0000000D 
+0F:7142	4E 75	RTS                             	Xnzvc [A7]=FFFFFF84
+ 
+01:5D2C	D6 38	ADD.B   ($CF30),D3              	Xnzvc [D3]=0000000D  # Adds CF30 twice. Smoz/Raph think this is Away bonus
+01:5D30	D6 38	ADD.B   ($CF30),D3              	xnzvc [D3]=0000000D 
+01:5D34	61 00	BSR     #$004E [01:5D84]        	xnzvc [D3]=0000000D 
+01:5D84	4A 03	TST.B   D3                      	xnzvc [D3]=0000000D 
+01:5D86	6A 00	BPL     #$0004 [01:5D8C]        	xnzvc [D3]=0000000D 
+01:5D8C	B6 3C	CMP.B   #$1E,D3                 	xnzvc [D3]=0000000D 
+01:5D90	6F 00	BLE     #$0006 [01:5D98]        	xNzvC [D3]=0000000D 
+01:5D98	4E 75	RTS                             	xNzvC 
+01:5D38	17 43	MOVE.B  D3,$0070(A3)            	xNzvC [A3]=FFFFB04A [D3]=0000000D 
+
+Passing:
+
+01:5D3C	16 28	MOVE.B  $0007(A0),D3            	xnzvc [A0]=00003B18 [A3]=FFFFB04A [D3]=0000000D 
+01:5D40	E8 0B	LSR.B   #4,D3                   	xnzvc [A0]=00003B18 [D3]=00000034 
+01:5D42	31 FC	MOVE.W  #$000E,($BF14)          	xnzvc [D3]=00000003
+ 
+01:5D48	4E B9	JSR     ($000F70E4)             	xnzvc 
+0F:70E4	48 E7	MOVEM.L {d0-a7}[e0 40],-(SP)    	xnzvc [A7]=FFFFFF84 
+0F:70E8	32 38	MOVE.W  ($BF14),D1              	xnzvc [A7]=FFFFFF74 [D1]=0000FFFF 
+0F:70EC	22 7C	MOVE.L  #$FFFFC6CE,A1           	xnzvc [A1]=FFFFCA32 [D1]=0000000E 
+0F:70F2	08 2B	BTST    #6,$0062(A3)            	xnzvc [A1]=FFFFC6CE [A3]=FFFFB04A 
+0F:70F8	67 00	BEQ     #$0008 [0F:7102]        	xnZvc [A3]=FFFFB04A 
+0F:7102	42 41	CLR.W   D1                      	xnZvc [D1]=0000000E 
+0F:7104	12 2B	MOVE.B  $0066(A3),D1            	xnZvc [A3]=FFFFB04A [D1]=00000000 
+0F:7108	E9 41	ASL.W   #4,D1                   	xnzvc [A3]=FFFFB04A [D1]=0000000E 
+0F:710A	D3 FC	ADDA.L  #$000001A2,A1           	xnzvc [A1]=FFFFC6CE [A2]=FFFFC6CE [D1]=000000E0 
+0F:7110	12 31	MOVE.B  $00(A1,D1),D1           	xnzvc [A1]=FFFFC870 [A2]=FFFFC6CE [D1]=000000E0 
+0F:7114	48 81	EXT.W   D1                      	xNzvc [A1]=FFFFC870 [D1]=000000F8 
+0F:7116	48 C1	EXT.L   D1                      	xNzvc [D1]=0000FFF8 
+0F:7118	83 FC	DIVS.W  #$0003,D1               	xNzvc [D1]=FFFFFFF8 
+0F:711C	3F 03	MOVE.W  D3,-(SP)                	xNzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000003 
+0F:711E	E5 43	ASL.W   #2,D3                   	xnzvc [A7]=FFFFFF72 [D3]=00000003 
+0F:7120	D6 5F	ADD.W   (SP)+,D3                	xnzvc [A7]=FFFFFF72 [D3]=0000000C 
+0F:7122	D6 41	ADD.W   D1,D3                   	xnzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=0000000F 
+0F:7124	6B 00	BMI     #$0012 [0F:7138]        	XnzvC [D1]=FFFEFFFE [D3]=0000000D 
+0F:7128	B6 7C	CMP.W   #$001E,D3               	XnzvC [D3]=0000000D 
+0F:712C	6D 00	BLT     #$000C [0F:713A]        	XNzvC [D3]=0000000D 
+0F:713A	02 43	ANDI.W  #$00FF,D3               	XNzvC [D3]=0000000D 
+0F:713E	4C DF	MOVEM.L (SP)+,{a7-d0}[02 07]    	Xnzvc [A7]=FFFFFF74 [D3]=0000000D 
+0F:7142	4E 75	RTS                             	Xnzvc [A7]=FFFFFF84 
+
+01:5D4E	D6 38	ADD.B   ($CF2E),D3              	Xnzvc [D3]=0000000D 
+01:5D52	D6 38	ADD.B   ($CF31),D3              	xnzvc [D3]=0000000D 
+01:5D56	61 00	BSR     #$002C [01:5D84]        	xnzvc [D3]=0000000D 
+01:5D84	4A 03	TST.B   D3                      	xnzvc [D3]=0000000D 
+01:5D86	6A 00	BPL     #$0004 [01:5D8C]        	xnzvc [D3]=0000000D 
+01:5D8C	B6 3C	CMP.B   #$1E,D3                 	xnzvc [D3]=0000000D 
+01:5D90	6F 00	BLE     #$0006 [01:5D98]        	xNzvC [D3]=0000000D 
+01:5D98	4E 75	RTS                             	xNzvC 
+01:5D5A	17 43	MOVE.B  D3,$006E(A3)            	xNzvC [A3]=FFFFB04A [D3]=0000000D
+
+Aggressiveness:
+
+01:5D5E	17 68	MOVE.B  $0007(A0),$0073(A3)     	xnzvc [A0]=00003B18 [A3]=FFFFB04A [D3]=0000000D 
+01:5D64	16 2B	MOVE.B  $0073(A3),D3            	xnzvc [A0]=00003B18 [A3]=FFFFB04A [D3]=0000000D 
+01:5D68	02 03	ANDI.B  #$0F,D3                 	xnzvc [A3]=FFFFB04A [D3]=00000034 
+01:5D6C	31 FC	MOVE.W  #$000F,($BF14)          	xnzvc [D3]=00000004 
+
+01:5D72	4E B9	JSR     ($000F70E4)             	xnzvc 
+0F:70E4	48 E7	MOVEM.L {d0-a7}[e0 40],-(SP)    	xnzvc [A7]=FFFFFF84 
+0F:70E8	32 38	MOVE.W  ($BF14),D1              	xnzvc [A7]=FFFFFF74 [D1]=0000FFFF 
+0F:70EC	22 7C	MOVE.L  #$FFFFC6CE,A1           	xnzvc [A1]=FFFFCA32 [D1]=0000000F 
+0F:70F2	08 2B	BTST    #6,$0062(A3)            	xnzvc [A1]=FFFFC6CE [A3]=FFFFB04A 
+0F:70F8	67 00	BEQ     #$0008 [0F:7102]        	xnZvc [A3]=FFFFB04A 
+0F:7102	42 41	CLR.W   D1                      	xnZvc [D1]=0000000F 
+0F:7104	12 2B	MOVE.B  $0066(A3),D1            	xnZvc [A3]=FFFFB04A [D1]=00000000 
+0F:7108	E9 41	ASL.W   #4,D1                   	xnzvc [A3]=FFFFB04A [D1]=0000000E 
+0F:710A	D3 FC	ADDA.L  #$000001A2,A1           	xnzvc [A1]=FFFFC6CE [A2]=FFFFC6CE [D1]=000000E0 
+0F:7110	12 31	MOVE.B  $00(A1,D1),D1           	xnzvc [A1]=FFFFC870 [A2]=FFFFC6CE [D1]=000000E0 
+0F:7114	48 81	EXT.W   D1                      	xNzvc [A1]=FFFFC870 [D1]=000000F8 
+0F:7116	48 C1	EXT.L   D1                      	xNzvc [D1]=0000FFF8 
+0F:7118	83 FC	DIVS.W  #$0003,D1               	xNzvc [D1]=FFFFFFF8 
+0F:711C	3F 03	MOVE.W  D3,-(SP)                	xNzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000004 
+0F:711E	E5 43	ASL.W   #2,D3                   	xnzvc [A7]=FFFFFF72 [D3]=00000004 
+0F:7120	D6 5F	ADD.W   (SP)+,D3                	xnzvc [A7]=FFFFFF72 [D3]=00000010 
+0F:7122	D6 41	ADD.W   D1,D3                   	xnzvc [A7]=FFFFFF74 [D1]=FFFEFFFE [D3]=00000014 
+0F:7124	6B 00	BMI     #$0012 [0F:7138]        	XnzvC [D1]=FFFEFFFE [D3]=00000012 
+0F:7128	B6 7C	CMP.W   #$001E,D3               	XnzvC [D3]=00000012 
+0F:712C	6D 00	BLT     #$000C [0F:713A]        	XNzvC [D3]=00000012 
+0F:713A	02 43	ANDI.W  #$00FF,D3               	XNzvC [D3]=00000012 
+0F:713E	4C DF	MOVEM.L (SP)+,{a7-d0}[02 07]    	Xnzvc [A7]=FFFFFF74 [D3]=00000012 
+0F:7142	4E 75	RTS                             	Xnzvc [A7]=FFFFFF84 
+
+01:5D78	17 43	MOVE.B  D3,$0073(A3)            	Xnzvc [A3]=FFFFB04A [D3]=00000012
+01:5D7C	02 2B	ANDI.B  #$0F,$0073(A3)          	Xnzvc [A3]=FFFFB04A [D3]=00000012 
+01:5D82	4E 75	RTS                             	Xnzvc [A3]=FFFFB04A 
+
+01:5A0E	50 EB	STTr    $0061(A3) [01:59FB]     	Xnzvc [A3]=FFFFB04A  # Sets True byte at offset 0061 (Sets to FF)
+01:5A12	50 EB	STTr    $0060(A3) [01:59FF]     	Xnzvc [A3]=FFFFB04A  # Sets True byte at offset 0060 (Sets to FF)
+01:5A16	D6 FC	ADDA.W  #$0080,A3               	Xnzvc [A3]=FFFFB04A  # Adds 0080 to A3 (next player array) 
+
+LW Start Code:
+
+01:5A1A	51 CC	DBFa    D4,#$FF96 [02:59B2]     	Xnzvc [A3]=FFFFB0CA [D4]=00000005  # Decrement Branch on False to label (located at 59B2 - uses D4 as the counter)  
+01:59B2	10 2B	MOVE.B  $0060(A3),D0            	Xnzvc [A3]=FFFFB0CA [D0]=00000000 [D4]=00000004  # Moves the data at offset 60 into D0
+01:59B6	48 80	EXT.W   D0                      	Xnzvc [A3]=FFFFB0CA [D0]=00000003  # Sign-extend Word D0 (the value is already positive, so this doesn't do anything in this case) 
+01:59B8	4A 6B	TST.W   $0034(A3)               	Xnzvc [A3]=FFFFB0CA [D0]=00000003  # Checks if data at offset 34 is 0 or negative. It is, so it sets Zero flag  
+01:59BC	66 00	BNE     #$001C [01:59DA]        	XnZvc [A3]=FFFFB0CA  # Branch not equal - Zero flag is set, so it doesn't branch  
+01:59C0	4A 40	TST.W   D0                      	XnZvc [D0]=00000003  # Checks if D0 is zero or negative. It is not, so Zero flag is not set
+01:59C2	67 00	BEQ     #$0016 [01:59DA]        	Xnzvc [D0]=00000003  # Branch if equal - Zero flag is not set, so it doesn't branch
+01:59C6	3F 2B	MOVE.W  $0052(A3),-(SP)         	Xnzvc [A3]=FFFFB0CA [A7]=FFFFFF8C  # Pushes data at offset 52 onto stack
+01:59CA	37 7C	MOVE.W  #$000F,$0052(A3)        	Xnzvc [A3]=FFFFB0CA [A7]=FFFFFF8A  # Moves 00 into offset 52 and 0F into offset 53
+
+01:59D0	4E B9	JSR     ($000F6E38)             	Xnzvc [A3]=FFFFB0CA  # Jumps to 6E38
+0F:6E38	4E 75	RTS                             	Xnzvc  # Returns
+
+01:59D6	37 5F	MOVE.W  (SP)+,$0052(A3)         	Xnzvc [A3]=FFFFB0CA [A7]=FFFFFF8A  # Pops stack data into offset 52 
+01:59DA	37 40	MOVE.W  D0,$0034(A3)            	Xnzvc [A3]=FFFFB0CA [A7]=FFFFFF8C [D0]=00000003  # Moves D0 into offset 34 + 35
+01:59DE	6B 00	BMI     #$002E [01:5A0E]        	Xnzvc [A0]=00003B18 [A3]=FFFFB0CA [D0]=00000003  # Branch on Minus - Jumps to 5A0E if D0 was negative
+01:59E2	61 00	BSR     #$00A4 [01:5A88]        	Xnzvc [A0]=00003B18 [A4]=FFFFB88A  # Jump
+01:5A88	30 2B	MOVE.W  $0034(A3),D0            	Xnzvc [A3]=FFFFB0CA [A4]=FFFFB88A [D0]=00000003  # Moves data at offset 34 + 35 into D0 
+01:5A8C	6B 00	BMI     #$F9D6 [01:5464]        	Xnzvc [A3]=FFFFB0CA [D0]=00000003 [D6]=0000000E  # Branch on Minus - Jumps to 5464 if D0 was negative 
+01:5A90	41 FA	LEA     $000A(PC),A0            	Xnzvc [A0]=00003B18 [D6]=0000000E  # Loads the PC + 000A into A0
+01:5A94	10 30	MOVE.B  $00(A0,D0),D0           	Xnzvc [A0]=00015A9C [D0]=00000003  # Moves byte data at address A0 + D0 (3), into D0 
+
+01:5A98	60 00	BRA     #$ABC8 [01:0662]        	Xnzvc [A0]=00015A9C [D0]=00000003  # Branch Always to label at 0662
+01:0662	2F 01	MOVE.L  D1,-(SP)                	Xnzvc [A7]=FFFFFF88 [D1]=0000FFFF  # Push D1 value onto the stack
+01:0664	32 2B	MOVE.W  $0036(A3),D1            	Xnzvc [A3]=FFFFB0CA [A7]=FFFFFF84 [D1]=0000FFFF  # Move data at offset 36 into D1 
+01:0668	17 80	MOVE.B  D0,$38(A3,D1)           	XnZvc [A3]=FFFFB0CA [D0]=00000003 [D1]=00000000  # Move byte of D0 (03) into data at offset 38 + A3 + D1 (D1 is zero, so its offset 38)
+01:066C	08 EB	BSET    #1,$0062(A3)            	Xnzvc [A3]=FFFFB0CA [D0]=00000003 [D1]=00000000  # Sets Bit 1 of offset 62
+01:0672	22 1F	MOVE.L  (SP)+,D1                	XnZvc [A3]=FFFFB0CA [A7]=FFFFFF84 [D1]=00000000  # pushes stack data into D1
+01:0674	4E 75	RTS                             	Xnzvc [A7]=FFFFFF88 [D1]=0000FFFF  # Return
+
+01:59E6	0C 6B	CMPI.W  #$0004,$0034(A3)        	Xnzvc [A3]=FFFFB0CA  #  Compares 0004 to word size at offset 34. In this case, the data is less than 0004 (N flag set) 
+01:59EC	66 00	BNE     #$000C [01:59FA]        	XNzvC [A3]=FFFFB0CA  # Branch not equal - it jumps (N flag set)
+01:59FA	42 43	CLR.W   D3                      	XNzvC [D3]=00000012  # Clears word size of D3
+01:59FC	16 2B	MOVE.B  $0061(A3),D3            	XnZvc [A3]=FFFFB0CA [D3]=00000000  # Moves data at offset 61 into D3. Looks like 61 is the current player offset.
+01:5A00	D6 43	ADD.W   D3,D3                   	Xnzvc [A3]=FFFFB0CA [D3]=00000002  # Multiplies D3 by 2
+01:5A02	35 BC	MOVE.W  #$FFFF,$66(A2,D3)       	xnzvc [A2]=FFFFC6CE [D3]=00000004  # Moves FFFF into 0x66 + A2 + D3 (A2 + 6A) or C738 and 39
+01:5A08	E2 4B	LSR.W   #1,D3                   	xNzvc [A2]=FFFFC6CE [D3]=00000004  # Divides D3 by 2
+
+01:5A0A	61 00	BSR     #$0098 [01:5AA4]        	xnzvc [A4]=FFFFB88A [D3]=00000002  # Jump
+01:5AA4	08 AB	BCLR    #6,$0063(A3)            	xnzvc [A3]=FFFFB0CA [A4]=FFFFB88A  # Clears bit 6 at offset 63
+01:5AAA	30 7C	MOVE.W  #$C6CE,A0               	xnZvc [A0]=00015A9C [A3]=FFFFB0CA  # moves C6CE into A0. I don't understand this, it moves a word size, but as you see next step, the MS word is FFFF. C6CE is start of Home Stats.
+01:5AAE	08 2B	BTST    #6,$0062(A3)            	xnZvc [A0]=FFFFC6CE [A3]=FFFFB0CA  # Checks if bit 6 at offset 62 is 0
+01:5AB4	67 00	BEQ     #$0006 [01:5ABC]        	xnZvc [A3]=FFFFB0CA  # Branch if equal - Z is set, so it jumps
+01:5ABC	17 43	MOVE.B  D3,$0066(A3)            	xnZvc [A3]=FFFFB0CA [D3]=00000002  # Moves D3 into offset 66. Player index (Joe Sakic is roster offset 2)
+01:5AC0	20 3C	MOVE.L  #$0000000A,D0           	xnzvc [A3]=FFFFB0CA [D0]=00000003 [D3]=00000002  # Moves 0000000A into D0
+01:5AC6	48 83	EXT.W   D3                      	xnzvc [D0]=0000000A [D3]=00000002  # Bit-Extend D3. No change
+01:5AC8	D6 43	ADD.W   D3,D3                   	xnzvc [D3]=00000002  # Multiplies D3 by 2
+01:5ACA	32 30	MOVE.W  $66(A0,D3),D1           	xnzvc [A0]=FFFFC6CE [D1]=0000FFFF [D3]=00000004  # Moves data at offset 0x66 + A0 + D3 into D1  
+01:5ACE	6A 00	BPL     #$0010 [01:5AE0]        	xNzvc [A0]=FFFFC6CE [D1]=0000FFFF [D3]=00000004  # Branch on plus - N flag set, so doesn't jump
+01:5AD2	20 3C	MOVE.L  #$00000009,D0           	xNzvc [D0]=0000000A  # Moves 0x09 into D0 (long-word)
+01:5AD8	B2 7C	CMP.W   #$FFFE,D1               	xnzvc [D0]=00000009 [D1]=0000FFFF  # Compare FFFE with D1. D1 is larger, so no flags set
+01:5ADC	66 00	BNE     #$0010 [01:5AEE]        	xnzvc [D1]=0000FFFF  # Branch not equal - Jumps to 5AEE
+01:5AEE	31 BC	MOVE.W  #$FFFF,$66(A0,D3)       	xnzvc [A0]=FFFFC6CE [D3]=00000004  # Moves FFFF into offset 66 + A0 + D3. A0 + 6A = C738
+01:5AF4	E2 4B	LSR.W   #1,D3                   	xNzvc [A0]=FFFFC6CE [D3]=00000004  # Note: D3 is the counter used in the loop to choose the player for position (see the DBFa loop, label at FFFA)
+01:5AF6	20 68	MOVE.L  $001E(A0),A0            	xnzvc [A0]=FFFFC6CE [D3]=00000002  # Moves data starting at offset 001E (A0 + 001E = C6EC) into A0. Looks like this is where Home Team Bytes start is stored
+01:5AFA	2F 08	MOVE.L  A0,-(SP)                	xnzvc [A0]=0000393C [A7]=FFFFFF88  # Pushes A0 on the stack. 393C is start of Home Team Bytes (QUE in this case)
+01:5AFC	D0 E8	ADDA.W  $0008(A0),A0            	xnzvc [A0]=0000393C [A7]=FFFFFF84  # Adds data at A0 + 8 to A0 (Data here is 76 decimal or 004C). This is where the Offense and Defense Byte is (3988 - 75 for QUE)
+01:5B00	42 B8	CLR.L   ($CF2E)                 	xnzvc [A0]=00003988  # Clears longword data at label located at CF2E. These are the 4 bonuses!
+01:5B04	4A 6B	TST.W   $0034(A3)               	xnZvc [A3]=FFFFB0CA  # Checks word size located at offset 34 of Player struct (34 and 35 are the player position). Checks if it's 0 (Goalie)
+01:5B08	67 00	BEQ     #$008E [01:5B98]        	xnzvc [A3]=FFFFB0CA  # Branch if equal - Jumps if zero is set (Goalie), if not, continues. This would jump over this next section
+01:5B0C	08 38	BTST    #5,($C2EE)              	xnzvc  # Checks if if the 5th bit of C2EE is set. It's zero, so Z flag is set. I believe this is PP bit.
+01:5B12	67 00	BEQ     #$0026 [01:5B3A]        	xnZvc  # Branch if equal - Jumps if Z flag set, it is, so jumps to 5B3A
+01:5B3A	10 28	MOVE.B  $0002(A0),D0            	xnZvc [A0]=00003988 [D0]=00000009  # Moves Home/Away byte (3988 + 2 for QUE (0 Home, 0 Away)) into D0. 
+01:5B3E	02 00	ANDI.B  #$0F,D0                 	xnZvc [A0]=00003988 [D0]=00000000  # Masks to pass Away byte
+01:5B42	44 00	NEG.B   D0                      	xnZvc [D0]=00000000  # Changes D0 to negative (byte size). D0 is 0, so there is no change. This would use the Away Bonus (as a negative)
+01:5B44	08 2B	BTST    #6,$0062(A3)            	xnZvc [A3]=FFFFB0CA [D0]=00000000  # Checks if the 6th bit of player offset 62 is set. It is zero (Z flag set). I'm guessing this is Home/Away player bit?
+01:5B4A	66 00	BNE     #$0008 [01:5B54]        	xnZvc [A3]=FFFFB0CA  # Branch not equal - does not jump in this case (This would skip the Home Bonus, so most likely only jumps for Away Team)
+01:5B4E	10 28	MOVE.B  $0002(A0),D0            	xnZvc [A0]=00003988 [D0]=00000000  # Moves Home/Away back into D0
+01:5B52	E8 08	LSR.B   #4,D0                   	xnZvc [A0]=00003988 [D0]=00000000  # LSR to shift out the Away nibble, leaving the Home nibble
+01:5B54	11 C0	MOVE.B  D0,($CF31)              	xnZvc [D0]=00000000  # Moves D0 into $CF31 (this is the Team Bonus). In this case, Home Bonus. For Away team, it would be Away Bonus (negative).
+01:5B58	0C 78	CMPI.W  #$0002,($C466)          	xnZvc [D0]=00000000  # Compares 2 to data in offset C466 (Current Period?). It is less than 2, so N is set
+01:5B5E	6D 00	BLT     #$0038 [01:5B98]        	xNzvC  # Branch if less than - N flag set, in this case it jumps
+
+Loop to move to LW - Joe Sakic, offset 2 on player list, first player after Hextall (0) and Fiset (1)
+
+01:5B98	20 5F	MOVE.L  (SP)+,A0                	xNzvC [A0]=00003988 [A7]=FFFFFF84  # Pops stack into A0
+01:5B9A	D0 D0	ADDA.W  (A0),A0                 	xNzvC [A0]=0000393C [A7]=FFFFFF88  # Adds data at A0 to A0 (which is 0092) A0 now is 39CE. 0092 is the offset for Player Data start for QUE.
+01:5B9C	D0 D0	ADDA.W  (A0),A0                 	xNzvC [A0]=000039CE  		   # Adds data at A0 to A0 (which is 000E). A0 is now 39DC. 0E is name length for Player offset 0 (Ron Hextall)
+01:5B9E	50 48	ADDQ.W  #8,A0                   	xNzvC [A0]=000039DC  		   # Adds 8 to A0, to skip Ron's attributes, and moves to beginning of Fiset's name length
+01:5BA0	51 CB	DBFa    D3,#$FFFA [02:5B9C]     	xNzvC [A0]=000039E4 [D3]=00000002  # Decrements D3, loops to 5B9C
+01:5B9C	D0 D0	ADDA.W  (A0),A0                 	xNzvC [A0]=000039E4 [D3]=00000001  # Skips Fiset's name
+01:5B9E	50 48	ADDQ.W  #8,A0                   	xNzvC [A0]=000039F4  		   # Skips Fiset's attributes
+01:5BA0	51 CB	DBFa    D3,#$FFFA [02:5B9C]     	xNzvC [A0]=000039FC [D3]=00000001  # Decrements D3, loops to 5B9C
+01:5B9C	D0 D0	ADDA.W  (A0),A0                 	xNzvC [A0]=000039FC [D3]=00000000  # Skips Sakic's name 
+01:5B9E	50 48	ADDQ.W  #8,A0                   	xNzvC [A0]=00003A08 		   # Skips Sakic's attributes
+01:5BA0	51 CB	DBFa    D3,#$FFFA [02:5B9C]     	xNzvC [A0]=00003A10 [D3]=00000000  # Decrements D3, checks that D3 would be -1, so ends loop
+01:5BA4	51 48	SUBQ.W  #8,A0                   	xNzvC [A0]=00003A10 [D3]=0000FFFF  # Subtracts 8 from A0, to move back to start of last player skipped attributes (Joe Sakic)
+
+
