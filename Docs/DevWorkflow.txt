@@ -1,0 +1,24 @@
+Development Workflow:
+Create a GITHUB Issue before doing any work
+In VSCode start a new topic branch using the GITHUB Pull request tab
+Do any required testing using MESEN emulator
+Make any changes in vscode src files and run the [1- Compile ROMS] task to build a rom
+Once happy with the changes, import the changes back into DiztinGUISH to mark up the rom
+	Set the !DizImport flag = 1 in the DizSettings.asm file of the SRC folder
+	backup the NHL '94(USA).sfc file in the root to the Orig_ROMS_For_Comparison folder
+	Copy the new compiled rom to the root with the same name NHL '94(USA).sfc
+	Load .dizraw file in DiztinGUISH
+	Markup all the new code by adding comments or labels as required
+	Export to DizExport Folder
+	Use beyond compare to compare DizExport folder to Src folder for changes
+	Review and copy changes to source
+	Run Compile Roms Task in VSCode to verify the rom builds successfully.
+If adding a new hack:
+ Add the patch to the patches folder
+ Add the patch filename to the patches.asm file
+ Add any config values to the config.asm
+ Add the hack to the GUI c# project
+ Build and Test the GUI project (TODO: Fix this so when testing it doesn't download the github files and uses local files instead)
+	Test from the GUI by building the hack from scrath
+	Test from the GUI by applying the hack to an existing rom
+	Test to make sure it works with the hack applied and disabled
