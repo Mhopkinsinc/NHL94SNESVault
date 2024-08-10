@@ -49,5 +49,4 @@
                        Set_Default_Goalie = $9FC6B2
                        CODE_9EBA67 = $9EBA67
                        CODE_9EC06D = $9EC06D
-                       jmpToGoalLogic = $9E920F
-                       Y_But_Bug_Fix = $9EFBC5
+                       jmpToGoalLogic = $9E920F                       
