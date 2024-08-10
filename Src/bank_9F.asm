@@ -6810,9 +6810,9 @@ Real_Time_Pen_Clock_2:
                        JMP.W CODE_9FC2CE                    ;9FC22E|4CCEC2  |;
  
           CODE_9FC231:
-                       LDA.B $A9                            ;9FC231|A5A9    |;
-                       BIT.W #$4000                         ;9FC233|890040  |;
-                       BNE CODE_9FC277                      ;9FC236|D03F    |;
+                       LDA.B $A9                            ;9FC231|A5A9    |; Load button press into A
+                       BIT.W #$4000                         ;9FC233|890040  |; Bitwise check if Y btn is pressed
+                       BNE CODE_9FC277                      ;9FC236|D03F    |; Branch if Y btn is pressed
                        LDA.W $14E3,X                        ;9FC238|BDE314  |;
                        BNE CODE_9FC26C                      ;9FC23B|D02F    |;
                        LDA.B $A9                            ;9FC23D|A5A9    |;
@@ -8650,16 +8650,16 @@ Real_Time_Pen_Clock_2:
                        SEC                                  ;9FD03F|38      |;
                        SBC.W #$0008                         ;9FD040|E90800  |;
                        STA.B $89                            ;9FD043|8589    |;
-                       LDA.B [$89]                          ;9FD045|A789    |;
-                       AND.W #$00FF                         ;9FD047|29FF00  |;
-                       STA.W $13C3,X                        ;9FD04A|9DC313  |;
-                       LDY.W #$0001                         ;9FD04D|A00100  |;
-                       LDA.B [$89],Y                        ;9FD050|B789    |;
-                       AND.W #$00F0                         ;9FD052|29F000  |;
-                       LSR A                                ;9FD055|4A      |;
-                       STA.W $12C3,X                        ;9FD056|9DC312  |;
-                       LDA.B [$89],Y                        ;9FD059|B789    |;
-                       AND.W #$0007                         ;9FD05B|290700  |;
+                       LDA.B [$89]                          ;9FD045|A789    |; Load Jersey Number
+                       AND.W #$00FF                         ;9FD047|29FF00  |; Low Byte
+                       STA.W PStructJerNum,X                ;9FD04A|9DC313  |; Store Jer Num
+                       LDY.W #$0001                         ;9FD04D|A00100  |; Next Attribute
+                       LDA.B [$89],Y                        ;9FD050|B789    |; Load Weight
+                       AND.W #$00F0                         ;9FD052|29F000  |; High nibble of Low byte
+                       LSR A                                ;9FD055|4A      |; Divide by 2
+                       STA.W PStructWeight,X                ;9FD056|9DC312  |; Store Weight
+                       LDA.B [$89],Y                        ;9FD059|B789    |; Agility
+                       AND.W #$0007                         ;9FD05B|290700  |; Low nibble of next byte
                        STA.B $00                            ;9FD05E|8500    |;
                        ASL A                                ;9FD060|0A      |;
                        ASL A                                ;9FD061|0A      |;
