@@ -8,3 +8,4 @@
                        incsrc "patches/PenaltyShot.asm"
                        incsrc "patches/DisablePosts.asm"                      
                        incsrc "patches/YButtonBugfix.asm"
+                       incsrc "patches/DisableIntros.asm"

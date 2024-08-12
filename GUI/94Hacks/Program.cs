@@ -83,9 +83,13 @@ namespace Snes94Hacks
                     {
                             "1 Minute Penalties", "Disable Interference Penalty","Disable Penalty Shots"
                     })
-                    .AddChoiceGroup("General", new[]
+                    .AddChoiceGroup("Time / Clock", new[]
                     {
-                            "Def. Control ON", "Show 30 Second Periods", "Real Time Clock", "Disable Goal Posts"                            
+                            "Show 30 Second Periods", "Real Time Clock",
+                    })
+                    .AddChoiceGroup("General / Misc", new[]
+                    {
+                            "Def. Control ON", "Skip EA Intro", "Skip Flying Pucks Intro", "Disable Goal Posts"                            
                     })
                     .AddChoiceGroup("New Functionality", new[]
                     {
@@ -308,6 +312,14 @@ namespace Snes94Hacks
                     else if (hack == "Y Button Bug Fix")
                     {
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!Y_Button_Bugfix", "1");
+                    }
+                    else if (hack == "Skip EA Intro")
+                    {
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!EA_Intro", "0");
+                    }
+                    else if (hack == "Skip Flying Pucks Intro")
+                    {
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!FlyingPucks_Intro", "0");
                     }
 
                 }

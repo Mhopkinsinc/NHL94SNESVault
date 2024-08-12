@@ -14861,9 +14861,9 @@ JyPadHmAwyLookupTable:
                        dw $0001                             ;9EFBC1|        |;
                        dw $0002                             ;9EFBC3|        |;
        Y_But_Bug_Fix:
-                       LDA.W $14E3,X                        ;9EFBC5|BDE314  |; Loads Selected Player Animation 0-None, 1-Knocked Down/pass, 08-Slapshot, F342-Speed boost
+                       LDA.W $14E3,X                        ;9EFBC5|BDE314  |; Loads Selected Player Animation[0-?] 0-None, 1-Knocked Down/pass, 08-Slapshot, F342-Speed boost
                        CMP.W #$0001                         ;9EFBC8|C90100  |; Compare if the player is knocked down
-                       BEQ .rtl                             ;9EFBCB|F003    |; If Knocked Down, Branch to RTL (Exit)
+                       BEQ .rtl                             ;9EFBCB|F003    |; If Knocked Down Branch to .rtl (Exit)
                        JMP.W CODE_9EA256                    ;9EFBCD|4C56A2  |; Else Continue execution of original code
                        .rtl:
                        RTL                                  ;9EFBD0|6B      |;

@@ -242,7 +242,7 @@
           CODE_9F8283:
                        REP #$30                             ;9F8283|C230    |;
                        JSL.L CODE_9B8358                    ;9F8285|2258839B|;
-                       JSL.L CODE_9FF436                    ;9F8289|2236F49F|;
+                       JSL.L Intro_EA                       ;9F8289|2236F49F|;
                        JSL.L CODE_8086A9                    ;9F828D|22A98680|;
                        LDA.W #$0000                         ;9F8291|A90000  |;
                        TAX                                  ;9F8294|AA      |;
@@ -262,7 +262,7 @@
                        STA.W $0AD3                          ;9F82B6|8DD30A  |;
                        JSL.L CODE_9B8526                    ;9F82B9|2226859B|;
                        STZ.W $1D68                          ;9F82BD|9C681D  |;
-                       JSL.L CODE_9DB118                    ;9F82C0|2218B19D|;
+                       JSL.L Intro_Fly_Pck                  ;9F82C0|2218B19D|;
                        JSL.L CODE_9C9786                    ;9F82C4|2286979C|;
  
           CODE_9F82C8:
@@ -11966,8 +11966,8 @@ Real_Time_Pen_Clock_2:
                        db $45,$53,$08,$00,$4D,$6F,$75,$73   ;9FF42C|        |;
                        db $65,$2E                           ;9FF434|        |;
  
-          CODE_9FF436:
-                       STZ.W $0AD3                          ;9FF436|9CD30A  |;
+             Intro_EA:
+                       STZ.W $0AD3                          ;9FF436|9CD30A  |; EA Intro Screen
                        JSL.L CODE_8086A9                    ;9FF439|22A98680|;
                        JSL.L CODE_9B8000                    ;9FF43D|2200809B|;
                        JSL.L CODE_9C97E9                    ;9FF441|22E9979C|;

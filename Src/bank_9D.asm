@@ -5118,8 +5118,8 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        JSL.L CODE_808EDF                    ;9DB113|22DF8E80|;
                        RTL                                  ;9DB117|6B      |;
  
-          CODE_9DB118:
-                       JSL.L CODE_8086A9                    ;9DB118|22A98680|;
+        Intro_Fly_Pck:
+                       JSL.L CODE_8086A9                    ;9DB118|22A98680|; Flying Pucks Intro Screen
                        JSL.L CODE_9C983D                    ;9DB11C|223D989C|;
                        LDA.W #$6000                         ;9DB120|A90060  |;
                        LDX.W #$0000                         ;9DB123|A20000  |;
