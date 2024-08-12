@@ -242,10 +242,10 @@
         <sys:Item Key="10419124" Value="#05 Sets Beep SFX" />
         <sys:Item Key="10419127" Value="Call To SFX Routine - Play Beep When L+R Pressed" />
         <sys:Item Key="10419131" Value="Run Original Hijacked code &amp; RTS" />
-        <sys:Item Key="10419141" Value="Loads Selected Player Action [0-?] 0-None 1-Knocked Down/pass 08-Slapshot F342-Speed boost" />
-        <sys:Item Key="10419144" Value="Compare to Knocked Down Action 1" />
-        <sys:Item Key="10419147" Value="If Knocked Down RTL" />
-        <sys:Item Key="10419149" Value="Go back and continue execution of original code" />
+        <sys:Item Key="10419141" Value="Loads Selected Player Animation[0-?] 0-None, 1-Knocked Down/pass, 08-Slapshot, F342-Speed boost" />
+        <sys:Item Key="10419144" Value="Compare if the player is knocked down" />
+        <sys:Item Key="10419147" Value="If Knocked Down Branch to .rtl (Exit)" />
+        <sys:Item Key="10419149" Value="Else continue execution of original code" />
         <sys:Item Key="10453876" Value="Penalties Off or Offsieds On Branch to 837C" />
         <sys:Item Key="10453884" Value="hijack to call our def control code" />
         <sys:Item Key="10454453" Value="0444 makes this real time" />
@@ -419,6 +419,9 @@
         </sys:Item>
         <sys:Item Key="10333393">
           <Value exs:type="ns1:Label" Name="Game_Setup_Menus_Arry_Sizes" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10334488">
+          <Value exs:type="ns1:Label" Name="Intro_Fly_Pck" Comment="Flying Pucks Intro Screen" />
         </sys:Item>
         <sys:Item Key="10354833">
           <Value exs:type="ns1:Label" Name="CurntTeamLoopVal" Comment="00 Home 02 Away" />
@@ -623,6 +626,9 @@
         </sys:Item>
         <sys:Item Key="10471090">
           <Value exs:type="ns1:Label" Name="Set_Default_Goalie" Comment="HiJack to Enable Def Control" />
+        </sys:Item>
+        <sys:Item Key="10482742">
+          <Value exs:type="ns1:Label" Name="Intro_EA" Comment="EA Intro Screen" />
         </sys:Item>
         <sys:Item Key="10484516">
           <Value exs:type="ns1:Label" Name="Enable_DefControl" Comment="" />

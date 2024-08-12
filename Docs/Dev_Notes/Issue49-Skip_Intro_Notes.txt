@@ -1,0 +1,20 @@
+NHL 94 SNES Startup Screens Notes:
+==================================
+EA Sports Screen Notes:
+=======================
+Trace Logs:
+RAM 800776 Is Read to determine when to skip to the NHL 94 LOGOs screen
+ROM $9FF886 is where the BNE happens
+ROM 9FF4B1, This Rom Address starts the EA Sports Logo Screen. If we BRA to $9FF4BB This will skip the EA Screen and start the NHL 94 LOGOS Screen.
+Possibly $9f8289 is the EA Intro screen?
+ROM Address $9f8289 loads the EA Into Screen. If we NOP this instruction, it bypasses and loads the 94 Flying Pucks Intro Screen.
+
+NHL 94 Logos Screen NOTES:
+==========================
+Trace Logs:
+RAM 800BE9 Is Read to determine when to skip to the Game Setup Screen
+If I set RAM Value 800BE9 = 01 This launches the Game Setup screen quicker
+This value is set at ROM Location $9DB1D6
+ROM address 9db414 checks if ram 800Be9 =1 and if it is jumps to rom location 9db41e
+Next Steps, Review the Ea Sports Screen Compare and see if i can JMP directly to 9db41e
+ROM address $9F82C0 Loads the NHL 94 LOGOS screen. If we NOP this instruction, it bypasses and loads the Game Setup screen.
