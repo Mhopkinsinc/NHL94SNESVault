@@ -2,7 +2,7 @@
 name: Documentation / ROM Markup
 about: Use this to document or markup the rom in DIZ
 title: 'Documentation - '
-labels: 'Documentation'
+labels: 'ROM/RAM Map'
 assignees: ''
 
 ---
