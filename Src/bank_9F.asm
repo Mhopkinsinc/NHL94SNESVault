@@ -206,7 +206,7 @@
                        STA.W $0D0F                          ;9F8238|8D0F0D  |;
                        LDA.W #$0014                         ;9F823B|A91400  |;
                        STA.W $0D11                          ;9F823E|8D110D  |;
-                       LDA.W $177E,X                        ;9F8241|BD7E17  |;
+                       LDA.W PerStat_GoalsPerPeriod,X       ;9F8241|BD7E17  |;
                        STA.B $A5                            ;9F8244|85A5    |;
                        LDA.W #$0003                         ;9F8246|A90300  |;
                        STA.B $A9                            ;9F8249|85A9    |;
@@ -707,7 +707,7 @@ Real_Time_Pen_Clock_2:
                        JMP.W CODE_9F875F                    ;9F86C8|4C5F87  |;
  
           CODE_9F86CB:
-                       LDA.W $0F43,X                        ;9F86CB|BD430F  |;
+                       LDA.W PStructPosition,X              ;9F86CB|BD430F  |;
                        BPL CODE_9F86D3                      ;9F86CE|1003    |;
                        JMP.W CODE_9F8834                    ;9F86D0|4C3488  |;
  
@@ -925,7 +925,7 @@ Real_Time_Pen_Clock_2:
                        CPX.W #$0018                         ;9F8870|E01800  |;
                        BCS CODE_9F88A8                      ;9F8873|B033    |;
                        STA.B $14                            ;9F8875|8514    |;
-                       LDA.W $0F43,X                        ;9F8877|BD430F  |;
+                       LDA.W PStructPosition,X              ;9F8877|BD430F  |;
                        BMI CODE_9F88A8                      ;9F887A|302C    |;
                        BEQ CODE_9F88A8                      ;9F887C|F02A    |;
                        LDA.W $1283,X                        ;9F887E|BD8312  |;
@@ -1042,7 +1042,7 @@ Real_Time_Pen_Clock_2:
           CODE_9F895A:
                        LDA.W #$FFFF                         ;9F895A|A9FFFF  |;
                        STA.B $E6                            ;9F895D|85E6    |;
-                       LDA.W $0F43,X                        ;9F895F|BD430F  |;
+                       LDA.W PStructPosition,X              ;9F895F|BD430F  |;
                        BPL CODE_9F8967                      ;9F8962|1003    |;
                        JMP.W CODE_9F8ADD                    ;9F8964|4CDD8A  |;
  
@@ -1098,7 +1098,7 @@ Real_Time_Pen_Clock_2:
                        JSL.L $001D59                        ;9F89D1|22591D00|;
  
           CODE_9F89D5:
-                       LDA.W $0F43,X                        ;9F89D5|BD430F  |;
+                       LDA.W PStructPosition,X              ;9F89D5|BD430F  |;
                        ORA.W $15D6                          ;9F89D8|0DD615  |;
                        BNE CODE_9F8A44                      ;9F89DB|D067    |;
                        CPX.W #$0018                         ;9F89DD|E01800  |;
@@ -1163,7 +1163,7 @@ Real_Time_Pen_Clock_2:
                        JSL.L CODE_9E8C35                    ;9F8A63|22358C9E|;
                        CPX.W #$0018                         ;9F8A67|E01800  |;
                        BCS CODE_9F8AD1                      ;9F8A6A|B065    |;
-                       LDA.W $0F43,X                        ;9F8A6C|BD430F  |;
+                       LDA.W PStructPosition,X              ;9F8A6C|BD430F  |;
                        BEQ CODE_9F8AD1                      ;9F8A6F|F060    |;
                        LDA.W $1283,X                        ;9F8A71|BD8312  |;
                        AND.W #$8000                         ;9F8A74|290080  |;
@@ -1329,7 +1329,7 @@ Real_Time_Pen_Clock_2:
                        BPL CODE_9F8C2B                      ;9F8C24|1005    |;
                        db $A2,$0C,$00,$86,$95               ;9F8C26|        |;
           CODE_9F8C2B:
-                       LDA.W $0F43,X                        ;9F8C2B|BD430F  |;
+                       LDA.W PStructPosition,X              ;9F8C2B|BD430F  |;
                        BEQ CODE_9F8C3B                      ;9F8C2E|F00B    |;
                        BMI CODE_9F8C3B                      ;9F8C30|3009    |;
                        JSL.L CODE_9E8C0E                    ;9F8C32|220E8C9E|;
@@ -2103,7 +2103,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $89                            ;9F994D|8589    |;
                        CLC                                  ;9F994F|18      |;
                        LDY.W #$0000                         ;9F9950|A00000  |;
-                       ADC.B [$89],Y                        ;9F9953|7789    |;
+                       ADC.B [$89],Y                        ;9F9953|7789    |; Loads Team Header Data during Matchups Screen
                        STA.B $89                            ;9F9955|8589    |;
                        DEC.B $A5                            ;9F9957|C6A5    |;
                        BMI CODE_9F9969                      ;9F9959|300E    |;
@@ -2238,7 +2238,7 @@ Real_Time_Pen_Clock_2:
                        LDA.W #$0064                         ;9F9A2A|A96400  |;
  
           CODE_9F9A2D:
-                       STA.B $A5                            ;9F9A2D|85A5    |;
+                       STA.B $A5                            ;9F9A2D|85A5    |; Edit Lines Current Attribute Temp Value. Loops for all players displayred. Except Weight, Handed, Overall
                        PLX                                  ;9F9A2F|FA      |;
                        JMP.W CODE_9F9ABD                    ;9F9A30|4CBD9A  |;
  
@@ -3981,7 +3981,7 @@ Real_Time_Pen_Clock_2:
                        STZ.W $0DB7,X                        ;9FAA2A|9EB70D  |;
                        LDA.W #$0001                         ;9FAA2D|A90100  |;
                        STA.W $0D97,X                        ;9FAA30|9D970D  |;
-                       LDA.W $0F43,X                        ;9FAA33|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FAA33|BD430F  |;
                        STA.B $A9                            ;9FAA36|85A9    |;
                        BPL CODE_9FAA3D                      ;9FAA38|1003    |;
                        JMP.W CODE_9FABA2                    ;9FAA3A|4CA2AB  |;
@@ -4089,7 +4089,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $A9                            ;9FAAFA|85A9    |;
  
           CODE_9FAAFC:
-                       LDA.W $0F43,X                        ;9FAAFC|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FAAFC|BD430F  |;
                        BEQ CODE_9FAB51                      ;9FAAFF|F050    |;
                        LDA.B $B5                            ;9FAB01|A5B5    |;
                        CMP.W #$0009                         ;9FAB03|C90900  |;
@@ -4162,7 +4162,7 @@ Real_Time_Pen_Clock_2:
                        STA.W $1283,X                        ;9FAB84|9D8312  |;
                        STZ.W $14E3,X                        ;9FAB87|9EE314  |;
                        STZ.W $11A3,X                        ;9FAB8A|9EA311  |;
-                       LDA.W $0F43,X                        ;9FAB8D|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FAB8D|BD430F  |;
                        BNE CODE_9FAB97                      ;9FAB90|D005    |;
                        LDA.W #$E0FE                         ;9FAB92|A9FEE0  |;
                        BRA CODE_9FAB9A                      ;9FAB95|8003    |;
@@ -4879,7 +4879,7 @@ Real_Time_Pen_Clock_2:
                        PLA                                  ;9FB1E4|68      |;
  
           CODE_9FB1E5:
-                       CMP.W $0F43,Y                        ;9FB1E5|D9430F  |;
+                       CMP.W PStructPosition,Y              ;9FB1E5|D9430F  |;
                        BEQ CODE_9FB1F3                      ;9FB1E8|F009    |;
                        INY                                  ;9FB1EA|C8      |;
                        INY                                  ;9FB1EB|C8      |;
@@ -4984,7 +4984,7 @@ Real_Time_Pen_Clock_2:
                        LSR A                                ;9FB2B5|4A      |;
                        INC A                                ;9FB2B6|1A      |;
                        STA.B $A5                            ;9FB2B7|85A5    |;
-                       LDA.W $14A3,X                        ;9FB2B9|BDA314  |;
+                       LDA.W PStructHanded,X                ;9FB2B9|BDA314  |;
                        BNE CODE_9FB2C4                      ;9FB2BC|D006    |;
                        INC.B $A5                            ;9FB2BE|E6A5    |;
                        INC.B $A5                            ;9FB2C0|E6A5    |;
@@ -6015,7 +6015,7 @@ Real_Time_Pen_Clock_2:
                        JSL.L CODE_9BC10F                    ;9FBC93|220FC19B|;
                        CMP.W #$4E20                         ;9FBC97|C9204E  |;
                        BEQ CODE_9FBC78                      ;9FBC9A|F0DC    |;
-                       LDY.W $0F43,X                        ;9FBC9C|BC430F  |;
+                       LDY.W PStructPosition,X              ;9FBC9C|BC430F  |;
                        BMI CODE_9FBC78                      ;9FBC9F|30D7    |;
                        PHX                                  ;9FBCA1|DA      |;
                        TAY                                  ;9FBCA2|A8      |;
@@ -6054,7 +6054,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $A5                            ;9FBCE3|85A5    |;
                        LDA.W $1D81                          ;9FBCE5|AD811D  |;
                        BNE CODE_9FBD0A                      ;9FBCE8|D020    |;
-                       LDA.W $0F43,X                        ;9FBCEA|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FBCEA|BD430F  |;
                        AND.W #$0007                         ;9FBCED|290700  |;
                        BEQ CODE_9FBD0A                      ;9FBCF0|F018    |;
                        TAX                                  ;9FBCF2|AA      |;
@@ -6820,7 +6820,7 @@ Real_Time_Pen_Clock_2:
                        BNE CODE_9FC2BA                      ;9FC242|D076    |;
                        BIT.W #$8000                         ;9FC244|890080  |;
                        BNE CODE_9FC27B                      ;9FC247|D032    |;
-                       LDA.W $0F43,X                        ;9FC249|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FC249|BD430F  |;
                        BEQ CODE_9FC287                      ;9FC24C|F039    |;
                        LDA.B $A9                            ;9FC24E|A5A9    |;
                        BIT.W #$0020                         ;9FC250|892000  |;
@@ -6893,7 +6893,7 @@ Real_Time_Pen_Clock_2:
                        LDA.W $14E3,X                        ;9FC2CE|BDE314  |;
                        BNE CODE_9FC26C                      ;9FC2D1|D099    |;
                        JSL.L CODE_9EC417                    ;9FC2D3|2217C49E|;
-                       LDA.W $0F43,X                        ;9FC2D7|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FC2D7|BD430F  |;
                        BNE CODE_9FC2E1                      ;9FC2DA|D005    |;
                        LDA.W $1543,X                        ;9FC2DC|BD4315  |;
                        BNE CODE_9FC298                      ;9FC2DF|D0B7    |;
@@ -6912,7 +6912,7 @@ Real_Time_Pen_Clock_2:
                        BNE CODE_9FC322                      ;9FC2FA|D026    |;
                        BIT.W #$4000                         ;9FC2FC|890040  |;
                        BNE CODE_9FC319                      ;9FC2FF|D018    |;
-                       LDA.W $0F43,X                        ;9FC301|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FC301|BD430F  |;
                        BEQ CODE_9FC32E                      ;9FC304|F028    |;
                        LDA.B $A9                            ;9FC306|A5A9    |;
                        BIT.W #$0080                         ;9FC308|898000  |;
@@ -7461,7 +7461,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $89                            ;9FC73C|8589    |;
                        LDY.W #$0000                         ;9FC73E|A00000  |;
                        CLC                                  ;9FC741|18      |;
-                       ADC.B [$89]                          ;9FC742|6789    |;
+                       ADC.B [$89]                          ;9FC742|6789    |; Loads Team Header During Game Setup Screen + Edit Lines
                        STA.B $89                            ;9FC744|8589    |;
                        BRA CODE_9FC752                      ;9FC746|800A    |;
  
@@ -7983,7 +7983,7 @@ Real_Time_Pen_Clock_2:
                        STA.W $1283,Y                        ;9FCB86|998312  |;
                        LDA.W #$FFFF                         ;9FCB89|A9FFFF  |;
                        STA.W $19D4,Y                        ;9FCB8C|99D419  |;
-                       LDA.W $0F43,Y                        ;9FCB8F|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9FCB8F|B9430F  |;
                        BNE CODE_9FCB9A                      ;9FCB92|D006    |;
                        LDA.W #$0000                         ;9FCB94|A90000  |;
                        STA.W $0B05,Y                        ;9FCB97|99050B  |;
@@ -8020,7 +8020,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $00                            ;9FCBCA|8500    |;
                        LDY.W $0AD9                          ;9FCBCC|ACD90A  |;
                        BMI CODE_9FCC06                      ;9FCBCF|3035    |;
-                       LDA.W $0F43,X                        ;9FCBD1|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FCBD1|BD430F  |;
                        BEQ CODE_9FCBEB                      ;9FCBD4|F015    |;
                        LDA.W $19D4,X                        ;9FCBD6|BDD419  |;
                        BMI CODE_9FCBEB                      ;9FCBD9|3010    |;
@@ -8059,7 +8059,7 @@ Real_Time_Pen_Clock_2:
                        LDX.W #$000C                         ;9FCC1D|A20C00  |;
  
           CODE_9FCC20:
-                       LDA.W $0F43,X                        ;9FCC20|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FCC20|BD430F  |;
                        BMI CODE_9FCC96                      ;9FCC23|3071    |;
                        BEQ CODE_9FCC96                      ;9FCC25|F06F    |;
                        LDA.W $1283,X                        ;9FCC27|BD8312  |;
@@ -8206,7 +8206,7 @@ Real_Time_Pen_Clock_2:
           CODE_9FCD15:
                        LDA.W $19D4,Y                        ;9FCD15|B9D419  |;
                        BPL CODE_9FCD1F                      ;9FCD18|1005    |;
-                       LDA.W $0F43,Y                        ;9FCD1A|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9FCD1A|B9430F  |;
                        BPL CODE_9FCD23                      ;9FCD1D|1004    |;
           CODE_9FCD1F:
                        INY                                  ;9FCD1F|C8      |;
@@ -8269,7 +8269,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $A5                            ;9FCD7F|85A5    |;
  
           CODE_9FCD81:
-                       LDA.W $0F43,X                        ;9FCD81|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FCD81|BD430F  |;
                        CMP.B $A9                            ;9FCD84|C5A9    |;
                        BEQ CODE_9FCD90                      ;9FCD86|F008    |;
                        INX                                  ;9FCD88|E8      |;
@@ -8388,12 +8388,12 @@ Real_Time_Pen_Clock_2:
  
           CODE_9FCE5B:
                        STA.B $A5                            ;9FCE5B|85A5    |;
-                       STA.W $0F43,X                        ;9FCE5D|9D430F  |;
+                       STA.W PStructPosition,X              ;9FCE5D|9D430F  |;
                        CMP.W #$0000                         ;9FCE60|C90000  |;
                        BMI CODE_9FCE9E                      ;9FCE63|3039    |;
                        JSL.L CODE_9FCED0                    ;9FCE65|22D0CE9F|;
                        LDX.B $95                            ;9FCE69|A695    |;
-                       LDA.W $0F43,X                        ;9FCE6B|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FCE6B|BD430F  |;
                        CMP.W #$0004                         ;9FCE6E|C90400  |;
                        BNE CODE_9FCE7C                      ;9FCE71|D009    |;
                        LDA.W #$0012                         ;9FCE73|A91200  |;
@@ -8452,7 +8452,7 @@ Real_Time_Pen_Clock_2:
                        RTL                                  ;9FCECF|6B      |;
  
           CODE_9FCED0:
-                       LDA.W $0F43,X                        ;9FCED0|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FCED0|BD430F  |;
                        STA.B $A5                            ;9FCED3|85A5    |;
                        BMI CODE_9FCEEE                      ;9FCED5|3017    |;
                        LDA.W #$009F                         ;9FCED7|A99F00  |;
@@ -8543,11 +8543,11 @@ Real_Time_Pen_Clock_2:
                        CLC                                  ;9FCF78|18      |;
                        ADC.B $89                            ;9FCF79|6589    |;
                        STA.B $89                            ;9FCF7B|8589    |;
-                       STZ.W $0D0B                          ;9FCF7D|9C0B0D  |;
-                       STZ.W $0D09                          ;9FCF80|9C090D  |;
-                       STZ.W $0CE5                          ;9FCF83|9CE50C  |;
-                       STZ.W $0CEF                          ;9FCF86|9CEF0C  |;
-                       LDA.W $0F43,X                        ;9FCF89|BD430F  |;
+                       STZ.W PpAdvDis                       ;9FCF7D|9C0B0D  |;
+                       STZ.W PKAdvDis                       ;9FCF80|9C090D  |;
+                       STZ.W RubberBandBonus                ;9FCF83|9CE50C  |;
+                       STZ.W HmAwAdvDis                     ;9FCF86|9CEF0C  |;
+                       LDA.W PStructPosition,X              ;9FCF89|BD430F  |;
                        BNE CODE_9FCF91                      ;9FCF8C|D003    |;
                        JMP.W CODE_9FD01F                    ;9FCF8E|4C1FD0  |;
  
@@ -8558,43 +8558,43 @@ Real_Time_Pen_Clock_2:
                        JSL.L CODE_9E827C                    ;9FCF99|227C829E|;
                        BEQ CODE_9FCFAC                      ;9FCF9D|F00D    |;
                        LDY.W #$0001                         ;9FCF9F|A00100  |;
-                       LDA.B [$89],Y                        ;9FCFA2|B789    |;
-                       AND.W #$000F                         ;9FCFA4|290F00  |;
-                       STA.W $0D0B                          ;9FCFA7|8D0B0D  |;
-                       BRA CODE_9FCFBF                      ;9FCFAA|8013    |;
+                       LDA.B [$89],Y                        ;9FCFA2|B789    |; Loads PP Adv
+                       AND.W #$000F                         ;9FCFA4|290F00  |; Isolate Low Nibble
+                       STA.W PpAdvDis                       ;9FCFA7|8D0B0D  |; Store PP Adv
+                       BRA CODE_9FCFBF                      ;9FCFAA|8013    |; Skip PK Disadv
  
           CODE_9FCFAC:
                        LDY.W #$0001                         ;9FCFAC|A00100  |;
-                       LDA.B [$89],Y                        ;9FCFAF|B789    |;
-                       LSR A                                ;9FCFB1|4A      |;
+                       LDA.B [$89],Y                        ;9FCFAF|B789    |; Loads PK Disadv
+                       LSR A                                ;9FCFB1|4A      |; Start - Isolates High Nibble
                        LSR A                                ;9FCFB2|4A      |;
                        LSR A                                ;9FCFB3|4A      |;
                        LSR A                                ;9FCFB4|4A      |;
-                       AND.W #$000F                         ;9FCFB5|290F00  |;
-                       EOR.W #$FFFF                         ;9FCFB8|49FFFF  |;
-                       INC A                                ;9FCFBB|1A      |;
-                       STA.W $0D09                          ;9FCFBC|8D090D  |;
+                       AND.W #$000F                         ;9FCFB5|290F00  |; End - Isolates High Nibble
+                       EOR.W #$FFFF                         ;9FCFB8|49FFFF  |; EOR to get negative value
+                       INC A                                ;9FCFBB|1A      |; Add one
+                       STA.W PKAdvDis                       ;9FCFBC|8D090D  |; Store PK Dis
  
           CODE_9FCFBF:
                        LDY.W #$0002                         ;9FCFBF|A00200  |;
-                       LDA.B [$89],Y                        ;9FCFC2|B789    |;
-                       AND.W #$000F                         ;9FCFC4|290F00  |;
-                       EOR.W #$FFFF                         ;9FCFC7|49FFFF  |;
-                       INC A                                ;9FCFCA|1A      |;
-                       STA.B $A5                            ;9FCFCB|85A5    |;
-                       LDA.W $1503,X                        ;9FCFCD|BD0315  |;
-                       BNE CODE_9FCFDD                      ;9FCFD0|D00B    |;
-                       LDA.B [$89],Y                        ;9FCFD2|B789    |;
-                       LSR A                                ;9FCFD4|4A      |;
+                       LDA.B [$89],Y                        ;9FCFC2|B789    |; Loads Road Team Disadvantage
+                       AND.W #$000F                         ;9FCFC4|290F00  |; Isolates the Low Nibble
+                       EOR.W #$FFFF                         ;9FCFC7|49FFFF  |; EOR with FFFF to get negative number
+                       INC A                                ;9FCFCA|1A      |; Add 1
+                       STA.B $A5                            ;9FCFCB|85A5    |; Store in $A5 of zero page
+                       LDA.W $1503,X                        ;9FCFCD|BD0315  |; ?
+                       BNE CODE_9FCFDD                      ;9FCFD0|D00B    |; Not Home Team Skip
+                       LDA.B [$89],Y                        ;9FCFD2|B789    |; Loads Home Team Advantage
+                       LSR A                                ;9FCFD4|4A      |; Start - Isolate High Nibble
                        LSR A                                ;9FCFD5|4A      |;
                        LSR A                                ;9FCFD6|4A      |;
                        LSR A                                ;9FCFD7|4A      |;
-                       AND.W #$000F                         ;9FCFD8|290F00  |;
-                       STA.B $A5                            ;9FCFDB|85A5    |;
+                       AND.W #$000F                         ;9FCFD8|290F00  |; End - Isolate High Nibble
+                       STA.B $A5                            ;9FCFDB|85A5    |; Store Hm Team Adv in $A5 of zero page.
  
           CODE_9FCFDD:
                        LDA.B $A5                            ;9FCFDD|A5A5    |;
-                       STA.W $0CEF                          ;9FCFDF|8DEF0C  |;
+                       STA.W HmAwAdvDis                     ;9FCFDF|8DEF0C  |; Save HmAwAdvDis
                        LDA.W period                         ;9FCFE2|AD3016  |;
                        SEC                                  ;9FCFE5|38      |;
                        SBC.W #$0002                         ;9FCFE6|E90200  |;
@@ -8625,7 +8625,7 @@ Real_Time_Pen_Clock_2:
                        BPL CODE_9FD01F                      ;9FD017|1006    |;
           CODE_9FD019:
                        LDA.W #$0002                         ;9FD019|A90200  |;
-                       STA.W $0CE5                          ;9FD01C|8DE50C  |;
+                       STA.W RubberBandBonus                ;9FD01C|8DE50C  |;
  
           CODE_9FD01F:
                        PLA                                  ;9FD01F|68      |;
@@ -8638,14 +8638,14 @@ Real_Time_Pen_Clock_2:
                        ADC.B $89                            ;9FD02B|6589    |;
                        STA.B $89                            ;9FD02D|8589    |;
  
-          CODE_9FD02F:
+   fn_LoadPlyrAttribs:
                        LDA.B [$89]                          ;9FD02F|A789    |;
                        CLC                                  ;9FD031|18      |;
                        ADC.B $89                            ;9FD032|6589    |;
                        ADC.W #$0008                         ;9FD034|690800  |;
                        STA.B $89                            ;9FD037|8589    |;
                        DEC.B $B1                            ;9FD039|C6B1    |;
-                       BPL CODE_9FD02F                      ;9FD03B|10F2    |;
+                       BPL fn_LoadPlyrAttribs               ;9FD03B|10F2    |;
                        LDA.B $89                            ;9FD03D|A589    |;
                        SEC                                  ;9FD03F|38      |;
                        SBC.W #$0008                         ;9FD040|E90800  |;
@@ -8660,77 +8660,77 @@ Real_Time_Pen_Clock_2:
                        STA.W PStructWeight,X                ;9FD056|9DC312  |; Store Weight
                        LDA.B [$89],Y                        ;9FD059|B789    |; Agility
                        AND.W #$0007                         ;9FD05B|290700  |; Low nibble of next byte
-                       STA.B $00                            ;9FD05E|8500    |;
-                       ASL A                                ;9FD060|0A      |;
+                       STA.B $00                            ;9FD05E|8500    |; Store Agility in zero page
+                       ASL A                                ;9FD060|0A      |; Start rescaling range from 0-6 to 0-15
                        ASL A                                ;9FD061|0A      |;
                        ADC.B $00                            ;9FD062|6500    |;
-                       LSR A                                ;9FD064|4A      |;
+                       LSR A                                ;9FD064|4A      |; End rescaling range from 0-6 to 0-15
                        LDY.W #$0000                         ;9FD065|A00000  |;
-                       JSL.L CODE_9FD22B                    ;9FD068|222BD29F|;
-                       STA.W $12E3,X                        ;9FD06C|9DE312  |;
-                       LDY.W #$0002                         ;9FD06F|A00200  |;
-                       LDA.B [$89],Y                        ;9FD072|B789    |;
-                       LSR A                                ;9FD074|4A      |;
+                       JSL.L fn_HotColdCalc                 ;9FD068|222BD29F|; Calc Hot/Cold Adv/Dis
+                       STA.W PStructAgility,X               ;9FD06C|9DE312  |; Store Agility in Player Struct
+                       LDY.W #$0002                         ;9FD06F|A00200  |; Setup Speed Attribute
+                       LDA.B [$89],Y                        ;9FD072|B789    |; Load Address for Speed Attribute
+                       LSR A                                ;9FD074|4A      |; Start - Isolates High Nibble of Speed Byte
                        LSR A                                ;9FD075|4A      |;
                        LSR A                                ;9FD076|4A      |;
                        LSR A                                ;9FD077|4A      |;
-                       AND.W #$0007                         ;9FD078|290700  |;
-                       STA.B $00                            ;9FD07B|8500    |;
-                       ASL A                                ;9FD07D|0A      |;
+                       AND.W #$0007                         ;9FD078|290700  |; End -Isolates High Nibble of Speed Byte
+                       STA.B $00                            ;9FD07B|8500    |; Temp store speed in Zero Page
+                       ASL A                                ;9FD07D|0A      |; Start rescaling range from 0-6 to 0-15
                        ASL A                                ;9FD07E|0A      |;
                        ADC.B $00                            ;9FD07F|6500    |;
-                       LSR A                                ;9FD081|4A      |;
+                       LSR A                                ;9FD081|4A      |; End rescaling
                        LDY.W #$0001                         ;9FD082|A00100  |;
-                       JSL.L CODE_9FD22B                    ;9FD085|222BD29F|;
-                       STA.W $1303,X                        ;9FD089|9D0313  |;
+                       JSL.L fn_HotColdCalc                 ;9FD085|222BD29F|; Calc Hot/Cold Adv/Dis
+                       STA.W PStructSpeed,X                 ;9FD089|9D0313  |; Store Speed in Player Struct
                        LDY.W #$0002                         ;9FD08C|A00200  |;
-                       LDA.B [$89],Y                        ;9FD08F|B789    |;
-                       AND.W #$0007                         ;9FD091|290700  |;
-                       STA.B $00                            ;9FD094|8500    |;
-                       ASL A                                ;9FD096|0A      |;
+                       LDA.B [$89],Y                        ;9FD08F|B789    |; Load Address for Off Aware Attribute
+                       AND.W #$0007                         ;9FD091|290700  |; Isolate Low Nibble
+                       STA.B $00                            ;9FD094|8500    |; Temp Store Off Aware in Zero Page
+                       ASL A                                ;9FD096|0A      |; Start rescaling range from 0-6 to 0-15
                        ASL A                                ;9FD097|0A      |;
                        ADC.B $00                            ;9FD098|6500    |;
-                       LSR A                                ;9FD09A|4A      |;
+                       LSR A                                ;9FD09A|4A      |; End rescaling range from 0-6 to 0-15
                        CLC                                  ;9FD09B|18      |;
-                       ADC.W $0D0B                          ;9FD09C|6D0B0D  |;
+                       ADC.W PpAdvDis                       ;9FD09C|6D0B0D  |; Add PP +/-
                        CLC                                  ;9FD09F|18      |;
-                       ADC.W $0D09                          ;9FD0A0|6D090D  |;
+                       ADC.W PKAdvDis                       ;9FD0A0|6D090D  |; Add PK +/-
                        CLC                                  ;9FD0A3|18      |;
-                       ADC.W $0CEF                          ;9FD0A4|6DEF0C  |;
+                       ADC.W HmAwAdvDis                     ;9FD0A4|6DEF0C  |; Add Home/Away +/-
                        CLC                                  ;9FD0A7|18      |;
-                       ADC.W $0CE5                          ;9FD0A8|6DE50C  |;
+                       ADC.W RubberBandBonus                ;9FD0A8|6DE50C  |; Add RubberBand Bonus
                        LDY.W #$0002                         ;9FD0AB|A00200  |;
-                       JSL.L CODE_9FD22B                    ;9FD0AE|222BD29F|;
-                       EOR.W #$000F                         ;9FD0B2|490F00  |;
+                       JSL.L fn_HotColdCalc                 ;9FD0AE|222BD29F|; Calc Hot/Cold Adv/Dis
+                       EOR.W #$000F                         ;9FD0B2|490F00  |; EOR with Max of 0F
                        CLC                                  ;9FD0B5|18      |;
-                       ADC.W #$000F                         ;9FD0B6|690F00  |;
-                       LSR A                                ;9FD0B9|4A      |;
-                       STA.W $1323,X                        ;9FD0BA|9D2313  |;
+                       ADC.W #$000F                         ;9FD0B6|690F00  |; Add Upper Limit Back to Accum
+                       LSR A                                ;9FD0B9|4A      |; Divide by 2
+                       STA.W PStructOffAware,X              ;9FD0BA|9D2313  |; Store Off Aware in Player Struct
                        LDY.W #$0003                         ;9FD0BD|A00300  |;
-                       LDA.B [$89],Y                        ;9FD0C0|B789    |;
-                       LSR A                                ;9FD0C2|4A      |;
+                       LDA.B [$89],Y                        ;9FD0C0|B789    |; Load Address for Def Aware Attribute
+                       LSR A                                ;9FD0C2|4A      |; Start - Isolates High Nibble of Def Aware Byte
                        LSR A                                ;9FD0C3|4A      |;
                        LSR A                                ;9FD0C4|4A      |;
                        LSR A                                ;9FD0C5|4A      |;
-                       AND.W #$0007                         ;9FD0C6|290700  |;
-                       STA.B $00                            ;9FD0C9|8500    |;
-                       ASL A                                ;9FD0CB|0A      |;
+                       AND.W #$0007                         ;9FD0C6|290700  |; End - Isolates High Nibble of Def Aware Byte
+                       STA.B $00                            ;9FD0C9|8500    |; Temp Store Def Aware in Zero Page
+                       ASL A                                ;9FD0CB|0A      |; Start rescaling range from 0-6 to 0-15
                        ASL A                                ;9FD0CC|0A      |;
                        ADC.B $00                            ;9FD0CD|6500    |;
-                       LSR A                                ;9FD0CF|4A      |;
+                       LSR A                                ;9FD0CF|4A      |; Endt rescaling range from 0-6 to 0-15
                        CLC                                  ;9FD0D0|18      |;
-                       ADC.W $0CEF                          ;9FD0D1|6DEF0C  |;
+                       ADC.W HmAwAdvDis                     ;9FD0D1|6DEF0C  |; Add Home/Away +/-
                        LDY.W #$0003                         ;9FD0D4|A00300  |;
-                       JSL.L CODE_9FD22B                    ;9FD0D7|222BD29F|;
-                       PHA                                  ;9FD0DB|48      |;
-                       LDA.W $0F43,X                        ;9FD0DC|BD430F  |;
-                       BEQ CODE_9FD0EE                      ;9FD0DF|F00D    |;
-                       PLA                                  ;9FD0E1|68      |;
-                       EOR.W #$000F                         ;9FD0E2|490F00  |;
+                       JSL.L fn_HotColdCalc                 ;9FD0D7|222BD29F|; Calc Hot/Cold Adv/Dis
+                       PHA                                  ;9FD0DB|48      |; Push the result onto the stack for reterival later
+                       LDA.W PStructPosition,X              ;9FD0DC|BD430F  |; Load The Players Position
+                       BEQ CODE_9FD0EE                      ;9FD0DF|F00D    |; If Goalie Branch to goalie calc instead.
+                       PLA                                  ;9FD0E1|68      |; Pull Def Aware from Stack
+                       EOR.W #$000F                         ;9FD0E2|490F00  |; EOR with 15
                        CLC                                  ;9FD0E5|18      |;
-                       ADC.W #$0007                         ;9FD0E6|690700  |;
-                       STA.W $1343,X                        ;9FD0E9|9D4313  |;
-                       BRA CODE_9FD0FA                      ;9FD0EC|800C    |;
+                       ADC.W #$0007                         ;9FD0E6|690700  |; Add 7
+                       STA.W PStructDefAware,X              ;9FD0E9|9D4313  |; Store Def Aware in Player Struct
+                       BRA CODE_9FD0FA                      ;9FD0EC|800C    |; Skip the Goalie Calc
  
           CODE_9FD0EE:
                        PLA                                  ;9FD0EE|68      |;
@@ -8738,185 +8738,185 @@ Real_Time_Pen_Clock_2:
                        CLC                                  ;9FD0F2|18      |;
                        ADC.W #$000F                         ;9FD0F3|690F00  |;
                        LSR A                                ;9FD0F6|4A      |;
-                       STA.W $1343,X                        ;9FD0F7|9D4313  |;
+                       STA.W PStructDefAware,X              ;9FD0F7|9D4313  |; Store Def Aware in Player Struct For The Goalie
  
           CODE_9FD0FA:
                        LDY.W #$0003                         ;9FD0FA|A00300  |;
-                       LDA.B [$89],Y                        ;9FD0FD|B789    |;
-                       AND.W #$0007                         ;9FD0FF|290700  |;
-                       STA.B $00                            ;9FD102|8500    |;
-                       ASL A                                ;9FD104|0A      |;
+                       LDA.B [$89],Y                        ;9FD0FD|B789    |; Load Address for Shot Power Attribute
+                       AND.W #$0007                         ;9FD0FF|290700  |; Isolate Low Nibble
+                       STA.B $00                            ;9FD102|8500    |; Temp Store Shot Power in Zero Page
+                       ASL A                                ;9FD104|0A      |; Start rescaling range from 0-6 to 0-15
                        ASL A                                ;9FD105|0A      |;
                        ADC.B $00                            ;9FD106|6500    |;
-                       LSR A                                ;9FD108|4A      |;
+                       LSR A                                ;9FD108|4A      |; End rescaling range from 0-6 to 0-15
                        LDY.W #$0004                         ;9FD109|A00400  |;
-                       JSL.L CODE_9FD22B                    ;9FD10C|222BD29F|;
-                       STA.W $1363,X                        ;9FD110|9D6313  |;
+                       JSL.L fn_HotColdCalc                 ;9FD10C|222BD29F|; Calc Hot/Cold Adv/Dis
+                       STA.W PStructShotPower,X             ;9FD110|9D6313  |; Store Shot Power in Player Struct
                        LDY.W #$0004                         ;9FD113|A00400  |;
-                       LDA.B [$89],Y                        ;9FD116|B789    |;
-                       LSR A                                ;9FD118|4A      |;
+                       LDA.B [$89],Y                        ;9FD116|B789    |; Load Address for Checking Attribute
+                       LSR A                                ;9FD118|4A      |; Start - Isolates High Nibble of Checking Byte
                        LSR A                                ;9FD119|4A      |;
                        LSR A                                ;9FD11A|4A      |;
                        LSR A                                ;9FD11B|4A      |;
-                       AND.W #$0007                         ;9FD11C|290700  |;
-                       STA.B $00                            ;9FD11F|8500    |;
-                       ASL A                                ;9FD121|0A      |;
+                       AND.W #$0007                         ;9FD11C|290700  |; End - Isolates High Nibble of Checking Byte
+                       STA.B $00                            ;9FD11F|8500    |; Temp Store Checking in Zero Page
+                       ASL A                                ;9FD121|0A      |; Start rescaling range from 0-6 to 0-15
                        ASL A                                ;9FD122|0A      |;
                        ADC.B $00                            ;9FD123|6500    |;
-                       LSR A                                ;9FD125|4A      |;
+                       LSR A                                ;9FD125|4A      |; End rescaling range from 0-6 to 0-15
                        CLC                                  ;9FD126|18      |;
-                       ADC.W $0CE5                          ;9FD127|6DE50C  |;
+                       ADC.W RubberBandBonus                ;9FD127|6DE50C  |; Add RubberBandBonus
                        LDY.W #$0005                         ;9FD12A|A00500  |;
-                       JSL.L CODE_9FD22B                    ;9FD12D|222BD29F|;
-                       STA.W $1483,X                        ;9FD131|9D8314  |;
-                       LDA.W $0E03,X                        ;9FD134|BD030E  |;
+                       JSL.L fn_HotColdCalc                 ;9FD12D|222BD29F|; Calc Hot/Cold Adv/Dis
+                       STA.W PStructChecking,X              ;9FD131|9D8314  |; Store Checking in Player Struct
+                       LDA.W $0E03,X                        ;9FD134|BD030E  |; ?
                        AND.W #$F7FF                         ;9FD137|29FFF7  |;
-                       STA.W $0E03,X                        ;9FD13A|9D030E  |;
+                       STA.W $0E03,X                        ;9FD13A|9D030E  |; ?
                        LDY.W #$0004                         ;9FD13D|A00400  |;
-                       LDA.B [$89],Y                        ;9FD140|B789    |;
-                       AND.W #$0001                         ;9FD142|290100  |;
-                       EOR.W #$0001                         ;9FD145|490100  |;
-                       STA.W $14A3,X                        ;9FD148|9DA314  |;
-                       BNE CODE_9FD156                      ;9FD14B|D009    |;
-                       LDA.W $0E03,X                        ;9FD14D|BD030E  |;
+                       LDA.B [$89],Y                        ;9FD140|B789    |; Load Address for Handed Attribute
+                       AND.W #$0001                         ;9FD142|290100  |; Isolate the Low Byte
+                       EOR.W #$0001                         ;9FD145|490100  |; Check If Odd or Even and invert result
+                       STA.W PStructHanded,X                ;9FD148|9DA314  |; Store Handed in Player Struct
+                       BNE CODE_9FD156                      ;9FD14B|D009    |; Branch If Even Number
+                       LDA.W $0E03,X                        ;9FD14D|BD030E  |; ?
                        ORA.W #$0800                         ;9FD150|090008  |;
-                       STA.W $0E03,X                        ;9FD153|9D030E  |;
+                       STA.W $0E03,X                        ;9FD153|9D030E  |; ?
  
           CODE_9FD156:
-                       LDA.B [$89],Y                        ;9FD156|B789    |;
-                       AND.W #$000E                         ;9FD158|290E00  |;
-                       STA.W $1463,X                        ;9FD15B|9D6314  |;
+                       LDA.B [$89],Y                        ;9FD156|B789    |; Load Address for Handed Attribute
+                       AND.W #$000E                         ;9FD158|290E00  |; Isolate The Low Byte
+                       STA.W PStructHandedActualValue,X     ;9FD15B|9D6314  |; Store the Actual Value of the byte (Not Used anywhere)
                        LDY.W #$0005                         ;9FD15E|A00500  |;
-                       LDA.B [$89],Y                        ;9FD161|B789    |;
-                       LSR A                                ;9FD163|4A      |;
+                       LDA.B [$89],Y                        ;9FD161|B789    |; Load Address for Stick Hanl Attribute
+                       LSR A                                ;9FD163|4A      |; Start - Isolates High Nibble of Stick Hanl Byte
                        LSR A                                ;9FD164|4A      |;
                        LSR A                                ;9FD165|4A      |;
                        LSR A                                ;9FD166|4A      |;
-                       AND.W #$0007                         ;9FD167|290700  |;
-                       STA.B $00                            ;9FD16A|8500    |;
-                       ASL A                                ;9FD16C|0A      |;
+                       AND.W #$0007                         ;9FD167|290700  |; End - Isolates High Nibble of Stick Hanl Byte
+                       STA.B $00                            ;9FD16A|8500    |; Temp Store Stick Hanl in Zero Page
+                       ASL A                                ;9FD16C|0A      |; Start rescaling range from 0-6 to 0-15
                        ASL A                                ;9FD16D|0A      |;
                        ADC.B $00                            ;9FD16E|6500    |;
-                       LSR A                                ;9FD170|4A      |;
+                       LSR A                                ;9FD170|4A      |; End rescaling range from 0-6 to 0-15
                        CLC                                  ;9FD171|18      |;
-                       ADC.W $0D0B                          ;9FD172|6D0B0D  |;
+                       ADC.W PpAdvDis                       ;9FD172|6D0B0D  |; Add PP +/-
                        CLC                                  ;9FD175|18      |;
-                       ADC.W $0D09                          ;9FD176|6D090D  |;
+                       ADC.W PKAdvDis                       ;9FD176|6D090D  |; Add PK +/-
                        CLC                                  ;9FD179|18      |;
-                       ADC.W $0CEF                          ;9FD17A|6DEF0C  |;
+                       ADC.W HmAwAdvDis                     ;9FD17A|6DEF0C  |; Add Home Away +/-
                        LDY.W #$0006                         ;9FD17D|A00600  |;
-                       JSL.L CODE_9FD22B                    ;9FD180|222BD29F|;
-                       STA.W $1403,X                        ;9FD184|9D0314  |;
+                       JSL.L fn_HotColdCalc                 ;9FD180|222BD29F|; Calc Hot/Cold Adv/Dis
+                       STA.W PStructStickHanl,X             ;9FD184|9D0314  |; Store Stick Hanl In Player Struct
                        LDY.W #$0005                         ;9FD187|A00500  |;
-                       LDA.B [$89],Y                        ;9FD18A|B789    |;
-                       AND.W #$0007                         ;9FD18C|290700  |;
-                       STA.B $00                            ;9FD18F|8500    |;
-                       ASL A                                ;9FD191|0A      |;
+                       LDA.B [$89],Y                        ;9FD18A|B789    |; Load Address for Shot Accur Attribute
+                       AND.W #$0007                         ;9FD18C|290700  |; Isolate Low Nibble
+                       STA.B $00                            ;9FD18F|8500    |; Temp Store Shot Accur in Zero Page
+                       ASL A                                ;9FD191|0A      |; Start rescaling range from 0-6 to 0-15
                        ASL A                                ;9FD192|0A      |;
                        ADC.B $00                            ;9FD193|6500    |;
-                       LSR A                                ;9FD195|4A      |;
+                       LSR A                                ;9FD195|4A      |; End rescaling range from 0-6 to 0-15
                        CLC                                  ;9FD196|18      |;
-                       ADC.W $0D0B                          ;9FD197|6D0B0D  |;
+                       ADC.W PpAdvDis                       ;9FD197|6D0B0D  |; Add PP +/-
                        CLC                                  ;9FD19A|18      |;
-                       ADC.W $0D09                          ;9FD19B|6D090D  |;
+                       ADC.W PKAdvDis                       ;9FD19B|6D090D  |; Add PK +/-
                        CLC                                  ;9FD19E|18      |;
-                       ADC.W $0CEF                          ;9FD19F|6DEF0C  |;
+                       ADC.W HmAwAdvDis                     ;9FD19F|6DEF0C  |; Add Home Away +/-
                        LDY.W #$0007                         ;9FD1A2|A00700  |;
-                       JSL.L CODE_9FD22B                    ;9FD1A5|222BD29F|;
-                       STA.W $1383,X                        ;9FD1A9|9D8313  |;
+                       JSL.L fn_HotColdCalc                 ;9FD1A5|222BD29F|; Calc Hot/Cold +/-
+                       STA.W PStructShotAccur,X             ;9FD1A9|9D8313  |; Store Shot Accurl In Player Struct
                        LDY.W #$0006                         ;9FD1AC|A00600  |;
-                       LDA.B [$89],Y                        ;9FD1AF|B789    |;
-                       LSR A                                ;9FD1B1|4A      |;
+                       LDA.B [$89],Y                        ;9FD1AF|B789    |; Load Address for Endurance Attribute
+                       LSR A                                ;9FD1B1|4A      |; Start - Isolates High Nibble of Endurance Byte
                        LSR A                                ;9FD1B2|4A      |;
                        LSR A                                ;9FD1B3|4A      |;
                        LSR A                                ;9FD1B4|4A      |;
-                       AND.W #$0007                         ;9FD1B5|290700  |;
-                       STA.B $00                            ;9FD1B8|8500    |;
-                       ASL A                                ;9FD1BA|0A      |;
+                       AND.W #$0007                         ;9FD1B5|290700  |; End - Isolates High Nibble of Endurance Byte
+                       STA.B $00                            ;9FD1B8|8500    |; Temp Store Endurance in Zero Page
+                       ASL A                                ;9FD1BA|0A      |; Start rescaling range from 0-6 to 0-15
                        ASL A                                ;9FD1BB|0A      |;
                        ADC.B $00                            ;9FD1BC|6500    |;
-                       LSR A                                ;9FD1BE|4A      |;
+                       LSR A                                ;9FD1BE|4A      |; End rescaling range from 0-6 to 0-15
                        LDY.W #$0008                         ;9FD1BF|A00800  |;
-                       JSL.L CODE_9FD22B                    ;9FD1C2|222BD29F|;
-                       STA.W $1423,X                        ;9FD1C6|9D2314  |;
+                       JSL.L fn_HotColdCalc                 ;9FD1C2|222BD29F|; Calc Hot/Cold +/-
+                       STA.W PStructEndurance,X             ;9FD1C6|9D2314  |; Store Endurance in Player Struct
                        LDY.W #$0006                         ;9FD1C9|A00600  |;
-                       LDA.B [$89],Y                        ;9FD1CC|B789    |;
-                       AND.W #$0007                         ;9FD1CE|290700  |;
-                       STA.B $00                            ;9FD1D1|8500    |;
-                       ASL A                                ;9FD1D3|0A      |;
+                       LDA.B [$89],Y                        ;9FD1CC|B789    |; Load Address for Roughing Attribute
+                       AND.W #$0007                         ;9FD1CE|290700  |; Isolate Low Nibble
+                       STA.B $00                            ;9FD1D1|8500    |; Temp store Roughing in Zero Page
+                       ASL A                                ;9FD1D3|0A      |; Start rescaling range from 0-6 to 0-15
                        ASL A                                ;9FD1D4|0A      |;
                        ADC.B $00                            ;9FD1D5|6500    |;
-                       LSR A                                ;9FD1D7|4A      |;
+                       LSR A                                ;9FD1D7|4A      |; End rescaling range from 0-6 to 0-15
                        CLC                                  ;9FD1D8|18      |;
-                       ADC.W $0CE5                          ;9FD1D9|6DE50C  |;
+                       ADC.W RubberBandBonus                ;9FD1D9|6DE50C  |; Add Rubber Band Bonus
                        CLC                                  ;9FD1DC|18      |;
-                       ADC.W $0CE5                          ;9FD1DD|6DE50C  |;
+                       ADC.W RubberBandBonus                ;9FD1DD|6DE50C  |; Add Rubber Band Bonus Again
                        LDY.W #$0009                         ;9FD1E0|A00900  |;
-                       JSL.L CODE_9FD22B                    ;9FD1E3|222BD29F|;
-                       STA.W $13E3,X                        ;9FD1E7|9DE313  |;
+                       JSL.L fn_HotColdCalc                 ;9FD1E3|222BD29F|; Calc Hot/Cold +/-
+                       STA.W PStructRoughing,X              ;9FD1E7|9DE313  |; Store Roughing in Player Struct
                        LDY.W #$0007                         ;9FD1EA|A00700  |;
-                       LDA.B [$89],Y                        ;9FD1ED|B789    |;
-                       LSR A                                ;9FD1EF|4A      |;
+                       LDA.B [$89],Y                        ;9FD1ED|B789    |; Load Address for Pass Accuracy
+                       LSR A                                ;9FD1EF|4A      |; Start - Isolates High Nibble of PassAccur Byte
                        LSR A                                ;9FD1F0|4A      |;
                        LSR A                                ;9FD1F1|4A      |;
                        LSR A                                ;9FD1F2|4A      |;
-                       AND.W #$0007                         ;9FD1F3|290700  |;
-                       STA.B $00                            ;9FD1F6|8500    |;
-                       ASL A                                ;9FD1F8|0A      |;
+                       AND.W #$0007                         ;9FD1F3|290700  |; End - Isolates High Nibble of PassAccur Byte
+                       STA.B $00                            ;9FD1F6|8500    |; Temp Store PassAccur in Zero Page
+                       ASL A                                ;9FD1F8|0A      |; Start rescaling range from 0-6 to 0-15
                        ASL A                                ;9FD1F9|0A      |;
                        ADC.B $00                            ;9FD1FA|6500    |;
-                       LSR A                                ;9FD1FC|4A      |;
+                       LSR A                                ;9FD1FC|4A      |; End rescaling range from 0-6 to 0-15
                        CLC                                  ;9FD1FD|18      |;
-                       ADC.W $0D0B                          ;9FD1FE|6D0B0D  |;
+                       ADC.W PpAdvDis                       ;9FD1FE|6D0B0D  |; Add PP +/-
                        CLC                                  ;9FD201|18      |;
-                       ADC.W $0CEF                          ;9FD202|6DEF0C  |;
+                       ADC.W HmAwAdvDis                     ;9FD202|6DEF0C  |; Add Home Away +/-
                        LDY.W #$000A                         ;9FD205|A00A00  |;
-                       JSL.L CODE_9FD22B                    ;9FD208|222BD29F|;
-                       STA.W $13A3,X                        ;9FD20C|9DA313  |;
+                       JSL.L fn_HotColdCalc                 ;9FD208|222BD29F|; Calc Hot/Cold +/-
+                       STA.W PStructPassAccur,X             ;9FD20C|9DA313  |; Store Pass Accur in Player Struct
                        LDY.W #$0007                         ;9FD20F|A00700  |;
-                       LDA.B [$89],Y                        ;9FD212|B789    |;
-                       AND.W #$0007                         ;9FD214|290700  |;
-                       STA.B $00                            ;9FD217|8500    |;
-                       ASL A                                ;9FD219|0A      |;
+                       LDA.B [$89],Y                        ;9FD212|B789    |; Load Address for Aggression Attribute
+                       AND.W #$0007                         ;9FD214|290700  |; Isolate The Low Byte
+                       STA.B $00                            ;9FD217|8500    |; Temp Store Aggression in Zero Page
+                       ASL A                                ;9FD219|0A      |; Start rescaling range from 0-6 to 0-15
                        ASL A                                ;9FD21A|0A      |;
                        ADC.B $00                            ;9FD21B|6500    |;
-                       LSR A                                ;9FD21D|4A      |;
+                       LSR A                                ;9FD21D|4A      |; End rescaling range from 0-6 to 0-15
                        LDY.W #$000B                         ;9FD21E|A00B00  |;
-                       JSL.L CODE_9FD22B                    ;9FD221|222BD29F|;
-                       STA.W $1443,X                        ;9FD225|9D4314  |;
+                       JSL.L fn_HotColdCalc                 ;9FD221|222BD29F|; Calc Hot/Cold +/-
+                       STA.W PStructAggression,X            ;9FD225|9D4314  |; Store Agression Attribute in Player Struct
                        PLY                                  ;9FD228|7A      |;
                        PLX                                  ;9FD229|FA      |;
                        RTL                                  ;9FD22A|6B      |;
  
-          CODE_9FD22B:
-                       STA.B $16                            ;9FD22B|8516    |;
-                       TYA                                  ;9FD22D|98      |;
-                       CLC                                  ;9FD22E|18      |;
-                       ADC.B $14                            ;9FD22F|6514    |;
-                       TAY                                  ;9FD231|A8      |;
-                       SEP #$20                             ;9FD232|E220    |;
-                       LDA.W $1A12,Y                        ;9FD234|B9121A  |;
-                       LSR A                                ;9FD237|4A      |;
-                       LSR A                                ;9FD238|4A      |;
-                       BIT.B #$00                           ;9FD239|8900    |;
-                       BEQ CODE_9FD23F                      ;9FD23B|F002    |;
-                       ORA.B #$00                           ;9FD23D|0900    |;
+       fn_HotColdCalc:
+                       STA.B $16                            ;9FD22B|8516    |; Store Orig Value in zero page
+                       TYA                                  ;9FD22D|98      |; Transfer Y to A
+                       CLC                                  ;9FD22E|18      |; Clear the carry flag
+                       ADC.B $14                            ;9FD22F|6514    |; $14 index to players RNG
+                       TAY                                  ;9FD231|A8      |; Transfer A to Y
+                       SEP #$20                             ;9FD232|E220    |; Set Accum to 8 bit
+                       LDA.W PStructRNG,Y                   ;9FD234|B9121A  |; Players RNG for Attribute
+                       LSR A                                ;9FD237|4A      |; Divide by 2 BUG: LSR treats as unsigned
+                       LSR A                                ;9FD238|4A      |; Divide by 2 BUG: LSR treats as unsigned
+                       BIT.B #$00                           ;9FD239|8900    |; Check if the result is zero
+                       BEQ CODE_9FD23F                      ;9FD23B|F002    |; Jmp if result is zero
+                       ORA.B #$00                           ;9FD23D|0900    |; Sets Processor status flags? Leaves A alone
  
           CODE_9FD23F:
                        CLC                                  ;9FD23F|18      |;
-                       ADC.B $16                            ;9FD240|6516    |;
-                       BPL CODE_9FD246                      ;9FD242|1002    |;
-                       LDA.B #$00                           ;9FD244|A900    |;
+                       ADC.B $16                            ;9FD240|6516    |; Add original value back to A
+                       BPL CODE_9FD246                      ;9FD242|1002    |; If Positive jump to cmp
+                       LDA.B #$00                           ;9FD244|A900    |; Negative so set value to 00
  
           CODE_9FD246:
-                       CMP.B #$0F                           ;9FD246|C90F    |;
-                       BCC CODE_9FD24C                      ;9FD248|9002    |;
-                       LDA.B #$0F                           ;9FD24A|A90F    |;
+                       CMP.B #$0F                           ;9FD246|C90F    |; Compare to MAX 0F (15)
+                       BCC CODE_9FD24C                      ;9FD248|9002    |; Branch if less than 0F (15)
+                       LDA.B #$0F                           ;9FD24A|A90F    |; Set Max Value 0F(15)
  
           CODE_9FD24C:
-                       REP #$20                             ;9FD24C|C220    |;
-                       AND.W #$00FF                         ;9FD24E|29FF00  |;
-                       RTL                                  ;9FD251|6B      |;
+                       REP #$20                             ;9FD24C|C220    |; Set Accumulator back to 16 bit
+                       AND.W #$00FF                         ;9FD24E|29FF00  |; Set the Word to only include the byte
+                       RTL                                  ;9FD251|6B      |; Exit and return to calling code
  
           CODE_9FD252:
                        LDA.B $A5                            ;9FD252|A5A5    |;
@@ -8987,7 +8987,7 @@ Real_Time_Pen_Clock_2:
                        LDA.W $1283,X                        ;9FD2BF|BD8312  |;
                        AND.W #$2FFF                         ;9FD2C2|29FF2F  |;
                        STA.W $1283,X                        ;9FD2C5|9D8312  |;
-                       LDA.W $0F43,X                        ;9FD2C8|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FD2C8|BD430F  |;
                        BMI CODE_9FD2F3                      ;9FD2CB|3026    |;
                        BNE CODE_9FD2D4                      ;9FD2CD|D005    |;
                        LDA.W #$E0FE                         ;9FD2CF|A9FEE0  |;
@@ -9188,7 +9188,7 @@ Real_Time_Pen_Clock_2:
  
           CODE_9FD4FC:
                        STX.B $89                            ;9FD4FC|8689    |;
-                       LDA.W $0F43,X                        ;9FD4FE|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FD4FE|BD430F  |;
                        BPL CODE_9FD507                      ;9FD501|1004    |;
                        db $C6,$B1,$10,$E3                   ;9FD503|        |;
  
@@ -9623,7 +9623,7 @@ Real_Time_Pen_Clock_2:
                        db $4C,$C2,$D9                       ;9FD8B3|        |;
  
           CODE_9FD8B6:
-                       LDA.W $0F43,X                        ;9FD8B6|BD430F  |;
+                       LDA.W PStructPosition,X              ;9FD8B6|BD430F  |;
                        BNE CODE_9FD8C4                      ;9FD8B9|D009    |;
                        LDA.W $0B05,X                        ;9FD8BB|BD050B  |;
                        ORA.W #$0003                         ;9FD8BE|090300  |;
@@ -9666,7 +9666,7 @@ Real_Time_Pen_Clock_2:
  
           CODE_9FD907:
                        LDA.W #$EA1A                         ;9FD907|A91AEA  |;
-                       LDY.W $0F43,X                        ;9FD90A|BC430F  |;
+                       LDY.W PStructPosition,X              ;9FD90A|BC430F  |;
                        BNE CODE_9FD912                      ;9FD90D|D003    |;
                        LDA.W #$E0FE                         ;9FD90F|A9FEE0  |;
  
@@ -9701,7 +9701,7 @@ Real_Time_Pen_Clock_2:
                        LDA.W #$0002                         ;9FD94F|A90200  |;
                        STA.W $1163,X                        ;9FD952|9D6311  |;
                        LDA.W #$E936                         ;9FD955|A936E9  |;
-                       LDY.W $0F43,X                        ;9FD958|BC430F  |;
+                       LDY.W PStructPosition,X              ;9FD958|BC430F  |;
                        BNE CODE_9FD960                      ;9FD95B|D003    |;
                        LDA.W #$E484                         ;9FD95D|A984E4  |;
  
@@ -9761,7 +9761,7 @@ Real_Time_Pen_Clock_2:
           CODE_9FD9CB:
                        LDA.W $1243,X                        ;9FD9CB|BD4312  |;
                        STA.B $A5                            ;9FD9CE|85A5    |;
-                       STA.W $0F43,X                        ;9FD9D0|9D430F  |;
+                       STA.W PStructPosition,X              ;9FD9D0|9D430F  |;
                        JSL.L CODE_9FCED0                    ;9FD9D3|22D0CE9F|;
                        LDA.W #$FFFF                         ;9FD9D7|A9FFFF  |;
                        STA.W $1263,X                        ;9FD9DA|9D6312  |;
@@ -9798,7 +9798,7 @@ Real_Time_Pen_Clock_2:
                        STA.W $1163,X                        ;9FDA1E|9D6311  |;
                        STA.W $14E3,X                        ;9FDA21|9DE314  |;
                        LDA.W #$E8F4                         ;9FDA24|A9F4E8  |;
-                       LDY.W $0F43,X                        ;9FDA27|BC430F  |;
+                       LDY.W PStructPosition,X              ;9FDA27|BC430F  |;
                        BNE CODE_9FDA2F                      ;9FDA2A|D003    |;
                        db $A9,$52,$E4                       ;9FDA2C|        |;
  
@@ -9968,7 +9968,7 @@ Real_Time_Pen_Clock_2:
                        LDA.W #$FFFF                         ;9FDCA1|A9FFFF  |;
                        STA.W $1263,X                        ;9FDCA4|9D6312  |;
                        STA.W $1243,X                        ;9FDCA7|9D4312  |;
-                       LDA.W $0F43                          ;9FDCAA|AD430F  |;
+                       LDA.W PStructPosition                ;9FDCAA|AD430F  |;
                        STA.B $A5                            ;9FDCAD|85A5    |;
                        JMP.W CODE_9FCED0                    ;9FDCAF|4CD0CE  |;
  
@@ -10053,7 +10053,7 @@ Real_Time_Pen_Clock_2:
  
           CODE_9FDD43:
                        LDY.B $89                            ;9FDD43|A489    |;
-                       LDA.W $0F43,Y                        ;9FDD45|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9FDD45|B9430F  |;
                        BEQ CODE_9FDD68                      ;9FDD48|F01E    |;
                        BMI CODE_9FDD68                      ;9FDD4A|301C    |;
                        LDA.W $12A3,Y                        ;9FDD4C|B9A312  |;

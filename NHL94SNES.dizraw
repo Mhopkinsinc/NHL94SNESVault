@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProjectXmlSerializer-Root xmlns:exs="https://extendedxmlserializer.github.io/v2" xmlns:ns1="clr-namespace:Diz.Core.model;assembly=Diz.Core" xmlns:ns2="clr-namespace:Diz.Core.model.snes;assembly=Diz.Core" xmlns:sys="https://extendedxmlserializer.github.io/system" xmlns:ns3="clr-namespace:System.Collections.Generic;assembly=System.Collections" xmlns:ns4="clr-namespace:Diz.Core.export;assembly=Diz.Core" SaveVersion="102" Watermark="DiztinGUIsh" Extra1="" Extra2="" xmlns="clr-namespace:Diz.Core.serialization.xml_serializer;assembly=Diz.Core">
-  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="1014715">
+  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="1036837">
     <LogWriterSettings Format="%label:-22% %code:37%;%pc%|%bytes%|; %comment%" DataPerLine="8" Unlabeled="ShowInPoints" Structure="OneBankPerFile" NewLine="true" OutputExtraWhitespace="true" GenerateFullLine="false" IncludeUnusedLabels="false" PrintLabelSpecificComments="true" RomSizeOverride="-1" FileOrFolderOutPath="DizExport\" OutputToString="false" ErrorFilename="errors.txt" />
     <ProjectSettings exs:member="" BsnesUsageMapImportOnlyChangedUnmarked="true">
       <RomBytesOutputFormatSettings CompressGroupBlock="true" CompressUsingTable1="true" InsertCommentIntoOutputLinesEveryNBytes="2048" />
@@ -74,6 +74,7 @@
         <sys:Item Key="10262371" Value="Banner Text WPG" />
         <sys:Item Key="10262380" Value="Banner Text ASE" />
         <sys:Item Key="10262393" Value="Banner Text ASW" />
+        <sys:Item Key="10265153" Value="Reset Puck Vert Position" />
         <sys:Item Key="10266087" Value="Anaheim" />
         <sys:Item Key="10266091" Value="Boston" />
         <sys:Item Key="10266095" Value="Buffalo" />
@@ -217,6 +218,7 @@
         <sys:Item Key="10417085" Value="Add 1 to the Break Away Made Stat" />
         <sys:Item Key="10417096" Value="Add 1 to Penalty Shot Made Game Stat" />
         <sys:Item Key="10417110" Value="Add 1 to One Timers Made" />
+        <sys:Item Key="10417243" Value="Add 1 to Period Goals Period Stats" />
         <sys:Item Key="10419035" Value="Compare to #0401 Value for 1 min penalties" />
         <sys:Item Key="10419038" Value="1 min pen jump to hit" />
         <sys:Item Key="10419040" Value="Cmp to #0A01 Roughing Pen is different" />
@@ -251,6 +253,9 @@
         <sys:Item Key="10454453" Value="0444 makes this real time" />
         <sys:Item Key="10454461" Value="Decrease Period Timer by 1 second" />
         <sys:Item Key="10454631" Value="003C makes this real time" />
+        <sys:Item Key="10459475" Value="Loads Team Header Data during Matchups Screen" />
+        <sys:Item Key="10459505" Value="Loads Team Header Data During" />
+        <sys:Item Key="10459693" Value="Edit Lines Current Attribute Temp Value. Loops for all players displayred. Except Weight, Handed, Overall" />
         <sys:Item Key="10459950" Value="5 minute period length" />
         <sys:Item Key="10459952" Value="10 min period length" />
         <sys:Item Key="10459954" Value="20 min period length" />
@@ -263,12 +268,35 @@
         <sys:Item Key="10471090" Value="Called When Ron Barr Intro Screen Ends, Sets Starting Home + Away Goalie" />
         <sys:Item Key="10471093" Value="0000 = 1st Goalie 0100 = 2nd Goalie 0200 = 3rd goalie FFFF = No Goalie" />
         <sys:Item Key="10471094" Value="17AA Home 17AC Away" />
+        <sys:Item Key="10471234" Value="Loads Team Header During Game Setup Screen + Edit Lines" />
         <sys:Item Key="10472262" Value="Used To swap goalie control when teammates" />
         <sys:Item Key="10472762" Value="Right Trigger Code" />
         <sys:Item Key="10472792" Value="Left Trigger Code" />
         <sys:Item Key="10472954" Value="PenCalled 5th (in the box)" />
         <sys:Item Key="10473102" Value="PenCalled 6th" />
         <sys:Item Key="10473301" Value="PenCalled 2nd" />
+        <sys:Item Key="10473378" Value="Loads PP Adv" />
+        <sys:Item Key="10473380" Value="Isolate Low Nibble" />
+        <sys:Item Key="10473383" Value="Store PP Adv" />
+        <sys:Item Key="10473386" Value="Skip PK Disadv" />
+        <sys:Item Key="10473391" Value="Loads PK Disadv" />
+        <sys:Item Key="10473393" Value="Start - Isolates High Nibble" />
+        <sys:Item Key="10473397" Value="End - Isolates High Nibble" />
+        <sys:Item Key="10473400" Value="EOR to get negative value" />
+        <sys:Item Key="10473403" Value="Add one" />
+        <sys:Item Key="10473404" Value="Store PK Dis" />
+        <sys:Item Key="10473410" Value="Loads Road Team Disadvantage" />
+        <sys:Item Key="10473412" Value="Isolates the Low Nibble" />
+        <sys:Item Key="10473415" Value="EOR with FFFF to get negative number" />
+        <sys:Item Key="10473418" Value="Add 1" />
+        <sys:Item Key="10473419" Value="Store in $A5 of zero page" />
+        <sys:Item Key="10473421" Value="?" />
+        <sys:Item Key="10473424" Value="Not Home Team Skip" />
+        <sys:Item Key="10473426" Value="Loads Home Team Advantage" />
+        <sys:Item Key="10473428" Value="Start - Isolate High Nibble" />
+        <sys:Item Key="10473432" Value="End - Isolate High Nibble" />
+        <sys:Item Key="10473435" Value="Store Hm Team Adv in $A5 of zero page." />
+        <sys:Item Key="10473439" Value="Save HmAwAdvDis" />
         <sys:Item Key="10473541" Value="Load Jersey Number" />
         <sys:Item Key="10473543" Value="Low Byte" />
         <sys:Item Key="10473546" Value="Store Jer Num" />
@@ -279,6 +307,155 @@
         <sys:Item Key="10473558" Value="Store Weight" />
         <sys:Item Key="10473561" Value="Agility" />
         <sys:Item Key="10473563" Value="Low nibble of next byte" />
+        <sys:Item Key="10473566" Value="Store Agility in zero page" />
+        <sys:Item Key="10473568" Value="Start rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473572" Value="End rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473576" Value="Calc Hot/Cold Adv/Dis" />
+        <sys:Item Key="10473580" Value="Store Agility in Player Struct" />
+        <sys:Item Key="10473583" Value="Setup Speed Attribute" />
+        <sys:Item Key="10473586" Value="Load Address for Speed Attribute" />
+        <sys:Item Key="10473588" Value="Start - Isolates High Nibble of Speed Byte" />
+        <sys:Item Key="10473592" Value="End -Isolates High Nibble of Speed Byte" />
+        <sys:Item Key="10473595" Value="Temp store speed in Zero Page" />
+        <sys:Item Key="10473597" Value="Start rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473601" Value="End rescaling" />
+        <sys:Item Key="10473605" Value="Calc Hot/Cold Adv/Dis" />
+        <sys:Item Key="10473609" Value="Store Speed in Player Struct" />
+        <sys:Item Key="10473615" Value="Load Address for Off Aware Attribute" />
+        <sys:Item Key="10473617" Value="Isolate Low Nibble " />
+        <sys:Item Key="10473620" Value="Temp Store Off Aware in Zero Page" />
+        <sys:Item Key="10473622" Value="Start rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473626" Value="End rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473628" Value="Add PP +/-" />
+        <sys:Item Key="10473632" Value="Add PK +/-" />
+        <sys:Item Key="10473636" Value="Add Home/Away +/-" />
+        <sys:Item Key="10473640" Value="Add RubberBand Bonus" />
+        <sys:Item Key="10473646" Value="Calc Hot/Cold Adv/Dis" />
+        <sys:Item Key="10473650" Value="EOR with Max of 0F" />
+        <sys:Item Key="10473654" Value="Add Upper Limit Back to Accum" />
+        <sys:Item Key="10473657" Value="Divide by 2" />
+        <sys:Item Key="10473658" Value="Store Off Aware in Player Struct" />
+        <sys:Item Key="10473664" Value="Load Address for Def Aware Attribute" />
+        <sys:Item Key="10473666" Value="Start - Isolates High Nibble of Def Aware Byte" />
+        <sys:Item Key="10473670" Value="End - Isolates High Nibble of Def Aware Byte" />
+        <sys:Item Key="10473673" Value="Temp Store Def Aware in Zero Page" />
+        <sys:Item Key="10473675" Value="Start rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473679" Value="Endt rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473681" Value="Add Home/Away +/-" />
+        <sys:Item Key="10473687" Value="Calc Hot/Cold Adv/Dis" />
+        <sys:Item Key="10473691" Value="Push the result onto the stack for reterival later" />
+        <sys:Item Key="10473692" Value="Load The Players Position" />
+        <sys:Item Key="10473695" Value="If Goalie Branch to goalie calc instead." />
+        <sys:Item Key="10473697" Value="Pull Def Aware from Stack" />
+        <sys:Item Key="10473698" Value="EOR with 15" />
+        <sys:Item Key="10473702" Value="Add 7" />
+        <sys:Item Key="10473705" Value="Store Def Aware in Player Struct" />
+        <sys:Item Key="10473708" Value="Skip the Goalie Calc" />
+        <sys:Item Key="10473719" Value="Store Def Aware in Player Struct For The Goalie" />
+        <sys:Item Key="10473725" Value="Load Address for Shot Power Attribute" />
+        <sys:Item Key="10473727" Value="Isolate Low Nibble" />
+        <sys:Item Key="10473730" Value="Temp Store Shot Power in Zero Page" />
+        <sys:Item Key="10473732" Value="Start rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473736" Value="End rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473740" Value="Calc Hot/Cold Adv/Dis" />
+        <sys:Item Key="10473744" Value="Store Shot Power in Player Struct" />
+        <sys:Item Key="10473750" Value="Load Address for Checking Attribute" />
+        <sys:Item Key="10473752" Value="Start - Isolates High Nibble of Checking Byte" />
+        <sys:Item Key="10473756" Value="End - Isolates High Nibble of Checking Byte" />
+        <sys:Item Key="10473759" Value="Temp Store Checking in Zero Page" />
+        <sys:Item Key="10473761" Value="Start rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473765" Value="End rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473767" Value="Add RubberBandBonus" />
+        <sys:Item Key="10473773" Value="Calc Hot/Cold Adv/Dis" />
+        <sys:Item Key="10473777" Value="Store Checking in Player Struct" />
+        <sys:Item Key="10473780" Value="?" />
+        <sys:Item Key="10473786" Value="?" />
+        <sys:Item Key="10473792" Value="Load Address for Handed Attribute" />
+        <sys:Item Key="10473794" Value="Isolate the Low Byte" />
+        <sys:Item Key="10473797" Value="Check If Odd or Even and invert result" />
+        <sys:Item Key="10473800" Value="Store Handed in Player Struct" />
+        <sys:Item Key="10473803" Value="Branch If Even Number" />
+        <sys:Item Key="10473805" Value="?" />
+        <sys:Item Key="10473811" Value="?" />
+        <sys:Item Key="10473814" Value="Load Address for Handed Attribute" />
+        <sys:Item Key="10473816" Value="Isolate The Low Byte" />
+        <sys:Item Key="10473819" Value="Store the Actual Value of the byte (Not Used anywhere)" />
+        <sys:Item Key="10473825" Value="Load Address for Stick Hanl Attribute" />
+        <sys:Item Key="10473827" Value="Start - Isolates High Nibble of Stick Hanl Byte" />
+        <sys:Item Key="10473831" Value="End - Isolates High Nibble of Stick Hanl Byte" />
+        <sys:Item Key="10473834" Value="Temp Store Stick Hanl in Zero Page" />
+        <sys:Item Key="10473836" Value="Start rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473840" Value="End rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473842" Value="Add PP +/-" />
+        <sys:Item Key="10473846" Value="Add PK +/-" />
+        <sys:Item Key="10473850" Value="Add Home Away +/-" />
+        <sys:Item Key="10473856" Value="Calc Hot/Cold Adv/Dis" />
+        <sys:Item Key="10473860" Value="Store Stick Hanl In Player Struct" />
+        <sys:Item Key="10473866" Value="Load Address for Shot Accur Attribute" />
+        <sys:Item Key="10473868" Value="Isolate Low Nibble" />
+        <sys:Item Key="10473871" Value="Temp Store Shot Accur in Zero Page" />
+        <sys:Item Key="10473873" Value="Start rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473877" Value="End rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473879" Value="Add PP +/-" />
+        <sys:Item Key="10473883" Value="Add PK +/-" />
+        <sys:Item Key="10473887" Value="Add Home Away +/-" />
+        <sys:Item Key="10473893" Value="Calc Hot/Cold +/-" />
+        <sys:Item Key="10473897" Value="Store Shot Accurl In Player Struct" />
+        <sys:Item Key="10473903" Value="Load Address for Endurance Attribute" />
+        <sys:Item Key="10473905" Value="Start - Isolates High Nibble of Endurance Byte" />
+        <sys:Item Key="10473909" Value="End - Isolates High Nibble of Endurance Byte" />
+        <sys:Item Key="10473912" Value="Temp Store Endurance in Zero Page" />
+        <sys:Item Key="10473914" Value="Start rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473918" Value="End rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473922" Value="Calc Hot/Cold +/-" />
+        <sys:Item Key="10473926" Value="Store Endurance in Player Struct" />
+        <sys:Item Key="10473932" Value="Load Address for Roughing Attribute" />
+        <sys:Item Key="10473934" Value="Isolate Low Nibble" />
+        <sys:Item Key="10473937" Value="Temp store Roughing in Zero Page" />
+        <sys:Item Key="10473939" Value="Start rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473943" Value="End rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473945" Value="Add Rubber Band Bonus" />
+        <sys:Item Key="10473949" Value="Add Rubber Band Bonus Again" />
+        <sys:Item Key="10473955" Value="Calc Hot/Cold +/-" />
+        <sys:Item Key="10473959" Value="Store Roughing in Player Struct" />
+        <sys:Item Key="10473965" Value="Load Address for Pass Accuracy" />
+        <sys:Item Key="10473967" Value="Start - Isolates High Nibble of PassAccur Byte" />
+        <sys:Item Key="10473971" Value="End - Isolates High Nibble of PassAccur Byte" />
+        <sys:Item Key="10473974" Value="Temp Store PassAccur in Zero Page" />
+        <sys:Item Key="10473976" Value="Start rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473980" Value="End rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10473982" Value="Add PP +/-" />
+        <sys:Item Key="10473986" Value="Add Home Away +/-" />
+        <sys:Item Key="10473992" Value="Calc Hot/Cold +/-" />
+        <sys:Item Key="10473996" Value="Store Pass Accur in Player Struct" />
+        <sys:Item Key="10474002" Value="Load Address for Aggression Attribute" />
+        <sys:Item Key="10474004" Value="Isolate The Low Byte" />
+        <sys:Item Key="10474007" Value="Temp Store Aggression in Zero Page" />
+        <sys:Item Key="10474009" Value="Start rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10474013" Value="End rescaling range from 0-6 to 0-15" />
+        <sys:Item Key="10474017" Value="Calc Hot/Cold +/-" />
+        <sys:Item Key="10474021" Value="Store Agression Attribute in Player Struct" />
+        <sys:Item Key="10474027" Value="Store Orig Value in zero page" />
+        <sys:Item Key="10474029" Value="Transfer Y to A" />
+        <sys:Item Key="10474030" Value="Clear the carry flag" />
+        <sys:Item Key="10474031" Value="$14 index to players RNG" />
+        <sys:Item Key="10474033" Value="Transfer A to Y" />
+        <sys:Item Key="10474034" Value="Set Accum to 8 bit" />
+        <sys:Item Key="10474036" Value="Players RNG for Attribute" />
+        <sys:Item Key="10474039" Value="Divide by 2 BUG: LSR treats as unsigned" />
+        <sys:Item Key="10474040" Value="Divide by 2 BUG: LSR treats as unsigned" />
+        <sys:Item Key="10474041" Value="Check if the result is zero" />
+        <sys:Item Key="10474043" Value="Jmp if result is zero" />
+        <sys:Item Key="10474045" Value="Sets Processor status flags? Leaves A alone" />
+        <sys:Item Key="10474048" Value="Add original value back to A" />
+        <sys:Item Key="10474050" Value="If Positive jump to cmp" />
+        <sys:Item Key="10474052" Value="Negative so set value to 00" />
+        <sys:Item Key="10474054" Value="Compare to MAX 0F (15)" />
+        <sys:Item Key="10474056" Value="Branch if less than 0F (15)" />
+        <sys:Item Key="10474058" Value="Set Max Value 0F(15)" />
+        <sys:Item Key="10474060" Value="Set Accumulator back to 16 bit" />
+        <sys:Item Key="10474062" Value="Set the Word to only include the byte" />
+        <sys:Item Key="10474065" Value="Exit and return to calling code" />
         <sys:Item Key="10477853" Value="Load Pause Game Menu" />
         <sys:Item Key="10478632" Value="Turns Def Control On or Off with EOR of current value" />
         <sys:Item Key="10484516" Value="Run Original Code we Hijacked" />
@@ -429,14 +606,71 @@
         <sys:Item Key="10356598">
           <Value exs:type="ns1:Label" Name="JoyPad" Comment="" />
         </sys:Item>
+        <sys:Item Key="10357989">
+          <Value exs:type="ns1:Label" Name="RubberBandBonus" Comment="Adds +2 to Off Aware when losing in the 3rd" />
+        </sys:Item>
+        <sys:Item Key="10357999">
+          <Value exs:type="ns1:Label" Name="HmAwAdvDis" Comment="Home / Away Adv Dis" />
+        </sys:Item>
+        <sys:Item Key="10358025">
+          <Value exs:type="ns1:Label" Name="PKAdvDis" Comment="Penalty Kill Adv/Dis" />
+        </sys:Item>
+        <sys:Item Key="10358027">
+          <Value exs:type="ns1:Label" Name="PpAdvDis" Comment="Powerplay Adv or Dis" />
+        </sys:Item>
         <sys:Item Key="10358265">
           <Value exs:type="ns1:Label" Name="PucVertVeloc" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10358595">
+          <Value exs:type="ns1:Label" Name="PStructPosition" Comment="Player Data Position 0 = Goalie 4 = Center" />
         </sys:Item>
         <sys:Item Key="10359491">
           <Value exs:type="ns1:Label" Name="PStructWeight" Comment="Player Data Weight" />
         </sys:Item>
+        <sys:Item Key="10359523">
+          <Value exs:type="ns1:Label" Name="PStructAgility" Comment="Player Data Agility" />
+        </sys:Item>
+        <sys:Item Key="10359555">
+          <Value exs:type="ns1:Label" Name="PStructSpeed" Comment="Player Data Speed" />
+        </sys:Item>
+        <sys:Item Key="10359587">
+          <Value exs:type="ns1:Label" Name="PStructOffAware" Comment="Player Data Off Aware" />
+        </sys:Item>
+        <sys:Item Key="10359619">
+          <Value exs:type="ns1:Label" Name="PStructDefAware" Comment="Player Data Def Aware" />
+        </sys:Item>
+        <sys:Item Key="10359651">
+          <Value exs:type="ns1:Label" Name="PStructShotPower" Comment="Player Data Shot Power" />
+        </sys:Item>
+        <sys:Item Key="10359683">
+          <Value exs:type="ns1:Label" Name="PStructShotAccur" Comment="Player Data Shot Accuracy" />
+        </sys:Item>
+        <sys:Item Key="10359715">
+          <Value exs:type="ns1:Label" Name="PStructPassAccur" Comment="Player Data Pass Accuracy" />
+        </sys:Item>
         <sys:Item Key="10359747">
           <Value exs:type="ns1:Label" Name="PStructJerNum" Comment="Player Data Jersey Number" />
+        </sys:Item>
+        <sys:Item Key="10359779">
+          <Value exs:type="ns1:Label" Name="PStructRoughing" Comment="Player Data Roughing" />
+        </sys:Item>
+        <sys:Item Key="10359811">
+          <Value exs:type="ns1:Label" Name="PStructStickHanl" Comment="Player Data Stick Handling" />
+        </sys:Item>
+        <sys:Item Key="10359843">
+          <Value exs:type="ns1:Label" Name="PStructEndurance" Comment="Player Data Endurance" />
+        </sys:Item>
+        <sys:Item Key="10359875">
+          <Value exs:type="ns1:Label" Name="PStructAggression" Comment="Player Data Aggression" />
+        </sys:Item>
+        <sys:Item Key="10359907">
+          <Value exs:type="ns1:Label" Name="PStructHandedActualValue" Comment="Player Data Handed Actual Value" />
+        </sys:Item>
+        <sys:Item Key="10359939">
+          <Value exs:type="ns1:Label" Name="PStructChecking" Comment="Player Data Checking" />
+        </sys:Item>
+        <sys:Item Key="10359971">
+          <Value exs:type="ns1:Label" Name="PStructHanded" Comment="Player Data Handed" />
         </sys:Item>
         <sys:Item Key="10360282">
           <Value exs:type="ns1:Label" Name="PauseScreenActive" Comment="" />
@@ -470,6 +704,9 @@
         </sys:Item>
         <sys:Item Key="10360700">
           <Value exs:type="ns1:Label" Name="GmStat_ShotsAwy" Comment="Shots ON Net Away" />
+        </sys:Item>
+        <sys:Item Key="10360702">
+          <Value exs:type="ns1:Label" Name="PerStat_GoalsPerPeriod" Comment="Period Stats Goals Per Period" />
         </sys:Item>
         <sys:Item Key="10360718">
           <Value exs:type="ns1:Label" Name="Score_HmAw" Comment="178E Home 1790 Away Score" />
@@ -506,6 +743,9 @@
         </sys:Item>
         <sys:Item Key="10360794">
           <Value exs:type="ns1:Label" Name="GmStat_OneTimrMade" Comment="On Timers Made" />
+        </sys:Item>
+        <sys:Item Key="10361362">
+          <Value exs:type="ns1:Label" Name="PStructRNG" Comment="Random Number Generator for Attributes" />
         </sys:Item>
         <sys:Item Key="10361988">
           <Value exs:type="ns1:Label" Name="JyPadHmAwy" Comment="01 Home 02 Away" />
@@ -626,6 +866,12 @@
         </sys:Item>
         <sys:Item Key="10471090">
           <Value exs:type="ns1:Label" Name="Set_Default_Goalie" Comment="HiJack to Enable Def Control" />
+        </sys:Item>
+        <sys:Item Key="10473519">
+          <Value exs:type="ns1:Label" Name="fn_LoadPlyrAttribs" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10474027">
+          <Value exs:type="ns1:Label" Name="fn_HotColdCalc" Comment="Calculates Hot/Cold Adjustment" />
         </sys:Item>
         <sys:Item Key="10482742">
           <Value exs:type="ns1:Label" Name="Intro_EA" Comment="EA Intro Screen" />
@@ -25685,7 +25931,7 @@ U
 .09E
 +09E
 .09E
-+09B
++09E
 .09B
 .09B
 +09B
@@ -25710,7 +25956,7 @@ r 20 U
 +09B
 .09B
 .09B
-+09B
++09E
 .09B
 .09B
 +09B
@@ -27737,7 +27983,7 @@ U
 .09B
 +09B
 .09B
-+09B
++09E
 .09B
 .09B
 +09B
@@ -28856,7 +29102,7 @@ U
 U
 U
 U
-+C9B
++C9E
 .C9B
 .C9B
 +C9B
@@ -28893,7 +29139,7 @@ U
 +C9B
 .C9B
 .C9B
-+C9B
++C9E
 .C9B
 .C9B
 +C9B
@@ -39093,7 +39339,7 @@ U
 .09B
 +09B
 .09B
-+09B
++09E
 .09B
 .09B
 +09B
@@ -39454,7 +39700,7 @@ r 21 U
 .09C
 +09C
 .09C
-+09C
++09E
 .09C
 .09C
 +09C
@@ -88254,7 +88500,7 @@ U
 .09E
 +
 .
-+
++09E
 .
 .
 +
@@ -88279,7 +88525,7 @@ U
 .
 +
 .
-+
++09E
 .
 .
 +
@@ -89848,7 +90094,7 @@ r 115 U
 +09F
 .09F
 .09F
-+09F
++09E
 .09F
 .09F
 +09F
@@ -100727,7 +100973,7 @@ r 24 U
 .09B
 +09B
 .09B
-+09B
++09E
 .09B
 .09B
 +09B
@@ -100805,7 +101051,7 @@ r 24 U
 .09B
 +09B
 .09B
-+09B
++09E
 .09B
 .09B
 +09B
