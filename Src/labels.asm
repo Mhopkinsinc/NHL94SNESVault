@@ -1,4 +1,4 @@
-                       zpCurntTeamLoopVal = $000091; !^ 00 Home 02 Away ^!
+                       zpCurntTeamLoopVal = $000091; !^ 00 Home 02 Away ^!                       
                        Selected_Goalie = $0017AA
                        Selected_Goalie_Awy = $0017AC
                        Def_Ctrl = $001C94; !^ Def Control On or Off 1c94+y = Home 1c94 = Away ^!
@@ -6,9 +6,28 @@
                        PenaltiesOnOff = $7E34C4
                        CurntTeamLoopVal = $9E0091; !^ 00 Home 02 Away ^!
                        JoyPad = $9E0776
+                       RubberBandBonus = $9E0CE5; !^ Adds +2 to Off Aware when losing in the 3rd ^!
+                       HmAwAdvDis = $9E0CEF; !^ Home / Away Adv Dis ^!
+                       PKAdvDis = $9E0D09; !^ Penalty Kill Adv/Dis ^!
+                       PpAdvDis = $9E0D0B; !^ Powerplay Adv or Dis ^!
                        PucVertVeloc = $9E0DF9
+                       PStructPosition = $9E0F43; !^ Player Data Position 0 = Goalie 4 = Center ^!
                        PStructWeight = $9E12C3; !^ Player Data Weight ^!
+                       PStructAgility = $9E12E3; !^ Player Data Agility ^!
+                       PStructSpeed = $9E1303; !^ Player Data Speed ^!
+                       PStructOffAware = $9E1323; !^ Player Data Off Aware ^!
+                       PStructDefAware = $9E1343; !^ Player Data Def Aware ^!
+                       PStructShotPower = $9E1363; !^ Player Data Shot Power ^!
+                       PStructShotAccur = $9E1383; !^ Player Data Shot Accuracy ^!
+                       PStructPassAccur = $9E13A3; !^ Player Data Pass Accuracy ^!
                        PStructJerNum = $9E13C3; !^ Player Data Jersey Number ^!
+                       PStructRoughing = $9E13E3; !^ Player Data Roughing ^!
+                       PStructStickHanl = $9E1403; !^ Player Data Stick Handling ^!
+                       PStructEndurance = $9E1423; !^ Player Data Endurance ^!
+                       PStructAggression = $9E1443; !^ Player Data Aggression ^!
+                       PStructHandedActualValue = $9E1463; !^ Player Data Handed Actual Value ^!
+                       PStructChecking = $9E1483; !^ Player Data Checking ^!
+                       PStructHanded = $9E14A3; !^ Player Data Handed ^!
                        PauseScreenActive = $9E15DA
                        period = $9E1630
                        clock_remaining_time = $9E1632
@@ -20,6 +39,7 @@
                        GmStat_SHGoals = $9E1762; !^ Short Handed Goals ^!
                        GmStat_Shots = $9E177A; !^ Shots On Net ^!
                        GmStat_ShotsAwy = $9E177C; !^ Shots ON Net Away ^!
+                       PerStat_GoalsPerPeriod = $9E177E; !^ Period Stats Goals Per Period ^!
                        Score_HmAw = $9E178E; !^ 178E Home 1790 Away Score ^!
                        GmStat_FceOffWins = $9E1792; !^ FaceOff Wins ^!
                        PlyrsOnIceCountHm = $9E17A6; !^ Player Count ON Ice ^!
@@ -32,6 +52,7 @@
                        GmStat_PnltyShotMade = $9E17CE; !^ Penalty Shots Made ^!
                        GmStat_OneTmrAtmpt = $9E17D6; !^ One Timer Attempts ^!
                        GmStat_OneTimrMade = $9E17DA; !^ On Timers Made ^!
+                       PStructRNG = $9E1A12; !^ Random Number Generator for Attributes ^!
                        JyPadHmAwy = $9E1C84; !^ 01 Home 02 Away ^!
                        OneTimerFlg = $9E1E89; !^ OneTimer ^!
                        BreakAwayActive_flg = $9E1E8B; !^ Break Away Flag 01 ^!

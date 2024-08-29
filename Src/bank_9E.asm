@@ -22,7 +22,7 @@
                        STZ.W $1003,X                        ;9E8027|9E0310  |;
  
           CODE_9E802A:
-                       LDA.W $0F43,X                        ;9E802A|BD430F  |;
+                       LDA.W PStructPosition,X              ;9E802A|BD430F  |;
                        BEQ UNREACH_9E8042                   ;9E802D|F013    |;
                        CPX.W $0AD9                          ;9E802F|ECD90A  |;
                        BNE CODE_9E8046                      ;9E8032|D012    |;
@@ -47,7 +47,7 @@
                        JMP.W CODE_9E814E                    ;9E8051|4C4E81  |;
  
           CODE_9E8054:
-                       ADC.W $1323,X                        ;9E8054|7D2313  |;
+                       ADC.W PStructOffAware,X              ;9E8054|7D2313  |;
                        BPL CODE_9E805C                      ;9E8057|1003    |;
                        LDA.W #$0000                         ;9E8059|A90000  |;
  
@@ -55,7 +55,7 @@
                        STA.W $1003,X                        ;9E805C|9D0310  |;
                        LDY.W $0AD9                          ;9E805F|ACD90A  |;
                        BMI CODE_9E8076                      ;9E8062|3012    |;
-                       LDA.W $0F43,Y                        ;9E8064|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9E8064|B9430F  |;
                        BEQ CODE_9E8076                      ;9E8067|F00D    |;
                        STY.B $8D                            ;9E8069|848D    |;
                        LDA.W $1503,Y                        ;9E806B|B90315  |;
@@ -81,7 +81,7 @@
                        LDA.W $1283,Y                        ;9E8091|B98312  |;
                        BIT.W #$1000                         ;9E8094|890010  |;
                        BNE CODE_9E80BF                      ;9E8097|D026    |;
-                       LDA.W $0F43,Y                        ;9E8099|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9E8099|B9430F  |;
                        BEQ CODE_9E80BF                      ;9E809C|F021    |;
                        LDA.W $0B7D,Y                        ;9E809E|B97D0B  |;
                        CMP.W #$0015                         ;9E80A1|C91500  |;
@@ -103,7 +103,7 @@
                        CMP.W #$00E2                         ;9E80C6|C9E200  |;
                        BCS CODE_9E80D2                      ;9E80C9|B007    |;
                        STZ.B $A9                            ;9E80CB|64A9    |;
-                       LDA.W $0F43,X                        ;9E80CD|BD430F  |;
+                       LDA.W PStructPosition,X              ;9E80CD|BD430F  |;
                        BEQ CODE_9E814E                      ;9E80D0|F07C    |;
  
           CODE_9E80D2:
@@ -122,7 +122,7 @@
           CODE_9E80EC:
                        LDA.W #$0014                         ;9E80EC|A91400  |;
                        SEC                                  ;9E80EF|38      |;
-                       SBC.W $1483,X                        ;9E80F0|FD8314  |;
+                       SBC.W PStructChecking,X              ;9E80F0|FD8314  |;
                        STA.B $A5                            ;9E80F3|85A5    |;
                        LDA.B $A9                            ;9E80F5|A5A9    |;
                        STA.B $C5                            ;9E80F7|85C5    |;
@@ -139,7 +139,7 @@
           CODE_9E8102:
                        LDY.W $0AD9                          ;9E8102|ACD90A  |;
                        BMI CODE_9E8136                      ;9E8105|302F    |;
-                       LDA.W $0F43,Y                        ;9E8107|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9E8107|B9430F  |;
                        BNE CODE_9E8136                      ;9E810A|D02A    |;
                        LDA.W $0D71                          ;9E810C|AD710D  |;
                        STA.B $A5                            ;9E810F|85A5    |;
@@ -358,7 +358,7 @@
                        SBC.B $C1                            ;9E82D3|E5C1    |;
                        STA.W $1003,X                        ;9E82D5|9D0310  |;
                        BPL CODE_9E8321                      ;9E82D8|1047    |;
-                       ADC.W $1323,X                        ;9E82DA|7D2313  |;
+                       ADC.W PStructOffAware,X              ;9E82DA|7D2313  |;
                        BPL CODE_9E82E2                      ;9E82DD|1003    |;
                        db $A9,$00,$00                       ;9E82DF|        |;
  
@@ -584,7 +584,7 @@
  
           CODE_9E849E:
                        CLC                                  ;9E849E|18      |;
-                       ADC.W $1343,X                        ;9E849F|7D4313  |;
+                       ADC.W PStructDefAware,X              ;9E849F|7D4313  |;
                        BPL CODE_9E84A7                      ;9E84A2|1003    |;
                        db $A9,$00,$00                       ;9E84A4|        |;
  
@@ -718,7 +718,7 @@
                        SBC.B $C1                            ;9E85B8|E5C1    |;
                        STA.W $1003,X                        ;9E85BA|9D0310  |;
                        BPL CODE_9E85C5                      ;9E85BD|1006    |;
-                       LDA.W $1343,X                        ;9E85BF|BD4313  |;
+                       LDA.W PStructDefAware,X              ;9E85BF|BD4313  |;
                        STA.W $1003,X                        ;9E85C2|9D0310  |;
  
           CODE_9E85C5:
@@ -810,7 +810,7 @@
  
           CODE_9E8667:
                        CLC                                  ;9E8667|18      |;
-                       ADC.W $1343,X                        ;9E8668|7D4313  |;
+                       ADC.W PStructDefAware,X              ;9E8668|7D4313  |;
                        BPL CODE_9E8670                      ;9E866B|1003    |;
                        db $A9,$00,$00                       ;9E866D|        |;
  
@@ -883,7 +883,7 @@
           CODE_9E86E1:
                        LDA.W #$0041                         ;9E86E1|A94100  |;
                        STA.W $1043,X                        ;9E86E4|9D4310  |;
-                       LDA.W $0F43,X                        ;9E86E7|BD430F  |;
+                       LDA.W PStructPosition,X              ;9E86E7|BD430F  |;
                        CMP.W #$0002                         ;9E86EA|C90200  |;
                        BEQ CODE_9E86F5                      ;9E86ED|F006    |;
                        LDA.W #$FFBF                         ;9E86EF|A9BFFF  |;
@@ -910,7 +910,7 @@
                        LDA.W $1283,Y                        ;9E8716|B98312  |;
                        BIT.W #$1000                         ;9E8719|890010  |;
                        BNE CODE_9E8747                      ;9E871C|D029    |;
-                       LDA.W $0F43,Y                        ;9E871E|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9E871E|B9430F  |;
                        BMI CODE_9E8747                      ;9E8721|3024    |;
                        LDA.W $0EE3,Y                        ;9E8723|B9E30E  |;
                        BMI CODE_9E872B                      ;9E8726|3003    |;
@@ -970,7 +970,7 @@
                        LDA.W $1283,Y                        ;9E877D|B98312  |;
                        BIT.W #$1000                         ;9E8780|890010  |;
                        BNE CODE_9E87AE                      ;9E8783|D029    |;
-                       LDA.W $0F43,Y                        ;9E8785|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9E8785|B9430F  |;
                        BMI CODE_9E87AE                      ;9E8788|3024    |;
                        LDA.W $0EE3,Y                        ;9E878A|B9E30E  |;
                        BPL CODE_9E8792                      ;9E878D|1003    |;
@@ -1083,7 +1083,7 @@
                        STA.W $1003,X                        ;9E885B|9D0310  |;
                        BPL CODE_9E886C                      ;9E885E|100C    |;
                        CLC                                  ;9E8860|18      |;
-                       ADC.W $1323,X                        ;9E8861|7D2313  |;
+                       ADC.W PStructOffAware,X              ;9E8861|7D2313  |;
                        BPL CODE_9E8869                      ;9E8864|1003    |;
                        db $A9,$00,$00                       ;9E8866|        |;
  
@@ -1096,7 +1096,7 @@
                        LDA.W #$8904                         ;9E8871|A90489  |;
                        STA.B $89                            ;9E8874|8589    |;
                        LDY.W #$0050                         ;9E8876|A05000  |;
-                       LDA.W $0F43,X                        ;9E8879|BD430F  |;
+                       LDA.W PStructPosition,X              ;9E8879|BD430F  |;
                        CMP.W #$0002                         ;9E887C|C90200  |;
                        BEQ CODE_9E8884                      ;9E887F|F003    |;
                        LDY.W #$FFB0                         ;9E8881|A0B0FF  |;
@@ -1261,7 +1261,7 @@
                        STA.W $1003,X                        ;9E89AF|9D0310  |;
                        BPL CODE_9E89C0                      ;9E89B2|100C    |;
                        CLC                                  ;9E89B4|18      |;
-                       ADC.W $1343,X                        ;9E89B5|7D4313  |;
+                       ADC.W PStructDefAware,X              ;9E89B5|7D4313  |;
                        BPL CODE_9E89BD                      ;9E89B8|1003    |;
                        db $A9,$00,$00                       ;9E89BA|        |;
  
@@ -1271,7 +1271,7 @@
           CODE_9E89C0:
                        LDA.W #$0064                         ;9E89C0|A96400  |;
                        STA.B $A5                            ;9E89C3|85A5    |;
-                       LDA.W $0F43,X                        ;9E89C5|BD430F  |;
+                       LDA.W PStructPosition,X              ;9E89C5|BD430F  |;
                        CMP.W #$0005                         ;9E89C8|C90500  |;
                        BNE CODE_9E89D2                      ;9E89CB|D005    |;
                        LDA.W #$FF9C                         ;9E89CD|A99CFF  |;
@@ -1289,7 +1289,7 @@
                        STA.B $A9                            ;9E89E5|85A9    |;
                        LDA.W #$FFB2                         ;9E89E7|A9B2FF  |;
                        STA.B $AD                            ;9E89EA|85AD    |;
-                       LDA.W $0F43,Y                        ;9E89EC|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9E89EC|B9430F  |;
                        BEQ CODE_9E8A4B                      ;9E89EF|F05A    |;
                        LDY.B zpCurntTeamLoopVal             ;9E89F1|A491    |;
                        LDA.W $17DE,Y                        ;9E89F3|B9DE17  |;
@@ -1317,7 +1317,7 @@
                        STA.B $A9                            ;9E8A1B|85A9    |;
                        LDA.W #$004E                         ;9E8A1D|A94E00  |;
                        STA.B $AD                            ;9E8A20|85AD    |;
-                       LDA.W $0F43,Y                        ;9E8A22|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9E8A22|B9430F  |;
                        BEQ CODE_9E8A4B                      ;9E8A25|F024    |;
                        LDY.B zpCurntTeamLoopVal             ;9E8A27|A491    |;
                        LDA.W $17DE,Y                        ;9E8A29|B9DE17  |;
@@ -1406,7 +1406,7 @@
  
           CODE_9E8ACC:
                        CLC                                  ;9E8ACC|18      |;
-                       ADC.W $1343,X                        ;9E8ACD|7D4313  |;
+                       ADC.W PStructDefAware,X              ;9E8ACD|7D4313  |;
                        BPL CODE_9E8AD5                      ;9E8AD0|1003    |;
                        db $A9,$00,$00                       ;9E8AD2|        |;
  
@@ -1502,7 +1502,7 @@
           CODE_9E8B79:
                        LDA.W $1043,X                        ;9E8B79|BD4310  |;
                        STA.B $A5                            ;9E8B7C|85A5    |;
-                       LDA.W $0F43,X                        ;9E8B7E|BD430F  |;
+                       LDA.W PStructPosition,X              ;9E8B7E|BD430F  |;
                        CMP.W #$0005                         ;9E8B81|C90500  |;
                        BEQ CODE_9E8B8E                      ;9E8B84|F008    |;
                        LDA.W #$0000                         ;9E8B86|A90000  |;
@@ -1640,7 +1640,7 @@
                        STA.B $AD                            ;9E8C9A|85AD    |;
                        PLA                                  ;9E8C9C|68      |;
                        STA.B $B1                            ;9E8C9D|85B1    |;
-                       LDA.W $0F43,X                        ;9E8C9F|BD430F  |;
+                       LDA.W PStructPosition,X              ;9E8C9F|BD430F  |;
                        BMI CODE_9E8CA8                      ;9E8CA2|3004    |;
                        JSL.L CODE_9E9484                    ;9E8CA4|2284949E|;
  
@@ -2150,7 +2150,7 @@
           CODE_9E90B6:
                        LDY.W $0AD9                          ;9E90B6|ACD90A  |;
                        BMI CODE_9E90C0                      ;9E90B9|3005    |;
-                       LDA.W $0F43,Y                        ;9E90BB|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9E90BB|B9430F  |;
                        BEQ CODE_9E9116                      ;9E90BE|F056    |;
  
           CODE_9E90C0:
@@ -2585,7 +2585,7 @@
                        SEC                                  ;9E94AB|38      |;
                        SBC.W #$000E                         ;9E94AC|E90E00  |;
                        BPL CODE_9E94DE                      ;9E94AF|102D    |;
-                       LDA.W $0F43,Y                        ;9E94B1|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9E94B1|B9430F  |;
                        BMI CODE_9E94DA                      ;9E94B4|3024    |;
                        LDA.W $0D55,Y                        ;9E94B6|B9550D  |;
                        SEC                                  ;9E94B9|38      |;
@@ -2622,7 +2622,7 @@
                        SEC                                  ;9E94F4|38      |;
                        SBC.W #$000E                         ;9E94F5|E90E00  |;
                        BPL CODE_9E9527                      ;9E94F8|102D    |;
-                       LDA.W $0F43,Y                        ;9E94FA|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9E94FA|B9430F  |;
                        BMI CODE_9E9523                      ;9E94FD|3024    |;
                        LDA.W $0D55,Y                        ;9E94FF|B9550D  |;
                        SEC                                  ;9E9502|38      |;
@@ -3005,7 +3005,7 @@
                        BEQ CODE_9E97F6                      ;9E97E2|F012    |;
                        CPY.W #$0018                         ;9E97E4|C01800  |;
                        BCS CODE_9E97F6                      ;9E97E7|B00D    |;
-                       LDA.W $0F43,Y                        ;9E97E9|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9E97E9|B9430F  |;
                        BMI CODE_9E97F6                      ;9E97EC|3008    |;
                        LDA.W $1563,Y                        ;9E97EE|B96315  |;
                        ORA.W $1203,Y                        ;9E97F1|190312  |;
@@ -3035,7 +3035,7 @@
                        LDA.W $1283,Y                        ;9E980E|B98312  |;
                        BIT.W #$1000                         ;9E9811|890010  |;
                        BNE CODE_9E97F7                      ;9E9814|D0E1    |;
-                       LDA.W $0F43,Y                        ;9E9816|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9E9816|B9430F  |;
                        BEQ CODE_9E97FA                      ;9E9819|F0DF    |;
                        LDA.W PucVertVeloc                   ;9E981B|ADF90D  |;
                        CMP.W #$0005                         ;9E981E|C90500  |;
@@ -3101,7 +3101,7 @@
                        BRA CODE_9E98EC                      ;9E9897|8053    |;
  
           CODE_9E9899:
-                       LDA.W $0F43,Y                        ;9E9899|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9E9899|B9430F  |;
                        BEQ CODE_9E98FB                      ;9E989C|F05D    |;
                        LDA.W $0D55,Y                        ;9E989E|B9550D  |;
                        SEC                                  ;9E98A1|38      |;
@@ -3364,7 +3364,7 @@
                        LDA.W #$000C                         ;9E9AC6|A90C00  |;
                        TRB.W $15D8                          ;9E9AC9|1CD815  |;
                        LDY.B zpCurntTeamLoopVal             ;9E9ACC|A491    |;
-                       LDA.W $0F43,Y                        ;9E9ACE|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9E9ACE|B9430F  |;
                        BNE CODE_9E9AED                      ;9E9AD1|D01A    |;
                        JSL.L CODE_9EF213                    ;9E9AD3|2213F29E|;
                        LDY.B zpCurntTeamLoopVal             ;9E9AD7|A491    |;
@@ -3451,7 +3451,7 @@
                        STA.B $A9                            ;9E9B84|85A9    |;
                        LDA.W $15D6                          ;9E9B86|ADD615  |;
                        BNE CODE_9E9BB3                      ;9E9B89|D028    |;
-                       LDA.W $1403,Y                        ;9E9B8B|B90314  |;
+                       LDA.W PStructStickHanl,Y             ;9E9B8B|B90314  |;
                        CMP.W #$000C                         ;9E9B8E|C90C00  |;
                        BCC CODE_9E9BB3                      ;9E9B91|9020    |;
                        LDA.W $1223,Y                        ;9E9B93|B92312  |;
@@ -3471,7 +3471,7 @@
                        RTL                                  ;9E9BB2|6B      |;
  
           CODE_9E9BB3:
-                       LDA.W $0F43,X                        ;9E9BB3|BD430F  |;
+                       LDA.W PStructPosition,X              ;9E9BB3|BD430F  |;
                        BEQ CODE_9E9BD2                      ;9E9BB6|F01A    |;
                        STZ.B $89                            ;9E9BB8|6489    |;
                        LDA.W $1503,X                        ;9E9BBA|BD0315  |;
@@ -3609,7 +3609,7 @@
                        LDA.W $1163,Y                        ;9E9D3E|B96311  |;
                        AND.W #$0003                         ;9E9D41|290300  |;
                        BNE CODE_9E9D59                      ;9E9D44|D013    |;
-                       LDA.W $1483,X                        ;9E9D46|BD8314  |;
+                       LDA.W PStructChecking,X              ;9E9D46|BD8314  |;
                        SEC                                  ;9E9D49|38      |;
                        SBC.W #$000A                         ;9E9D4A|E90A00  |;
                        BMI CODE_9E9D59                      ;9E9D4D|300A    |;
@@ -3624,7 +3624,7 @@
                        STA.W $14E3,X                        ;9E9D5E|9DE314  |;
                        JSL.L CODE_9EA3DD                    ;9E9D61|22DDA39E|;
                        LDX.B $95                            ;9E9D65|A695    |;
-                       LDA.W $0F43,X                        ;9E9D67|BD430F  |;
+                       LDA.W PStructPosition,X              ;9E9D67|BD430F  |;
                        BNE CODE_9E9D79                      ;9E9D6A|D00D    |;
                        CPX.W #$0018                         ;9E9D6C|E01800  |;
                        BCS CODE_9E9D79                      ;9E9D6F|B008    |;
@@ -3654,7 +3654,7 @@
                        LDA.L $7E34BC                        ;9E9D9D|AFBC347E|;
                        CMP.W #$0004                         ;9E9DA1|C90400  |;
                        BEQ CODE_9E9D76                      ;9E9DA4|F0D0    |;
-                       LDA.W $0F43,X                        ;9E9DA6|BD430F  |;
+                       LDA.W PStructPosition,X              ;9E9DA6|BD430F  |;
                        BEQ CODE_9E9D76                      ;9E9DA9|F0CB    |;
                        LDA.W $11A3,Y                        ;9E9DAB|B9A311  |;
                        CMP.W #$F54E                         ;9E9DAE|C94EF5  |;
@@ -3875,7 +3875,7 @@
                        LDA.B [$89],Y                        ;9EA0B1|B789    |;
                        JSL.L CODE_9EA3F1                    ;9EA0B3|22F1A39E|;
                        LDY.B zpCurntTeamLoopVal             ;9EA0B7|A491    |;
-                       LDA.W $0F43,Y                        ;9EA0B9|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EA0B9|B9430F  |;
                        BEQ CODE_9EA10E                      ;9EA0BC|F050    |;
                        LDA.B $B5                            ;9EA0BE|A5B5    |;
                        SEC                                  ;9EA0C0|38      |;
@@ -3897,7 +3897,7 @@
                        JSL.L CODE_9BB39B                    ;9EA0E0|229BB39B|;
                        LDA.B $A5                            ;9EA0E4|A5A5    |;
                        SEC                                  ;9EA0E6|38      |;
-                       SBC.W $1483,X                        ;9EA0E7|FD8314  |;
+                       SBC.W PStructChecking,X              ;9EA0E7|FD8314  |;
                        BMI CODE_9EA10F                      ;9EA0EA|3023    |;
                        JSL.L CODE_9EC124                    ;9EA0EC|2224C19E|;
                        LDA.B $A5                            ;9EA0F0|A5A5    |;
@@ -3937,7 +3937,7 @@
           CODE_9EA164:
                        LDA.W #$0014                         ;9EA164|A91400  |;
                        SEC                                  ;9EA167|38      |;
-                       SBC.W $1483,X                        ;9EA168|FD8314  |;
+                       SBC.W PStructChecking,X              ;9EA168|FD8314  |;
                        STA.B $A5                            ;9EA16B|85A5    |;
                        LDA.L PenaltiesOnOff                 ;9EA16D|AFC4347E|;
                        BEQ CODE_9EA175                      ;9EA171|F002    |; Penalties Off Branch A175
@@ -3963,7 +3963,7 @@
  
           CODE_9EA19B:
                        STY.B $89                            ;9EA19B|8489    |;
-                       LDA.W $0F43,Y                        ;9EA19D|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EA19D|B9430F  |;
                        BEQ CODE_9EA1B4                      ;9EA1A0|F012    |;
                        LDA.W $11A3,Y                        ;9EA1A2|B9A311  |;
                        CMP.W #$F3A6                         ;9EA1A5|C9A6F3  |;
@@ -4056,7 +4056,7 @@
                        JML.L CODE_9EA3F1                    ;9EA248|5CF1A39E|;
  
           CODE_9EA24C:
-                       LDA.W $0F43,X                        ;9EA24C|BD430F  |; Loads Selected Player Position [0-6]
+                       LDA.W PStructPosition,X              ;9EA24C|BD430F  |; Loads Selected Player Position [0-6]
                        BEQ CODE_9EA25E                      ;9EA24F|F00D    |; If 0 [Goalie] RTL
                        JMP.W Y_But_Bug_Fix                  ;9EA251|4CC5FB  |; Hijack for Y button Buf Fix
                        BEQ CODE_9EA25F                      ;9EA254|F009    |; If Action = 0 [None]
@@ -4083,7 +4083,7 @@
  
           CODE_9EA276:
                        STY.B zpCurntTeamLoopVal             ;9EA276|8491    |;
-                       LDA.W $0F43,Y                        ;9EA278|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EA278|B9430F  |;
                        BEQ CODE_9EA2B3                      ;9EA27B|F036    |;
                        BMI CODE_9EA2B3                      ;9EA27D|3034    |;
                        LDA.W $0D55,Y                        ;9EA27F|B9550D  |;
@@ -4148,7 +4148,7 @@
                        JML.L CODE_9EA3DD                    ;9EA2ED|5CDDA39E|;
  
           CODE_9EA2F1:
-                       LDA.W $0F43,X                        ;9EA2F1|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EA2F1|BD430F  |;
                        BEQ CODE_9EA333                      ;9EA2F4|F03D    |;
                        LDA.W $14E3,X                        ;9EA2F6|BDE314  |;
                        BNE CODE_9EA333                      ;9EA2F9|D038    |;
@@ -4449,7 +4449,7 @@
                        JSL.L CODE_9EA3F1                    ;9EA535|22F1A39E|;
  
           CODE_9EA539:
-                       LDA.W $0F43,X                        ;9EA539|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EA539|BD430F  |;
                        BNE CODE_9EA55D                      ;9EA53C|D01F    |;
                        LDA.W $19D4,X                        ;9EA53E|BDD419  |;
                        BMI CODE_9EA55D                      ;9EA541|301A    |;
@@ -4469,7 +4469,7 @@
                        PHX                                  ;9EA55D|DA      |;
                        LDA.W #$0070                         ;9EA55E|A97000  |;
                        CLC                                  ;9EA561|18      |;
-                       ADC.W $12E3,X                        ;9EA562|7DE312  |;
+                       ADC.W PStructAgility,X               ;9EA562|7DE312  |;
                        LDX.W $0ADB                          ;9EA565|AEDB0A  |;
                        JSL.L CODE_808F4C                    ;9EA568|224C8F80|;
                        STA.B $08                            ;9EA56C|8508    |;
@@ -4560,7 +4560,7 @@
                        SEC                                  ;9EA5FB|38      |;
                        SBC.W $0DB7,X                        ;9EA5FC|FDB70D  |;
                        STA.B $A9                            ;9EA5FF|85A9    |;
-                       LDA.W $0F43,X                        ;9EA601|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EA601|BD430F  |;
                        BNE CODE_9EA60E                      ;9EA604|D008    |;
                        LDA.W $0B05,X                        ;9EA606|BD050B  |;
                        BIT.W #$0002                         ;9EA609|890200  |;
@@ -4690,19 +4690,19 @@
                        CLC                                  ;9EA74D|18      |;
                        ADC.W #$0020                         ;9EA74E|692000  |;
                        CLC                                  ;9EA751|18      |;
-                       ADC.W $12E3,X                        ;9EA752|7DE312  |;
+                       ADC.W PStructAgility,X               ;9EA752|7DE312  |;
                        STA.B $AD                            ;9EA755|85AD    |;
-                       LDA.W $12E3,X                        ;9EA757|BDE312  |;
+                       LDA.W PStructAgility,X               ;9EA757|BDE312  |;
                        LSR A                                ;9EA75A|4A      |;
                        ADC.B $AD                            ;9EA75B|65AD    |;
                        STA.B $AD                            ;9EA75D|85AD    |;
-                       LDA.W $0F43,X                        ;9EA75F|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EA75F|BD430F  |;
                        BNE CODE_9EA78C                      ;9EA762|D028    |;
                        LDA.W $19D4,X                        ;9EA764|BDD419  |;
                        BMI CODE_9EA77B                      ;9EA767|3012    |;
                        CPX.W $0AD9                          ;9EA769|ECD90A  |;
                        BEQ CODE_9EA77B                      ;9EA76C|F00D    |;
-                       LDA.W $12E3,X                        ;9EA76E|BDE312  |;
+                       LDA.W PStructAgility,X               ;9EA76E|BDE312  |;
                        ASL A                                ;9EA771|0A      |;
                        ADC.B $AD                            ;9EA772|65AD    |;
                        ADC.W #$0008                         ;9EA774|690800  |;
@@ -4714,7 +4714,7 @@
                        LDY.W $0D07                          ;9EA77D|AC070D  |;
                        BMI CODE_9EA786                      ;9EA780|3004    |;
                        SEC                                  ;9EA782|38      |;
-                       SBC.W $12E3,X                        ;9EA783|FDE312  |;
+                       SBC.W PStructAgility,X               ;9EA783|FDE312  |;
  
           CODE_9EA786:
                        CLC                                  ;9EA786|18      |;
@@ -4771,7 +4771,7 @@
                        PHA                                  ;9EA7EA|48      |;
                        LDX.B $E4                            ;9EA7EB|A6E4    |;
                        JSL.L CODE_9FDCB2                    ;9EA7ED|22B2DC9F|;
-                       LDA.W $1303,X                        ;9EA7F1|BD0313  |;
+                       LDA.W PStructSpeed,X                 ;9EA7F1|BD0313  |;
                        PHA                                  ;9EA7F4|48      |;
                        LDA.L $7E34C6                        ;9EA7F5|AFC6347E|;
                        CMP.W #$0002                         ;9EA7F9|C90200  |;
@@ -4799,7 +4799,7 @@
                        LDA.L UNREACH_80D9C8,X               ;9EA81F|BFC8D980|;
                        STA.B $AF                            ;9EA823|85AF    |;
                        LDX.B $E4                            ;9EA825|A6E4    |;
-                       LDA.W $0F43,X                        ;9EA827|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EA827|BD430F  |;
                        BNE CODE_9EA845                      ;9EA82A|D019    |;
                        LDA.W $19D4,X                        ;9EA82C|BDD419  |;
                        BMI CODE_9EA845                      ;9EA82F|3014    |;
@@ -4849,7 +4849,7 @@
                        db $00,$00,$FC,$FF,$04,$00           ;9EA8A3|        |;
  
           CODE_9EA8A9:
-                       LDA.W $0F43,X                        ;9EA8A9|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EA8A9|BD430F  |;
                        BNE CODE_9EA8B2                      ;9EA8AC|D004    |;
                        JML.L CODE_9ECFDC                    ;9EA8AE|5CDCCF9E|;
  
@@ -5225,7 +5225,7 @@
                        STA.B $10                            ;9EAB85|8510    |;
                        LDA.B $A9                            ;9EAB87|A5A9    |;
                        STA.B $12                            ;9EAB89|8512    |;
-                       LDA.W $0F43,X                        ;9EAB8B|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EAB8B|BD430F  |;
                        BNE CODE_9EAB93                      ;9EAB8E|D003    |;
                        JMP.W CODE_9EADCF                    ;9EAB90|4CCFAD  |;
  
@@ -5803,7 +5803,7 @@
                        JSL.L CODE_9BB445                    ;9EB01A|2245B49B|;
                        LDA.B $A5                            ;9EB01E|A5A5    |;
                        STA.W $10A3,X                        ;9EB020|9DA310  |;
-                       LDA.W $0F43,X                        ;9EB023|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EB023|BD430F  |;
                        BEQ CODE_9EB070                      ;9EB026|F048    |;
                        LDA.W $0EDF                          ;9EB028|ADDF0E  |;
                        STA.B $A5                            ;9EB02B|85A5    |;
@@ -6426,7 +6426,7 @@
                        ASL A                                ;9EB4E5|0A      |;
                        STA.B $A9                            ;9EB4E6|85A9    |;
                        TAY                                  ;9EB4E8|A8      |;
-                       LDA.W $0F43,Y                        ;9EB4E9|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EB4E9|B9430F  |;
                        BMI CODE_9EB4F1                      ;9EB4EC|3003    |;
                        JMP.W CODE_9EB6CC                    ;9EB4EE|4CCCB6  |;
  
@@ -7128,7 +7128,7 @@
  
           CODE_9EBA68:
                        LDY.B zpCurntTeamLoopVal             ;9EBA68|A491    |;
-                       LDA.W $0F43,Y                        ;9EBA6A|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EBA6A|B9430F  |;
                        BNE CODE_9EBA67                      ;9EBA6D|D0F8    |;
                        LDA.W $15D6                          ;9EBA6F|ADD615  |;
                        BNE CODE_9EBA67                      ;9EBA72|D0F3    |;
@@ -7163,7 +7163,7 @@
                        BNE CODE_9EBA67                      ;9EBAB0|D0B5    |;
                        LDA.W #$0014                         ;9EBAB2|A91400  |;
                        SEC                                  ;9EBAB5|38      |;
-                       SBC.W $1443,X                        ;9EBAB6|FD4314  |;
+                       SBC.W PStructAggression,X            ;9EBAB6|FD4314  |;
                        JSL.L CODE_9BB385                    ;9EBAB9|2285B39B|;
                        CMP.W #$0002                         ;9EBABD|C90200  |;
                        BCS CODE_9EBA67                      ;9EBAC0|B0A5    |;
@@ -7263,7 +7263,7 @@
                        LDY.B zpCurntTeamLoopVal             ;9EBC24|A491    |;
                        LDA.W $14E3,X                        ;9EBC26|BDE314  |;
                        BNE CODE_9EBCA3                      ;9EBC29|D078    |;
-                       LDA.W $0F43,X                        ;9EBC2B|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EBC2B|BD430F  |;
                        BEQ CODE_9EBCA3                      ;9EBC2E|F073    |;
                        LDA.L PenaltiesOnOff                 ;9EBC30|AFC4347E|;
                        BNE CODE_9EBC4F                      ;9EBC34|D019    |; If Penalties On Branch BC4F
@@ -7391,7 +7391,7 @@
                        JSL.L CODE_9EA3F1                    ;9EBD8D|22F1A39E|;
                        LDA.W #$0006                         ;9EBD91|A90600  |;
                        STA.B $AD                            ;9EBD94|85AD    |;
-                       LDA.W $14A3,X                        ;9EBD96|BDA314  |;
+                       LDA.W PStructHanded,X                ;9EBD96|BDA314  |;
                        BEQ CODE_9EBDA0                      ;9EBD99|F005    |;
                        LDA.W #$0002                         ;9EBD9B|A90200  |;
                        STA.B $AD                            ;9EBD9E|85AD    |;
@@ -7510,7 +7510,7 @@
                        ADC.B $A5                            ;9EBEF2|65A5    |;
                        STA.W $1624                          ;9EBEF4|8D2416  |;
                        LDA.W #$FFFF                         ;9EBEF7|A9FFFF  |;
-                       STA.W $0F43,X                        ;9EBEFA|9D430F  |;
+                       STA.W PStructPosition,X              ;9EBEFA|9D430F  |;
                        LDA.W PauseScreenActive              ;9EBEFD|ADDA15  |;
                        BNE CODE_9EBF0A                      ;9EBF00|D008    |;
                        LDA.W #$0171                         ;9EBF02|A97101  |;
@@ -7534,7 +7534,7 @@
                        LDX.W #$0000                         ;9EBF20|A20000  |;
  
           CODE_9EBF23:
-                       LDA.W $0F43,X                        ;9EBF23|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EBF23|BD430F  |;
                        BPL CODE_9EBF3B                      ;9EBF26|1013    |;
                        JSL.L CODE_9EBEA1                    ;9EBF28|22A1BE9E|;
                        LDA.B $08                            ;9EBF2C|A508    |;
@@ -7740,7 +7740,7 @@
           CODE_9EC09A:
                        INX                                  ;9EC09A|E8      |;
                        INX                                  ;9EC09B|E8      |;
-                       LDA.W $0F43,X                        ;9EC09C|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EC09C|BD430F  |;
                        BPL CODE_9EC09A                      ;9EC09F|10F9    |;
                        LDA.B $A5                            ;9EC0A1|A5A5    |;
                        LSR A                                ;9EC0A3|4A      |;
@@ -7764,7 +7764,7 @@
                        LDY.B $A9                            ;9EC0CB|A4A9    |;
                        LDA.B [$89],Y                        ;9EC0CD|B789    |;
                        AND.W #$00FF                         ;9EC0CF|29FF00  |;
-                       STA.W $0F43,X                        ;9EC0D2|9D430F  |;
+                       STA.W PStructPosition,X              ;9EC0D2|9D430F  |;
                        STX.B $95                            ;9EC0D5|8695    |;
                        JSL.L CODE_9FCED0                    ;9EC0D7|22D0CE9F|;
                        JSL.L CODE_9FCEF6                    ;9EC0DB|22F6CE9F|;
@@ -7812,7 +7812,7 @@
           CODE_9EC124:
                        LDA.W #$0014                         ;9EC124|A91400  |;
                        SEC                                  ;9EC127|38      |;
-                       SBC.W $1443,X                        ;9EC128|FD4314  |;
+                       SBC.W PStructAggression,X            ;9EC128|FD4314  |;
                        ASL A                                ;9EC12B|0A      |;
                        ASL A                                ;9EC12C|0A      |;
                        ASL A                                ;9EC12D|0A      |;
@@ -8177,7 +8177,7 @@
                        BEQ CODE_9EC5AD                      ;9EC577|F034    |;
                        BIT.W #$0001                         ;9EC579|890100  |;
                        BEQ CODE_9EC5AD                      ;9EC57C|F02F    |;
-                       LDA.W $0F43,Y                        ;9EC57E|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EC57E|B9430F  |;
                        BEQ CODE_9EC5AD                      ;9EC581|F02A    |;
                        LDA.W $0CF1                          ;9EC583|ADF10C  |;
                        BIT.W #$0002                         ;9EC586|890200  |;
@@ -8299,7 +8299,7 @@
                        STA.B $AD                            ;9EC691|85AD    |;
  
           CODE_9EC693:
-                       LDA.W $0F43,Y                        ;9EC693|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EC693|B9430F  |;
                        BMI CODE_9EC6A2                      ;9EC696|300A    |;
                        BEQ CODE_9EC6A2                      ;9EC698|F008    |;
                        LDA.B $A5                            ;9EC69A|A5A5    |;
@@ -8332,7 +8332,7 @@
                        STA.B $AD                            ;9EC6C9|85AD    |;
  
           CODE_9EC6CB:
-                       LDA.W $0F43,Y                        ;9EC6CB|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EC6CB|B9430F  |;
                        BMI CODE_9EC6DA                      ;9EC6CE|300A    |;
                        BEQ CODE_9EC6DA                      ;9EC6D0|F008    |;
                        LDA.B $A5                            ;9EC6D2|A5A5    |;
@@ -10103,7 +10103,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        JMP.W CODE_9EDB21                    ;9ED4C7|4C21DB  |;
  
           CODE_9ED4CA:
-                       LDA.W $1343,X                        ;9ED4CA|BD4313  |;
+                       LDA.W PStructDefAware,X              ;9ED4CA|BD4313  |;
                        LSR A                                ;9ED4CD|4A      |;
                        CLC                                  ;9ED4CE|18      |;
                        ADC.W $1003,X                        ;9ED4CF|7D0310  |;
@@ -11362,7 +11362,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
           CODE_9EDF0C:
                        LDA.W #$0020                         ;9EDF0C|A92000  |;
                        SEC                                  ;9EDF0F|38      |;
-                       SBC.W $13E3,X                        ;9EDF10|FDE313  |;
+                       SBC.W PStructRoughing,X              ;9EDF10|FDE313  |;
                        ASL A                                ;9EDF13|0A      |;
                        ASL A                                ;9EDF14|0A      |;
                        ASL A                                ;9EDF15|0A      |;
@@ -11419,7 +11419,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        db $A0,$0C,$00                       ;9EDF81|        |;
  
           CODE_9EDF84:
-                       LDA.W $0F43,Y                        ;9EDF84|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EDF84|B9430F  |;
                        BEQ CODE_9EDF9D                      ;9EDF87|F014    |;
                        LDA.W $0B5D,Y                        ;9EDF89|B95D0B  |;
                        SEC                                  ;9EDF8C|38      |;
@@ -11495,7 +11495,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDY.W #$000C                         ;9EE011|A00C00  |;
  
           CODE_9EE014:
-                       LDA.W $0F43,Y                        ;9EE014|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EE014|B9430F  |;
                        BEQ CODE_9EE022                      ;9EE017|F009    |;
                        INY                                  ;9EE019|C8      |;
                        INY                                  ;9EE01A|C8      |;
@@ -11807,7 +11807,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        STA.B $01,S                          ;9EE272|8301    |;
  
           CODE_9EE274:
-                       LDA.W $1363,X                        ;9EE274|BD6313  |;
+                       LDA.W PStructShotPower,X             ;9EE274|BD6313  |;
                        STX.B $89                            ;9EE277|8689    |;
                        JSL.L CODE_9FDCEB                    ;9EE279|22EBDC9F|;
                        ADC.W #$0014                         ;9EE27D|691400  |;
@@ -11884,7 +11884,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        CMP.W #$00C9                         ;9EE30D|C9C900  |;
                        BCS CODE_9EE321                      ;9EE310|B00F    |;
                        LDA.W #$0010                         ;9EE312|A91000  |;
-                       ADC.W $1383,X                        ;9EE315|7D8313  |;
+                       ADC.W PStructShotAccur,X             ;9EE315|7D8313  |;
                        JSL.L CODE_9BB385                    ;9EE318|2285B39B|;
                        CMP.W #$000F                         ;9EE31C|C90F00  |;
                        BCS CODE_9EE387                      ;9EE31F|B066    |;
@@ -11895,7 +11895,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LSR A                                ;9EE325|4A      |;
                        LSR A                                ;9EE326|4A      |;
                        SEC                                  ;9EE327|38      |;
-                       SBC.W $1383,X                        ;9EE328|FD8313  |;
+                       SBC.W PStructShotAccur,X             ;9EE328|FD8313  |;
                        CLC                                  ;9EE32B|18      |;
                        ADC.W #$0010                         ;9EE32C|691000  |;
                        LDX.B $B1                            ;9EE32F|A6B1    |;
@@ -12342,7 +12342,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        db $00                               ;9EE6D1|        |;
  
           CODE_9EE6D2:
-                       LDA.W $0F43,X                        ;9EE6D2|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EE6D2|BD430F  |;
                        BNE CODE_9EE6F6                      ;9EE6D5|D01F    |;
                        LDA.W $0D71                          ;9EE6D7|AD710D  |;
                        CMP.W #$FFF0                         ;9EE6DA|C9F0FF  |;
@@ -12562,7 +12562,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        BNE CODE_9EE8B4                      ;9EE8A2|D010    |;
                        LDA.W #$0010                         ;9EE8A4|A91000  |;
                        CLC                                  ;9EE8A7|18      |;
-                       ADC.W $13E3,X                        ;9EE8A8|7DE313  |;
+                       ADC.W PStructRoughing,X              ;9EE8A8|7DE313  |;
                        JSL.L CODE_9BB385                    ;9EE8AB|2285B39B|;
                        CMP.W #$0009                         ;9EE8AF|C90900  |;
                        BCS CODE_9EE8ED                      ;9EE8B2|B039    |;
@@ -12578,7 +12578,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        STA.B $A5                            ;9EE8C6|85A5    |;
  
           CODE_9EE8C8:
-                       LDA.W $0F43,X                        ;9EE8C8|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EE8C8|BD430F  |;
                        BEQ CODE_9EE8E7                      ;9EE8CB|F01A    |;
                        LDA.W $0D71                          ;9EE8CD|AD710D  |;
                        CMP.W #$FFD7                         ;9EE8D0|C9D7FF  |;
@@ -12602,7 +12602,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
           CODE_9EE8EE:
                        LDY.B $A5                            ;9EE8EE|A4A5    |;
                        STY.B $89                            ;9EE8F0|8489    |;
-                       LDA.W $0F43,Y                        ;9EE8F2|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EE8F2|B9430F  |;
                        BEQ CODE_9EE8ED                      ;9EE8F5|F0F6    |;
                        BMI CODE_9EE8ED                      ;9EE8F7|30F4    |;
                        LDA.W $1283,Y                        ;9EE8F9|B98312  |;
@@ -12676,7 +12676,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        DEC.B $B1                            ;9EE98C|C6B1    |;
                        BPL CODE_9EE974                      ;9EE98E|10E4    |;
                        JSL.L CODE_9EE9BF                    ;9EE990|22BFE99E|;
-                       LDA.W $0F43,X                        ;9EE994|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EE994|BD430F  |;
                        BEQ CODE_9EE9A2                      ;9EE997|F009    |;
                        PLA                                  ;9EE999|68      |;
                        SEP #$20                             ;9EE99A|E220    |;
@@ -12716,9 +12716,9 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        STA.W $0CF3                          ;9EE9D6|8DF30C  |;
                        LDA.W #$0007                         ;9EE9D9|A90700  |;
                        STA.B $A5                            ;9EE9DC|85A5    |;
-                       LDA.W $0F43,X                        ;9EE9DE|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EE9DE|BD430F  |;
                        BEQ CODE_9EE9E8                      ;9EE9E1|F005    |;
-                       LDA.W $13A3,X                        ;9EE9E3|BDA313  |;
+                       LDA.W PStructPassAccur,X             ;9EE9E3|BDA313  |;
                        STA.B $A5                            ;9EE9E6|85A5    |;
  
           CODE_9EE9E8:
@@ -12741,7 +12741,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        CPX.B $8D                            ;9EEA08|E48D    |;
                        BEQ CODE_9EEA50                      ;9EEA0A|F044    |;
                        LDY.B $8D                            ;9EEA0C|A48D    |;
-                       LDA.W $0F43,Y                        ;9EEA0E|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EEA0E|B9430F  |;
                        BMI CODE_9EEA50                      ;9EEA11|303D    |;
                        BEQ CODE_9EEA50                      ;9EEA13|F03B    |;
                        LDA.W $1283,Y                        ;9EEA15|B98312  |;
@@ -12836,7 +12836,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        STA.W $0E01                          ;9EEAC9|8D010E  |;
  
           CODE_9EEACC:
-                       LDA.W $0F43,X                        ;9EEACC|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EEACC|BD430F  |;
                        BNE CODE_9EEAE9                      ;9EEACF|D018    |;
                        LDA.W $14C3,X                        ;9EEAD1|BDC314  |;
                        BEQ CODE_9EEADD                      ;9EEAD4|F007    |;
@@ -12858,7 +12858,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        STA.B $A9                            ;9EEAF1|85A9    |;
                        JSL.L CODE_9BB445                    ;9EEAF3|2245B49B|;
                        LDY.W #$E34E                         ;9EEAF7|A04EE3  |;
-                       LDA.W $0F43,X                        ;9EEAFA|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EEAFA|BD430F  |;
                        BEQ CODE_9EEB0B                      ;9EEAFD|F00C    |;
                        LDY.W #$EC66                         ;9EEAFF|A066EC  |;
                        JSL.L CODE_9EE698                    ;9EEB02|2298E69E|;
@@ -12870,7 +12870,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        JSL.L CODE_9EA3DD                    ;9EEB0D|22DDA39E|;
                        LDA.W #$0001                         ;9EEB11|A90100  |;
                        STA.W $14E3,X                        ;9EEB14|9DE314  |;
-                       LDA.W $0F43,X                        ;9EEB17|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EEB17|BD430F  |;
                        BNE CODE_9EEB2D                      ;9EEB1A|D011    |;
                        LDA.W $19D4,X                        ;9EEB1C|BDD419  |;
                        BMI CODE_9EEB2D                      ;9EEB1F|300C    |;
@@ -12893,7 +12893,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
  
           CODE_9EEB40:
                        LDX.W $0B9D,Y                        ;9EEB40|BE9D0B  |;
-                       LDA.W $1343,X                        ;9EEB43|BD4313  |;
+                       LDA.W PStructDefAware,X              ;9EEB43|BD4313  |;
                        LSR A                                ;9EEB46|4A      |;
                        CLC                                  ;9EEB47|18      |;
                        ADC.W #$0001                         ;9EEB48|690100  |;
@@ -13033,7 +13033,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDX.B $E4                            ;9EEC52|A6E4    |;
                        LDA.W #$0010                         ;9EEC54|A91000  |;
                        SEC                                  ;9EEC57|38      |;
-                       SBC.W $13A3,X                        ;9EEC58|FDA313  |;
+                       SBC.W PStructPassAccur,X             ;9EEC58|FDA313  |;
                        JSL.L CODE_9BB3A4                    ;9EEC5B|22A4B39B|;
                        CLC                                  ;9EEC5F|18      |;
                        ADC.B $B9                            ;9EEC60|65B9    |;
@@ -13083,7 +13083,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDY.B zpCurntTeamLoopVal             ;9EECC6|A491    |;
                        LDA.W $19D4,X                        ;9EECC8|BDD419  |;
                        STA.W $0B01,Y                        ;9EECCB|99010B  |;
-                       LDA.W $0F43,X                        ;9EECCE|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EECCE|BD430F  |;
                        BNE CODE_9EECF5                      ;9EECD1|D022    |;
                        LDA.W $19D4,X                        ;9EECD3|BDD419  |;
                        BMI CODE_9EECF5                      ;9EECD6|301D    |;
@@ -13103,7 +13103,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
  
           CODE_9EECF6:
                        STX.W $0BA3                          ;9EECF6|8EA30B  |;
-                       LDA.W $0F43,X                        ;9EECF9|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EECF9|BD430F  |;
                        BEQ UNREACH_9EED6D                   ;9EECFC|F06F    |;
                        LDA.W $14C3,X                        ;9EECFE|BDC314  |;
                        BNE CODE_9EED38                      ;9EED01|D035    |;
@@ -13205,7 +13205,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        RTL                                  ;9EEDE9|6B      |;
  
           CODE_9EEDEA:
-                       LDA.W $0F43,X                        ;9EEDEA|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EEDEA|BD430F  |;
                        BNE CODE_9EEDFD                      ;9EEDED|D00E    |;
                        db $98,$0A,$6D,$A5,$0B,$8D,$A5,$0B   ;9EEDEF|        |;
                        db $BD,$63,$11,$8D,$03,$0D           ;9EEDF7|        |;
@@ -13219,7 +13219,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        PLB                                  ;9EEE05|AB      |;
                        LDA.W #$000F                         ;9EEE06|A90F00  |;
                        SEC                                  ;9EEE09|38      |;
-                       SBC.W $13A3,X                        ;9EEE0A|FDA313  |;
+                       SBC.W PStructPassAccur,X             ;9EEE0A|FDA313  |;
                        ASL A                                ;9EEE0D|0A      |;
                        STA.B $B5                            ;9EEE0E|85B5    |;
                        LDY.W $0BA5                          ;9EEE10|ACA50B  |;
@@ -13257,7 +13257,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
  
           CODE_9EEE57:
                        LDX.B $E4                            ;9EEE57|A6E4    |;
-                       LDY.W $0F43,X                        ;9EEE59|BC430F  |;
+                       LDY.W PStructPosition,X              ;9EEE59|BC430F  |;
                        BEQ UNREACH_9EEE68                   ;9EEE5C|F00A    |;
                        CMP.W #$0010                         ;9EEE5E|C91000  |;
                        BCS CODE_9EEE66                      ;9EEE61|B003    |;
@@ -13502,21 +13502,21 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        ADC.B $AD                            ;9EF093|65AD    |;
                        ASL A                                ;9EF095|0A      |;
                        STA.B $AD                            ;9EF096|85AD    |;
-                       LDA.W $1443,Y                        ;9EF098|B94314  |;
+                       LDA.W PStructAggression,Y            ;9EF098|B94314  |;
                        STA.B $A9                            ;9EF09B|85A9    |;
                        LDA.B $AD                            ;9EF09D|A5AD    |;
                        BEQ CODE_9EF0BE                      ;9EF09F|F01D    |;
-                       LDA.W $13A3,Y                        ;9EF0A1|B9A313  |;
+                       LDA.W PStructPassAccur,Y             ;9EF0A1|B9A313  |;
                        STA.B $A9                            ;9EF0A4|85A9    |;
                        LDA.B $AD                            ;9EF0A6|A5AD    |;
                        CMP.W #$0002                         ;9EF0A8|C90200  |;
                        BEQ CODE_9EF0BE                      ;9EF0AB|F011    |;
-                       LDA.W $13E3,Y                        ;9EF0AD|B9E313  |;
+                       LDA.W PStructRoughing,Y              ;9EF0AD|B9E313  |;
                        STA.B $A9                            ;9EF0B0|85A9    |;
                        LDA.B $AD                            ;9EF0B2|A5AD    |;
                        CMP.W #$0004                         ;9EF0B4|C90400  |;
                        BEQ CODE_9EF0BE                      ;9EF0B7|F005    |;
-                       LDA.W $1423,Y                        ;9EF0B9|B92314  |;
+                       LDA.W PStructEndurance,Y             ;9EF0B9|B92314  |;
                        STA.B $A9                            ;9EF0BC|85A9    |;
  
           CODE_9EF0BE:
@@ -13659,7 +13659,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
           CODE_9EF1CE:
                        LDA.W #$0002                         ;9EF1CE|A90200  |;
                        CLC                                  ;9EF1D1|18      |;
-                       ADC.W $1363,Y                        ;9EF1D2|796313  |;
+                       ADC.W PStructShotPower,Y             ;9EF1D2|796313  |;
                        XBA                                  ;9EF1D5|EB      |;
                        AND.W #$FF00                         ;9EF1D6|2900FF  |;
                        ASL A                                ;9EF1D9|0A      |;
@@ -13991,9 +13991,9 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        STA.W $19BE                          ;9EF455|8DBE19  |;
  
           CODE_9EF458:
-                       LDA.W $177E,X                        ;9EF458|BD7E17  |;
-                       INC A                                ;9EF45B|1A      |;
-                       STA.W $177E,X                        ;9EF45C|9D7E17  |;
+                       LDA.W PerStat_GoalsPerPeriod,X       ;9EF458|BD7E17  |;
+                       INC A                                ;9EF45B|1A      |; Add 1 to Period Goals Period Stats
+                       STA.W PerStat_GoalsPerPeriod,X       ;9EF45C|9D7E17  |;
                        PLX                                  ;9EF45F|FA      |;
                        LDA.L $7E313A                        ;9EF460|AF3A317E|;
                        CMP.W #$0258                         ;9EF464|C95802  |;
@@ -14142,7 +14142,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        STA.B $B1                            ;9EF5C2|85B1    |;
  
           CODE_9EF5C4:
-                       LDA.W $0F43,X                        ;9EF5C4|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EF5C4|BD430F  |;
                        BMI CODE_9EF5D2                      ;9EF5C7|3009    |;
                        BEQ CODE_9EF5D2                      ;9EF5C9|F007    |;
                        STZ.W $1563,X                        ;9EF5CB|9E6315  |;
@@ -14158,7 +14158,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
  
           CODE_9EF5DA:
                        LDY.B zpCurntTeamLoopVal             ;9EF5DA|A491    |;
-                       LDA.W $0F43,Y                        ;9EF5DC|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EF5DC|B9430F  |;
                        BNE CODE_9EF5EA                      ;9EF5DF|D009    |;
                        LDA.W $15D4                          ;9EF5E1|ADD415  |;
                        BIT.W #$0010                         ;9EF5E4|891000  |;
@@ -14183,12 +14183,12 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDA.B $A5                            ;9EF605|A5A5    |;
                        CMP.W #$0025                         ;9EF607|C92500  |;
                        BCS CODE_9EF5E9                      ;9EF60A|B0DD    |;
-                       LDA.W $0F43,Y                        ;9EF60C|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EF60C|B9430F  |;
                        BEQ CODE_9EF64C                      ;9EF60F|F03B    |;
                        LDY.B $89                            ;9EF611|A489    |;
-                       LDA.W $0F43,Y                        ;9EF613|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9EF613|B9430F  |;
                        BEQ CODE_9EF5E9                      ;9EF616|F0D1    |;
-                       LDA.W $1403,Y                        ;9EF618|B90314  |;
+                       LDA.W PStructStickHanl,Y             ;9EF618|B90314  |;
                        JSL.L CODE_9FDCEB                    ;9EF61B|22EBDC9F|;
                        LDA.B $A5                            ;9EF61F|A5A5    |;
                        PHA                                  ;9EF621|48      |;
@@ -14196,7 +14196,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDY.B zpCurntTeamLoopVal             ;9EF624|A491    |;
                        STY.B $89                            ;9EF626|8489    |;
                        STA.B zpCurntTeamLoopVal             ;9EF628|8591    |;
-                       LDA.W $1403,Y                        ;9EF62A|B90314  |;
+                       LDA.W PStructStickHanl,Y             ;9EF62A|B90314  |;
                        STA.B $A5                            ;9EF62D|85A5    |;
                        JSL.L CODE_9FDCEB                    ;9EF62F|22EBDC9F|;
                        LDA.B $89                            ;9EF633|A589    |;
@@ -14214,7 +14214,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
  
           CODE_9EF64C:
                        LDY.B $89                            ;9EF64C|A489    |;
-                       LDA.W $1403,Y                        ;9EF64E|B90314  |;
+                       LDA.W PStructStickHanl,Y             ;9EF64E|B90314  |;
                        JSL.L CODE_9FDCEB                    ;9EF651|22EBDC9F|;
                        LDA.B $A5                            ;9EF655|A5A5    |;
                        ADC.W #$0014                         ;9EF657|691400  |;
@@ -14224,7 +14224,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDY.B zpCurntTeamLoopVal             ;9EF661|A491    |;
                        STY.B $89                            ;9EF663|8489    |;
                        STA.B zpCurntTeamLoopVal             ;9EF665|8591    |;
-                       LDA.W $1403,Y                        ;9EF667|B90314  |;
+                       LDA.W PStructStickHanl,Y             ;9EF667|B90314  |;
                        JSL.L CODE_9FDCEB                    ;9EF66A|22EBDC9F|;
                        LDA.B $A5                            ;9EF66E|A5A5    |;
                        ADC.W #$0014                         ;9EF670|691400  |;
@@ -14274,7 +14274,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        BIT.W #$1000                         ;9EF6CA|890010  |;
                        BNE CODE_9EF6E1                      ;9EF6CD|D012    |;
                        LDY.B zpCurntTeamLoopVal             ;9EF6CF|A491    |;
-                       LDA.W $1403,Y                        ;9EF6D1|B90314  |;
+                       LDA.W PStructStickHanl,Y             ;9EF6D1|B90314  |;
                        PHX                                  ;9EF6D4|DA      |;
                        LDX.W #$02BC                         ;9EF6D5|A2BC02  |;
                        JSL.L CODE_808F98                    ;9EF6D8|22988F80|;
@@ -14286,7 +14286,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDA.B $A9                            ;9EF6E1|A5A9    |;
                        CLC                                  ;9EF6E3|18      |;
                        ADC.W #$2710                         ;9EF6E4|691027  |;
-                       LDY.W $0F43,X                        ;9EF6E7|BC430F  |;
+                       LDY.W PStructPosition,X              ;9EF6E7|BC430F  |;
                        BEQ CODE_9EF6F1                      ;9EF6EA|F005    |;
                        db $EC,$07,$0D,$D0,$03               ;9EF6EC|        |;
  
@@ -14301,7 +14301,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        LDA.B $0A                            ;9EF6FF|A50A    |;
                        SBC.B $A7                            ;9EF701|E5A7    |;
                        BCS CODE_9EF71F                      ;9EF703|B01A    |;
-                       LDA.W $0F43,X                        ;9EF705|BD430F  |;
+                       LDA.W PStructPosition,X              ;9EF705|BD430F  |;
                        BEQ CODE_9EF714                      ;9EF708|F00A    |;
                        db $A5,$AD,$C9,$25,$00,$90,$03,$4C   ;9EF70A|        |;
                        db $99,$F6                           ;9EF712|        |;

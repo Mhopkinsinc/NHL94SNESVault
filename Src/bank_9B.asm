@@ -2815,7 +2815,7 @@
                        BRA CODE_9BA0A2                      ;9BA04B|8055    |;
  
           CODE_9BA04D:
-                       LDA.W $0DF9                          ;9BA04D|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9BA04D|ADF90D  |;
                        CMP.W #$001A                         ;9BA050|C91A00  |;
                        BMI CODE_9BA076                      ;9BA053|3021    |;
                        ASL A                                ;9BA055|0A      |;
@@ -2832,7 +2832,7 @@
                        JMP.W CODE_9BA106                    ;9BA076|4C06A1  |;
  
           CODE_9BA079:
-                       LDA.W $0DF9                          ;9BA079|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9BA079|ADF90D  |;
                        CMP.W #$001A                         ;9BA07C|C91A00  |;
                        BMI CODE_9BA076                      ;9BA07F|30F5    |;
                        ASL A                                ;9BA081|0A      |;
@@ -3528,7 +3528,7 @@
                        STA.W $2180                          ;9BA988|8D8021  |;
                        LDA.W $13C5,X                        ;9BA98B|BDC513  |;
                        STA.W $2180                          ;9BA98E|8D8021  |;
-                       LDA.W $0F43,X                        ;9BA991|BD430F  |;
+                       LDA.W PStructPosition,X              ;9BA991|BD430F  |;
                        BPL CODE_9BA998                      ;9BA994|1002    |;
                        LDA.B #$FF                           ;9BA996|A9FF    |;
  
@@ -3950,7 +3950,7 @@
  
           CODE_9BAD19:
                        LDY.B $89                            ;9BAD19|A489    |;
-                       LDA.W $0F43,Y                        ;9BAD1B|B9430F  |;
+                       LDA.W PStructPosition,Y              ;9BAD1B|B9430F  |;
                        BMI CODE_9BAD81                      ;9BAD1E|3061    |;
                        LDA.W $0D55,Y                        ;9BAD20|B9550D  |;
                        SEC                                  ;9BAD23|38      |;
@@ -4529,7 +4529,7 @@
                        db $A9,$FF,$9D,$44,$0F               ;9BB22D|        |;
  
           CODE_9BB232:
-                       STA.W $0F43,X                        ;9BB232|9D430F  |;
+                       STA.W PStructPosition,X              ;9BB232|9D430F  |;
                        STZ.W $0F46,X                        ;9BB235|9E460F  |;
                        LDA.B $14                            ;9BB238|A514    |;
                        LSR A                                ;9BB23A|4A      |;
@@ -4550,7 +4550,7 @@
                        DEC.B $A9                            ;9BB250|C6A9    |;
                        BPL CODE_9BB213                      ;9BB252|10BF    |;
                        LDA.W $2180                          ;9BB254|AD8021  |;
-                       STA.W $0DF9                          ;9BB257|8DF90D  |;
+                       STA.W PucVertVeloc                   ;9BB257|8DF90D  |;
                        BPL CODE_9BB260                      ;9BB25A|1004    |;
                        LDA.B #$FF                           ;9BB25C|A9FF    |;
                        BRA CODE_9BB262                      ;9BB25E|8002    |;

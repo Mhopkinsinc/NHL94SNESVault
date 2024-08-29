@@ -2978,7 +2978,7 @@
                        LDA.W #$0000                         ;9CA0BC|A90000  |;
                        CPX.W #$001C                         ;9CA0BF|E01C00  |;
                        BNE CODE_9CA0C7                      ;9CA0C2|D003    |;
-                       LDA.W $0DF9                          ;9CA0C4|ADF90D  |;
+                       LDA.W PucVertVeloc                   ;9CA0C4|ADF90D  |;
  
           CODE_9CA0C7:
                        CPX.W #$001E                         ;9CA0C7|E01E00  |;
@@ -2992,7 +2992,7 @@
                        LDA.L $7E34BC                        ;9CA0D6|AFBC347E|;
                        CMP.W #$0004                         ;9CA0DA|C90400  |;
                        BNE CODE_9CA0E4                      ;9CA0DD|D005    |;
-                       LDA.W $0F43,X                        ;9CA0DF|BD430F  |;
+                       LDA.W PStructPosition,X              ;9CA0DF|BD430F  |;
                        BMI CODE_9CA0FE                      ;9CA0E2|301A    |;
  
           CODE_9CA0E4:
@@ -3182,7 +3182,7 @@
                        STZ.B zpCurntTeamLoopVal             ;9CA23B|6491    |;
                        STZ.B $95                            ;9CA23D|6495    |;
                        STZ.B $99                            ;9CA23F|6499    |;
-                       STZ.W $0DF9                          ;9CA241|9CF90D  |;
+                       STZ.W PucVertVeloc                   ;9CA241|9CF90D  |; Reset Puck Vert Position
  
           CODE_9CA244:
                        LDX.B zpCurntTeamLoopVal             ;9CA244|A691    |;
