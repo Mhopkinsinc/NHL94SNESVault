@@ -8895,9 +8895,9 @@ Real_Time_Pen_Clock_2:
                        ADC.B $14                            ;9FD22F|6514    |; $14 index to players RNG
                        TAY                                  ;9FD231|A8      |; Transfer A to Y
                        SEP #$20                             ;9FD232|E220    |; Set Accum to 8 bit
-                       LDA.W PStructRNG,Y                   ;9FD234|B9121A  |; Players RNG for Attribute
-                       LSR A                                ;9FD237|4A      |; Divide by 2 BUG: LSR treats as unsigned
-                       LSR A                                ;9FD238|4A      |; Divide by 2 BUG: LSR treats as unsigned
+                       JSR.W DivideBy2                      ;9FD234|2032FB  |; Hijack for Hot/Cold Divide by 2 error fix
+                       NOP                                  ;9FD237|EA      |; Divide by 2 BUG: LSR treats as unsigned
+                       NOP                                  ;9FD238|EA      |; Divide by 2 BUG: LSR treats as unsigned
                        BIT.B #$00                           ;9FD239|8900    |; Check if the result is zero
                        BEQ CODE_9FD23F                      ;9FD23B|F002    |; Jmp if result is zero
                        ORA.B #$00                           ;9FD23D|0900    |; Sets Processor status flags? Leaves A alone
@@ -12814,6 +12814,20 @@ Real_Time_Pen_Clock_2:
                        STA.W Def_Ctrl                       ;9FFB2B|8D941C  |; Enable Home Defense Control (1C94)
                        STA.W Def_Ctrl_Awy                   ;9FFB2E|8D961C  |; Enable Away Defense Control (1C96)
                        RTS                                  ;9FFB31|60      |; Return from this Subroutine
+    DivideBy2:
+                       LDA.W PStructRNG,Y                   ;9FFB32|B9121A  |; Run hijacked instruction
+                       BPL .positive                        ;9FFB35|1009    |; Branch on Plus (N clear)
+                       EOR.B #$FF                           ;9FFB37|49FF    |; Exclusive OR with $FF (all 1's). Flips all bits, $FA becomes $05. Part of two's complement conversion
+                       INC A                                ;9FFB39|1A      |; Increment accumulator. $05 becomes $06, completing two's complement. Now we have +6
+                       LSR A                                ;9FFB3A|4A      |; Logical Shift Right (divide by 2). $06 (0000 0110) becomes $03 (0000 0011)
+                       LSR A                                ;9FFB3B|4A      |; Logical Shift Right again (divide by 2 again). $03 (0000 0011) becomes $01 (0000 0001)
+                       EOR.B #$FF                           ;9FFB3C|49FF    |; Flip all bits again. $01 becomes $FE, starting conversion back to negative
+                       INC A                                ;9FFB3E|1A      |; Increment accumulator. $FE becomes $FF, completing conversion to -1
+                       RTS                                  ;9FFB3F|60      |; Return
+    .positive:
+                       LSR A                                ;9FFB40|4A      |; For positive numbers, simply shift right (divide by 2)
+                       LSR A                                ;9FFB41|4A      |; For positive numbers, simply shift right (divide by 2)
+                       RTS                                  ;9FFB42|60      |; Return
                        
-                       padbyte $FF
-                       pad $A08000
+                        padbyte $FF
+                        pad $A08000
