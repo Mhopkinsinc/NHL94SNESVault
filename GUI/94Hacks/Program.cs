@@ -97,7 +97,7 @@ namespace Snes94Hacks
                     })
                     .AddChoiceGroup("Bug Fixes", new[]
                     {
-                            "Y Button Bug Fix"
+                            "Y Button Bug Fix", "Hot Cold Bonus Bug Fix"
                     })
                     ) ;
 
@@ -320,6 +320,10 @@ namespace Snes94Hacks
                     else if (hack == "Skip Flying Pucks Intro")
                     {
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!FlyingPucks_Intro", "0");
+                    }
+                    else if (hack == "Hot Cold Bonus Bug Fix")
+                    {
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!HotCold_Bugfix", "1");
                     }
 
                 }

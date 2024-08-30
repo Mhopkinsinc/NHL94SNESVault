@@ -9,3 +9,4 @@
                        incsrc "patches/DisablePosts.asm"                      
                        incsrc "patches/YButtonBugfix.asm"
                        incsrc "patches/DisableIntros.asm"
+                       incsrc "patches/HotColdFix.asm"
