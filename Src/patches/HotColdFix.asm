@@ -23,8 +23,9 @@
     if !PatchROM == 1 && !HotCold_Bugfix == 1  ;If PatchROM is enabled and HotCold_Bugfix is enabled then add new code 
             
             org $9FD234
-                    JSR.W $9FFB32                      ;9FD234|2032FB  |; Hijack for Hot/Cold Divide by 2 error fix                           ;9EA251|4CC5FB  |; Hijack to New Code
-            
+                    JSR.W $9FFB32                      ;9FD234|2032FB  |; Hijack for Hot/Cold Divide by 2 error fix 
+                    db $EA,$EA
+
             org $9FFB32            
                     DivideBy2:
                        LDA.W PStructRNG,Y                   ;9FFB32|B9121A  |; Run hijacked instruction
