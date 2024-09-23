@@ -97,7 +97,7 @@ namespace Snes94Hacks
                     })
                     .AddChoiceGroup("Bug Fixes", new[]
                     {
-                            "Y Button Bug Fix", "Hot Cold Bonus Bug Fix"
+                            "Y Button Bug Fix", "Hot Cold Bonus Bug Fix", "Extra Attacker Missing Bug Fix"
                     })
                     ) ;
 
@@ -279,51 +279,55 @@ namespace Snes94Hacks
                     //Update the ExtractedFiles\\NHL94SNESVault-main\\Src\\Config.asm file and set the variables
                     if (hack == "Def. Control ON")
                     {
-                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Defense_Control", "1");
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Defense_Control", "1");  //Enables Defense Control
                     }
                     else if (hack == "Show 30 Second Periods")
                     {
-                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Thirty_Second_Period", "1");
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Thirty_Second_Period", "1"); //Enables 30 Second Periods
                     }
                     else if (hack == "Real Time Clock")
                     {
-                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Real_Time_Clock", "1");
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Real_Time_Clock", "1"); //Enables the Real Time Clock
                     }
                     else if (hack == "Pull Goalie with L+R Triggers")
                     {
-                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Manual_Pull_Goalie", "1");
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Manual_Pull_Goalie", "1"); //Enables the Manual Pull Goalie
                     }
                     else if (hack == "1 Minute Penalties")
                     {
-                        await FileModifier.UpdateFileAsync(ConfigPaths, "!One_Minute_Penalties", "1");
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!One_Minute_Penalties", "1"); //Enables 1 Minute Penalties
                     }
                     else if (hack == "Disable Interference Penalty")
                     {
-                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Interference_Penalty", "0");
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Interference_Penalty", "0"); //Disables the Interference Penalty
                     }
                     else if (hack == "Disable Penalty Shots")
                     {
-                        await FileModifier.UpdateFileAsync(ConfigPaths, "!PenaltyShot", "0");
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!PenaltyShot", "0"); //Disables the Penalty Shots
                     }
                     else if (hack == "Disable Goal Posts")
                     {
-                        await FileModifier.UpdateFileAsync(ConfigPaths, "!GoalPosts", "0");
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!GoalPosts", "0"); //Disables the Goal Posts
                     }
                     else if (hack == "Y Button Bug Fix")
                     {
-                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Y_Button_Bugfix", "1");
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!Y_Button_Bugfix", "1"); //Enables the Y Button Bug Fix
                     }
                     else if (hack == "Skip EA Intro")
                     {
-                        await FileModifier.UpdateFileAsync(ConfigPaths, "!EA_Intro", "0");
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!EA_Intro", "0"); //Disables the EA Intro
                     }
                     else if (hack == "Skip Flying Pucks Intro")
                     {
-                        await FileModifier.UpdateFileAsync(ConfigPaths, "!FlyingPucks_Intro", "0");
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!FlyingPucks_Intro", "0"); //Disables the Flying Pucks Intro
                     }
                     else if (hack == "Hot Cold Bonus Bug Fix")
                     {
-                        await FileModifier.UpdateFileAsync(ConfigPaths, "!HotCold_Bugfix", "1");
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!HotCold_Bugfix", "1"); //Enables the Hot Cold Bonus Bug Fix
+                    }
+                    else if (hack == "Extra Attacker Missing Bug Fix")
+                    {
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!ExtraAttacker_Bugfix", "1"); //Enables the Extra Attacker Bug Fix
                     }
 
                 }

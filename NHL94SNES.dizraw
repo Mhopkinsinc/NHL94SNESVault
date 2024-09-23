@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProjectXmlSerializer-Root xmlns:exs="https://extendedxmlserializer.github.io/v2" xmlns:ns1="clr-namespace:Diz.Core.model;assembly=Diz.Core" xmlns:ns2="clr-namespace:Diz.Core.model.snes;assembly=Diz.Core" xmlns:sys="https://extendedxmlserializer.github.io/system" xmlns:ns3="clr-namespace:System.Collections.Generic;assembly=System.Collections" xmlns:ns4="clr-namespace:Diz.Core.export;assembly=Diz.Core" SaveVersion="102" Watermark="DiztinGUIsh" Extra1="" Extra2="" xmlns="clr-namespace:Diz.Core.serialization.xml_serializer;assembly=Diz.Core">
-  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="1047335">
+  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="887958">
     <LogWriterSettings Format="%label:-22% %code:37%;%pc%|%bytes%|; %comment%" DataPerLine="8" Unlabeled="ShowInPoints" Structure="OneBankPerFile" NewLine="true" OutputExtraWhitespace="true" GenerateFullLine="false" IncludeUnusedLabels="false" PrintLabelSpecificComments="true" RomSizeOverride="-1" FileOrFolderOutPath="DizExport\" OutputToString="false" ErrorFilename="errors.txt" />
     <ProjectSettings exs:member="" BsnesUsageMapImportOnlyChangedUnmarked="true">
       <RomBytesOutputFormatSettings CompressGroupBlock="true" CompressUsingTable1="true" InsertCommentIntoOutputLinesEveryNBytes="2048" />
@@ -9,10 +9,78 @@
       <Comments>
         <sys:Item Key="8421488" Value="Mode 7 Settings" />
         <sys:Item Key="8436659" Value="Logo Decompression function" />
+        <sys:Item Key="10194042" Value="Store the Selected Player Index" />
+        <sys:Item Key="10194045" Value="Load The Line Your Editing" />
+        <sys:Item Key="10194048" Value="Subtract 1" />
+        <sys:Item Key="10194049" Value="Multiple by 2" />
+        <sys:Item Key="10194050" Value="Multiple by 2" />
+        <sys:Item Key="10194051" Value="Multiple by 2" />
+        <sys:Item Key="10194052" Value="Starting Index of Current Line Offset" />
+        <sys:Item Key="10194058" Value="Set Carry Flag" />
+        <sys:Item Key="10194059" Value="Add the Starting Index Offset of the Line being editing" />
+        <sys:Item Key="10194061" Value="Store the reult back to $A5. This is now contains the RAM address of the line being editied" />
+        <sys:Item Key="10194063" Value="4 if pk; 5 if Line 1-3 or PP" />
+        <sys:Item Key="10194066" Value="Set The Carry Flag" />
+        <sys:Item Key="10194067" Value="Restul of SBC 1=LD 2=RD 3=LW 4=C 5=RW" />
+        <sys:Item Key="10194070" Value="Left Defense; ExtAttackerFix Hijack" />
+        <sys:Item Key="10194073" Value="Branch if Left Defense" />
+        <sys:Item Key="10194075" Value="Right Defense" />
+        <sys:Item Key="10194078" Value="Branch to Right Defense" />
+        <sys:Item Key="10194080" Value="Left Wing" />
+        <sys:Item Key="10194083" Value="Branch to Left Wing" />
+        <sys:Item Key="10194085" Value="Center" />
+        <sys:Item Key="10194088" Value="Branch To Center" />
+        <sys:Item Key="10194090" Value="Fall Through to Right Wing" />
+        <sys:Item Key="10194116" Value="Load Starting Index of Current Line Being Edited" />
+        <sys:Item Key="10194118" Value="Clear the Carry Flag" />
+        <sys:Item Key="10194119" Value="Add 4 to get the ram address of the right winger" />
+        <sys:Item Key="10194122" Value="Store the right wings ram address in ZP $95" />
+        <sys:Item Key="10194124" Value="Returns Player Index from right wing" />
+        <sys:Item Key="10194127" Value="Compares to see if your swapping Center with Right Wing" />
+        <sys:Item Key="10194130" Value="Not Swapping so branch" />
+        <sys:Item Key="10194132" Value="Decrease back to centers ram value" />
+        <sys:Item Key="10194134" Value="Return ?" />
+        <sys:Item Key="10194226" Value="Returns the current centers index" />
         <sys:Item Key="10194482" Value="# of Goalies" />
         <sys:Item Key="10194499" Value="Edit Lines # Of players at positon " />
         <sys:Item Key="10194508" Value="# of Goalies" />
+        <sys:Item Key="10195751" Value="If Zero Skip to Home" />
+        <sys:Item Key="10195753" Value="Away Team Line 1 Starting Index" />
+        <sys:Item Key="10195758" Value="Home Team Line 1 Starting Index" />
+        <sys:Item Key="10195870" Value="Save Away Team Best Line Extra Attacker into $1D22" />
         <sys:Item Key="10203123" Value="Instant Replay SFXs" />
+        <sys:Item Key="10210936" Value="Save A before hijack" />
+        <sys:Item Key="10210937" Value="Load Current Line Starting address from $A5 into A" />
+        <sys:Item Key="10210940" Value="Add the number of ava players to the current line starting address" />
+        <sys:Item Key="10210943" Value="Store the new address in $95" />
+        <sys:Item Key="10210945" Value="Add the number of ava players into x as the counter" />
+        <sys:Item Key="10210948" Value="Increment X (increase loop count for Extra Attacker)" />
+        <sys:Item Key="10210949" Value=" Load Current Line Ending Address from $95 into A" />
+        <sys:Item Key="10210951" Value="Load The Player at Address $A5 into A " />
+        <sys:Item Key="10210954" Value="Compare with the selected player index" />
+        <sys:Item Key="10210958" Value="Branch if Equal (Player Found)" />
+        <sys:Item Key="10210960" Value="Decrement the Current Line Ending Address" />
+        <sys:Item Key="10210962" Value="Decrement X (decrease loop count)" />
+        <sys:Item Key="10210963" Value="Loop if Not Equal (X != 0)" />
+        <sys:Item Key="10210965" Value="Not Found, Branch to the end" />
+        <sys:Item Key="10210967" Value="Decrement X (decrease loop count)" />
+        <sys:Item Key="10210968" Value="Load Current Line Starting address from $A5 into A" />
+        <sys:Item Key="10210970" Value="Clear the Carry Flag" />
+        <sys:Item Key="10210971" Value="Add the number of available players to the current line starting addres" />
+        <sys:Item Key="10210974" Value="Subtract the current position index from the new address" />
+        <sys:Item Key="10210977" Value="Store the new address in $95" />
+        <sys:Item Key="10210979" Value="Load The Player at Address $A5 into A" />
+        <sys:Item Key="10210982" Value="Save A to the stack for reterival later" />
+        <sys:Item Key="10210983" Value="Load Current Line Starting address from $A5 into A" />
+        <sys:Item Key="10210985" Value="Store X in $AF" />
+        <sys:Item Key="10210987" Value="Clear the Carry Flag" />
+        <sys:Item Key="10210988" Value="Add X to Accumulator (so we know the new address of the player)" />
+        <sys:Item Key="10210991" Value="Store the new address in $95" />
+        <sys:Item Key="10210993" Value="Restore A from the stack this contained the orignal player to be moved" />
+        <sys:Item Key="10210994" Value="Move Player from selected postion into the found position" />
+        <sys:Item Key="10210997" Value="Restore pre hijacked A value" />
+        <sys:Item Key="10210998" Value="Restore hijacked instruction" />
+        <sys:Item Key="10211001" Value="Return to hijacked code" />
         <sys:Item Key="10257671" Value="Something to do with Player Stats &amp; Team Roster Screen" />
         <sys:Item Key="10259913" Value="Penalties ON Branck 8DD7" />
         <sys:Item Key="10260470" Value="Penalties On Branch 9002" />
@@ -456,6 +524,7 @@
         <sys:Item Key="10474060" Value="Set Accumulator back to 16 bit" />
         <sys:Item Key="10474062" Value="Set the Word to only include the byte" />
         <sys:Item Key="10474065" Value="Exit and return to calling code" />
+        <sys:Item Key="10474972" Value="Loads Away Team Best Line Extra Attacker 1)When Goalie set to NONE" />
         <sys:Item Key="10477853" Value="Load Pause Game Menu" />
         <sys:Item Key="10478632" Value="Turns Def Control On or Off with EOR of current value" />
         <sys:Item Key="10484516" Value="Run Original Code we Hijacked" />
@@ -512,6 +581,21 @@
         </sys:Item>
         <sys:Item Key="8454142">
           <Value exs:type="ns1:Label" Name="Emulation_RESET" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10195744">
+          <Value exs:type="ns1:Label" Name="fn_rtnEdtLinesStartIndx" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10210936">
+          <Value exs:type="ns1:Label" Name="ExtAttackerFix" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10210949">
+          <Value exs:type="ns1:Label" Name=".Loop" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10210967">
+          <Value exs:type="ns1:Label" Name=".Found" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10210997">
+          <Value exs:type="ns1:Label" Name=".End" Comment="" />
         </sys:Item>
         <sys:Item Key="10262089">
           <Value exs:type="ns1:Label" Name="Banner_Team_Text_PTR" Comment="" />
@@ -857,6 +941,18 @@
         </sys:Item>
         <sys:Item Key="10419152">
           <Value exs:type="ns1:Label" Name=".rtl" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10423619">
+          <Value exs:type="ns1:Label" Name="EdLnSelLineIndx" Comment="Edit Lines Selected Line Index 1-7" />
+        </sys:Item>
+        <sys:Item Key="10427787">
+          <Value exs:type="ns1:Label" Name="EdLnCurPositionIndex" Comment="0-4 0=RW 1=C 2=LW 3=RD 4=LD; PK 0=C 1=LW 2=RD 3=LD" />
+        </sys:Item>
+        <sys:Item Key="10427791">
+          <Value exs:type="ns1:Label" Name="EdLnSelPlyIndx" Comment="Edit Lines Selected Player Index" />
+        </sys:Item>
+        <sys:Item Key="10427807">
+          <Value exs:type="ns1:Label" Name="EdLnAvlPlayersCount" Comment="4 if pk; 5 if Line 1-3 or PP" />
         </sys:Item>
         <sys:Item Key="10454453">
           <Value exs:type="ns1:Label" Name="Real_Time_Clock_Speed" Comment="" />
@@ -23581,43 +23677,14 @@ r 16 U
 .09F
 +09F
 .09F
-U
-U
-U
-U
-U
-+09F
++I9F
 .09F
-+09F
-+09F
-+09F
-+09F
+.09F
++Y9F
 .09F
 +09F
 .09F
 +09F
-+09F
-.09F
-.09F
-+09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
-U
-U
-U
-U
-U
-U
-U
-+09F
-.09F
 +09F
 +09F
 +09F
@@ -23638,11 +23705,40 @@ U
 .09F
 +09F
 .09F
-U
-U
-U
-U
-U
++09F
+.09F
++I9F
+.09F
+.09F
++Y9F
+.09F
++09F
+.09F
++09F
++09F
++09F
+.09F
++09F
+.09F
++09F
++09F
+.09F
+.09F
++09F
+.09F
++09F
+.09F
+.09F
++09F
+.09F
+.09F
++09F
+.09F
++I9F
+.09F
+.09F
++Y9F
+.09F
 +09F
 .09F
 +09F
@@ -23680,22 +23776,14 @@ U
 .09F
 +09F
 .09F
-U
-U
-U
-U
-U
 +09F
 .09F
-+09F
-+09F
++I9F
 .09F
 .09F
-+09F
-.09F
++E9F
 .09F
 +09F
-.09F
 +09F
 .09F
 .09F
@@ -23703,35 +23791,45 @@ U
 .09F
 .09F
 +09F
-+
-.
-.
-+
-.
-.
-+
-.
-+
-.
-.
-+
-.
-+
-.
-.
-+
-.
-+
-.
-.
-+
-.
-.
-+
-.
-+
-r 37 U
+.09F
 +09F
+.09F
+.09F
++09F
+.09F
+.09F
++09F
++E
+.
+.
++
+.
+.
++
+.
++
+.
+.
++
+.
++
+.
+.
++
+.
++
+.
+.
++
+.
+.
++
+.
++
++E
+.
+r 35 U
++E9F
 .09F
 +C9F
 .C9F
@@ -23741,7 +23839,7 @@ r 37 U
 .09F
 .09F
 +09F
-+09F
++E9F
 .09F
 .09F
 +09F
@@ -34100,7 +34198,73 @@ r 47 U
 .B8
 .B8
 +B8
-r 393 U
++B8
++B8
+.B8
++B8
++B9F
+.B8
+.B8
++B8
+.B8
++B9F
+.B8
+.B8
++B8
++F8
+.B8
++J8
+.B8
+.B8
++B8
+.B8
+.B8
+.B8
++J8
+.B8
++B8
+.B8
++B8
++J8
+.B8
++Z8
+.B8
++F8
++B8
+.B8
++B8
++B9F
+.B8
+.B8
++B9F
+.B8
+.B8
++B8
+.B8
++J8
+.B8
+.B8
++B8
++B8
+.B8
++B8
+.B8
++B8
++B8
+.B8
+.B8
++B8
+.B8
++B8
++J8
+.B8
+.B8
++F8
++B8
+.B8
+.B8
++R8
+r 327 U
 ;pos=0DD000
 r 2048 U
 ;pos=0DD800

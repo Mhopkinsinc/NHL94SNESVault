@@ -1,0 +1,12 @@
+Extra Attacker Notes:
+==================================
+Gameplay Notes:
+==================================
+Trace Logs:
+Penalty is called, Pull Goalie Flag is Set 
+ROM $9ED0F8 JSL is called to $9FD407
+
+==================================
+Pause Screen Notes:
+==================================
+When the goalie is set to NO Goalie, Away Team Extra Attacker Player Index is saved to Ram $1D22
