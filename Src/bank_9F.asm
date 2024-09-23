@@ -7645,7 +7645,7 @@ Real_Time_Pen_Clock_2:
                        LDA.W #$FFFF                         ;9FC87C|A9FFFF  |;
                        STA.W $0D49                          ;9FC87F|8D490D  |;
                        STA.W $0D3F                          ;9FC882|8D3F0D  |;
-                       STZ.W $0D43                          ;9FC885|9C430D  |;
+                       STZ.W EdLnSelLineIndx                ;9FC885|9C430D  |;
                        STZ.W $0D45                          ;9FC888|9C450D  |;
                        LDA.W #$007E                         ;9FC88B|A97E00  |;
                        STA.B $8B                            ;9FC88E|858B    |;
@@ -9284,7 +9284,7 @@ Real_Time_Pen_Clock_2:
                        PHA                                  ;9FD5A5|48      |;
                        LDA.B $95                            ;9FD5A6|A595    |;
                        PHA                                  ;9FD5A8|48      |;
-                       JSL.L CODE_9B9320                    ;9FD5A9|2220939B|;
+                       JSL.L fn_rtnEdtLinesStartIndx        ;9FD5A9|2220939B|;
                        LDA.B $97                            ;9FD5AD|A597    |;
                        STA.B $8F                            ;9FD5AF|858F    |;
                        LDA.B $95                            ;9FD5B1|A595    |;
@@ -9312,7 +9312,7 @@ Real_Time_Pen_Clock_2:
                        STA.B $B9                            ;9FD5D7|85B9    |;
                        TAY                                  ;9FD5D9|A8      |;
                        SEP #$20                             ;9FD5DA|E220    |;
-                       LDA.B [$8D],Y                        ;9FD5DC|B78D    |;
+                       LDA.B [$8D],Y                        ;9FD5DC|B78D    |; Loads Away Team Best Line Extra Attacker 1)When Goalie set to NONE
                        LDY.B $B5                            ;9FD5DE|A4B5    |;
                        STA.B [$99],Y                        ;9FD5E0|9799    |;
                        LDA.B $B9                            ;9FD5E2|A5B9    |;
@@ -9395,7 +9395,7 @@ Real_Time_Pen_Clock_2:
                        PHA                                  ;9FD663|48      |;
                        LDA.B $95                            ;9FD664|A595    |;
                        PHA                                  ;9FD666|48      |;
-                       JSL.L CODE_9B9320                    ;9FD667|2220939B|;
+                       JSL.L fn_rtnEdtLinesStartIndx        ;9FD667|2220939B|;
                        LDA.B $97                            ;9FD66B|A597    |;
                        STA.B $8F                            ;9FD66D|858F    |;
                        LDA.B $95                            ;9FD66F|A595    |;

@@ -3197,7 +3197,7 @@ DefaultGameSetupValues:
                        LDA.W $1796,Y                        ;9D9D2C|B99617  |;
                        INC A                                ;9D9D2F|1A      |;
                        STA.B $A5                            ;9D9D30|85A5    |;
-                       STA.W $0D43                          ;9D9D32|8D430D  |;
+                       STA.W EdLnSelLineIndx                ;9D9D32|8D430D  |;
                        STZ.W $0D47                          ;9D9D35|9C470D  |;
                        LDX.B zpCurntTeamLoopVal             ;9D9D38|A691    |;
                        LDA.W $1C98,X                        ;9D9D3A|BD981C  |;
@@ -3330,12 +3330,12 @@ DefaultGameSetupValues:
           CODE_9D9E70:
                        LDA.B $A5                            ;9D9E70|A5A5    |;
                        CLC                                  ;9D9E72|18      |;
-                       ADC.W $0D43                          ;9D9E73|6D430D  |;
+                       ADC.W EdLnSelLineIndx                ;9D9E73|6D430D  |;
                        STA.B $A5                            ;9D9E76|85A5    |;
                        BMI CODE_9D9E86                      ;9D9E78|300C    |;
                        CMP.W #$0008                         ;9D9E7A|C90800  |;
                        BCS CODE_9D9E86                      ;9D9E7D|B007    |;
-                       STA.W $0D43                          ;9D9E7F|8D430D  |;
+                       STA.W EdLnSelLineIndx                ;9D9E7F|8D430D  |;
                        JSL.L CODE_9D9ECB                    ;9D9E82|22CB9E9D|;
  
           CODE_9D9E86:
@@ -3383,7 +3383,7 @@ DefaultGameSetupValues:
                        STA.B $8D                            ;9D9EE0|858D    |;
                        PLA                                  ;9D9EE2|68      |;
                        STA.B $8F                            ;9D9EE3|858F    |;
-                       LDA.W $0D43                          ;9D9EE5|AD430D  |;
+                       LDA.W EdLnSelLineIndx                ;9D9EE5|AD430D  |;
                        STA.B $A5                            ;9D9EE8|85A5    |;
                        LDA.W #$009D                         ;9D9EEA|A99D00  |;
                        STA.B $8F                            ;9D9EED|858F    |;
@@ -3403,7 +3403,7 @@ DefaultGameSetupValues:
                        STA.B $8D                            ;9D9F10|858D    |;
                        LDA.W $0D47                          ;9D9F12|AD470D  |;
                        STA.B $A5                            ;9D9F15|85A5    |;
-                       LDA.W $0D43                          ;9D9F17|AD430D  |;
+                       LDA.W EdLnSelLineIndx                ;9D9F17|AD430D  |;
                        BNE CODE_9D9F32                      ;9D9F1A|D016    |;
                        LDA.W #$0080                         ;9D9F1C|A98000  |;
                        STA.B $8F                            ;9D9F1F|858F    |;
@@ -3482,7 +3482,7 @@ DefaultGameSetupValues:
                        STA.B $97                            ;9D9FB0|8597    |;
                        LDA.W #$A04D                         ;9D9FB2|A94DA0  |;
                        STA.B $95                            ;9D9FB5|8595    |;
-                       LDA.W $0D43                          ;9D9FB7|AD430D  |;
+                       LDA.W EdLnSelLineIndx                ;9D9FB7|AD430D  |;
                        DEC A                                ;9D9FBA|3A      |;
                        STA.B $A5                            ;9D9FBB|85A5    |;
                        BMI CODE_9D9FFD                      ;9D9FBD|303E    |;
@@ -3507,7 +3507,7 @@ DefaultGameSetupValues:
                        STA.B $9D                            ;9D9FE3|859D    |;
                        LDA.W #$0004                         ;9D9FE5|A90400  |;
                        STA.B $A9                            ;9D9FE8|85A9    |;
-                       LDA.W $0D43                          ;9D9FEA|AD430D  |;
+                       LDA.W EdLnSelLineIndx                ;9D9FEA|AD430D  |;
                        SEC                                  ;9D9FED|38      |;
                        SBC.W #$0005                         ;9D9FEE|E90500  |;
                        BEQ CODE_9D9FFD                      ;9D9FF1|F00A    |;

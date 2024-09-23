@@ -8216,7 +8216,7 @@
                        JSL.L CODE_80CC1B                    ;80CA4A|221BCC80|;
                        STZ.W $1DB9                          ;80CA4E|9CB91D  |;
                        LDA.W #$0001                         ;80CA51|A90100  |;
-                       STA.W $0D43                          ;80CA54|8D430D  |;
+                       STA.W EdLnSelLineIndx                ;80CA54|8D430D  |;
                        STZ.W $0D47                          ;80CA57|9C470D  |;
                        JSL.L CODE_80CC89                    ;80CA5A|2289CC80|;
                        LDA.W #$0005                         ;80CA5E|A90500  |;
@@ -8518,7 +8518,7 @@
                        STA.B $97                            ;80CCE7|8597    |;
                        LDA.W #$CDA6                         ;80CCE9|A9A6CD  |;
                        STA.B $95                            ;80CCEC|8595    |;
-                       LDA.W $0D43                          ;80CCEE|AD430D  |;
+                       LDA.W EdLnSelLineIndx                ;80CCEE|AD430D  |;
                        DEC A                                ;80CCF1|3A      |;
                        STA.B $A5                            ;80CCF2|85A5    |;
                        BMI CODE_80CD22                      ;80CCF4|302C    |;
@@ -9026,7 +9026,7 @@
                        STA.B $8D                            ;80D231|858D    |;
                        PLA                                  ;80D233|68      |;
                        STA.B $8F                            ;80D234|858F    |;
-                       LDA.W $0D43                          ;80D236|AD430D  |;
+                       LDA.W EdLnSelLineIndx                ;80D236|AD430D  |;
                        DEC A                                ;80D239|3A      |;
                        ASL A                                ;80D23A|0A      |;
                        ASL A                                ;80D23B|0A      |;
@@ -9042,7 +9042,7 @@
                        STA.B $9D                            ;80D24F|859D    |;
                        LDA.W #$0008                         ;80D251|A90800  |;
                        STA.B $A9                            ;80D254|85A9    |;
-                       LDA.W $0D43                          ;80D256|AD430D  |;
+                       LDA.W EdLnSelLineIndx                ;80D256|AD430D  |;
                        SEC                                  ;80D259|38      |;
                        SBC.W #$0005                         ;80D25A|E90500  |;
                        BEQ CODE_80D269                      ;80D25D|F00A    |;

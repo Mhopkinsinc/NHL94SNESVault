@@ -57,6 +57,10 @@
                        OneTimerFlg = $9E1E89; !^ OneTimer ^!
                        BreakAwayActive_flg = $9E1E8B; !^ Break Away Flag 01 ^!
                        IsPenaltyShot = $9E1E9B
+                       EdLnSelLineIndx = $9F0D43; !^ Edit Lines Selected Line Index 1-7 ^!
+                       EdLnCurPositionIndex = $9F1D8B; !^ 0-4 0=RW 1=C 2=LW 3=RD 4=LD; PK 0=C 1=LW 2=RD 3=LD ^!
+                       EdLnSelPlyIndx = $9F1D8F; !^ Edit Lines Selected Player Index ^!
+                       EdLnAvlPlayersCount = $9F1D9F; !^ 4 if pk; 5 if Line 1-3 or PP ^!
                        CODE_00801A = $00801A
                        CODE_008147 = $008147
                        CODE_0084E5 = $0084E5

@@ -8715,9 +8715,9 @@
                        STA.B $A5                            ;9EC984|85A5    |;
                        BPL CODE_9EC9E2                      ;9EC986|105A    |;
                        STZ.W $0D47                          ;9EC988|9C470D  |;
-                       LDY.W $0D43                          ;9EC98B|AC430D  |;
-                       INC.W $0D43                          ;9EC98E|EE430D  |;
-                       INC.W $0D43                          ;9EC991|EE430D  |;
+                       LDY.W EdLnSelLineIndx                ;9EC98B|AC430D  |;
+                       INC.W EdLnSelLineIndx                ;9EC98E|EE430D  |;
+                       INC.W EdLnSelLineIndx                ;9EC991|EE430D  |;
                        LDA.W #$007E                         ;9EC994|A97E00  |;
                        STA.B $8B                            ;9EC997|858B    |;
                        LDA.W #$347C                         ;9EC999|A97C34  |;
