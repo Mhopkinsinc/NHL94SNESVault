@@ -54,5 +54,4 @@
                        CODE_9EBA67 = $9EBA67
                        CODE_9EC06D = $9EC06D
                        jmpToGoalLogic = $9E920F
-                       PStructRNG = $9E1A12; !^ Random Number Generator for Attributes ^!
-                       CODE_9B8D72 = $9B8D72
+                       PStructRNG = $9E1A12; !^ Random Number Generator for Attributes ^!                       
