@@ -26,7 +26,7 @@
                        JSR.W ExtAttackerFix                 ;9B8C96|  |; ExtAttackerFix Hijack
 
             org $9BCE78
-            ExtAttackerFix
+            ExtAttackerFix:
                        PHA                                  ;9BCE78|48      |; Save A before hijack
                        LDA.B $A5                            ;9BCE79|A5A5    |; Load Current Line Starting address from $A5 into A
                        CLC                                  ;9BCE7B|18      |;
