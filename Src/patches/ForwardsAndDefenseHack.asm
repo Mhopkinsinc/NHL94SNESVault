@@ -24,9 +24,9 @@
             
             org $9B8E1A
                        NOP                                  ;9B8E1A|  |; All Positions Hijack
-                       NOP                                  ;9B8E1A|  |; All Positions Hijack
-                       NOP                                  ;9B8E1A|  |; All Positions Hijack
-                       JSR.W $9BCEBA                        ;9B8E1D|  |; All Positions Hijack
+                       NOP                                  ;9B8E1B|  |; All Positions Hijack
+                       NOP                                  ;9B8E1C|  |; All Positions Hijack
+                       JMP.W $9BCEBA                        ;9B8E1D|  |; All Positions Hijack
 
             org $9BCEBA
             FwdAndDefHack:

@@ -22,7 +22,7 @@
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     if !PatchROM == 1 && !ExtraAttacker_Bugfix == 1  ;If PatchROM is enabled and ExtraAttacker_Bugfix is enabled then add new code 
             
-            org $9B8C96
+            org $9B8C96                       
                        JSR.W $9BCE78                        ;9B8C96|  |; ExtAttackerFix Hijack
 
             org $9BCE78
