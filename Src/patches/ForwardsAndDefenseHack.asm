@@ -37,5 +37,5 @@
                        ADC.W $1DA3                          ;9BCECF|6DA31D  |; Add Defense and Forwards
                        STA.W $1DA3                          ;9BCED2|8DA31D  |; Save Total Forw+Def to $1DA3
                        LDA.W $1DAB                          ;9BCED5|ADAB1D  |; Load Total Number Of Goalies Before Jumping Back to Hijacked Code
-                       JMP.W CODE_9B8E3B                    ;9BCED8|4C3B8E  |; Jump Back To bottom of hijacked function                      
+                       JMP.W $9B8E3B                        ;9BCED8|4C3B8E  |; Jump Back To bottom of hijacked function                      
     endif
