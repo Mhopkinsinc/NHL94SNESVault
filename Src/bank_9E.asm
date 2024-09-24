@@ -9863,7 +9863,7 @@ fn_end_cpu_pull_goalie_3rdperiod:
                        db $9B,$A5,$A5,$9D,$A3,$10,$BD,$A3   ;9ED2F1|        |;
                        db $10,$85,$A5,$5C,$A9,$A8,$9E       ;9ED2F9|        |;
  
-          CODE_9ED300:
+fn_RtnTeamGoalieCount:
                        LDA.B zpCurntTeamLoopVal             ;9ED300|A591    |;
                        TAY                                  ;9ED302|A8      |;
                        LDA.W #$009C                         ;9ED303|A99C00  |;

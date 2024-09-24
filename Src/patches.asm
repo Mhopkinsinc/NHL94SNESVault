@@ -10,4 +10,5 @@
                        incsrc "patches/YButtonBugfix.asm"
                        incsrc "patches/DisableIntros.asm"
                        incsrc "patches/HotColdFix.asm"
-                       incsrc "patches/ExtraAttackerFix.asm"                    
+                       incsrc "patches/ExtraAttackerFix.asm"
+                       incsrc "patches/ForwardsAndDefenseHack.asm"                       

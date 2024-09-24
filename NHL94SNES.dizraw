@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProjectXmlSerializer-Root xmlns:exs="https://extendedxmlserializer.github.io/v2" xmlns:ns1="clr-namespace:Diz.Core.model;assembly=Diz.Core" xmlns:ns2="clr-namespace:Diz.Core.model.snes;assembly=Diz.Core" xmlns:sys="https://extendedxmlserializer.github.io/system" xmlns:ns3="clr-namespace:System.Collections.Generic;assembly=System.Collections" xmlns:ns4="clr-namespace:Diz.Core.export;assembly=Diz.Core" SaveVersion="102" Watermark="DiztinGUIsh" Extra1="" Extra2="" xmlns="clr-namespace:Diz.Core.serialization.xml_serializer;assembly=Diz.Core">
-  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="887958">
+  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="904896">
     <LogWriterSettings Format="%label:-22% %code:37%;%pc%|%bytes%|; %comment%" DataPerLine="8" Unlabeled="ShowInPoints" Structure="OneBankPerFile" NewLine="true" OutputExtraWhitespace="true" GenerateFullLine="false" IncludeUnusedLabels="false" PrintLabelSpecificComments="true" RomSizeOverride="-1" FileOrFolderOutPath="DizExport\" OutputToString="false" ErrorFilename="errors.txt" />
     <ProjectSettings exs:member="" BsnesUsageMapImportOnlyChangedUnmarked="true">
       <RomBytesOutputFormatSettings CompressGroupBlock="true" CompressUsingTable1="true" InsertCommentIntoOutputLinesEveryNBytes="2048" />
@@ -41,9 +41,32 @@
         <sys:Item Key="10194132" Value="Decrease back to centers ram value" />
         <sys:Item Key="10194134" Value="Return ?" />
         <sys:Item Key="10194226" Value="Returns the current centers index" />
-        <sys:Item Key="10194482" Value="# of Goalies" />
-        <sys:Item Key="10194499" Value="Edit Lines # Of players at positon " />
-        <sys:Item Key="10194508" Value="# of Goalies" />
+        <sys:Item Key="10194455" Value="EdtLines Check if Forward or Defense" />
+        <sys:Item Key="10194458" Value="Forward Defense Hijack" />
+        <sys:Item Key="10194464" Value="Load Defense Count" />
+        <sys:Item Key="10194466" Value="Save Defense Count To $1DA3" />
+        <sys:Item Key="10194469" Value="Return # of Goalies" />
+        <sys:Item Key="10194473" Value="Load # Of goalies" />
+        <sys:Item Key="10194475" Value="Save # Of Goalies to $1DAB" />
+        <sys:Item Key="10194478" Value="Returns # of Forwards" />
+        <sys:Item Key="10194482" Value="Load # Of Goalies" />
+        <sys:Item Key="10194485" Value="Clear The Carry" />
+        <sys:Item Key="10194486" Value="Add Forwards + Goalies" />
+        <sys:Item Key="10194488" Value="Save Fwd+Goalies to $1DAB" />
+        <sys:Item Key="10194491" Value="Skip Forward Code" />
+        <sys:Item Key="10194493" Value="Forward; Returns # Of Forwards" />
+        <sys:Item Key="10194497" Value="Load # Of Forwards" />
+        <sys:Item Key="10194499" Value="Store # of Forwards to $1DA3" />
+        <sys:Item Key="10194502" Value="Returns # of Goalies" />
+        <sys:Item Key="10194506" Value="Load # of Goalies" />
+        <sys:Item Key="10194508" Value="Save # of Goalies to $1DAB" />
+        <sys:Item Key="10194511" Value="Save A to $1DA7" />
+        <sys:Item Key="10194514" Value="Load Max Players to Display" />
+        <sys:Item Key="10194517" Value="Cmp $1DA3 to 9" />
+        <sys:Item Key="10194520" Value="Equals 9; Skip" />
+        <sys:Item Key="10194522" Value="Less than 9 Skip" />
+        <sys:Item Key="10194524" Value="&gt;9 so load Player Count" />
+        <sys:Item Key="10194527" Value="Save to $1DAF" />
         <sys:Item Key="10195751" Value="If Zero Skip to Home" />
         <sys:Item Key="10195753" Value="Away Team Line 1 Starting Index" />
         <sys:Item Key="10195758" Value="Home Team Line 1 Starting Index" />
@@ -81,6 +104,17 @@
         <sys:Item Key="10210997" Value="Restore pre hijacked A value" />
         <sys:Item Key="10210998" Value="Restore hijacked instruction" />
         <sys:Item Key="10211001" Value="Return to hijacked code" />
+        <sys:Item Key="10211002" Value="Return # of Defenders" />
+        <sys:Item Key="10211006" Value="Save the number of Defenders to $1DA3" />
+        <sys:Item Key="10211009" Value="Return The total number of Goalies to $A5" />
+        <sys:Item Key="10211013" Value="Load the total number of Goalkeeprs" />
+        <sys:Item Key="10211015" Value="Save the total number of Goalies to $1DAB" />
+        <sys:Item Key="10211018" Value="Return num of Forwards" />
+        <sys:Item Key="10211022" Value="Clear the Carry" />
+        <sys:Item Key="10211023" Value="Add Defense and Forwards" />
+        <sys:Item Key="10211026" Value="Save Total Forw+Def to $1DA3" />
+        <sys:Item Key="10211029" Value="Load Total Number Of Goalies Before Jumping Back to Hijacked Code" />
+        <sys:Item Key="10211032" Value="Jump Back To bottom of hijacked function" />
         <sys:Item Key="10257671" Value="Something to do with Player Stats &amp; Team Roster Screen" />
         <sys:Item Key="10259913" Value="Penalties ON Branck 8DD7" />
         <sys:Item Key="10260470" Value="Penalties On Branch 9002" />
@@ -582,6 +616,12 @@
         <sys:Item Key="8454142">
           <Value exs:type="ns1:Label" Name="Emulation_RESET" Comment="" />
         </sys:Item>
+        <sys:Item Key="10195676">
+          <Value exs:type="ns1:Label" Name="fn_rtnRosterFwdsCount" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10195712">
+          <Value exs:type="ns1:Label" Name="fn_rtnRosterDefCount" Comment="" />
+        </sys:Item>
         <sys:Item Key="10195744">
           <Value exs:type="ns1:Label" Name="fn_rtnEdtLinesStartIndx" Comment="" />
         </sys:Item>
@@ -596,6 +636,9 @@
         </sys:Item>
         <sys:Item Key="10210997">
           <Value exs:type="ns1:Label" Name=".End" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10211002">
+          <Value exs:type="ns1:Label" Name="FwdAndDefHack" Comment="" />
         </sys:Item>
         <sys:Item Key="10262089">
           <Value exs:type="ns1:Label" Name="Banner_Team_Text_PTR" Comment="" />
@@ -902,6 +945,9 @@
         </sys:Item>
         <sys:Item Key="10408312">
           <Value exs:type="ns1:Label" Name="fn_end_cpu_pull_goalie_3rdperiod" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10408704">
+          <Value exs:type="ns1:Label" Name="fn_RtnTeamGoalieCount" Comment="" />
         </sys:Item>
         <sys:Item Key="10419035">
           <Value exs:type="ns1:Label" Name="One_Min_Pen" Comment="" />
@@ -23998,18 +24044,9 @@ r 35 U
 .09F
 .09F
 +09F
-.09F
 +09F
-.09F
-.09F
-.09F
 +09F
-.09F
-+09F
-.09F
-.09F
-+09F
-.09F
++Y9F
 .09F
 .09F
 +09F
@@ -24023,6 +24060,15 @@ r 35 U
 .09F
 +09F
 .09F
++09F
+.09F
+.09F
++09F
+.09F
+.09F
+.09F
++09F
+.09F
 .09F
 +09F
 +09F
@@ -24030,7 +24076,7 @@ r 35 U
 +09F
 .09F
 .09F
-+09F
++E9F
 .09F
 +09F
 .09F
@@ -24844,7 +24890,7 @@ U
 .09F
 .09F
 +09F
-+09F
++E9F
 .09F
 +09F
 .09F
@@ -24880,7 +24926,7 @@ U
 +09F
 .09F
 +09F
-+09F
++E9F
 .09F
 +09F
 .09F
@@ -34264,7 +34310,40 @@ r 47 U
 .B8
 .B8
 +R8
-r 327 U
++N8
+.B8
+.B8
+.B8
++B8
+.B8
+.B8
++J8
+.B8
+.B8
+.B8
++B8
+.B8
++B8
+.B8
+.B8
++J8
+.B8
+.B8
+.B8
++B8
++B8
+.B8
+.B8
++B8
+.B8
+.B8
++B8
+.B8
+.B8
++Z8
+.B8
+.B8
+r 294 U
 ;pos=0DD000
 r 2048 U
 ;pos=0DD800
@@ -80481,7 +80560,7 @@ r 25 U
 .09E
 +E9E
 r 391 U
-+09E
++E9E
 .09E
 +09E
 +09E

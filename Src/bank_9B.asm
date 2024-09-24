@@ -1179,7 +1179,7 @@
                        STA.B $8D                            ;9B8BA3|858D    |;
                        PLA                                  ;9B8BA5|68      |;
                        STA.B $8F                            ;9B8BA6|858F    |;
-                       JSL.L CODE_9ED300                    ;9B8BA8|2200D39E|;
+                       JSL.L fn_RtnTeamGoalieCount          ;9B8BA8|2200D39E|;
                        LDA.B $A5                            ;9B8BAC|A5A5    |;
                        DEC A                                ;9B8BAE|3A      |;
                        STA.B $A9                            ;9B8BAF|85A9    |;
@@ -1473,39 +1473,43 @@
                        LDA.W EdLnAvlPlayersCount            ;9B8E10|AD9F1D  |;
                        SEC                                  ;9B8E13|38      |;
                        SBC.W EdLnCurPositionIndex           ;9B8E14|ED8B1D  |;
-                       CMP.W #$0003                         ;9B8E17|C90300  |;
-                       BPL CODE_9B8E3D                      ;9B8E1A|1021    |;
-                       JSL.L CODE_9B9300                    ;9B8E1C|2200939B|;
-                       LDA.B $A5                            ;9B8E20|A5A5    |;
-                       STA.W $1DA3                          ;9B8E22|8DA31D  |;
-                       JSL.L CODE_9ED300                    ;9B8E25|2200D39E|;
-                       LDA.B $A5                            ;9B8E29|A5A5    |;
-                       STA.W $1DAB                          ;9B8E2B|8DAB1D  |;
-                       JSL.L CODE_9B92DC                    ;9B8E2E|22DC929B|;
-                       LDA.W $1DAB                          ;9B8E32|ADAB1D  |; # of Goalies
-                       CLC                                  ;9B8E35|18      |;
-                       ADC.B $A5                            ;9B8E36|65A5    |;
-                       STA.W $1DAB                          ;9B8E38|8DAB1D  |;
-                       BRA CODE_9B8E4F                      ;9B8E3B|8012    |;
+                       CMP.W #$0003                         ;9B8E17|C90300  |; EdtLines Check if Forward or Defense
+                       NOP                                  ;9B8E1A|EA      |; Forward Defense Hijack
+                       NOP                                  ;9B8E1B|EA      |; 
+                       NOP                                  ;9B8E1C|EA      |;
+                       JMP.W FwdAndDefHack                  ;9B8E1D|4CBACE  |;
+ 
+                       LDA.B $A5                            ;9B8E20|A5A5    |; Load Defense Count
+                       STA.W $1DA3                          ;9B8E22|8DA31D  |; Save Defense Count To $1DA3
+                       JSL.L fn_RtnTeamGoalieCount          ;9B8E25|2200D39E|; Return # of Goalies
+                       LDA.B $A5                            ;9B8E29|A5A5    |; Load # Of goalies
+                       STA.W $1DAB                          ;9B8E2B|8DAB1D  |; Save # Of Goalies to $1DAB
+                       JSL.L fn_rtnRosterFwdsCount          ;9B8E2E|22DC929B|; Returns # of Forwards
+                       LDA.W $1DAB                          ;9B8E32|ADAB1D  |; Load # Of Goalies
+                       CLC                                  ;9B8E35|18      |; Clear The Carry
+                       ADC.B $A5                            ;9B8E36|65A5    |; Add Forwards + Goalies
+                       STA.W $1DAB                          ;9B8E38|8DAB1D  |; Save Fwd+Goalies to $1DAB
+          CODE_9B8E3B:
+                       BRA CODE_9B8E4F                      ;9B8E3B|8012    |; Skip Forward Code
  
           CODE_9B8E3D:
-                       JSL.L CODE_9B92DC                    ;9B8E3D|22DC929B|;
-                       LDA.B $A5                            ;9B8E41|A5A5    |;
-                       STA.W $1DA3                          ;9B8E43|8DA31D  |; Edit Lines # Of players at positon
-                       JSL.L CODE_9ED300                    ;9B8E46|2200D39E|;
-                       LDA.B $A5                            ;9B8E4A|A5A5    |;
-                       STA.W $1DAB                          ;9B8E4C|8DAB1D  |; # of Goalies
+                       JSL.L fn_rtnRosterFwdsCount          ;9B8E3D|22DC929B|; Forward; Returns # Of Forwards
+                       LDA.B $A5                            ;9B8E41|A5A5    |; Load # Of Forwards
+                       STA.W $1DA3                          ;9B8E43|8DA31D  |; Store # of Forwards to $1DA3
+                       JSL.L fn_RtnTeamGoalieCount          ;9B8E46|2200D39E|; Returns # of Goalies
+                       LDA.B $A5                            ;9B8E4A|A5A5    |; Load # of Goalies
+                       STA.W $1DAB                          ;9B8E4C|8DAB1D  |; Save # of Goalies to $1DAB
  
           CODE_9B8E4F:
-                       STA.W $1DA7                          ;9B8E4F|8DA71D  |;
-                       LDA.W #$0009                         ;9B8E52|A90900  |;
-                       CMP.W $1DA3                          ;9B8E55|CDA31D  |;
-                       BEQ CODE_9B8E5F                      ;9B8E58|F005    |;
-                       BMI CODE_9B8E5F                      ;9B8E5A|3003    |;
-                       LDA.W $1DA3                          ;9B8E5C|ADA31D  |;
+                       STA.W $1DA7                          ;9B8E4F|8DA71D  |; Save A to $1DA7
+                       LDA.W #$0009                         ;9B8E52|A90900  |; Load Max Players to Display
+                       CMP.W $1DA3                          ;9B8E55|CDA31D  |; Cmp $1DA3 to 9
+                       BEQ CODE_9B8E5F                      ;9B8E58|F005    |; Equals 9; Skip
+                       BMI CODE_9B8E5F                      ;9B8E5A|3003    |; Less than 9 Skip
+                       LDA.W $1DA3                          ;9B8E5C|ADA31D  |; >9 so load Player Count
  
           CODE_9B8E5F:
-                       STA.W $1DAF                          ;9B8E5F|8DAF1D  |;
+                       STA.W $1DAF                          ;9B8E5F|8DAF1D  |; Save to $1DAF
                        LDA.W EdLnSelLineIndx                ;9B8E62|AD430D  |;
                        DEC A                                ;9B8E65|3A      |;
                        ASL A                                ;9B8E66|0A      |;
@@ -1917,7 +1921,7 @@
                        STA.B $A5                            ;9B92AF|85A5    |;
                        STA.B $04                            ;9B92B1|8504    |;
                        STZ.B $08                            ;9B92B3|6408    |;
-                       JSL.L CODE_9ED300                    ;9B92B5|2200D39E|;
+                       JSL.L fn_RtnTeamGoalieCount          ;9B92B5|2200D39E|;
                        LDA.B $04                            ;9B92B9|A504    |;
                        CMP.B $A5                            ;9B92BB|C5A5    |;
                        BPL CODE_9B92C4                      ;9B92BD|1005    |;
@@ -1935,7 +1939,7 @@
                        STA.W $0D0D                          ;9B92D8|8D0D0D  |;
                        RTS                                  ;9B92DB|60      |;
  
-          CODE_9B92DC:
+fn_rtnRosterFwdsCount:
                        LDY.B zpCurntTeamLoopVal             ;9B92DC|A491    |;
                        LDA.W #$009C                         ;9B92DE|A99C00  |;
                        STA.B $97                            ;9B92E1|8597    |;
@@ -1956,7 +1960,7 @@
                        STA.B $A5                            ;9B92FD|85A5    |;
                        RTL                                  ;9B92FF|6B      |;
  
-          CODE_9B9300:
+ fn_rtnRosterDefCount:
                        LDY.B zpCurntTeamLoopVal             ;9B9300|A491    |;
                        LDA.W #$009C                         ;9B9302|A99C00  |;
                        STA.B $97                            ;9B9305|8597    |;
@@ -7071,6 +7075,19 @@ fn_rtnEdtLinesStartIndx:
                        PLA                                  ;9BCEB5|68      |; Restore pre hijacked A value
                        CMP.W #$0001                         ;9BCEB6|C90100  |; Restore hijacked instruction
                        RTS                                  ;9BCEB9|60      |; Return to hijacked code
-                       
+            
+        FwdAndDefHack:
+                       JSL.L fn_rtnRosterDefCount           ;9BCEBA|2200939B|; Return # of Defenders
+                       STA.W $1DA3                          ;9BCEBE|8DA31D  |; Save the number of Defenders to $1DA3
+                       JSL.L fn_RtnTeamGoalieCount          ;9BCEC1|2200D39E|; Return The total number of Goalies to $A5
+                       LDA.B $A5                            ;9BCEC5|A5A5    |; Load the total number of Goalkeeprs
+                       STA.W $1DAB                          ;9BCEC7|8DAB1D  |; Save the total number of Goalies to $1DAB
+                       JSL.L fn_rtnRosterFwdsCount          ;9BCECA|22DC929B|; Return num of Forwards
+                       CLC                                  ;9BCECE|18      |; Clear the Carry
+                       ADC.W $1DA3                          ;9BCECF|6DA31D  |; Add Defense and Forwards
+                       STA.W $1DA3                          ;9BCED2|8DA31D  |; Save Total Forw+Def to $1DA3
+                       LDA.W $1DAB                          ;9BCED5|ADAB1D  |; Load Total Number Of Goalies Before Jumping Back to Hijacked Code
+                       JMP.W CODE_9B8E3B                    ;9BCED8|4C3B8E  |; Jump Back To bottom of hijacked function
+
                        padbyte $FF
                        pad $9BFFFF

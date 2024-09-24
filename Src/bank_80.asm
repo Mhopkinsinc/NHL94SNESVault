@@ -8506,7 +8506,7 @@
                        STA.B $8D                            ;80CCCC|858D    |;
                        PLA                                  ;80CCCE|68      |;
                        STA.B $8F                            ;80CCCF|858F    |;
-                       JSL.L CODE_9ED300                    ;80CCD1|2200D39E|;
+                       JSL.L fn_RtnTeamGoalieCount          ;80CCD1|2200D39E|;
                        LDA.B $A5                            ;80CCD5|A5A5    |;
                        DEC A                                ;80CCD7|3A      |;
                        STA.B $A9                            ;80CCD8|85A9    |;
@@ -8646,7 +8646,7 @@
           CODE_80CE0A:
                        LDA.W $1DB9                          ;80CE0A|ADB91D  |;
                        BNE Shootout_Edit_Lines              ;80CE0D|D032    |;
-                       JSL.L CODE_9ED300                    ;80CE0F|2200D39E|;
+                       JSL.L fn_RtnTeamGoalieCount          ;80CE0F|2200D39E|;
                        LDA.W #$0000                         ;80CE13|A90000  |;
                        STA.B $8F                            ;80CE16|858F    |;
                        LDA.W #$1D71                         ;80CE18|A9711D  |;
@@ -8727,7 +8727,7 @@
                        JSL.L CODE_9FC93D                    ;80CEC7|223DC99F|;
                        LDA.B $A5                            ;80CECB|A5A5    |;
                        STA.W $1DA3                          ;80CECD|8DA31D  |;
-                       JSL.L CODE_9ED300                    ;80CED0|2200D39E|;
+                       JSL.L fn_RtnTeamGoalieCount          ;80CED0|2200D39E|;
                        LDA.W $1DA3                          ;80CED4|ADA31D  |;
                        SEC                                  ;80CED7|38      |;
                        SBC.B $A5                            ;80CED8|E5A5    |;
@@ -9075,7 +9075,7 @@
                        STA.B $A5                            ;80D290|85A5    |;
                        STA.B $04                            ;80D292|8504    |;
                        STZ.B $08                            ;80D294|6408    |;
-                       JSL.L CODE_9ED300                    ;80D296|2200D39E|;
+                       JSL.L fn_RtnTeamGoalieCount          ;80D296|2200D39E|;
                        LDA.B $04                            ;80D29A|A504    |;
                        CMP.B $A5                            ;80D29C|C5A5    |;
                        BPL CODE_80D2A5                      ;80D29E|1005    |;

@@ -97,7 +97,7 @@ namespace Snes94Hacks
                     })
                     .AddChoiceGroup("Bug Fixes", new[]
                     {
-                            "Y Button Bug Fix", "Hot Cold Bonus Bug Fix", "Extra Attacker Missing Bug Fix"
+                            "Y Button Bug Fix", "Hot Cold Bonus Bug Fix", "Extra Attacker Missing Bug Fix", "Edit Lines All Positions Hack"
                     })
                     ) ;
 
@@ -329,6 +329,11 @@ namespace Snes94Hacks
                     {
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!ExtraAttacker_Bugfix", "1"); //Enables the Extra Attacker Bug Fix
                     }
+                    else if (hack == "Edit Lines All Positions Hack")
+                    {
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!ExtraAttacker_Bugfix", "1"); //Enables the Extra Attacker Bug Fix
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!ForwardsAndDefense_Hack", "1"); //Enables the Forwards and Defense Hack
+                    }                    
 
                 }
                 catch (Exception ex)

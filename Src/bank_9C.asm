@@ -422,7 +422,7 @@
                        LDA.W $1DF9                          ;9C8826|ADF91D  |;
                        CMP.W #$0000                         ;9C8829|C90000  |;
                        BEQ UNREACH_9C8842                   ;9C882C|F014    |;
-                       JSL.L CODE_9ED300                    ;9C882E|2200D39E|;
+                       JSL.L fn_RtnTeamGoalieCount          ;9C882E|2200D39E|;
                        LDA.B $A5                            ;9C8832|A5A5    |;
                        STA.W $1DBD                          ;9C8834|8DBD1D  |;
                        JSL.L CODE_9FC93D                    ;9C8837|223DC99F|;
@@ -2587,7 +2587,7 @@
                        JSL.L CODE_9FC93D                    ;9C9D8C|223DC99F|;
                        LDA.B $A5                            ;9C9D90|A5A5    |;
                        STA.W $1E21                          ;9C9D92|8D211E  |;
-                       JSL.L CODE_9ED300                    ;9C9D95|2200D39E|;
+                       JSL.L fn_RtnTeamGoalieCount          ;9C9D95|2200D39E|;
                        LDA.B $A5                            ;9C9D99|A5A5    |;
                        STA.W $1E23                          ;9C9D9B|8D231E  |;
                        LDX.W #$0000                         ;9C9D9E|A20000  |;
@@ -2721,7 +2721,7 @@
                        CLC                                  ;9C9EA8|18      |;
                        ADC.W #$001A                         ;9C9EA9|691A00  |;
                        STA.W $1E21                          ;9C9EAC|8D211E  |;
-                       JSL.L CODE_9ED300                    ;9C9EAF|2200D39E|;
+                       JSL.L fn_RtnTeamGoalieCount          ;9C9EAF|2200D39E|;
                        LDA.B $A5                            ;9C9EB3|A5A5    |;
                        CLC                                  ;9C9EB5|18      |;
                        ADC.W #$001A                         ;9C9EB6|691A00  |;

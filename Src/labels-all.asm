@@ -57,3 +57,6 @@
                        PStructRNG = $9E1A12; !^ Random Number Generator for Attributes ^!
                        CODE_9B8D72 = $9B8D72
                        CODE_9B8D7C = $9B8D7C
+                       fn_rtnRosterDefCount = $9B9300
+                       fn_RtnTeamGoalieCount = $9ED300
+                       fn_rtnRosterFwdsCount = $9B92DC
