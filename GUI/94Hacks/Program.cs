@@ -93,11 +93,11 @@ namespace Snes94Hacks
                     })
                     .AddChoiceGroup("New Functionality", new[]
                     {
-                            "Pull Goalie with L+R Triggers"
+                            "Edit Lines All Positions Hack", "Pull Goalie with L+R Triggers"
                     })
                     .AddChoiceGroup("Bug Fixes", new[]
                     {
-                            "Y Button Bug Fix", "Hot Cold Bonus Bug Fix", "Extra Attacker Missing Bug Fix", "Edit Lines All Positions Hack"
+                            "Y Button Bug Fix", "Hot Cold Bonus Bug Fix", "Extra Attacker Missing Bug Fix"
                     })
                     ) ;
 
