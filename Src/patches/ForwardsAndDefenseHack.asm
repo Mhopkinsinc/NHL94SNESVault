@@ -23,7 +23,10 @@
     if !PatchROM == 1 && !ForwardsAndDefense_Hack == 1  ;If PatchROM is enabled and ForwardsAndDefense_Hack is enabled then add new code 
             
             org $9B8E1A
-                       JSR.W $9BCEBA                        ;9B8C96|  |; ExtAttackerFix Hijack
+                       NOP                                  ;9B8E1A|  |; All Positions Hijack
+                       NOP                                  ;9B8E1A|  |; All Positions Hijack
+                       NOP                                  ;9B8E1A|  |; All Positions Hijack
+                       JSR.W $9BCEBA                        ;9B8E1D|  |; All Positions Hijack
 
             org $9BCEBA
             FwdAndDefHack:
