@@ -10627,7 +10627,7 @@ Real_Time_Pen_Clock_2:
                        JSL.L CODE_9FE79F                    ;9FE3B3|229FE79F|;
                        JMP.W CODE_9FE2AE                    ;9FE3B7|4CAEE2  |;
                        JSL.L CODE_9FC76C                    ;9FE3BA|226CC79F|;
-                       JSL.L CODE_9ED300                    ;9FE3BE|2200D39E|;
+                       JSL.L fn_RtnTeamGoalieCount          ;9FE3BE|2200D39E|;
                        JSL.L CODE_9FC76C                    ;9FE3C2|226CC79F|;
                        LDY.B zpCurntTeamLoopVal             ;9FE3C6|A491    |;
                        LDA.B $A9                            ;9FE3C8|A5A9    |;
