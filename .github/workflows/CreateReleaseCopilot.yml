@@ -40,6 +40,19 @@ jobs:
         cd ${{ github.workspace }}/GUI/94Hacks/publish/OSX64
         ls
 
+    # Upload artifacts for all branches
+    - name: Upload build artifacts (WinX86)
+      uses: actions/upload-artifact@v3
+      with:
+        name: Snes94Hacks-win-x86
+        path: ${{ github.workspace }}/GUI/94Hacks/publish/WinX86/Snes94Hacks-${{ steps.version.outputs.builddate }}-win-x86.zip
+
+    - name: Upload build artifacts (OSX64)
+      uses: actions/upload-artifact@v3
+      with:
+        name: Snes94Hacks-osx64
+        path: ${{ github.workspace }}/GUI/94Hacks/publish/OSX64/Snes94Hacks-${{ steps.version.outputs.builddate }}-osx64.zip
+
     - name: Create Release
       if: github.ref == 'refs/heads/main'
       id: create_release
