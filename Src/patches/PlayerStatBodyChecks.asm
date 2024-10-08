@@ -60,9 +60,11 @@
                        PLX                                  ;9EFC03|FA      |; Pull original X value off the stack
                        PLA                                  ;9EFC04|68      |; Pull Original A Value off the stack
                        LDA.W $17B6,Y                        ;9EFC05|B9B617  |; Run original hijacked instruction to reterieve team body check count
-                       RTS                                  ;9EFC08|60      |; Return to Original Code
+                       RTS                                  ;9EFC08|60      |; Return to Original Code      
 
-        if !PlayerStat_BodyChecks_Display == 1          ;Display Body Checks For in Player Stats UI
+    endif
+
+      if !PlayerStat_BodyChecks_Display == 1          ;Display Body Checks For in Player Stats UI
 
                         print "Adding Checks For/Against to Player Stats Page (UI)"
 
@@ -75,5 +77,3 @@
                         org $9C8C18             ;Change Penalties to Checks
                         db " Checks  "          ;9C8C18|        |;                        
         endif
-
-    endif
