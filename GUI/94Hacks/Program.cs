@@ -201,7 +201,7 @@ namespace Snes94Hacks
             // Download the latest version of Github Repo
             try
             {
-                string fileUrl = @"https://github.com/Mhopkinsinc/NHL94SNESVault/archive/refs/heads/main.zip";
+                string fileUrl = @"https://github.com/Mhopkinsinc/NHL94SNESVault/archive/refs/heads/Mhopkinsinc/issue61.zip";
                 string fileName = "Nhl94SnesValut.zip";
                 string filePath = Path.Combine(AppContext.BaseDirectory, fileName);
 
@@ -338,7 +338,7 @@ namespace Snes94Hacks
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!ExtraAttacker_Bugfix", "1"); //Enables the Extra Attacker Bug Fix
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!ForwardsAndDefense_Hack", "1"); //Enables the Forwards and Defense Hack
                     }
-                    else if (hack == "Enable Body Checks For/Against")
+                    else if (hack == "Enable Body Checks For Against")
                     {
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!PlayerStat_BodyChecks", "1"); //Enables BodyCheck Stats in RAM                        
                     }
