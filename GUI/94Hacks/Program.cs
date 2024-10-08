@@ -279,7 +279,7 @@ namespace Snes94Hacks
             {
                 try
                 {
-                    string[] ConfigPaths = {@"ExtractedFiles", "NHL94SNESVault-main", "Src", "Config.asm"};
+                    string[] ConfigPaths = {@"ExtractedFiles", "NHL94SNESVault-Mhopkinsinc-issue61", "Src", "Config.asm"};
                     //Update the ExtractedFiles\\NHL94SNESVault-main\\Src\\Config.asm file and set the variables
                     if (hack == "Def. Control ON")
                     {
