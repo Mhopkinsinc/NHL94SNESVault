@@ -99,6 +99,10 @@ namespace Snes94Hacks
                     {
                             "Y Button Bug Fix", "Hot Cold Bonus Bug Fix", "Extra Attacker Missing Bug Fix"
                     })
+                    .AddChoiceGroup("Stats", new[]
+                    {
+                            "Enable Body Checks For/Against", "Show Body Checks in Player Stats Page"
+                    })
                     ) ;
 
             var selectedItemsFormatted = string.Join("\n", hacks.Select(hack => $"[blue]{hack}[/]"));
@@ -333,7 +337,16 @@ namespace Snes94Hacks
                     {
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!ExtraAttacker_Bugfix", "1"); //Enables the Extra Attacker Bug Fix
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!ForwardsAndDefense_Hack", "1"); //Enables the Forwards and Defense Hack
-                    }                    
+                    }
+                    else if (hack == "Enable Body Checks For/Against")
+                    {
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!PlayerStat_BodyChecks", "1"); //Enables BodyCheck Stats in RAM                        
+                    }
+                    else if (hack == "PlayerStat_BodyChecks_Display")
+                    {
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!PlayerStat_BodyChecks", "1"); //Enables BodyCheck Stats in RAM
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!PlayerStat_BodyChecks_Display", "1"); //Enables the Display of BodyCheck For Stats in UI
+                    }
 
                 }
                 catch (Exception ex)
