@@ -342,7 +342,7 @@ namespace Snes94Hacks
                     {
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!PlayerStat_BodyChecks", "1"); //Enables BodyCheck Stats in RAM                        
                     }
-                    else if (hack == "PlayerStat_BodyChecks_Display")
+                    else if (hack == "Show Body Checks in Player Stats Page")
                     {
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!PlayerStat_BodyChecks", "1"); //Enables BodyCheck Stats in RAM
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!PlayerStat_BodyChecks_Display", "1"); //Enables the Display of BodyCheck For Stats in UI
