@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProjectXmlSerializer-Root xmlns:exs="https://extendedxmlserializer.github.io/v2" xmlns:ns1="clr-namespace:Diz.Core.model;assembly=Diz.Core" xmlns:ns2="clr-namespace:Diz.Core.model.snes;assembly=Diz.Core" xmlns:sys="https://extendedxmlserializer.github.io/system" xmlns:ns3="clr-namespace:System.Collections.Generic;assembly=System.Collections" xmlns:ns4="clr-namespace:Diz.Core.export;assembly=Diz.Core" SaveVersion="102" Watermark="DiztinGUIsh" Extra1="" Extra2="" xmlns="clr-namespace:Diz.Core.serialization.xml_serializer;assembly=Diz.Core">
-  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="904896">
+  <Project AttachedRomFilename="C:\_Personal\NHL94SNESVault\NHL '94 (USA).sfc" InternalRomGameName="NHL '94              " InternalCheckSum="2605868205" CurrentViewOffset="920160">
     <LogWriterSettings Format="%label:-22% %code:37%;%pc%|%bytes%|; %comment%" DataPerLine="8" Unlabeled="ShowInPoints" Structure="OneBankPerFile" NewLine="true" OutputExtraWhitespace="true" GenerateFullLine="false" IncludeUnusedLabels="false" PrintLabelSpecificComments="true" RomSizeOverride="-1" FileOrFolderOutPath="DizExport\" OutputToString="false" ErrorFilename="errors.txt" />
     <ProjectSettings exs:member="" BsnesUsageMapImportOnlyChangedUnmarked="true">
       <RomBytesOutputFormatSettings CompressGroupBlock="true" CompressUsingTable1="true" InsertCommentIntoOutputLinesEveryNBytes="2048" />
@@ -116,6 +116,7 @@
         <sys:Item Key="10211029" Value="Load Total Number Of Goalies Before Jumping Back to Hijacked Code" />
         <sys:Item Key="10211032" Value="Jump Back To bottom of hijacked function" />
         <sys:Item Key="10257671" Value="Something to do with Player Stats &amp; Team Roster Screen" />
+        <sys:Item Key="10259040" Value="; Loads PM per player in Player Stats Page. Use $1650 for checks for" />
         <sys:Item Key="10259913" Value="Penalties ON Branck 8DD7" />
         <sys:Item Key="10260470" Value="Penalties On Branch 9002" />
         <sys:Item Key="10262051" Value="? Called During Change of Player Portrai on Game Setup" />
@@ -237,6 +238,7 @@
         <sys:Item Key="10392129" Value="Cmp puck Horz pos to (-17) decimal (left post)" />
         <sys:Item Key="10392132" Value="If Positive then Goal; Else Negative Post" />
         <sys:Item Key="10392144" Value="Setup Post SFX" />
+        <sys:Item Key="10394571" Value="HIJACK for bodycheck stats" />
         <sys:Item Key="10396017" Value="Penalties Off Branch A175" />
         <sys:Item Key="10396236" Value="Loads Selected Player Position [0-6]" />
         <sys:Item Key="10396239" Value="If 0 [Goalie] RTL" />
@@ -350,6 +352,28 @@
         <sys:Item Key="10419144" Value="Compare if the player is knocked down" />
         <sys:Item Key="10419147" Value="If Knocked Down Branch to .rtl (Exit)" />
         <sys:Item Key="10419149" Value="Else continue execution of original code" />
+        <sys:Item Key="10419153" Value="Save  Current Value of A" />
+        <sys:Item Key="10419154" Value="Save  Current Value of X" />
+        <sys:Item Key="10419155" Value="$95 is Player Making the Check" />
+        <sys:Item Key="10419157" Value="$12A3 + $95 gets roster index of player" />
+        <sys:Item Key="10419160" Value="$89 is the team making the check 00=Home 02=Away" />
+        <sys:Item Key="10419162" Value="Compare the value in the X register with 2" />
+        <sys:Item Key="10419165" Value="If X register is Home, then branch and Skip Addition" />
+        <sys:Item Key="10419167" Value="Clear Carry Flag" />
+        <sys:Item Key="10419168" Value="Add #$001A (26) to the accumulator to skip to the Away Team Starting Values" />
+        <sys:Item Key="10419174" Value="Add 1 to the existing checks For value" />
+        <sys:Item Key="10419179" Value="$91 is Player being chekced" />
+        <sys:Item Key="10419181" Value="$12A3 + $91 gets roster index of player" />
+        <sys:Item Key="10419184" Value="$89 is the team making the check 00=Home 02=Away" />
+        <sys:Item Key="10419186" Value="Compare the value in the X register with 0 to reverse Team" />
+        <sys:Item Key="10419189" Value="If X register is Home, then branch and Skip Addition" />
+        <sys:Item Key="10419191" Value="Clear Carry Flag" />
+        <sys:Item Key="10419192" Value="Add #$001A (26) to the accumulator to skip to the Away Team Starting Values" />
+        <sys:Item Key="10419198" Value="Add 1 to the existing checks Against value" />
+        <sys:Item Key="10419203" Value="Pull original X value off the stack" />
+        <sys:Item Key="10419204" Value="Pull Original A Value off the stack" />
+        <sys:Item Key="10419205" Value="Run original hijacked instruction to reterieve team body check count" />
+        <sys:Item Key="10419208" Value="Return to Original Code" />
         <sys:Item Key="10453876" Value="Penalties Off or Offsieds On Branch to 837C" />
         <sys:Item Key="10453884" Value="hijack to call our def control code" />
         <sys:Item Key="10454453" Value="0444 makes this real time" />
@@ -987,6 +1011,15 @@
         </sys:Item>
         <sys:Item Key="10419152">
           <Value exs:type="ns1:Label" Name=".rtl" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419153">
+          <Value exs:type="ns1:Label" Name="RecBdyChkF_ChkA" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419171">
+          <Value exs:type="ns1:Label" Name=".recordChkF" Comment="" />
+        </sys:Item>
+        <sys:Item Key="10419195">
+          <Value exs:type="ns1:Label" Name=".recordChkA" Comment="" />
         </sys:Item>
         <sys:Item Key="10423619">
           <Value exs:type="ns1:Label" Name="EdLnSelLineIndx" Comment="Edit Lines Selected Line Index 1-7" />
@@ -35472,9 +35505,22 @@ r 22 U
 +
 A
 A
-r 12 U
+U
+U
+T
+T
+T
+T
+T
+T
+T
+U
+U
+U
 r 15 A
-r 55 U
+r 45 U
+r 9 T
+U
 +
 +
 +
@@ -69436,7 +69482,7 @@ r 12 U
 .09E
 +09E
 .09E
-+09E
++I9E
 .09E
 .09E
 +09E
@@ -89904,7 +89950,63 @@ E
 .
 .
 +U
-r 1071 U
++E
++
++
+.
++
+.
+.
++
+.
++
+.
+.
++I
+.
++
++
+.
+.
++E
++C
+.C
++C
+.C
+.C
++
+.
++
+.
++
+.
+.
++
+.
++
+.
+.
++I
+.
++
++
+.
+.
++E
++C
+.C
++C
+.C
+.C
++
+.
++
++
++
+.
+.
++Q
+r 1015 U
 +09F
 ;pos=0F8000
 .09F
