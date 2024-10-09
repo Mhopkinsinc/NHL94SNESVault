@@ -29,11 +29,11 @@ namespace Snes94Hacks
                         string relativePath;
                         if (entry.FullName.Contains("/Src/", StringComparison.OrdinalIgnoreCase))
                         {
-                            relativePath = entry.FullName.Substring(entry.FullName.IndexOf("/Src/", StringComparison.OrdinalIgnoreCase));
+                            relativePath = entry.FullName.Substring(entry.FullName.IndexOf("/Src/", StringComparison.OrdinalIgnoreCase) + 1);
                         }
                         else
                         {
-                            relativePath = entry.FullName.Substring(entry.FullName.IndexOf("/ASAR/", StringComparison.OrdinalIgnoreCase));
+                            relativePath = entry.FullName.Substring(entry.FullName.IndexOf("/ASAR/", StringComparison.OrdinalIgnoreCase) + 1);
                         }
 
                         var destinationPath = Path.Combine(extractionPath, relativePath);
