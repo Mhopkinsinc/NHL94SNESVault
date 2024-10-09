@@ -19,7 +19,7 @@ namespace Snes94Hacks
         static async Task Main(string[] args)
         {
 
-            #region GlobalVariables            
+            #region GlobalVariables
             string romPath = "";
             string cleanedromPath = "";
             bool patchExisting = false;            
@@ -29,6 +29,7 @@ namespace Snes94Hacks
             var Linux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             var branchName = "";
             SNESROM _sourceROM = null;
+            bool isDebug = args.Contains("--debug");
             #endregion
 
             #region SerilogSetup
@@ -259,7 +260,7 @@ namespace Snes94Hacks
                        ctx.SpinnerStyle(Style.Parse("green"));
 
                        var extractionPath = Path.Combine(AppContext.BaseDirectory, "ExtractedFiles");
-                       await FileExtractor.ExtractZipFileAsync(filePath, extractionPath, logger);
+                       await FileExtractor.ExtractZipFileAsync(filePath, extractionPath, logger, isDebug: isDebug);
 
                        // Download completed
                        ctx.Status("Unzip Completed Successfully!");

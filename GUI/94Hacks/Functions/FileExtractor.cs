@@ -8,7 +8,7 @@ namespace Snes94Hacks
 {
     public static class FileExtractor
 {
-    public static async Task ExtractZipFileAsync(string sourceZipFilePath, string extractionPath, ILogger logger, bool overwrite = true)
+    public static async Task ExtractZipFileAsync(string sourceZipFilePath, string extractionPath, ILogger logger, bool isDebug, bool overwrite = true)
     {
         try
         {
@@ -38,8 +38,8 @@ namespace Snes94Hacks
 
                         var destinationPath = Path.Combine(extractionPath, relativePath);
 
-                        // Log the destination path
-                        logger.LogInformation($"Extracting to: {destinationPath}");
+                        // Log the destination path                        
+                        if (isDebug) logger.LogInformation($"Extracting to: {destinationPath}");
 
                         // Overwrite existing files if needed
                         if (overwrite && File.Exists(destinationPath))
@@ -65,7 +65,7 @@ namespace Snes94Hacks
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "An error occurred while extracting files");
+             if (isDebug) logger.LogError(ex, "An error occurred while extracting files");
         }
     }
 }
