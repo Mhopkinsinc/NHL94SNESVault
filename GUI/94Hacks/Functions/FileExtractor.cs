@@ -19,7 +19,7 @@ namespace Snes94Hacks
             {
                 foreach (var entry in archive.Entries)
                 {
-                    logger.LogInformation($"Processing entry: {entry.FullName}");
+                    if (isDebug) logger.LogInformation($"Processing entry: {entry.FullName}");
 
                     // Check if the entry is in the 'Src/' or 'ASAR/' folder at any depth
                     if (entry.FullName.Contains("/Src/", StringComparison.OrdinalIgnoreCase) ||
