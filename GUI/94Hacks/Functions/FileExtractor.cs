@@ -23,8 +23,8 @@ namespace Snes94Hacks
 
                         var destinationPath = Path.Combine(extractionPath, entry.FullName);
 
-                        if (entry.FullName.StartsWith("Src/", StringComparison.OrdinalIgnoreCase) ||
-                            entry.FullName.StartsWith("ASAR/", StringComparison.OrdinalIgnoreCase))
+                        if (entry.FullName.Contains("/Src/", StringComparison.OrdinalIgnoreCase) ||
+                            entry.FullName.Contains("/ASAR/", StringComparison.OrdinalIgnoreCase))
                         {
                              // Log the destination path
                             logger.LogInformation($"Extracting to: {destinationPath}");
