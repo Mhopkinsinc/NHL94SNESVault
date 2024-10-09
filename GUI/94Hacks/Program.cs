@@ -205,10 +205,9 @@ namespace Snes94Hacks
             {
                  // Retrieve the branch name from the assembly metadata
                 branchName = Assembly.GetExecutingAssembly()
-                             .GetCustomAttribute<AssemblyMetadataAttribute>()?
-                             .GetType()
-                             .GetProperty("BranchName")?
-                             .GetValue(null, null)?.ToString() ?? "main";
+                                 .GetCustomAttributes<AssemblyMetadataAttribute>()
+                                 .FirstOrDefault(attr => attr.Key == "BranchName")?
+                                 .Value ?? "main";
                 
                 string fileUrl = $"https://github.com/Mhopkinsinc/NHL94SNESVault/archive/refs/heads/{branchName}.zip";
                 string fileName = "Nhl94SnesValut.zip";
