@@ -23,21 +23,21 @@ namespace Snes94Hacks
 
                     if (System.OperatingSystem.IsWindows())
                     {
-                        asarPath = "ExtractedFiles\\NHL94SNESVault-main\\ASAR\\windows\\asar.exe";
+                        asarPath = "ExtractedFiles\\ASAR\\windows\\asar.exe";
                         filepath = Path.Combine(AppContext.BaseDirectory, asarPath);
-                        mainASMPath = Path.Combine(AppContext.BaseDirectory, $"ExtractedFiles\\NHL94SNESVault-main\\Src\\{InputFile}");
+                        mainASMPath = Path.Combine(AppContext.BaseDirectory, $"ExtractedFiles\\Src\\{InputFile}");
                     }
                     else if (System.OperatingSystem.IsLinux())
                     {
-                        asarPath = "ExtractedFiles/NHL94SNESVault-main/ASAR/linux/asar";
+                        asarPath = "ExtractedFiles/ASAR/linux/asar";
                         filepath = Path.Combine(AppContext.BaseDirectory, asarPath);
-                        mainASMPath = Path.Combine(AppContext.BaseDirectory, $"ExtractedFiles/NHL94SNESVault-main/Src/{InputFile}");
+                        mainASMPath = Path.Combine(AppContext.BaseDirectory, $"ExtractedFiles/Src/{InputFile}");
                     }
                     else if (System.OperatingSystem.IsMacOS())
                     {
-                        asarPath = "ExtractedFiles/NHL94SNESVault-main/ASAR/osx/asar";
+                        asarPath = "ExtractedFiles/ASAR/osx/asar";
                         filepath = Path.Combine(AppContext.BaseDirectory, asarPath);
-                        mainASMPath = Path.Combine(AppContext.BaseDirectory, $"ExtractedFiles/NHL94SNESVault-main/Src/{InputFile}");                        
+                        mainASMPath = Path.Combine(AppContext.BaseDirectory, $"ExtractedFiles/Src/{InputFile}");                        
                         File.SetUnixFileMode(filepath,UnixFileMode.UserExecute); //Sets asar file to be executable on MAC
                     }                   
 

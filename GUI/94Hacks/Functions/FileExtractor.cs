@@ -2,23 +2,44 @@
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Snes94Hacks
 {
     public static class FileExtractor
+{
+    public static async Task ExtractZipFileAsync(string sourceZipFilePath, string extractionPath, ILogger logger, bool isDebug, bool overwrite = true)
     {
-        public static async Task ExtractZipFileAsync(string sourceZipFilePath, string extractionPath, bool overwrite = true)
+        try
         {
-            try
-            {
-                // Ensure the extraction directory exists
-                Directory.CreateDirectory(extractionPath);
+            // Ensure the extraction directory exists
+            Directory.CreateDirectory(extractionPath);
 
-                using (var archive = ZipFile.OpenRead(sourceZipFilePath))
+            using (var archive = ZipFile.OpenRead(sourceZipFilePath))
+            {
+                foreach (var entry in archive.Entries)
                 {
-                    foreach (var entry in archive.Entries)
+                    if (isDebug) logger.LogInformation($"Processing entry: {entry.FullName}");
+
+                    // Check if the entry is in the 'Src/' or 'ASAR/' folder at any depth
+                    if (entry.FullName.Contains("/Src/", StringComparison.OrdinalIgnoreCase) ||
+                        entry.FullName.Contains("/ASAR/", StringComparison.OrdinalIgnoreCase))
                     {
-                        var destinationPath = Path.Combine(extractionPath, entry.FullName);
+                        // Determine the relative path within the extraction directory
+                        string relativePath;
+                        if (entry.FullName.Contains("/Src/", StringComparison.OrdinalIgnoreCase))
+                        {
+                            relativePath = entry.FullName.Substring(entry.FullName.IndexOf("/Src/", StringComparison.OrdinalIgnoreCase) + 1);
+                        }
+                        else
+                        {
+                            relativePath = entry.FullName.Substring(entry.FullName.IndexOf("/ASAR/", StringComparison.OrdinalIgnoreCase) + 1);
+                        }
+
+                        var destinationPath = Path.Combine(extractionPath, relativePath);
+
+                        // Log the destination path                        
+                        if (isDebug) logger.LogInformation($"Extracting to: {destinationPath}");
 
                         // Overwrite existing files if needed
                         if (overwrite && File.Exists(destinationPath))
@@ -33,7 +54,7 @@ namespace Snes94Hacks
                         if (!String.IsNullOrEmpty(entry.Name))
                         {
                             using (var entryStream = entry.Open())
-                            using (var fileStream = new FileStream(destinationPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 4096, true))
+                            using (var fileStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
                             {
                                 await entryStream.CopyToAsync(fileStream);
                             }
@@ -41,12 +62,11 @@ namespace Snes94Hacks
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                // Handle any errors that might occur during extraction
-                Console.WriteLine($"An error occurred during file extraction: {ex.Message}");
-                throw; // Optional: re-throw if you want calling code to handle the exception as well
-            }
+        }
+        catch (Exception ex)
+        {
+             if (isDebug) logger.LogError(ex, "An error occurred while extracting files");
         }
     }
+}
 }

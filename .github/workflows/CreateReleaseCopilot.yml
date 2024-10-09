@@ -27,8 +27,8 @@ jobs:
     - name: Build
       run: |
             cd GUI
-            dotnet publish /p:PublishProfile=Winx86Publish.pubxml /p:DebugType=None /p:DebugSymbols=false
-            dotnet publish /p:PublishProfile=Osx64Publish.pubxml /p:DebugType=None /p:DebugSymbols=false
+            dotnet publish /p:PublishProfile=Winx86Publish.pubxml /p:DebugType=None /p:DebugSymbols=false /p:BranchName=${{ github.ref_name }}
+            dotnet publish /p:PublishProfile=Osx64Publish.pubxml /p:DebugType=None /p:DebugSymbols=false /p:BranchName=${{ github.ref_name }}
 
     - name: Zip artifacts
       run: |
@@ -40,7 +40,21 @@ jobs:
         cd ${{ github.workspace }}/GUI/94Hacks/publish/OSX64
         ls
 
+    # Upload artifacts for all branches
+    - name: Upload build artifacts (WinX86)
+      uses: actions/upload-artifact@v3
+      with:
+        name: Snes94Hacks-win-x86
+        path: ${{ github.workspace }}/GUI/94Hacks/publish/WinX86/Snes94Hacks-${{ steps.version.outputs.builddate }}-win-x86.zip
+
+    - name: Upload build artifacts (OSX64)
+      uses: actions/upload-artifact@v3
+      with:
+        name: Snes94Hacks-osx64
+        path: ${{ github.workspace }}/GUI/94Hacks/publish/OSX64/Snes94Hacks-${{ steps.version.outputs.builddate }}-osx64.zip
+
     - name: Create Release
+      if: github.ref == 'refs/heads/main'
       id: create_release
       uses: ncipollo/release-action@v1.14.0
       env:
@@ -52,7 +66,8 @@ jobs:
         name: NHL94 SNES Vault ${{ steps.version.outputs.builddate }}
         generateReleaseNotes: true          
 
-    - name: Upload Release Asset
+    - name: Upload Release Asset (WinX86)
+      if: github.ref == 'refs/heads/main'
       id: upload-release-asset1 
       uses: actions/upload-release-asset@v1
       env:
@@ -63,7 +78,8 @@ jobs:
         asset_name: Snes94Hacks-${{ steps.version.outputs.builddate }}-win-x86.zip
         asset_content_type: application/zip
 
-    - name: Upload Release Asset
+    - name: Upload Release Asset (OSX64)
+      if: github.ref == 'refs/heads/main'
       id: upload-release-asset2 
       uses: actions/upload-release-asset@v1
       env:

@@ -1,0 +1,73 @@
+Track Body Checking To Record As Player Stat:
+
+==================================
+Body Checking Notes:
+==================================
+
+Trace Logs:
+IsRead && MemAddress == $017B6 (Ram Address of Total Body Checks Per Team)
+ROM Address 9E9BCB Reads the total number of checks and then increments for game stat.
+Partial Progress @ ROM Address $9E9B8B The Value of Y is the position on the ice of the player Being Hit. Value of X is the player hitting
+For Example PlayerStruct Jer# is 13c3 + x will give you the jersey number of the player performing the hit
+For Example PlayerStruct Jer# is 13c3 + y will give you the jersey number of the player being hit.
+
+{$89} = Home/Away Team Performing Hit 0=Home 2=Away
+{$91} = Player Hit
+{$95} = Player Hitting
+
+13c3 is player struct on ice
+12a3 is roster index of player on the ice
+
+{$13c3+[$95]} = Jersy# of Player doing the hit
+{$12a3+[$95]} = Player Roster Index -1 of player doing the hit [0 based thats why]
+{$13c3+[$91]} = Jersy# of Player being hit
+{$12a3+[$91]} = Player Roster Index -1 of player being hit [0 based thats why]
+
+1650 Checks For 	26 bytes home team, 26 bytes away team
+1684 Checks Against	26 bytes home team, 26 bytes away team
+
+
+E690 free space starts here
+
+
+==================================
+Goals Ram MAP:
+==================================
+Goals Ram MAP starts @ Wram $18EE 26 bytes home team, 26 bytes away team
+Each player has their own byte organized by Team Player Roster Index order
+The Goalie bytes contain Goals against
+The Player bytes contain Goals
+
+Trace Logs:
+ROM Address 9EF4D5 increments the goals for the current player index.
+
+==================================
+Shots On Net Ram MAP:
+==================================
+Shots on Net Ram MAP starts @ Wram $1956 26 bytes home team, 26 bytes away team
+Each player has their own byte organized by Team Player Roster Index order
+The Goalie bytes contain Shots against
+The Player bytes contain Shots On Net
+
+Trace Logs:
+ROM Address 9EF2D3 increments the Shots On Goal for the current player index.
+
+==================================
+Penality Minutes Ram MAP:
+==================================
+Penalty Minutes Ram MAP starts @ Wram $198A 26 bytes home team, 26 bytes away team
+Each player has their own byte organized by Team Player Roster Index order
+The Goalie bytes contain ?
+The Player bytes contain Total Penalty Minutes
+
+Trace Logs:
+ROM Address 9EB5BF Adds the penalty to the players penalty byte
+
+==================================
+Other Notes:
+==================================
+ROM $9EF213 Start of Function that ends up figuring out who scored the goal before incrementing the Goal Ram Map, or Shot on net?
+ROM $9E90AE is part of master function that increments the goal ram map
+ROM $9EF226 builds up the player data that just took the shot. {$13c3+[$95]} = jersey # {$12a3+[$95]} = player index on team (-1) $91 Home00 or Away02
+
+9e9bb3
