@@ -2,12 +2,13 @@
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Snes94Hacks
 {
     public static class FileExtractor
     {
-        public static async Task ExtractZipFileAsync(string sourceZipFilePath, string extractionPath, bool overwrite = true)
+        public static async Task ExtractZipFileAsync(string sourceZipFilePath, string extractionPath, ILogger logger, bool overwrite = true)
         {
             try
             {
@@ -18,11 +19,15 @@ namespace Snes94Hacks
                 {
                     foreach (var entry in archive.Entries)
                     {
+                        logger.LogInformation($"Processing entry: {entry.FullName}");
+
                         var destinationPath = Path.Combine(extractionPath, entry.FullName);
 
                         if (entry.FullName.StartsWith("Src/", StringComparison.OrdinalIgnoreCase) ||
                             entry.FullName.StartsWith("ASAR/", StringComparison.OrdinalIgnoreCase))
                         {
+                             // Log the destination path
+                            logger.LogInformation($"Extracting to: {destinationPath}");
 
                             // Overwrite existing files if needed
                             if (overwrite && File.Exists(destinationPath))

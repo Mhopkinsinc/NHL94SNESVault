@@ -259,7 +259,7 @@ namespace Snes94Hacks
                        ctx.SpinnerStyle(Style.Parse("green"));
 
                        var extractionPath = Path.Combine(AppContext.BaseDirectory, "ExtractedFiles");
-                       await FileExtractor.ExtractZipFileAsync(filePath, extractionPath);
+                       await FileExtractor.ExtractZipFileAsync(filePath, extractionPath, logger);
 
                        // Download completed
                        ctx.Status("Unzip Completed Successfully!");
