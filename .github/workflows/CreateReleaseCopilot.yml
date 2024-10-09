@@ -27,8 +27,8 @@ jobs:
     - name: Build
       run: |
             cd GUI
-            dotnet publish /p:PublishProfile=Winx86Publish.pubxml /p:DebugType=None /p:DebugSymbols=false
-            dotnet publish /p:PublishProfile=Osx64Publish.pubxml /p:DebugType=None /p:DebugSymbols=false
+            dotnet publish /p:PublishProfile=Winx86Publish.pubxml /p:DebugType=None /p:DebugSymbols=false /p:BranchName=${{ github.ref_name }}
+            dotnet publish /p:PublishProfile=Osx64Publish.pubxml /p:DebugType=None /p:DebugSymbols=false /p:BranchName=${{ github.ref_name }}
 
     - name: Zip artifacts
       run: |

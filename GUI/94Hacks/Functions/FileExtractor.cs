@@ -20,24 +20,30 @@ namespace Snes94Hacks
                     {
                         var destinationPath = Path.Combine(extractionPath, entry.FullName);
 
-                        // Overwrite existing files if needed
-                        if (overwrite && File.Exists(destinationPath))
+                        if (entry.FullName.StartsWith("Src/", StringComparison.OrdinalIgnoreCase) ||
+                            entry.FullName.StartsWith("ASAR/", StringComparison.OrdinalIgnoreCase))
                         {
-                            File.Delete(destinationPath);
-                        }
 
-                        // Ensure the directory of the entry exists
-                        Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));
-
-                        // Extract the entry if it is not a directory
-                        if (!String.IsNullOrEmpty(entry.Name))
-                        {
-                            using (var entryStream = entry.Open())
-                            using (var fileStream = new FileStream(destinationPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 4096, true))
+                            // Overwrite existing files if needed
+                            if (overwrite && File.Exists(destinationPath))
                             {
-                                await entryStream.CopyToAsync(fileStream);
+                                File.Delete(destinationPath);
+                            }
+
+                            // Ensure the directory of the entry exists
+                            Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));
+
+                            // Extract the entry if it is not a directory
+                            if (!String.IsNullOrEmpty(entry.Name))
+                            {
+                                using (var entryStream = entry.Open())
+                                using (var fileStream = new FileStream(destinationPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 4096, true))
+                                {
+                                    await entryStream.CopyToAsync(fileStream);
+                                }
                             }
                         }
+
                     }
                 }
             }

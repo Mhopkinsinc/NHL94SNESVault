@@ -9,6 +9,7 @@ using Serilog;
 using Spectre.Console;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace Snes94Hacks
 {
@@ -26,6 +27,7 @@ namespace Snes94Hacks
             string ASAROutputFile = "nhl94.sfc";
             var MacOS = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
             var Linux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+            var branchName = "";
             SNESROM _sourceROM = null;
             #endregion
 
@@ -201,7 +203,14 @@ namespace Snes94Hacks
             // Download the latest version of Github Repo
             try
             {
-                string fileUrl = @"https://github.com/Mhopkinsinc/NHL94SNESVault/archive/refs/heads/Mhopkinsinc/issue61.zip";
+                 // Retrieve the branch name from the assembly metadata
+                branchName = Assembly.GetExecutingAssembly()
+                             .GetCustomAttribute<AssemblyMetadataAttribute>()?
+                             .GetType()
+                             .GetProperty("BranchName")?
+                             .GetValue(null, null)?.ToString() ?? "main";
+                
+                string fileUrl = $"https://github.com/Mhopkinsinc/NHL94SNESVault/archive/refs/heads/{branchName}.zip";
                 string fileName = "Nhl94SnesValut.zip";
                 string filePath = Path.Combine(AppContext.BaseDirectory, fileName);
 
@@ -279,7 +288,7 @@ namespace Snes94Hacks
             {
                 try
                 {
-                    string[] ConfigPaths = {@"ExtractedFiles", "NHL94SNESVault-Mhopkinsinc-issue61", "Src", "Config.asm"};
+                    string[] ConfigPaths = {@"ExtractedFiles", "Src", "Config.asm"};
                     //Update the ExtractedFiles\\NHL94SNESVault-main\\Src\\Config.asm file and set the variables
                     if (hack == "Def. Control ON")
                     {
@@ -338,7 +347,7 @@ namespace Snes94Hacks
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!ExtraAttacker_Bugfix", "1"); //Enables the Extra Attacker Bug Fix
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!ForwardsAndDefense_Hack", "1"); //Enables the Forwards and Defense Hack
                     }
-                    else if (hack == "Enable Body Checks For Against")
+                    else if (hack == "Enable Body Checks For/Against")
                     {
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!PlayerStat_BodyChecks", "1"); //Enables BodyCheck Stats in RAM                        
                     }
@@ -364,7 +373,7 @@ namespace Snes94Hacks
             //Set the CPU Pull Goalie Time and CPU Goalie Goals
             try
             {
-                string[] ConfigPaths = { @"ExtractedFiles", "NHL94SNESVault-main", "Src", "Config.asm" };
+                string[] ConfigPaths = { @"ExtractedFiles", "Src", "Config.asm" };
                 await FileModifier.UpdateFileAsync(ConfigPaths, "!CPU_Pull_Goalie_Time_Left", CPUPullGoalieTime.ToString());
                 await FileModifier.UpdateFileAsync(ConfigPaths, "!CPU_Pull_Goalie_Goal_Diff", CPUGoalieGoals.ToString());
             }
@@ -383,7 +392,7 @@ namespace Snes94Hacks
                 //Set the PatchROM variable in the DizSettings.asm file                
                 try
                 {
-                    string[] ConfigPaths = { @"ExtractedFiles", "NHL94SNESVault-main", "Src", "DizSettings.asm" };
+                    string[] ConfigPaths = { @"ExtractedFiles", "Src", "DizSettings.asm" };
                     await FileModifier.UpdateFileAsync(ConfigPaths, "!PatchROM", patchExisting ? "1" : "0");
                 }
                 catch (Exception ex)
