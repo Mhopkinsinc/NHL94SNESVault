@@ -23,11 +23,11 @@ For Example PlayerStruct Jer# is 13c3 + y will give you the jersey number of the
 {$13c3+[$91]} = Jersy# of Player being hit
 {$12a3+[$91]} = Player Roster Index -1 of player being hit [0 based thats why]
 
-1650 Checks For 	26 bytes home team, 26 bytes away team
-1684 Checks Against	26 bytes home team, 26 bytes away team
+$2000-$2034 Checks For     	26 bytes home team, 26 bytes away team
+$2035-$2069 Checks Against	26 bytes home team, 26 bytes away team
 
 
-E690 free space starts here
+WRAM E690 free space starts here?
 
 
 ==================================
