@@ -69,7 +69,7 @@
                         print "Adding Checks For/Against to Player Stats Page (UI)"
 
                         org $9C8A60             ;Point PM to Checks For Ram Map
-                        LDA.W $2000,X           ;9C8A60|BD8A19  |; Load Checks For per player
+                        LDA.W $168D,X           ;9C8A60|BD8A19  |; Load Checks For per player
 
                         org $9CF323             ;Change Pm to Cf
                         db " Pt Sh Cf#"         ;9CF323|        |;
