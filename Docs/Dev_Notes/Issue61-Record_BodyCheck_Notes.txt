@@ -23,12 +23,19 @@ For Example PlayerStruct Jer# is 13c3 + y will give you the jersey number of the
 {$13c3+[$91]} = Jersy# of Player being hit
 {$12a3+[$91]} = Player Roster Index -1 of player being hit [0 based thats why]
 
-1650 Checks For 	26 bytes home team, 26 bytes away team
-1684 Checks Against	26 bytes home team, 26 bytes away team
+I steal from the Penalty Summary Ram Map as it had room for 60 penalties. I leave room for 20 penalties and steal the remaing bytes for checks for and checks against
+
+$168E-$16C1 Checks For     	26 bytes home team, 26 bytes away team
+$16C2-$16F5 Checks Against	26 bytes home team, 26 bytes away team
 
 
-E690 free space starts here
+WRAM Ends at $1FFF
 
+==================================
+Penalty Summary Ram MAP:
+==================================
+Penalty Summary Ram MAP starts @ Wram $163E enough for approx 60 penalties. Each Penalty is 4 bytes.
+$163C contains the number of penalties, it just keeps incrementing this number for each penalty then takes the next four available bytes.
 
 ==================================
 Goals Ram MAP:
