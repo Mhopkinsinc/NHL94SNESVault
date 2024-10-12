@@ -14884,7 +14884,7 @@ JyPadHmAwyLookupTable:
          .recordChkF:                       
                        TAX                                  ;9EFBE3|AA      |;
                        SEP #$20                             ;9EFBE4|E220    |;
-                       INC.W $2000,X                        ;9EFBE6|FE5016  |; Add 1 to the existing checks For value
+                       INC.W $168D,X                        ;9EFBE6|FE5016  |; Add 1 to the existing checks For value
                        REP #$20                             ;9EFBE9|C220    |;
          
                        LDX.B zpCurntTeamLoopVal             ;9EFBEB|A691    |; $91 is Player being chekced
@@ -14898,7 +14898,7 @@ JyPadHmAwyLookupTable:
          .recordChkA:                       
                        TAX                                  ;9EFBFB|AA      |;
                        SEP #$20                             ;9EFBFC|E220    |;
-                       INC.W $2035,X                        ;9EFBFE|FE8416  |; Add 1 to the existing checks Against value
+                       INC.W $16C1,X                        ;9EFBFE|FE8416  |; Add 1 to the existing checks Against value
                        REP #$20                             ;9EFC01|C220    |;
                        PLX                                  ;9EFC03|FA      |; Pull original X value off the stack
                        PLA                                  ;9EFC04|68      |; Pull Original A Value off the stack
