@@ -29,7 +29,7 @@
                 ShowMaxBoost:
                        BIT.B $14                            ; Check if $14 (RNG) is negative
                        BMI .negative                        ; Branch if negative
-                       JMP.W $9FFB43                        ; JMP to original code
+                       JMP.W $9F9ABD                        ; JMP to original code
                 .negative:
                        LDA.W #$0064                         ; Load 100 decimal (MAX) into A
                        STA.W $A5                            ; Store 100 decimal into $A5 and return
