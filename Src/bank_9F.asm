@@ -2240,7 +2240,8 @@ Real_Time_Pen_Clock_2:
           CODE_9F9A2D:
                        STA.B $A5                            ;9F9A2D|85A5    |; Edit Lines Current Attribute Temp Value. Loops for all players displayred. Except Weight, Handed, Overall
                        PLX                                  ;9F9A2F|FA      |;
-                       JMP.W CODE_9F9ABD                    ;9F9A30|4CBD9A  |;
+                       ;JMP.W CODE_9F9ABD                    ;9F9A30|4CBD9A  |; HIJACK To Show Max Boost if RNG is Negative
+                       JMP.W ShowMaxBoost                   ;9F9A30|4C3A9A  |; HIJACK To Show Max Boost if RNG is Negative
  
           CODE_9F9A33:
                        LDA.B $B1                            ;9F9A33|A5B1    |;
@@ -12828,6 +12829,14 @@ Real_Time_Pen_Clock_2:
                        LSR A                                ;9FFB40|4A      |; For positive numbers, simply shift right (divide by 2)
                        LSR A                                ;9FFB41|4A      |; For positive numbers, simply shift right (divide by 2)
                        RTS                                  ;9FFB42|60      |; Return
-                       
-                        padbyte $FF
-                        pad $A08000
+    ShowMaxBoost:
+                       BIT.B $14                            ; Check if $14 (RNG) is negative
+                       BMI .negative                        ; Branch if negative
+                       JMP.W CODE_9F9ABD                    ; JMP to original code
+    .negative:
+                       LDA.W #$0064                         ; Load 100 decimal (MAX) into A
+                       STA.W $A5                            ; Store 100 decimal into $A5 and return
+                       RTL
+
+                       padbyte $FF
+                       pad $A08000

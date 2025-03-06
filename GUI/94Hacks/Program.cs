@@ -104,9 +104,15 @@ namespace Snes94Hacks
                     })
                     .AddChoiceGroup("Stats", new[]
                     {
-                            "Enable Body Checks For/Against", "Show Body Checks in Player Stats Page"
+                            "Enable Body Checks For/Against", "Show Body Checks in Player Stats Page", "Show Real Value in Edit Lines (Max Boost Bug)"
                     })
                     ) ;
+            
+            // Check if "Hot Cold Bonus Bug Fix" is selected
+            if (hacks.Contains("Hot Cold Bonus Bug Fix"))
+            {
+                hacks.Remove("Show Real Value in Edit Lines (Max Boost Bug)");
+            }
 
             var selectedItemsFormatted = string.Join("\n", hacks.Select(hack => $"[blue]{hack}[/]"));
 
@@ -337,6 +343,7 @@ namespace Snes94Hacks
                     else if (hack == "Hot Cold Bonus Bug Fix")
                     {
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!HotCold_Bugfix", "1"); //Enables the Hot Cold Bonus Bug Fix
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!ShowMaxBoost", "0"); //Disable MaxBoost in Edit Lines
                     }
                     else if (hack == "Extra Attacker Missing Bug Fix")
                     {
@@ -355,6 +362,11 @@ namespace Snes94Hacks
                     {
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!PlayerStat_BodyChecks", "1"); //Enables BodyCheck Stats in RAM
                         await FileModifier.UpdateFileAsync(ConfigPaths, "!PlayerStat_BodyChecks_Display", "1"); //Enables the Display of BodyCheck For Stats in UI
+                    }
+
+                    else if (hack == "Show Real Value in Edit Lines (Max Boost Bug)")
+                    {
+                        await FileModifier.UpdateFileAsync(ConfigPaths, "!ShowMaxBoost", "1"); //Enables MaxBoost in Edit Lines                        
                     }
 
                 }
