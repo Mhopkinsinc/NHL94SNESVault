@@ -1,0 +1,37 @@
+NOTES:
+
+WRAM Map of Random Numbers from -12 to +12 
+$1A12 to $1C81 622 Bytes populated from code address $9FE0EB
+$14 populated from code address $9FCF23. Used As Base RNG # Per Player.
+$9FCEF6 Main Loop Called for Each Player On The Ice, Or When A New Player Comes On The Ice
+$9F99D2 Loads Players RNG from $1A12 to $1C81 to figure out edit lines value.
+$9F9ABD Checks to see if it needs to cap or min attribute value
+
+Formula the game uses for attributes in edit lines / Team Roster
+18*attribute value (0 to 6) + Hold/Cold RNG (-12 to +12)
+Example 18*4+10 = 82 in edit lines for a 4 of 6 attribute with a + 10 RNG
+
+Hot/Cold Function (A,Y,$14)
+	Input:
+		A 	= Current Attribute Value before hot/cold
+		Y 	= Current Attribute Index Zero based (12 Attributes)
+		$14	= Base Index to Players RNG (Different for each player)
+	Outputs:
+		A	= Players New Attribute Value
+	
+	$16 = Stores Players Attribute Value before hot/cold applied
+	Y 	= $14 + Current Attribute Index
+	$1A12 + Y = RNG
+	
+	
+Goal:
+	Extract Real Player Attributes per player from the save state (WRAM)
+		Identify WRAM Map [Done]
+		Understand how $14 is populated per player []
+		Test the theroy of extracting each players real attributes []
+		
+
+DEBUG Points:
+$9F992E
+$9F9A2D
+$9F9A17

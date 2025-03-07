@@ -49,6 +49,11 @@
 !HotCold_Bugfix = 0   ; Enable = 1,  Disable = 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;Enable / Disable Display of Max Boost in Edit Lines
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+!ShowMaxBoost = 0   ; Enable = 1,  Disable = 0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Extrat Attacker Missing Bug Fix
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 !ExtraAttacker_Bugfix = 0   ; Enable = 1,  Disable = 0

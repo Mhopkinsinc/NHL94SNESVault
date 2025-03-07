@@ -12,4 +12,5 @@
                        incsrc "patches/HotColdFix.asm"
                        incsrc "patches/ExtraAttackerFix.asm"
                        incsrc "patches/ForwardsAndDefenseHack.asm"
-                       incsrc "patches/PlayerStatBodyChecks.asm"                       
+                       incsrc "patches/PlayerStatBodyChecks.asm"
+                       incsrc "patches/ShowMaxBoost.asm"
