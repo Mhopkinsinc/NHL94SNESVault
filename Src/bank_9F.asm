@@ -293,7 +293,7 @@
                        STA.B $0E                            ;9F82FE|850E    |;
                        LDA.W #$C20C                         ;9F8300|A90CC2  |;
                        STA.B $0C                            ;9F8303|850C    |;
-                       JSL.L CODE_80A2E0                    ;9F8305|22E0A280|;
+                       JSL.L fn_PlayMusic                   ;9F8305|22E0A280|; Main Menu Music
  
           CODE_9F8309:
                        STZ.W $15DA                          ;9F8309|9CDA15  |;

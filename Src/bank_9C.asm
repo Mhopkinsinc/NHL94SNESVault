@@ -2367,7 +2367,7 @@
                        STA.B $0E                            ;9C9B7D|850E    |;
                        LDA.L UNREACH_80DA56,X               ;9C9B7F|BF56DA80|;
                        STA.B $0C                            ;9C9B83|850C    |;
-                       JSL.L CODE_80A2E0                    ;9C9B85|22E0A280|;
+                       JSL.L fn_PlayMusic                   ;9C9B85|22E0A280|; Organ Ditties
                        BRA CODE_9C9BA5                      ;9C9B89|801A    |;
  
           CODE_9C9B8B:
@@ -2380,7 +2380,7 @@
                        STA.B $0C                            ;9C9B99|850C    |;
                        LDA.L UNREACH_80DCF8,X               ;9C9B9B|BFF8DC80|;
                        STA.B $0E                            ;9C9B9F|850E    |;
-                       JSL.L CODE_80A2E0                    ;9C9BA1|22E0A280|;
+                       JSL.L fn_PlayMusic                   ;9C9BA1|22E0A280|; Goal Music
  
           CODE_9C9BA5:
                        PLA                                  ;9C9BA5|68      |;

@@ -1311,20 +1311,30 @@
           CODE_9D8BDE:
                        CMP.W #$0004                         ;9D8BDE|C90400  |;
                        BNE CODE_9D8BE6                      ;9D8BE1|D003    |;
-                       db $4C,$64,$90                       ;9D8BE3|        |;
+                       JMP.W CODE_9D9064                    ;9D8BE3|4C6490  |;
  
           CODE_9D8BE6:
                        LDA.L $7E35D4                        ;9D8BE6|AFD4357E|;
                        CMP.W #$0002                         ;9D8BEA|C90200  |;
                        BCC CODE_9D8C15                      ;9D8BED|9026    |;
-                       db $AD,$ED,$07,$C9,$31,$ED,$F0,$1E   ;9D8BEF|        |;
-                       db $22,$86,$97,$9C,$22,$A9,$86,$80   ;9D8BF7|        |;
-                       db $AD,$F3,$07,$D0,$FB,$A9,$93,$00   ;9D8BFF|        |;
-                       db $85,$0E,$A9,$31,$ED,$85,$0C,$22   ;9D8C07|        |;
-                       db $E0,$A2,$80,$4C,$19,$8C           ;9D8C0F|        |;
+                       LDA.W $07ED                          ;9D8BEF|ADED07  |;
+                       CMP.W #$ED31                         ;9D8BF2|C931ED  |;
+                       BEQ CODE_9D8C15                      ;9D8BF5|F01E    |;
+                       JSL.L CODE_9C9786                    ;9D8BF7|2286979C|;
+                       JSL.L CODE_8086A9                    ;9D8BFB|22A98680|;
+          CODE_9D8BFF:
+                       LDA.W $07F3                          ;9D8BFF|ADF307  |;
+                       BNE CODE_9D8BFF                      ;9D8C02|D0FB    |;
+                       LDA.W #$0093                         ;9D8C04|A99300  |;
+                       STA.B $0E                            ;9D8C07|850E    |;
+                       LDA.W #$ED31                         ;9D8C09|A931ED  |;
+                       STA.B $0C                            ;9D8C0C|850C    |;
+                       JSL.L fn_PlayMusic                   ;9D8C0E|22E0A280|; Finals Playoff Music
+                       JMP.W CODE_9D8C19                    ;9D8C12|4C198C  |;
  
           CODE_9D8C15:
                        JSL.L CODE_8086A9                    ;9D8C15|22A98680|;
+          CODE_9D8C19:
                        SEP #$20                             ;9D8C19|E220    |;
                        LDA.B #$09                           ;9D8C1B|A909    |;
                        STA.W $2105                          ;9D8C1D|8D0521  |;
@@ -5258,7 +5268,7 @@ Game_Setup_Menus_Arry_Sizes:                                                ;|; 
                        STA.B $0E                            ;9DB2B0|850E    |;
                        LDA.W #$DD32                         ;9DB2B2|A932DD  |;
                        STA.B $0C                            ;9DB2B5|850C    |;
-                       JSL.L CODE_80A2E0                    ;9DB2B7|22E0A280|;
+                       JSL.L fn_PlayMusic                   ;9DB2B7|22E0A280|; Flying Pucks Intro Music
                        JSL.L CODE_80AF7B                    ;9DB2BB|227BAF80|;
                        JSR.W CODE_9DB954                    ;9DB2BF|2054B9  |;
                        JSL.L CODE_80AFDE                    ;9DB2C2|22DEAF80|;

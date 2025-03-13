@@ -3325,7 +3325,8 @@
                        PLX                                  ;80A2DE|FA      |;
                        RTL                                  ;80A2DF|6B      |;
  
-          CODE_80A2E0:
+ 
+         fn_PlayMusic:
                        PHP                                  ;80A2E0|08      |;
                        SEP #$30                             ;80A2E1|E230    |;
                        JSL.L CODE_80A349                    ;80A2E3|2249A380|;
@@ -3343,7 +3344,7 @@
                        LDA.W $213F                          ;80A2FC|AD3F21  |;
                        BIT.B #$10                           ;80A2FF|8910    |;
                        BEQ CODE_80A306                      ;80A301|F003    |;
-                       db $A2,$E0,$1F                       ;80A303|        |;
+                       LDX.W #$1FE0                         ;80A303|A2E01F  |;
  
           CODE_80A306:
                        LDA.B [$0C],Y                        ;80A306|B70C    |;
