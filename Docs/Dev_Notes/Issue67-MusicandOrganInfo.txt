@@ -1,0 +1,50 @@
+Play Music Debugging:
+
+Called before music is playing
+Address $80A2E0 CODE_80A2E0
+
+
+Main_Menu Music:
+CODE_9F82FB
+SETUP VARS
+					   LDA.W #$0090                         ;9F82FB|A99000  |;
+                       STA.B $0E                            ;9F82FE|850E    |;
+                       LDA.W #$C20C                         ;9F8300|A90CC2  |;
+                       STA.B $0C                            ;9F8303|850C    |;
+					   
+Intro Music:
+$9DB2AD
+SETUP VARS					   
+					   LDA.W #$008F                         ;9DB2AD|A98F00  |;
+                       STA.B $0E                            ;9DB2B0|850E    |;
+                       LDA.W #$DD32                         ;9DB2B2|A932DD  |;
+                       STA.B $0C                            ;9DB2B5|850C    |;
+					   
+Finals Playoff Music:
+$9D8BEF
+						LDA 0093
+						STA $0E
+						LDA ED31
+						STA $0C
+
+					   
+					   
+Organ Ditties:
+$9C9B85
+SETUP VARS
+						(MTL)
+						LDA $0098
+						STA $0E
+						LDA 90B0
+						STA $0C
+						
+						(NJ)
+						LDA $0096
+						STA $0E
+						LDA D442
+						STA $0C
+						
+Goal Music:
+$9C9BA1
+SETUP Vars:
+						
