@@ -106,7 +106,7 @@ function bytesPerTile(format: PixelFormat): number {
   return format === "bitplane2" ? 16 : 32;
 }
 
-function decodeTile(data: Uint8Array, offset: number, format: PixelFormat): number[][] {
+export function decodeTile(data: Uint8Array, offset: number, format: PixelFormat): number[][] {
   switch (format) {
     case "nibble": return decodeTileNibble(data, offset);
     case "bitplane4": return decodeTileBitplane4(data, offset);

@@ -1,19 +1,53 @@
 import { decompress, identifyCompression, NotImplementedError } from "./decompress";
 import { renderImage, renderTileGrid, TileRenderOptions, PixelFormat, RGB, parseSNESPalette } from "./snes-tiles";
+import { parseFrame, renderFrame, FRAME_COUNT } from "./sprite-frame";
+import { parseTeamLogo, renderTeamLogo, TEAM_COUNT, TEAM_NAMES } from "./team-logos";
 
+// --- Shared elements ---
 const romFileInput = document.getElementById("romFile") as HTMLInputElement;
+const modeSelect = document.getElementById("mode") as HTMLSelectElement;
+const debugToggle = document.getElementById("debugToggle") as HTMLButtonElement;
+const statusDiv = document.getElementById("status") as HTMLDivElement;
+const imageCanvas = document.getElementById("imageCanvas") as HTMLCanvasElement;
+const tilesCanvas = document.getElementById("tilesCanvas") as HTMLCanvasElement;
+
+// --- Decompress mode elements ---
+const decompressControls = document.getElementById("decompressControls") as HTMLDivElement;
 const snesAddrInput = document.getElementById("snesAddr") as HTMLInputElement;
 const tilesWideInput = document.getElementById("tilesWide") as HTMLInputElement;
 const scaleInput = document.getElementById("scale") as HTMLInputElement;
 const formatSelect = document.getElementById("format") as HTMLSelectElement;
 const paletteInput = document.getElementById("paletteInput") as HTMLInputElement;
 const decompressBtn = document.getElementById("decompressBtn") as HTMLButtonElement;
-const debugToggle = document.getElementById("debugToggle") as HTMLButtonElement;
-const statusDiv = document.getElementById("status") as HTMLDivElement;
-const imageCanvas = document.getElementById("imageCanvas") as HTMLCanvasElement;
-const tilesCanvas = document.getElementById("tilesCanvas") as HTMLCanvasElement;
 
-// Debug panel elements
+// --- Sprite Frame mode elements ---
+const spriteFrameControls = document.getElementById("spriteFrameControls") as HTMLDivElement;
+const frameIdInput = document.getElementById("frameId") as HTMLInputElement;
+const framePrevBtn = document.getElementById("framePrev") as HTMLButtonElement;
+const frameNextBtn = document.getElementById("frameNext") as HTMLButtonElement;
+const frameGoBtn = document.getElementById("frameGo") as HTMLButtonElement;
+const frameScaleInput = document.getElementById("frameScale") as HTMLInputElement;
+const framePaletteInput = document.getElementById("framePaletteInput") as HTMLInputElement;
+const autoPlayCheck = document.getElementById("autoPlay") as HTMLInputElement;
+const autoPlaySpeedInput = document.getElementById("autoPlaySpeed") as HTMLInputElement;
+
+// --- Team Logo mode elements ---
+const teamLogoControls = document.getElementById("teamLogoControls") as HTMLDivElement;
+const teamSelect = document.getElementById("teamSelect") as HTMLSelectElement;
+const teamPrevBtn = document.getElementById("teamPrev") as HTMLButtonElement;
+const teamNextBtn = document.getElementById("teamNext") as HTMLButtonElement;
+const teamScaleInput = document.getElementById("teamScale") as HTMLInputElement;
+const teamPaletteInput = document.getElementById("teamPaletteInput") as HTMLInputElement;
+
+// Populate team dropdown
+for (let i = 0; i < TEAM_COUNT; i++) {
+  const opt = document.createElement("option");
+  opt.value = String(i);
+  opt.textContent = `${i}: ${TEAM_NAMES[i]}`;
+  teamSelect.appendChild(opt);
+}
+
+// --- Debug panel elements ---
 const debugPanel = document.getElementById("debugPanel") as HTMLDivElement;
 const debugBody = document.getElementById("debugBody") as HTMLDivElement;
 const debugInfo = document.getElementById("debugInfo") as HTMLSpanElement;
@@ -26,8 +60,12 @@ const debugTabs = debugPanel.querySelectorAll<HTMLButtonElement>(".debug-tab");
 let romData: Uint8Array | null = null;
 let debugHasData = false;
 let debugUserCollapsed = false;
+let autoPlayTimer: ReturnType<typeof setInterval> | null = null;
 
-// --- Debug toggle button ---
+// ============================================================
+// Debug panel
+// ============================================================
+
 debugToggle.addEventListener("click", () => {
   if (!debugHasData) return;
   debugUserCollapsed = debugBody.style.display !== "none";
@@ -35,7 +73,6 @@ debugToggle.addEventListener("click", () => {
   debugToggle.classList.toggle("active", !debugUserCollapsed);
 });
 
-// --- Debug tab switching ---
 debugTabs.forEach((tab) => {
   tab.addEventListener("click", () => {
     debugTabs.forEach((t) => t.classList.remove("active"));
@@ -46,7 +83,6 @@ debugTabs.forEach((tab) => {
   });
 });
 
-// --- Copy button ---
 copyBtn.addEventListener("click", () => {
   const activeTab = debugPanel.querySelector(".debug-tab-content.active") as HTMLDivElement | null;
   if (!activeTab || !activeTab.textContent) return;
@@ -61,7 +97,6 @@ copyBtn.addEventListener("click", () => {
   });
 });
 
-// --- Status bar (brief summary only) ---
 function status(msg: string) {
   statusDiv.textContent += msg + "\n";
   statusDiv.scrollTop = statusDiv.scrollHeight;
@@ -71,7 +106,6 @@ function clearStatus() {
   statusDiv.textContent = "";
 }
 
-// --- Debug panel helpers ---
 function setActiveTab(tabName: string) {
   debugTabs.forEach((t) => t.classList.toggle("active", t.dataset.tab === tabName));
   tabLog.classList.toggle("active", tabName === "log");
@@ -80,10 +114,8 @@ function setActiveTab(tabName: string) {
 }
 
 function populateDebugPanel(logLines: string[], data: Uint8Array) {
-  // Log tab
   tabLog.textContent = logLines.join("\n");
 
-  // Hex dump tab: offset | hex | ASCII
   const hexLines: string[] = [];
   for (let i = 0; i < data.length; i += 16) {
     const row = data.slice(i, Math.min(i + 16, data.length));
@@ -99,7 +131,6 @@ function populateDebugPanel(logLines: string[], data: Uint8Array) {
   }
   tabHexdump.textContent = hexLines.join("\n");
 
-  // Raw tab: uppercase hex bytes, 16 per row
   const rawLines: string[] = [];
   for (let i = 0; i < data.length; i += 16) {
     const row = data.slice(i, Math.min(i + 16, data.length));
@@ -129,13 +160,38 @@ function hideDebugPanel() {
   debugToggle.classList.remove("active");
 }
 
-/**
- * Parse palette input — supports:
- *  - SNES address (e.g. "9A:F55C") -> reads 32 bytes from ROM
- *  - Raw hex bytes (e.g. "$00,$00,$7B,$6F,...")
- *  - Empty -> returns null (use default palette)
- */
-function parsePaletteInput(input: string): RGB[] | null {
+// ============================================================
+// Address parsing
+// ============================================================
+
+function snesLoROMToFileOffset(bank: number, addr: number): number {
+  return ((bank & 0x7f) * 0x8000) + (addr & 0x7fff);
+}
+
+function parseSNESAddress(input: string): number {
+  const trimmed = input.trim().replace(/^\$/, "");
+
+  const colonMatch = trimmed.match(/^([0-9a-f]{1,2}):([0-9a-f]{1,4})$/i);
+  if (colonMatch) {
+    const bank = parseInt(colonMatch[1], 16);
+    const addr = parseInt(colonMatch[2], 16);
+    return snesLoROMToFileOffset(bank, addr);
+  }
+
+  const flat = parseInt(trimmed.replace(/^0x/i, ""), 16);
+  if (!isNaN(flat)) {
+    if (flat > 0x200000) {
+      const bank = (flat >> 16) & 0xff;
+      const addr = flat & 0xffff;
+      return snesLoROMToFileOffset(bank, addr);
+    }
+    return flat;
+  }
+
+  throw new Error(`Cannot parse address: "${input}"`);
+}
+
+function parsePaletteFromInput(input: string): RGB[] | null {
   if (!input) return null;
 
   const hexBytesMatch = input.match(/[\$]?[0-9a-f]{2}/gi);
@@ -161,36 +217,23 @@ function parsePaletteInput(input: string): RGB[] | null {
   return null;
 }
 
-/**
- * Convert SNES LoROM address to file offset.
- */
-function snesLoROMToFileOffset(bank: number, addr: number): number {
-  return ((bank & 0x7f) * 0x8000) + (addr & 0x7fff);
+// ============================================================
+// Mode switching
+// ============================================================
+
+function updateModeUI() {
+  const mode = modeSelect.value;
+  decompressControls.style.display = mode === "decompress" ? "" : "none";
+  spriteFrameControls.style.display = mode === "sprite-frame" ? "" : "none";
+  teamLogoControls.style.display = mode === "team-logos" ? "" : "none";
+  stopAutoPlay();
 }
 
-/** Parse "BB:AAAA" or "0xNNNNNN" SNES address formats */
-function parseSNESAddress(input: string): number {
-  const trimmed = input.trim().replace(/^\$/, "");
+modeSelect.addEventListener("change", updateModeUI);
 
-  const colonMatch = trimmed.match(/^([0-9a-f]{1,2}):([0-9a-f]{1,4})$/i);
-  if (colonMatch) {
-    const bank = parseInt(colonMatch[1], 16);
-    const addr = parseInt(colonMatch[2], 16);
-    return snesLoROMToFileOffset(bank, addr);
-  }
-
-  const flat = parseInt(trimmed.replace(/^0x/i, ""), 16);
-  if (!isNaN(flat)) {
-    if (flat > 0x200000) {
-      const bank = (flat >> 16) & 0xff;
-      const addr = flat & 0xffff;
-      return snesLoROMToFileOffset(bank, addr);
-    }
-    return flat;
-  }
-
-  throw new Error(`Cannot parse address: "${input}"`);
-}
+// ============================================================
+// ROM loading
+// ============================================================
 
 romFileInput.addEventListener("change", async () => {
   const file = romFileInput.files?.[0];
@@ -198,11 +241,22 @@ romFileInput.addEventListener("change", async () => {
 
   const buffer = await file.arrayBuffer();
   romData = new Uint8Array(buffer);
-  decompressBtn.disabled = false;
   clearStatus();
   hideDebugPanel();
   status(`Loaded ROM: ${file.name} (${romData.length} bytes / $${romData.length.toString(16)} hex)`);
+
+  // Enable controls
+  decompressBtn.disabled = false;
+  frameGoBtn.disabled = false;
+  framePrevBtn.disabled = false;
+  frameNextBtn.disabled = false;
+  teamPrevBtn.disabled = false;
+  teamNextBtn.disabled = false;
 });
+
+// ============================================================
+// Decompress mode
+// ============================================================
 
 decompressBtn.addEventListener("click", () => {
   if (!romData) return;
@@ -222,7 +276,6 @@ decompressBtn.addEventListener("click", () => {
     const maxCompressed = Math.min(0x10000, romData.length - fileOffset);
     const compressedData = romData.slice(fileOffset, fileOffset + maxCompressed);
 
-    // Identify compression type
     const compType = identifyCompression(compressedData);
     if (compType) {
       status(`Magic: $${compType.name} — ${compType.description}${compType.implemented ? "" : " [NOT IMPLEMENTED]"}`);
@@ -234,15 +287,12 @@ decompressBtn.addEventListener("click", () => {
       return;
     }
 
-    // Decompress
     let result;
     try {
       result = decompress(compressedData);
     } catch (err) {
       if (err instanceof NotImplementedError) {
         status(`${err.compressionType.name} decompressor is not implemented yet.`);
-
-        // Show what we can in the debug panel — the raw compressed header
         const headerLines: string[] = [
           `Compression: ${err.compressionType.name} — ${err.compressionType.description}`,
           `Status: NOT IMPLEMENTED`,
@@ -255,7 +305,6 @@ decompressBtn.addEventListener("click", () => {
             .join(" ");
           headerLines.push(`  ${i.toString(16).padStart(4, "0")}: ${hex}`);
         }
-
         tabLog.textContent = headerLines.join("\n");
         tabHexdump.textContent = "(no decompressed data)";
         tabRaw.textContent = "(no decompressed data)";
@@ -267,19 +316,16 @@ decompressBtn.addEventListener("click", () => {
       throw err;
     }
 
-    // Collect all detail lines for the Log tab
     const logLines: string[] = [];
     logLines.push(`Compression: $${compType.name} — ${compType.description}`);
     logLines.push(`Source: ${snesAddrInput.value} -> file offset $${fileOffset.toString(16).padStart(6, "0")}`);
     logLines.push(``);
 
-    // Decompressor log
     for (const line of result.log) {
       logLines.push(line);
     }
 
-    // Palette info
-    const palette = parsePaletteInput(paletteInput.value.trim());
+    const palette = parsePaletteFromInput(paletteInput.value.trim());
     logLines.push(``);
     if (palette) {
       logLines.push(`Palette (${palette.length} colors):`);
@@ -291,7 +337,6 @@ decompressBtn.addEventListener("click", () => {
       logLines.push("Using default grayscale palette");
     }
 
-    // Render info
     const format = formatSelect.value as PixelFormat;
     const tilesWide = parseInt(tilesWideInput.value);
     const scale = parseInt(scaleInput.value);
@@ -308,14 +353,189 @@ decompressBtn.addEventListener("click", () => {
 
     renderTileGrid(tilesCanvas, result.data, opts);
 
-    // Brief status summary
     status(`Decompressed ${result.data.length} bytes -> ${tileCount} tiles (${tilesWide}x${info.tilesHigh})`);
 
-    // Populate and show debug panel
     populateDebugPanel(logLines, result.data);
     showDebugPanel();
   } catch (err) {
     status(`ERROR: ${err instanceof Error ? err.message : String(err)}`);
     console.error(err);
   }
+});
+
+// ============================================================
+// Sprite Frame Browser mode
+// ============================================================
+
+function loadFrame(frameId: number) {
+  if (!romData) return;
+
+  clearStatus();
+  hideDebugPanel();
+
+  try {
+    const frame = parseFrame(romData, frameId);
+    frameIdInput.value = String(frameId);
+
+    const scale = parseInt(frameScaleInput.value) || 6;
+    const palette = parsePaletteFromInput(framePaletteInput.value.trim());
+
+    // Render composed sprite to the main canvas
+    const dims = renderFrame(imageCanvas, frame, scale, palette ?? undefined);
+
+    // Also render individual tiles in the tile grid
+    if (frame.tileData.length > 0) {
+      const tileOpts: TileRenderOptions = {
+        format: "bitplane4",
+        tilesWide: Math.min(frame.header.numTiles, 12),
+        scale: Math.max(scale - 1, 2),
+        palette: palette ?? undefined,
+      };
+      renderTileGrid(tilesCanvas, frame.tileData, tileOpts);
+    } else {
+      const ctx = tilesCanvas.getContext("2d")!;
+      tilesCanvas.width = 1;
+      tilesCanvas.height = 1;
+      ctx.clearRect(0, 0, 1, 1);
+    }
+
+    const flagNote = (frame.header.flag & 0x80) === 0
+      ? ` [flag=$${frame.header.flag.toString(16)} — VRAM pre-loaded, no inline tiles]`
+      : "";
+    status(`Frame ${frameId}/${FRAME_COUNT}: ${frame.header.numSprites} sprites, ${frame.header.numTiles} tiles, ${dims.width}x${dims.height}px${flagNote}`);
+
+    populateDebugPanel(frame.log, frame.tileData);
+    showDebugPanel();
+  } catch (err) {
+    status(`ERROR: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(err);
+  }
+}
+
+frameGoBtn.addEventListener("click", () => {
+  loadFrame(parseInt(frameIdInput.value) || 1);
+});
+
+frameIdInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") loadFrame(parseInt(frameIdInput.value) || 1);
+});
+
+framePrevBtn.addEventListener("click", () => {
+  const id = Math.max(1, (parseInt(frameIdInput.value) || 1) - 1);
+  loadFrame(id);
+});
+
+frameNextBtn.addEventListener("click", () => {
+  const id = Math.min(FRAME_COUNT, (parseInt(frameIdInput.value) || 1) + 1);
+  loadFrame(id);
+});
+
+// Keyboard navigation: left/right arrows when in sprite frame mode
+document.addEventListener("keydown", (e) => {
+  if (modeSelect.value !== "sprite-frame" || !romData) return;
+  if (document.activeElement?.tagName === "INPUT" && document.activeElement !== frameIdInput) return;
+
+  if (e.key === "ArrowLeft") {
+    e.preventDefault();
+    const id = Math.max(1, (parseInt(frameIdInput.value) || 1) - 1);
+    loadFrame(id);
+  } else if (e.key === "ArrowRight") {
+    e.preventDefault();
+    const id = Math.min(FRAME_COUNT, (parseInt(frameIdInput.value) || 1) + 1);
+    loadFrame(id);
+  }
+});
+
+// Auto-play
+function stopAutoPlay() {
+  if (autoPlayTimer !== null) {
+    clearInterval(autoPlayTimer);
+    autoPlayTimer = null;
+  }
+  autoPlayCheck.checked = false;
+}
+
+autoPlayCheck.addEventListener("change", () => {
+  if (autoPlayCheck.checked) {
+    const speed = parseInt(autoPlaySpeedInput.value) || 200;
+    autoPlayTimer = setInterval(() => {
+      const id = (parseInt(frameIdInput.value) || 1) + 1;
+      if (id > FRAME_COUNT) {
+        stopAutoPlay();
+        return;
+      }
+      loadFrame(id);
+    }, speed);
+  } else {
+    stopAutoPlay();
+  }
+});
+
+autoPlaySpeedInput.addEventListener("change", () => {
+  if (autoPlayCheck.checked) {
+    stopAutoPlay();
+    autoPlayCheck.checked = true;
+    autoPlayCheck.dispatchEvent(new Event("change"));
+  }
+});
+
+// ============================================================
+// Team Logo Browser mode
+// ============================================================
+
+function loadTeamLogo(teamIndex: number) {
+  if (!romData) return;
+
+  clearStatus();
+  hideDebugPanel();
+
+  try {
+    const logo = parseTeamLogo(romData, teamIndex);
+    teamSelect.value = String(teamIndex);
+
+    const scale = parseInt(teamScaleInput.value) || 8;
+    const manualPalette = parsePaletteFromInput(teamPaletteInput.value.trim());
+    const palette = manualPalette ?? logo.palette;
+
+    const dims = renderTeamLogo(imageCanvas, logo, scale, palette);
+
+    // Render individual tiles in the tile grid
+    if (logo.tileData.length > 0) {
+      const tileOpts: TileRenderOptions = {
+        format: "nibble",
+        tilesWide: 8,
+        scale: Math.max(scale - 2, 2),
+        palette,
+      };
+      renderTileGrid(tilesCanvas, logo.tileData, tileOpts);
+    } else {
+      const ctx = tilesCanvas.getContext("2d")!;
+      tilesCanvas.width = 1;
+      tilesCanvas.height = 1;
+      ctx.clearRect(0, 0, 1, 1);
+    }
+
+    const tileCount = Math.floor(logo.tileData.length / 32);
+    status(`${logo.teamName}: ${logo.widthTiles}x${logo.heightTiles} tiles (${tileCount} unique tiles), ${dims.width}x${dims.height}px`);
+
+    populateDebugPanel(logo.log, logo.tileData);
+    showDebugPanel();
+  } catch (err) {
+    status(`ERROR: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(err);
+  }
+}
+
+teamSelect.addEventListener("change", () => {
+  loadTeamLogo(parseInt(teamSelect.value) || 0);
+});
+
+teamPrevBtn.addEventListener("click", () => {
+  const idx = Math.max(0, (parseInt(teamSelect.value) || 0) - 1);
+  loadTeamLogo(idx);
+});
+
+teamNextBtn.addEventListener("click", () => {
+  const idx = Math.min(TEAM_COUNT - 1, (parseInt(teamSelect.value) || 0) + 1);
+  loadTeamLogo(idx);
 });
