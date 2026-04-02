@@ -176,14 +176,13 @@ export function parseFrame(romData: Uint8Array, frameId: number): FrameData {
   }
   const actualTileCount = Math.floor(tileData.length / 32);
 
-  // Compute top section size for the log
+  // Log tile layout using DMA params from header
   if (hasInlineTiles && actualTileCount > 0) {
-    let logTopSection = 0;
-    for (const s of sprites) {
-      if (s.firstTile >= actualTileCount) continue;
-      logTopSection += s.size === 0xFF ? 2 : 1;
-    }
-    log.push(`Tile layout: topSection=${logTopSection} tiles, bottomSection=${actualTileCount - logTopSection} tiles`);
+    const topBytes = rawBytes[0x0C] | (rawBytes[0x0D] << 8);
+    const botBytes = rawBytes[0x0E] | (rawBytes[0x0F] << 8);
+    const topTiles = Math.floor(topBytes / 32);
+    const botTiles = Math.floor(botBytes / 32);
+    log.push(`Tile layout: topSection=${topTiles} tiles (${topBytes} bytes), bottomSection=${botTiles} tiles (${botBytes} bytes)`);
   }
 
   return { frameId, fileOffset: frameOffset, header: hdr, sprites, tileData, log };
@@ -244,20 +243,16 @@ export function renderFrame(
     px[i + 3] = 255;
   }
 
-  // Compute the "top section" size: number of tiles before the bottom rows
-  // of 16x16 sprites begin. Layout is:
-  //   [16x16 top-row tiles] [8x8 tiles] [16x16 bottom-row tiles]
-  // So for a 16x16 sprite, bottom row = firstTile + topSectionSize
-  const maxTileIdx = Math.floor(tileData.length / 32);
-  let topSectionSize = 0;
-  for (const s of sprites) {
-    if (s.firstTile >= maxTileIdx) continue; // skip OOB entries
-    if (s.size === 0xFF) {
-      topSectionSize += 2; // top 2 tiles of 16x16
-    } else {
-      topSectionSize += 1; // 8x8 tile
-    }
-  }
+  // The SNES OBJ hardware arranges tiles in a 16-wide grid in VRAM.
+  // A 16x16 sprite with tile N uses VRAM tiles: N, N+1, N+16, N+17.
+  // But the inline ROM data is packed linearly with topSectionSize tiles
+  // per VRAM row. To convert: romIndex = floor(vramTile/16)*topSection + vramTile%16
+  //
+  // topSectionSize = number of tiles in VRAM row 0 (top halves of 16x16 + 8x8 tiles).
+  // Also derivable from header: bytes $0C-$0D = topSectionSize * 32.
+  const topSectionSize = Math.floor(
+    ((frame.header.rawBytes[0x0C] | (frame.header.rawBytes[0x0D] << 8)) / 32)
+  );
 
   // Render each sprite entry
   for (const s of sprites) {
@@ -273,9 +268,10 @@ export function renderFrame(
 
     for (let ty = 0; ty < tilesY; ty++) {
       for (let tx = 0; tx < tilesX; tx++) {
-        // Top row: firstTile + tx
-        // Bottom row: firstTile + topSectionSize + tx
-        const tileIdx = s.firstTile + ty * topSectionSize + tx;
+        // Compute VRAM tile index (SNES 16-wide OBJ grid)
+        const vramTile = s.firstTile + ty * 16 + tx;
+        // Convert VRAM tile to ROM linear index
+        const tileIdx = Math.floor(vramTile / 16) * topSectionSize + (vramTile % 16);
         const tileOffset = tileIdx * 32;
 
         if (tileOffset + 32 > tileData.length) continue;
