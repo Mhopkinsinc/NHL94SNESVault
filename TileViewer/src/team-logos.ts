@@ -13,7 +13,8 @@
  *   [palAddr:16] [palBank:16] -> 16 raw SNES 15-bit RGB colors (32 bytes)
  *
  * Tilemap header: [width:16] [height:16] [info:16] then width*height tile entries
- * Tile index 0 = blank, actual tiles start at index 1 (game does INC A)
+ * Tile index $FF = blank (game does INC A, $FF wraps to $00 = transparent)
+ * ROM value 0 = data tile 0, value 1 = data tile 1, etc.
  */
 
 import { RGB, decodeTile, parseSNESPalette } from "./snes-tiles";
@@ -68,7 +69,7 @@ export interface TeamLogo {
   widthTiles: number;
   heightTiles: number;
   tileData: Uint8Array;
-  tilemap: number[];   // tile indices (0 = blank, 1+ = tile index into tileData)
+  tilemap: number[];   // tile indices ($FF = blank, 0+ = direct data tile index)
   palette: RGB[];      // 16-color per-team palette from ROM
   log: string[];
 }
@@ -108,12 +109,16 @@ export function parseTeamLogo(romData: Uint8Array, teamIndex: number): TeamLogo 
   log.push(`  Tilemap: ${widthTiles}x${heightTiles} tiles, info=$${info.toString(16).padStart(4, "0")}`);
 
   // Read tilemap entries — each is 2 bytes: [tileIndex, attributes]
-  // The game code (CODE_9DBC67) reads byte-by-byte and does INC A on tile index
+  // The game code (CODE_9DBC67) does INC A on the raw tile byte:
+  //   ROM $FF → INC → $00 → blank/transparent
+  //   ROM $00 → INC → $01 → first tile (data tile 0)
+  //   ROM $01 → INC → $02 → second tile (data tile 1)
+  // So ROM value N maps directly to data tile N; $FF = blank.
   const totalCells = widthTiles * heightTiles;
   const tilemap: number[] = [];
   for (let i = 0; i < totalCells; i++) {
     const tileIdx = romData[mapOff + 6 + i * 2];
-    // const attr = romData[mapOff + 6 + i * 2 + 1]; // attributes (palette/flip), skip for now
+    // const attr = romData[mapOff + 6 + i * 2 + 1]; // attributes (palette/flip bits)
     tilemap.push(tileIdx);
   }
   log.push(`  Tilemap indices: [${tilemap.join(",")}]`);
@@ -171,13 +176,12 @@ export function renderTeamLogo(
       const cellIdx = row * logo.widthTiles + col;
       const tileIdx = logo.tilemap[cellIdx];
 
-      if (tileIdx === 0) continue; // blank tile
+      if (tileIdx === 0xFF) continue; // $FF in ROM → blank (game does INC → $00)
 
-      // Tile index in the decompressed data (0-based, tilemap uses 1-based)
-      const dataIdx = tileIdx - 1;
-      if (dataIdx >= tileCount) continue;
+      // ROM value maps directly to data tile index (no -1 offset)
+      if (tileIdx >= tileCount) continue;
 
-      const tileOff = dataIdx * 32;
+      const tileOff = tileIdx * 32;
       // FB30 decompresses to nibble-packed format (32 bytes/tile, 2 pixels per byte)
       const pixels = decodeTile(logo.tileData, tileOff, "nibble");
 
