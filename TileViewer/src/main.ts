@@ -248,6 +248,16 @@ function updateModeUI() {
   teamLogoControls.style.display = mode === "team-logos" ? "" : "none";
   setupLogoControls.style.display = mode === "setup-logos" ? "" : "none";
   stopAutoPlay();
+
+  if (romData) {
+    if (mode === "sprite-frame") {
+      loadFrame(parseInt(frameIdInput.value) || 1);
+    } else if (mode === "team-logos") {
+      loadTeamLogo(parseInt(teamSelect.value) || 0);
+    } else if (mode === "setup-logos") {
+      loadSetupLogo(parseInt(setupTeamSelect.value) || 0);
+    }
+  }
 }
 
 modeSelect.addEventListener("change", updateModeUI);
