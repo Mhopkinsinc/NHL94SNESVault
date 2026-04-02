@@ -128,7 +128,7 @@
       background: #000;
     }
   </style>
-  <script type="module" crossorigin src="/assets/index-Clz62zhp.js"></script>
+  <script type="module" crossorigin src="/assets/index-C9wLWc4D.js"></script>
 </head>
 <body>
   <h1>NHL 94 SNES - Master Decompression Tool</h1>
@@ -142,6 +142,7 @@
         <option value="decompress" selected>Decompress</option>
         <option value="sprite-frame">Sprite Frame Browser</option>
         <option value="team-logos">Team Logo Browser</option>
+        <option value="setup-logos">Game Setup Logo Browser</option>
       </select>
     </label>
     <button id="debugToggle" disabled title="Toggle debug panel">
@@ -215,6 +216,29 @@
     <div class="controls">
       <label>Palette (SNES addr or hex bytes):
         <input type="text" id="teamPaletteInput" value="" size="60" placeholder="Leave empty — auto-detected from ROM" />
+      </label>
+    </div>
+  </div>
+
+  <!-- Game Setup Logo Browser controls -->
+  <div id="setupLogoControls" style="display: none;">
+    <div class="controls">
+      <label>Team:
+        <select id="setupTeamSelect"></select>
+      </label>
+      <button id="setupPrev" disabled title="Previous team">&#9664; Prev</button>
+      <button id="setupNext" disabled title="Next team">Next &#9654;</button>
+      <label>Side:
+        <select id="setupSide">
+          <option value="home" selected>Home (left)</option>
+          <option value="away">Away (right)</option>
+        </select>
+      </label>
+      <label>Scale: <input type="number" id="setupScale" value="8" min="1" max="16" /></label>
+    </div>
+    <div class="controls">
+      <label>Palette (SNES addr or hex bytes):
+        <input type="text" id="setupPaletteInput" value="" size="60" placeholder="Leave empty — auto-detected from ROM" />
       </label>
     </div>
   </div>

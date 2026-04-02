@@ -2,6 +2,10 @@ import { decompress, identifyCompression, NotImplementedError } from "./decompre
 import { renderImage, renderTileGrid, TileRenderOptions, PixelFormat, RGB, parseSNESPalette } from "./snes-tiles";
 import { parseFrame, renderFrame, FRAME_COUNT } from "./sprite-frame";
 import { parseTeamLogo, renderTeamLogo, TEAM_COUNT, TEAM_NAMES } from "./team-logos";
+import {
+  decompressSetupBlob, parseSetupLogo, renderSetupLogo, getFrameCount,
+  TEAM_COUNT as SETUP_TEAM_COUNT, TEAM_NAMES as SETUP_TEAM_NAMES,
+} from "./game-setup-logos";
 
 // --- Shared elements ---
 const romFileInput = document.getElementById("romFile") as HTMLInputElement;
@@ -39,12 +43,27 @@ const teamNextBtn = document.getElementById("teamNext") as HTMLButtonElement;
 const teamScaleInput = document.getElementById("teamScale") as HTMLInputElement;
 const teamPaletteInput = document.getElementById("teamPaletteInput") as HTMLInputElement;
 
-// Populate team dropdown
+// --- Game Setup Logo mode elements ---
+const setupLogoControls = document.getElementById("setupLogoControls") as HTMLDivElement;
+const setupTeamSelect = document.getElementById("setupTeamSelect") as HTMLSelectElement;
+const setupPrevBtn = document.getElementById("setupPrev") as HTMLButtonElement;
+const setupNextBtn = document.getElementById("setupNext") as HTMLButtonElement;
+const setupSideSelect = document.getElementById("setupSide") as HTMLSelectElement;
+const setupScaleInput = document.getElementById("setupScale") as HTMLInputElement;
+const setupPaletteInput = document.getElementById("setupPaletteInput") as HTMLInputElement;
+
+// Populate team dropdowns
 for (let i = 0; i < TEAM_COUNT; i++) {
   const opt = document.createElement("option");
   opt.value = String(i);
   opt.textContent = `${i}: ${TEAM_NAMES[i]}`;
   teamSelect.appendChild(opt);
+}
+for (let i = 0; i < SETUP_TEAM_COUNT; i++) {
+  const opt = document.createElement("option");
+  opt.value = String(i);
+  opt.textContent = `${i}: ${SETUP_TEAM_NAMES[i]}`;
+  setupTeamSelect.appendChild(opt);
 }
 
 // --- Debug panel elements ---
@@ -58,6 +77,7 @@ const tabRaw = document.getElementById("tabRaw") as HTMLDivElement;
 const debugTabs = debugPanel.querySelectorAll<HTMLButtonElement>(".debug-tab");
 
 let romData: Uint8Array | null = null;
+let setupBlob: Uint8Array | null = null;
 let debugHasData = false;
 let debugUserCollapsed = false;
 let autoPlayTimer: ReturnType<typeof setInterval> | null = null;
@@ -226,6 +246,7 @@ function updateModeUI() {
   decompressControls.style.display = mode === "decompress" ? "" : "none";
   spriteFrameControls.style.display = mode === "sprite-frame" ? "" : "none";
   teamLogoControls.style.display = mode === "team-logos" ? "" : "none";
+  setupLogoControls.style.display = mode === "setup-logos" ? "" : "none";
   stopAutoPlay();
 }
 
@@ -252,6 +273,11 @@ romFileInput.addEventListener("change", async () => {
   frameNextBtn.disabled = false;
   teamPrevBtn.disabled = false;
   teamNextBtn.disabled = false;
+  setupPrevBtn.disabled = false;
+  setupNextBtn.disabled = false;
+
+  // Reset cached setup blob when new ROM loaded
+  setupBlob = null;
 });
 
 // ============================================================
@@ -538,4 +564,96 @@ teamPrevBtn.addEventListener("click", () => {
 teamNextBtn.addEventListener("click", () => {
   const idx = Math.min(TEAM_COUNT - 1, (parseInt(teamSelect.value) || 0) + 1);
   loadTeamLogo(idx);
+});
+
+// ============================================================
+// Game Setup Logo Browser mode
+// ============================================================
+
+function ensureSetupBlob(): Uint8Array | null {
+  if (!romData) return null;
+  if (setupBlob) return setupBlob;
+
+  try {
+    const result = decompressSetupBlob(romData);
+    setupBlob = result.data;
+    const frameCount = getFrameCount(setupBlob);
+    status(`Decompressed game setup blob: ${setupBlob.length} bytes, ${frameCount} frame entries`);
+    for (const line of result.log) status(line);
+    return setupBlob;
+  } catch (err) {
+    status(`ERROR decompressing setup blob: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(err);
+    return null;
+  }
+}
+
+function loadSetupLogo(teamIndex: number) {
+  if (!romData) return;
+
+  clearStatus();
+  hideDebugPanel();
+
+  const blob = ensureSetupBlob();
+  if (!blob) return;
+
+  try {
+    const side = setupSideSelect.value as "home" | "away";
+    const logo = parseSetupLogo(romData, blob, teamIndex, side);
+    setupTeamSelect.value = String(teamIndex);
+
+    const scale = parseInt(setupScaleInput.value) || 8;
+    const manualPalette = parsePaletteFromInput(setupPaletteInput.value.trim());
+    const palette = manualPalette ?? logo.palette;
+
+    const dims = renderSetupLogo(imageCanvas, logo, scale, palette);
+
+    // Render individual tiles in the tile grid
+    if (logo.tileData.length > 0) {
+      const tileOpts: TileRenderOptions = {
+        format: "bitplane4",
+        tilesWide: Math.min(Math.floor(logo.tileData.length / 32), 12),
+        scale: Math.max(scale - 2, 2),
+        palette,
+      };
+      renderTileGrid(tilesCanvas, logo.tileData, tileOpts);
+    } else {
+      const ctx = tilesCanvas.getContext("2d")!;
+      tilesCanvas.width = 1;
+      tilesCanvas.height = 1;
+      ctx.clearRect(0, 0, 1, 1);
+    }
+
+    const tileCount = Math.floor(logo.tileData.length / 32);
+    const frameCount = getFrameCount(blob);
+    const flagNote = (logo.flag & 0x80) === 0
+      ? ` [no inline tiles — VRAM pre-loaded]`
+      : "";
+    status(`${logo.teamName} (${side}): ${logo.numSprites} sprites, ${tileCount} tiles, ${dims.width}x${dims.height}px${flagNote}`);
+    status(`Blob: ${frameCount} total frame entries`);
+
+    populateDebugPanel(logo.log, logo.tileData);
+    showDebugPanel();
+  } catch (err) {
+    status(`ERROR: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(err);
+  }
+}
+
+setupTeamSelect.addEventListener("change", () => {
+  loadSetupLogo(parseInt(setupTeamSelect.value) || 0);
+});
+
+setupSideSelect.addEventListener("change", () => {
+  loadSetupLogo(parseInt(setupTeamSelect.value) || 0);
+});
+
+setupPrevBtn.addEventListener("click", () => {
+  const idx = Math.max(0, (parseInt(setupTeamSelect.value) || 0) - 1);
+  loadSetupLogo(idx);
+});
+
+setupNextBtn.addEventListener("click", () => {
+  const idx = Math.min(SETUP_TEAM_COUNT - 1, (parseInt(setupTeamSelect.value) || 0) + 1);
+  loadSetupLogo(idx);
 });
