@@ -23,14 +23,11 @@ ROM $81:ABDE (FB30 compressed)
   WRAM $7F:7800  =  Decompressed Blob
   +--------------------------------------------------+
   | Pointer Table (N x 4 bytes)                      |
-  |   entry[0] -> frame for team 0 (home)            |
-  |   entry[1] -> frame for team 1 (home)            |
+  |   entry[0] -> frame for team 0                   |
+  |   entry[1] -> frame for team 1                   |
   |   ...                                            |
-  |   entry[27] -> frame for team 27 (home)          |
-  |   entry[28..32] -> special / league logos         |
-  |   entry[33] -> frame for team 0 (away)           |
-  |   ...                                            |
-  |   entry[60] -> frame for team 27 (away)          |
+  |   entry[27] -> frame for team 27                 |
+  |   entry[28+] -> special / league logos (if any)  |
   +--------------------------------------------------+
   | Frame 0: [22-byte header][sprite entries][tiles]  |
   | Frame 1: ...                                      |
@@ -122,9 +119,12 @@ Inputs:
 | `$9D:A62D` | `$1C9A + $0021` (team B + 33) | `$1C98` (team A) | Swapped sides |
 | `$9D:8631` | `$1C9A` (team B) | `$1C98` (team A) | Normal matchup |
 
-The `+$0021` (33) offset for away-side logos means the blob's pointer table
-contains two sets of frame data per team: indices 0-27 for home/left and
-indices 33-60 for away/right.
+The `+$0021` (33) offset applies to the **BG overlay table** at `$9C:8497`
+(which has 59 entries with home/away positioning variants) but NOT to the
+blob's frame pointer table. Both home and away teams use the same frame data
+from blob indices 0-27. The visual difference between home and away is
+controlled by screen position (X/Y passed to CODE_80B08D) and the overlay
+table entries, not different frame graphics.
 
 ### 2.3 `CODE_9DDDFF` - Frame Pointer Resolution
 
@@ -263,9 +263,13 @@ background layer tiles for the selected team.
 
 | Index Range | Purpose |
 |-------------|---------|
-| 0 - 27 | Home/left team overlay data (28 teams) |
+| 0 - 27 | Home/left team overlay positioning (28 teams) |
 | 28 - 32 | Special entries (league logos, etc.) |
-| 33 - 60 | Away/right team overlay data (28 teams) |
+| 33 - 60 | Away/right team overlay positioning (28 teams) |
+
+The `+33` offset used at call site `$9D:A62D` indexes into THIS table for
+away-side BG positioning, but both sides reference the **same** blob frame
+(indices 0-27) for the actual logo sprite graphics.
 
 **Note:** Entries 30-57 of this table overlap in ROM address space with the
 palette pointer table at `$9C:850F` used by the Team Logo Browser. The same
@@ -337,8 +341,8 @@ table, so `pointer[0]` equals the total size of the pointer table.
 
 For a given team index and side (home/away):
 
-1. Compute blob index: `home = teamIndex`, `away = teamIndex + 33`
-2. Read 4-byte pointer from `blob[blobIndex * 4]`
+1. Compute blob index: `teamIndex` (0-27, same for both home and away)
+2. Read 4-byte pointer from `blob[teamIndex * 4]`
 3. Seek to `blob[pointerValue]` — this is the frame data
 4. Read 22-byte header (same format as `sprite_frames_technical.md` Section 3.1)
 5. Read N sprite entries (7 bytes each, same format as Section 4)

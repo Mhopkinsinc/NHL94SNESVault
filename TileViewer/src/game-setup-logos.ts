@@ -29,7 +29,6 @@ const SETUP_COMPRESSED_OFFSET = 0x00ABDE;
 const PALETTE_TABLE_OFFSET = 0x0E050F;
 
 const TEAM_COUNT = 28;
-const AWAY_OFFSET = 33;
 const HEADER_SIZE = 0x16; // 22 bytes
 const ENTRY_SIZE = 7;
 
@@ -138,7 +137,10 @@ export function parseSetupLogo(
 ): SetupLogo {
   const log: string[] = [];
   const name = TEAM_NAMES[teamIndex] ?? `Team ${teamIndex}`;
-  const blobIndex = side === "away" ? teamIndex + AWAY_OFFSET : teamIndex;
+  // Both home and away use the same frame data (indices 0-27).
+  // The +33 offset in the assembly (CODE_9DA62D) applies to the BG overlay
+  // table at $9C:8497 for screen positioning, not to the blob frame index.
+  const blobIndex = teamIndex;
 
   log.push(`Team ${teamIndex}: ${name} (${side})`);
   log.push(`  Blob index: ${blobIndex}`);
