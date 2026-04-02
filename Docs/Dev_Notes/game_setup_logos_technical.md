@@ -250,41 +250,59 @@ Processing per tile:
 
 ## 3. ROM Data Tables
 
-### 3.1 Per-Team Overlay Pointer Table
+### 3.1 Per-Team Palette Pointer Table
 
 **SNES:** `$9C:8497` (`UNREACH_9C8497`)
 **File offset:** `$0E0497`
 **Entry size:** 4 bytes `[addr:16LE] [bank:16LE]`
 **Entry count:** 59 entries (from `$9C:8497` to `$9C:8583`)
 
-Each entry points to 32 bytes of BG tilemap overlay data in ROM (bank `$9A`).
-This data is copied to `$7F:7640` by `CODE_9DE0BD` to customize the
-background layer tiles for the selected team.
+Each entry points to **32 bytes of SNES 15-bit RGB palette data** (16 colors
+x 2 bytes) in ROM bank `$9A`. `CODE_9DE0BD` copies these 32 bytes to WRAM at
+`$7F:7640`, where they are subsequently loaded into CGRAM for the team logo's
+color palette.
+
+Example: Entry 0 (Anaheim) = `$9A:EDBC`.
 
 | Index Range | Purpose |
 |-------------|---------|
-| 0 - 27 | Home/left team overlay positioning (28 teams) |
+| 0 - 27 | Home/left team palettes (28 teams) |
 | 28 - 32 | Special entries (league logos, etc.) |
-| 33 - 60 | Away/right team overlay positioning (28 teams) |
+| 33 - 60 | Away/right team palettes (28 teams) |
 
 The `+33` offset used at call site `$9D:A62D` indexes into THIS table for
-away-side BG positioning, but both sides reference the **same** blob frame
+away-side palette data, but both sides reference the **same** blob frame
 (indices 0-27) for the actual logo sprite graphics.
 
 **Note:** Entries 30-57 of this table overlap in ROM address space with the
 palette pointer table at `$9C:850F` used by the Team Logo Browser. The same
-4-byte values serve as overlay data pointers for this system and as palette
-data pointers for the team logo system.
+4-byte values serve as game setup palette pointers for this system and as
+team logo palette pointers for the team logo system.
 
-### 3.2 Palette Pointer Table
+### 3.2 Reading a Per-Team Palette
 
-**SNES:** `$9C:850F` (`UNREACH_9C850F`)
-**File offset:** `$0E050F`
-**Entry size:** 4 bytes `[addr:16LE] [bank:16LE]`
-**Entry count:** 28 (one per team)
+The palette pointer table at `$9C:8497` (file `$0E0497`) is used:
 
-Each entry points to 32 bytes of raw SNES 15-bit RGB palette data (16 colors).
-This is the same table used by the Team Logo Browser for per-team palettes.
+```
+table_base   = $0E0497   (file offset)
+entry_offset = teamIndex * 4
+palAddr      = read16LE(ROM, table_base + entry_offset)      ; SNES address low
+palBank      = read16LE(ROM, table_base + entry_offset + 2)  ; SNES bank
+SNES addr    = palBank:palAddr
+file offset  = LoROM(palBank, palAddr)
+palette      = 32 bytes at that file offset (16 x 15-bit SNES colors)
+```
+
+| Team Index | Team | Palette SNES Address |
+|------------|------|---------------------|
+| 0 | Anaheim | `$9A:EDBC` |
+| 1 | Boston | `$9A:ED7C` |
+| 2 | Buffalo | `$9A:EF9C` |
+| ... | ... | (read from table) |
+
+The TileViewer auto-loads the correct palette SNES address into the palette
+input field when a team is selected. The address updates automatically with
+each team change; the user can override it by typing a different address.
 
 ### 3.3 Compressed Setup Blob
 
@@ -347,7 +365,7 @@ For a given team index and side (home/away):
 4. Read 22-byte header (same format as `sprite_frames_technical.md` Section 3.1)
 5. Read N sprite entries (7 bytes each, same format as Section 4)
 6. If flag bit 7 is set: read inline tile data (4bpp bitplane, 32 bytes/tile)
-7. Read per-team palette from ROM palette table at `$0E050F`
+7. Read per-team palette from ROM palette table at `$0E0497`
 
 ### 4.4 Frame Rendering (`renderSetupLogo`)
 
@@ -384,12 +402,9 @@ Controls:
   be rendered. These frames reference tiles loaded by the additional decompression
   steps in `CODE_9DD9AD` (from `$96:A103`, `$9A:C1F3`, etc.) which are not yet
   replicated in the TileViewer.
-- **Palette accuracy**: The palette table at `$9C:850F` may not exactly match
-  the CGRAM state during the game setup screen, since `CODE_9DCCBA` loads
-  palette data from a different WRAM location (`$7E:37F4`).
-- **BG overlay**: The per-team BG tilemap overlay data (32 bytes from the
-  `$9C:8497` table) is not rendered. This data customizes the background layer
-  behind the sprite logo.
+- **Palette accuracy**: The palette table at `$9C:8497` provides the per-team
+  palette data (32 bytes = 16 SNES colors). This is the same data that
+  `CODE_9DE0BD` copies to WRAM and `CODE_9DCCBA` loads into CGRAM.
 
 ---
 
@@ -420,11 +435,8 @@ ROM $81:ABDE                            WRAM $7F:7800
                                          [...]
 
 ROM $9C:8497                            WRAM $7F:7640
-(per-team overlay   --- CODE_9DE0BD -->  [32 bytes BG tilemap overlay]
- pointer table)
-
-ROM $9C:850F                            Per-team palette
-(palette pointers)  --- readPalette -->  [16 x RGB colors]
+(per-team palette   --- CODE_9DE0BD -->  [32 bytes palette data]
+ pointer table)                          (16 colors x 2 bytes)
 
                         CODE_80B08D
   WRAM blob  -------->  reads [$7F7800 + teamIndex*4]

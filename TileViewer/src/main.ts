@@ -603,7 +603,16 @@ function loadSetupLogo(teamIndex: number) {
     setupTeamSelect.value = String(teamIndex);
 
     const scale = parseInt(setupScaleInput.value) || 8;
-    const manualPalette = parsePaletteFromInput(setupPaletteInput.value.trim());
+
+    // Auto-load per-team palette address; user can override by typing a different address
+    // We track whether the current value was auto-set so we can replace it on team change
+    const currentPalVal = setupPaletteInput.value.trim();
+    const isAutoAddr = currentPalVal === "" || currentPalVal === (setupPaletteInput as any)._autoAddr;
+    if (isAutoAddr) {
+      setupPaletteInput.value = logo.paletteAddr;
+      (setupPaletteInput as any)._autoAddr = logo.paletteAddr;
+    }
+    const manualPalette = isAutoAddr ? null : parsePaletteFromInput(currentPalVal);
     const palette = manualPalette ?? logo.palette;
 
     const dims = renderSetupLogo(imageCanvas, logo, scale, palette);

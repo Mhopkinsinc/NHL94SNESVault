@@ -25,8 +25,11 @@ import { decompress } from "./decompress";
 // SNES $81:ABDE -> file offset = ($01 * $8000) + ($2BDE) = $ABDE
 const SETUP_COMPRESSED_OFFSET = 0x00ABDE;
 
-// Palette pointer table: SNES $9C:850F -> file $0E050F (same as team-logos.ts)
-const PALETTE_TABLE_OFFSET = 0x0E050F;
+// Per-team palette pointer table: SNES $9C:8497 -> file $0E0497
+// Each 4-byte entry [addr:16LE][bank:16LE] points to 32 bytes of SNES palette
+// (16 colors x 2 bytes). CODE_9DE0BD copies these 32 bytes to WRAM.
+// Entry 0 (Anaheim) = $9A:EDBC, etc.
+const PALETTE_TABLE_OFFSET = 0x0E0497;
 
 const TEAM_COUNT = 28;
 const HEADER_SIZE = 0x16; // 22 bytes
@@ -72,6 +75,7 @@ export interface SetupLogo {
   sprites: SetupSpriteEntry[];
   tileData: Uint8Array;
   palette: RGB[];
+  paletteAddr: string;  // SNES address string e.g. "9A:F17C"
   frameOffset: number;  // offset within decompressed blob
   log: string[];
 }
@@ -107,7 +111,7 @@ export function getFrameCount(blob: Uint8Array): number {
   return Math.floor(firstPtr / 4);
 }
 
-function readPalette(romData: Uint8Array, teamIndex: number): { palette: RGB[]; log: string[] } {
+function readPalette(romData: Uint8Array, teamIndex: number): { palette: RGB[]; snesAddr: string; log: string[] } {
   const log: string[] = [];
   const palIdx = Math.min(teamIndex, TEAM_COUNT - 1);
   const base = PALETTE_TABLE_OFFSET + palIdx * 4;
@@ -115,7 +119,8 @@ function readPalette(romData: Uint8Array, teamIndex: number): { palette: RGB[]; 
   const palBank = romData[base + 2] | (romData[base + 3] << 8);
   const palFile = snesLoROMToFile(palBank, palAddr);
 
-  log.push(`  Palette ptr: $${((palBank << 16) | palAddr).toString(16).toUpperCase()} (file $${palFile.toString(16).toUpperCase()})`);
+  const snesAddr = `${palBank.toString(16).toUpperCase()}:${palAddr.toString(16).toUpperCase().padStart(4, "0")}`;
+  log.push(`  Palette ptr: $${snesAddr} (file $${palFile.toString(16).toUpperCase()})`);
 
   const palBytes = romData.slice(palFile, palFile + 32);
   const palette = parseSNESPalette(palBytes);
@@ -123,7 +128,7 @@ function readPalette(romData: Uint8Array, teamIndex: number): { palette: RGB[]; 
   const colorStrs = palette.map((c, i) => `${i}:rgb(${c[0]},${c[1]},${c[2]})`);
   log.push(`  Palette: ${colorStrs.join(" ")}`);
 
-  return { palette, log };
+  return { palette, snesAddr, log };
 }
 
 /**
@@ -241,6 +246,7 @@ export function parseSetupLogo(
     sprites,
     tileData,
     palette: palResult.palette,
+    paletteAddr: palResult.snesAddr,
     frameOffset,
     log,
   };
