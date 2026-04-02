@@ -243,16 +243,18 @@ export function renderFrame(
     px[i + 3] = 255;
   }
 
-  // The SNES OBJ hardware arranges tiles in a 16-wide grid in VRAM.
-  // A 16x16 sprite with tile N uses VRAM tiles: N, N+1, N+16, N+17.
-  // But the inline ROM data is packed linearly with topSectionSize tiles
-  // per VRAM row. To convert: romIndex = floor(vramTile/16)*topSection + vramTile%16
+  // SNES OBJ hardware uses a 16-wide VRAM tile grid. The game DMA's tiles
+  // in two sections: top section (header $0C-$0D bytes) fills VRAM linearly
+  // starting at the base, bottom section ($0E-$0F bytes) fills starting at
+  // the next 16-tile row boundary after the top section ends.
   //
-  // topSectionSize = number of tiles in VRAM row 0 (top halves of 16x16 + 8x8 tiles).
-  // Also derivable from header: bytes $0C-$0D = topSectionSize * 32.
+  // To convert a VRAM tile index back to a ROM linear index, we need to
+  // figure out which section (top or bottom) the tile falls in.
   const topSectionSize = Math.floor(
     ((frame.header.rawBytes[0x0C] | (frame.header.rawBytes[0x0D] << 8)) / 32)
   );
+  const topRows = Math.ceil(topSectionSize / 16);
+  const bottomStartVram = topRows * 16;
 
   // Render each sprite entry
   for (const s of sprites) {
@@ -270,8 +272,15 @@ export function renderFrame(
       for (let tx = 0; tx < tilesX; tx++) {
         // Compute VRAM tile index (SNES 16-wide OBJ grid)
         const vramTile = s.firstTile + ty * 16 + tx;
-        // Convert VRAM tile to ROM linear index
-        const tileIdx = Math.floor(vramTile / 16) * topSectionSize + (vramTile % 16);
+        // Convert VRAM tile to ROM linear index:
+        // Top section tiles are DMA'd linearly, so VRAM index = ROM index.
+        // Bottom section starts at the next 16-tile row after top section.
+        let tileIdx: number;
+        if (vramTile < bottomStartVram) {
+          tileIdx = vramTile;
+        } else {
+          tileIdx = topSectionSize + (vramTile - bottomStartVram);
+        }
         const tileOffset = tileIdx * 32;
 
         if (tileOffset + 32 > tileData.length) continue;

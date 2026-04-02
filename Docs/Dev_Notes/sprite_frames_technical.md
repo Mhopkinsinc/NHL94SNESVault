@@ -421,8 +421,8 @@ Offset $02-$03 (word): NumTiles → VRAM slot size calculation
   Non-compressed:   slots = numTiles (direct)
 ```
 
-The routine manages VRAM allocation through tables at $2F40 (compressed) and
-$3032 (non-compressed), finding free slots and marking them as occupied.
+The routine manages VRAM allocation through tables at ```$2F40``` (compressed) and
+```$3032``` (non-compressed), finding free slots and marking them as occupied.
 
 ### 6.2 Tile Name Base ($16)
 
@@ -488,7 +488,7 @@ for offline rendering:
 - **No VRAM state:** Frames without inline tiles (flag bit 7 clear) cannot be
   rendered since the TileViewer has no VRAM state.
 - **Palette:** Must be supplied externally; the default is a greyscale ramp.
-- **Unknown header bytes:** Offsets $04-$0B are not read by any identified
+- **Unknown header bytes:** Offsets ```$04-$0B``` are not read by any identified
   assembly routine and their purpose remains unknown.
 
 ---
