@@ -1,6 +1,8 @@
+import { parseSNESPalette, RGB } from "./snes-tiles";
 import { TEAM_COUNT, TEAM_NAMES } from "./team-logos";
 
 const PORTRAIT_POINTER_TABLE_OFFSET = 0x0ECD53;
+const PORTRAIT_PALETTE_TABLE_OFFSET = 0x0ED8B3;
 const POINTER_SIZE = 4;
 
 export const PLAYER_PORTRAITS_PER_TEAM = 26;
@@ -14,12 +16,39 @@ export interface PlayerPortraitSource {
   tableOffset: number;
   pointerAddress: number;
   fileOffset: number;
+  paletteTableOffset: number;
+  paletteAddress: number;
+  paletteFileOffset: number;
+  paletteAddr: string;
+  palette: RGB[];
   compressedData: Uint8Array;
   log: string[];
 }
 
 function snesLoROMToFile(bank: number, addr: number): number {
   return ((bank & 0x7f) * 0x8000) + (addr & 0x7fff);
+}
+
+function readPointer(romData: Uint8Array, tableOffset: number) {
+  if (tableOffset + POINTER_SIZE > romData.length) {
+    throw new Error(`Pointer entry exceeds ROM size: $${tableOffset.toString(16).toUpperCase()}`);
+  }
+
+  const addr = romData[tableOffset] | (romData[tableOffset + 1] << 8);
+  const bank = romData[tableOffset + 2] | (romData[tableOffset + 3] << 8);
+
+  if (addr === 0 && bank === 0) {
+    throw new Error(`Null pointer at table offset $${tableOffset.toString(16).toUpperCase()}`);
+  }
+
+  const pointerAddress = (bank << 16) | addr;
+  const fileOffset = snesLoROMToFile(bank, addr);
+
+  if (fileOffset >= romData.length) {
+    throw new Error(`Pointer resolves outside ROM: $${pointerAddress.toString(16).toUpperCase()} -> $${fileOffset.toString(16).toUpperCase()}`);
+  }
+
+  return { pointerAddress, fileOffset };
 }
 
 export function loadPlayerPortraitSource(
@@ -37,28 +66,17 @@ export function loadPlayerPortraitSource(
 
   const entryIndex = (teamIndex * PLAYER_PORTRAITS_PER_TEAM) + (portraitIndex - 1);
   const tableOffset = PORTRAIT_POINTER_TABLE_OFFSET + (entryIndex * POINTER_SIZE);
+  const { pointerAddress, fileOffset } = readPointer(romData, tableOffset);
 
-  if (tableOffset + POINTER_SIZE > romData.length) {
-    throw new Error(`Portrait pointer entry exceeds ROM size: $${tableOffset.toString(16).toUpperCase()}`);
-  }
-
-  const addr = romData[tableOffset] | (romData[tableOffset + 1] << 8);
-  const bank = romData[tableOffset + 2] | (romData[tableOffset + 3] << 8);
-
-  if (addr === 0 && bank === 0) {
-    throw new Error(`Portrait pointer is null for team ${teamIndex}, portrait ${portraitIndex}`);
-  }
-
-  const pointerAddress = (bank << 16) | addr;
-  const fileOffset = snesLoROMToFile(bank, addr);
-
-  if (fileOffset >= romData.length) {
-    throw new Error(`Portrait pointer resolves outside ROM: $${pointerAddress.toString(16).toUpperCase()} -> $${fileOffset.toString(16).toUpperCase()}`);
-  }
+  const paletteTableOffset = PORTRAIT_PALETTE_TABLE_OFFSET + (teamIndex * POINTER_SIZE);
+  const { pointerAddress: paletteAddress, fileOffset: paletteFileOffset } = readPointer(romData, paletteTableOffset);
 
   const maxCompressed = Math.min(0x10000, romData.length - fileOffset);
   const compressedData = romData.slice(fileOffset, fileOffset + maxCompressed);
+  const paletteBytes = romData.slice(paletteFileOffset, paletteFileOffset + 32);
+  const palette = parseSNESPalette(paletteBytes);
   const teamName = PLAYER_PORTRAIT_TEAM_NAMES[teamIndex] ?? `Team ${teamIndex}`;
+  const paletteAddr = `${(paletteAddress >> 16).toString(16).toUpperCase().padStart(2, "0")}:${(paletteAddress & 0xffff).toString(16).toUpperCase().padStart(4, "0")}`;
 
   return {
     teamIndex,
@@ -67,12 +85,19 @@ export function loadPlayerPortraitSource(
     tableOffset,
     pointerAddress,
     fileOffset,
+    paletteTableOffset,
+    paletteAddress,
+    paletteFileOffset,
+    paletteAddr,
+    palette,
     compressedData,
     log: [
       `Team ${teamIndex}: ${teamName}`,
       `Portrait: ${portraitIndex}/${PLAYER_PORTRAITS_PER_TEAM}`,
       `Pointer table entry: file offset $${tableOffset.toString(16).toUpperCase().padStart(6, "0")}`,
       `Pointer: $${pointerAddress.toString(16).toUpperCase().padStart(6, "0")} -> file offset $${fileOffset.toString(16).toUpperCase().padStart(6, "0")}`,
+      `Palette table entry: file offset $${paletteTableOffset.toString(16).toUpperCase().padStart(6, "0")}`,
+      `Palette: $${paletteAddress.toString(16).toUpperCase().padStart(6, "0")} -> file offset $${paletteFileOffset.toString(16).toUpperCase().padStart(6, "0")}`,
     ],
   };
 }

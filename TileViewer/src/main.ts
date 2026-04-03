@@ -611,7 +611,14 @@ function loadPlayerPortrait(teamIndex: number, portraitIndex: number) {
       logLines.push(line);
     }
 
-    const palette = parsePaletteFromInput(portraitPaletteInput.value.trim());
+    const currentPalVal = portraitPaletteInput.value.trim();
+    const isAutoAddr = currentPalVal === "" || currentPalVal === (portraitPaletteInput as HTMLInputElement & { _autoAddr?: string })._autoAddr;
+    if (isAutoAddr) {
+      portraitPaletteInput.value = source.paletteAddr;
+      (portraitPaletteInput as HTMLInputElement & { _autoAddr?: string })._autoAddr = source.paletteAddr;
+    }
+    const manualPalette = isAutoAddr ? null : parsePaletteFromInput(currentPalVal);
+    const palette = manualPalette ?? source.palette;
     logLines.push("");
     if (palette) {
       logLines.push(`Palette (${palette.length} colors):`);
@@ -716,6 +723,40 @@ portraitSelect.addEventListener("change", () => {
 
 portraitLoadBtn.addEventListener("click", () => {
   loadPlayerPortrait(parseInt(portraitTeamSelect.value) || 0, parseInt(portraitSelect.value) || 1);
+});
+
+// Keyboard navigation: left/right arrows when in player portraits mode
+document.addEventListener("keydown", (e) => {
+  if (modeSelect.value !== "player-portraits" || !romData) return;
+  if (document.activeElement?.tagName === "INPUT" || document.activeElement?.tagName === "SELECT") return;
+
+  if (e.key === "ArrowLeft") {
+    e.preventDefault();
+    let teamIndex = parseInt(portraitTeamSelect.value) || 0;
+    let portraitIndex = parseInt(portraitSelect.value) || 1;
+
+    if (portraitIndex > 1) {
+      portraitIndex -= 1;
+    } else if (teamIndex > 0) {
+      teamIndex -= 1;
+      portraitIndex = PLAYER_PORTRAITS_PER_TEAM;
+    }
+
+    loadPlayerPortrait(teamIndex, portraitIndex);
+  } else if (e.key === "ArrowRight") {
+    e.preventDefault();
+    let teamIndex = parseInt(portraitTeamSelect.value) || 0;
+    let portraitIndex = parseInt(portraitSelect.value) || 1;
+
+    if (portraitIndex < PLAYER_PORTRAITS_PER_TEAM) {
+      portraitIndex += 1;
+    } else if (teamIndex < TEAM_COUNT - 1) {
+      teamIndex += 1;
+      portraitIndex = 1;
+    }
+
+    loadPlayerPortrait(teamIndex, portraitIndex);
+  }
 });
 
 // ============================================================
