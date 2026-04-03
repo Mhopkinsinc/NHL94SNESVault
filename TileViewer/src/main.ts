@@ -6,6 +6,10 @@ import {
   decompressSetupBlob, parseSetupLogo, renderSetupLogo, getFrameCount,
   TEAM_COUNT as SETUP_TEAM_COUNT, TEAM_NAMES as SETUP_TEAM_NAMES,
 } from "./game-setup-logos";
+import {
+  loadPlayerPortraitSource,
+  PLAYER_PORTRAITS_PER_TEAM,
+} from "./player-portraits";
 
 // --- Shared elements ---
 const romFileInput = document.getElementById("romFile") as HTMLInputElement;
@@ -52,18 +56,39 @@ const setupSideSelect = document.getElementById("setupSide") as HTMLSelectElemen
 const setupScaleInput = document.getElementById("setupScale") as HTMLInputElement;
 const setupPaletteInput = document.getElementById("setupPaletteInput") as HTMLInputElement;
 
+// --- Player Portraits mode elements ---
+const playerPortraitControls = document.getElementById("playerPortraitControls") as HTMLDivElement;
+const portraitTeamSelect = document.getElementById("portraitTeamSelect") as HTMLSelectElement;
+const portraitSelect = document.getElementById("portraitSelect") as HTMLSelectElement;
+const portraitTilesWideInput = document.getElementById("portraitTilesWide") as HTMLInputElement;
+const portraitScaleInput = document.getElementById("portraitScale") as HTMLInputElement;
+const portraitFormatSelect = document.getElementById("portraitFormat") as HTMLSelectElement;
+const portraitPaletteInput = document.getElementById("portraitPaletteInput") as HTMLInputElement;
+const portraitLoadBtn = document.getElementById("portraitLoadBtn") as HTMLButtonElement;
+
 // Populate team dropdowns
 for (let i = 0; i < TEAM_COUNT; i++) {
   const opt = document.createElement("option");
   opt.value = String(i);
   opt.textContent = `${i}: ${TEAM_NAMES[i]}`;
   teamSelect.appendChild(opt);
+
+  const portraitOpt = document.createElement("option");
+  portraitOpt.value = String(i);
+  portraitOpt.textContent = `${i}: ${TEAM_NAMES[i]}`;
+  portraitTeamSelect.appendChild(portraitOpt);
 }
 for (let i = 0; i < SETUP_TEAM_COUNT; i++) {
   const opt = document.createElement("option");
   opt.value = String(i);
   opt.textContent = `${i}: ${SETUP_TEAM_NAMES[i]}`;
   setupTeamSelect.appendChild(opt);
+}
+for (let i = 1; i <= PLAYER_PORTRAITS_PER_TEAM; i++) {
+  const opt = document.createElement("option");
+  opt.value = String(i);
+  opt.textContent = String(i);
+  portraitSelect.appendChild(opt);
 }
 
 // --- Debug panel elements ---
@@ -247,6 +272,7 @@ function updateModeUI() {
   spriteFrameControls.style.display = mode === "sprite-frame" ? "" : "none";
   teamLogoControls.style.display = mode === "team-logos" ? "" : "none";
   setupLogoControls.style.display = mode === "setup-logos" ? "" : "none";
+  playerPortraitControls.style.display = mode === "player-portraits" ? "" : "none";
   stopAutoPlay();
 
   if (romData) {
@@ -256,6 +282,8 @@ function updateModeUI() {
       loadTeamLogo(parseInt(teamSelect.value) || 0);
     } else if (mode === "setup-logos") {
       loadSetupLogo(parseInt(setupTeamSelect.value) || 0);
+    } else if (mode === "player-portraits") {
+      loadPlayerPortrait(parseInt(portraitTeamSelect.value) || 0, parseInt(portraitSelect.value) || 1);
     }
   }
 }
@@ -285,6 +313,7 @@ romFileInput.addEventListener("change", async () => {
   teamNextBtn.disabled = false;
   setupPrevBtn.disabled = false;
   setupNextBtn.disabled = false;
+  portraitLoadBtn.disabled = false;
 
   // Reset cached setup blob when new ROM loaded
   setupBlob = null;
@@ -519,6 +548,107 @@ autoPlaySpeedInput.addEventListener("change", () => {
 // Team Logo Browser mode
 // ============================================================
 
+function loadPlayerPortrait(teamIndex: number, portraitIndex: number) {
+  if (!romData) return;
+
+  clearStatus();
+  hideDebugPanel();
+
+  try {
+    const source = loadPlayerPortraitSource(romData, teamIndex, portraitIndex);
+    portraitTeamSelect.value = String(teamIndex);
+    portraitSelect.value = String(portraitIndex);
+
+    status(`${source.teamName} portrait ${portraitIndex}: $${source.pointerAddress.toString(16).toUpperCase().padStart(6, "0")} -> file offset $${source.fileOffset.toString(16).toUpperCase().padStart(6, "0")}`);
+
+    const compType = identifyCompression(source.compressedData);
+    if (compType) {
+      status(`Magic: $${compType.name} — ${compType.description}${compType.implemented ? "" : " [NOT IMPLEMENTED]"}`);
+    } else {
+      const raw = source.compressedData.length >= 2
+        ? `$${((source.compressedData[1] << 8) | source.compressedData[0]).toString(16).toUpperCase().padStart(4, "0")}`
+        : "(insufficient data)";
+      status(`ERROR: Unknown compression magic: ${raw}`);
+      return;
+    }
+
+    let result;
+    try {
+      result = decompress(source.compressedData);
+    } catch (err) {
+      if (err instanceof NotImplementedError) {
+        status(`${err.compressionType.name} decompressor is not implemented yet.`);
+        const headerLines: string[] = [
+          ...source.log,
+          `Compression: ${err.compressionType.name} — ${err.compressionType.description}`,
+          `Status: NOT IMPLEMENTED`,
+          ``,
+          `Raw compressed header (first 64 bytes):`,
+        ];
+        for (let i = 0; i < Math.min(64, source.compressedData.length); i += 16) {
+          const hex = Array.from(source.compressedData.slice(i, Math.min(i + 16, source.compressedData.length)))
+            .map((b: number) => b.toString(16).padStart(2, "0"))
+            .join(" ");
+          headerLines.push(`  ${i.toString(16).padStart(4, "0")}: ${hex}`);
+        }
+        tabLog.textContent = headerLines.join("\n");
+        tabHexdump.textContent = "(no decompressed data)";
+        tabRaw.textContent = "(no decompressed data)";
+        debugInfo.textContent = "not implemented";
+        setActiveTab("log");
+        showDebugPanel();
+        return;
+      }
+      throw err;
+    }
+
+    const logLines: string[] = [...source.log];
+    logLines.push(`Compression: $${compType.name} — ${compType.description}`);
+    logLines.push(`Source: portrait pointer $${source.pointerAddress.toString(16).toUpperCase().padStart(6, "0")} -> file offset $${source.fileOffset.toString(16).padStart(6, "0")}`);
+    logLines.push("");
+
+    for (const line of result.log) {
+      logLines.push(line);
+    }
+
+    const palette = parsePaletteFromInput(portraitPaletteInput.value.trim());
+    logLines.push("");
+    if (palette) {
+      logLines.push(`Palette (${palette.length} colors):`);
+      for (let i = 0; i < palette.length; i++) {
+        const [r, g, b] = palette[i];
+        logLines.push(`  ${i.toString().padStart(2)}: rgb(${r}, ${g}, ${b})`);
+      }
+    } else {
+      logLines.push("Using default grayscale palette");
+    }
+
+    const format = portraitFormatSelect.value as PixelFormat;
+    const tilesWide = parseInt(portraitTilesWideInput.value) || 6;
+    const scale = parseInt(portraitScaleInput.value) || 4;
+
+    const opts: TileRenderOptions = { format, tilesWide, scale, palette: palette ?? undefined };
+    const bpt = format === "bitplane2" ? 16 : 32;
+    const tileCount = Math.floor(result.data.length / bpt);
+
+    logLines.push("");
+    logLines.push(`Rendering ${tileCount} tiles (${format}, ${tilesWide} wide, ${scale}x scale)`);
+
+    const info = renderImage(imageCanvas, result.data, opts);
+    logLines.push(`Image: ${tilesWide * 8}x${info.tilesHigh * 8} pixels (${tilesWide}x${info.tilesHigh} tiles)`);
+
+    renderTileGrid(tilesCanvas, result.data, opts);
+
+    status(`${source.teamName} portrait ${portraitIndex}: decompressed ${result.data.length} bytes -> ${tileCount} tiles (${tilesWide}x${info.tilesHigh})`);
+
+    populateDebugPanel(logLines, result.data);
+    showDebugPanel();
+  } catch (err) {
+    status(`ERROR: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(err);
+  }
+}
+
 function loadTeamLogo(teamIndex: number) {
   if (!romData) return;
 
@@ -574,6 +704,18 @@ teamPrevBtn.addEventListener("click", () => {
 teamNextBtn.addEventListener("click", () => {
   const idx = Math.min(TEAM_COUNT - 1, (parseInt(teamSelect.value) || 0) + 1);
   loadTeamLogo(idx);
+});
+
+portraitTeamSelect.addEventListener("change", () => {
+  loadPlayerPortrait(parseInt(portraitTeamSelect.value) || 0, parseInt(portraitSelect.value) || 1);
+});
+
+portraitSelect.addEventListener("change", () => {
+  loadPlayerPortrait(parseInt(portraitTeamSelect.value) || 0, parseInt(portraitSelect.value) || 1);
+});
+
+portraitLoadBtn.addEventListener("click", () => {
+  loadPlayerPortrait(parseInt(portraitTeamSelect.value) || 0, parseInt(portraitSelect.value) || 1);
 });
 
 // ============================================================

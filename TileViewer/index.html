@@ -142,6 +142,7 @@
         <option value="sprite-frame">Sprite Frame Browser</option>
         <option value="team-logos">Team Logo Browser</option>
         <option value="setup-logos">Game Setup Logo Browser</option>
+        <option value="player-portraits">Player Portraits Browser</option>
       </select>
     </label>
     <button id="debugToggle" disabled title="Toggle debug panel">
@@ -238,6 +239,33 @@
     <div class="controls">
       <label>Palette (SNES addr or hex bytes):
         <input type="text" id="setupPaletteInput" value="" size="60" placeholder="Leave empty — auto-detected from ROM" />
+      </label>
+    </div>
+  </div>
+
+  <!-- Player Portraits Browser controls -->
+  <div id="playerPortraitControls" style="display: none;">
+    <div class="controls">
+      <label>Team:
+        <select id="portraitTeamSelect"></select>
+      </label>
+      <label>Portrait:
+        <select id="portraitSelect"></select>
+      </label>
+      <label>Tiles Wide: <input type="number" id="portraitTilesWide" value="6" min="1" max="32" /></label>
+      <label>Scale: <input type="number" id="portraitScale" value="4" min="1" max="16" /></label>
+      <label>Format:
+        <select id="portraitFormat">
+          <option value="nibble" selected>Nibble-packed (FB30 WRAM)</option>
+          <option value="bitplane4">4bpp Bitplane (VRAM)</option>
+          <option value="bitplane2">2bpp Bitplane (VRAM)</option>
+        </select>
+      </label>
+      <button id="portraitLoadBtn" disabled>Load Portrait</button>
+    </div>
+    <div class="controls">
+      <label>Palette (SNES addr or hex bytes):
+        <input type="text" id="portraitPaletteInput" value="" size="60" placeholder="Leave empty for grayscale" />
       </label>
     </div>
   </div>
