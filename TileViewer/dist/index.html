@@ -128,7 +128,7 @@
       background: #000;
     }
   </style>
-  <script type="module" crossorigin src="/assets/index-bzM8lHhh.js"></script>
+  <script type="module" crossorigin src="/assets/index-DcO3oKB1.js"></script>
 </head>
 <body>
   <h1>NHL 94 SNES - Master Decompression Tool</h1>
@@ -215,10 +215,19 @@
       <label>Scale: <input type="number" id="teamScale" value="8" min="1" max="16" /></label>
     </div>
     <div class="controls">
+      <label>Palette source:
+        <select id="teamPaletteMode">
+          <option value="auto" selected>Auto (read attribute bits)</option>
+          <option value="slot5">Force 9A:D156 (slot 5)</option>
+          <option value="slot6">Force 9A:D176 (slot 6)</option>
+          <option value="custom">Custom address / hex bytes</option>
+        </select>
+      </label>
       <label>Palette (SNES addr or hex bytes):
         <input type="text" id="teamPaletteInput" value="" size="60" placeholder="Leave empty — auto-detected from ROM" />
       </label>
     </div>
+    <div id="teamPaletteSlotsInfo" style="margin-top: -8px; margin-bottom: 16px; color: #9ab; font-size: 12px; white-space: pre-wrap;"></div>
   </div>
 
   <!-- Team Logo - Game Setup controls -->

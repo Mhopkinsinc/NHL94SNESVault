@@ -45,7 +45,9 @@ const teamSelect = document.getElementById("teamSelect") as HTMLSelectElement;
 const teamPrevBtn = document.getElementById("teamPrev") as HTMLButtonElement;
 const teamNextBtn = document.getElementById("teamNext") as HTMLButtonElement;
 const teamScaleInput = document.getElementById("teamScale") as HTMLInputElement;
+const teamPaletteMode = document.getElementById("teamPaletteMode") as HTMLSelectElement;
 const teamPaletteInput = document.getElementById("teamPaletteInput") as HTMLInputElement;
+const teamPaletteSlotsInfo = document.getElementById("teamPaletteSlotsInfo") as HTMLDivElement;
 
 // --- Team Logo - Game Setup mode elements ---
 const setupLogoControls = document.getElementById("setupLogoControls") as HTMLDivElement;
@@ -65,6 +67,8 @@ const portraitScaleInput = document.getElementById("portraitScale") as HTMLInput
 const portraitFormatSelect = document.getElementById("portraitFormat") as HTMLSelectElement;
 const portraitPaletteInput = document.getElementById("portraitPaletteInput") as HTMLInputElement;
 const portraitLoadBtn = document.getElementById("portraitLoadBtn") as HTMLButtonElement;
+
+teamPaletteInput.disabled = teamPaletteMode.value !== "custom";
 
 // Populate team dropdowns
 for (let i = 0; i < TEAM_COUNT; i++) {
@@ -667,8 +671,38 @@ function loadTeamLogo(teamIndex: number) {
     teamSelect.value = String(teamIndex);
 
     const scale = parseInt(teamScaleInput.value) || 8;
-    const manualPalette = parsePaletteFromInput(teamPaletteInput.value.trim());
-    const palette = manualPalette ?? logo.palette;
+    const forcedPaletteAddr = teamPaletteMode.value === "slot5"
+      ? "9A:D156"
+      : teamPaletteMode.value === "slot6"
+        ? "9A:D176"
+        : null;
+    const currentPalVal = teamPaletteInput.value.trim();
+    const isCustomMode = teamPaletteMode.value === "custom";
+    const isAutoField = currentPalVal === "" || currentPalVal === (teamPaletteInput as HTMLInputElement & { _autoAddr?: string })._autoAddr;
+    if (!isCustomMode) {
+      const displayAddr = forcedPaletteAddr ?? logo.paletteAddr;
+      teamPaletteInput.value = displayAddr;
+      (teamPaletteInput as HTMLInputElement & { _autoAddr?: string })._autoAddr = displayAddr;
+      teamPaletteInput.disabled = true;
+    } else {
+      teamPaletteInput.disabled = false;
+    }
+    if (teamPaletteMode.value === "auto" && isAutoField) {
+      teamPaletteInput.value = logo.paletteAddr;
+      (teamPaletteInput as HTMLInputElement & { _autoAddr?: string })._autoAddr = logo.paletteAddr;
+    }
+    const customPalette = isCustomMode ? parsePaletteFromInput(currentPalVal) : null;
+    const forcedPalette = forcedPaletteAddr ? parsePaletteFromInput(forcedPaletteAddr) : null;
+    const palette = customPalette ?? forcedPalette ?? logo.palette;
+    const paletteSlotSummary = logo.paletteSlots.length > 0
+      ? logo.paletteSlots.map((slot, index) => `${slot}=$${logo.paletteSlotAddrs[index]}`).join("  ")
+      : `${logo.paletteSlot}=$${logo.paletteAddr}`;
+    const modeSummary = forcedPaletteAddr
+      ? `forced: $${forcedPaletteAddr}`
+      : teamPaletteMode.value === "custom"
+        ? `custom: ${currentPalVal || "(empty -> auto)"}`
+        : `auto-selected: ${logo.paletteSlot}=$${logo.paletteAddr}`;
+    teamPaletteSlotsInfo.textContent = `Palette slots used: ${paletteSlotSummary} | ${modeSummary}`;
 
     const dims = renderTeamLogo(imageCanvas, logo, scale, palette);
 
@@ -689,17 +723,24 @@ function loadTeamLogo(teamIndex: number) {
     }
 
     const tileCount = Math.floor(logo.tileData.length / 32);
-    status(`${logo.teamName}: ${logo.widthTiles}x${logo.heightTiles} tiles (${tileCount} unique tiles), ${dims.width}x${dims.height}px`);
+    status(`${logo.teamName}: ${logo.widthTiles}x${logo.heightTiles} tiles (${tileCount} unique tiles), ${dims.width}x${dims.height}px, ${modeSummary}`);
 
     populateDebugPanel(logo.log, logo.tileData);
     showDebugPanel();
   } catch (err) {
+    teamPaletteInput.disabled = teamPaletteMode.value !== "custom";
+    teamPaletteSlotsInfo.textContent = "";
     status(`ERROR: ${err instanceof Error ? err.message : String(err)}`);
     console.error(err);
   }
 }
 
 teamSelect.addEventListener("change", () => {
+  loadTeamLogo(parseInt(teamSelect.value) || 0);
+});
+
+teamPaletteMode.addEventListener("change", () => {
+  teamPaletteInput.disabled = teamPaletteMode.value !== "custom";
   loadTeamLogo(parseInt(teamSelect.value) || 0);
 });
 

@@ -4,13 +4,11 @@
  * Team logos are composed from:
  *   1. Per-team compressed tile graphics (FB30 at $9C:83B7 table, +0/+2)
  *   2. Per-team tilemaps (8x4 tile grids at $9C:83B7 table, +4/+6)
- *   3. Per-team palettes (raw 16-color SNES palette at $9C:850F table)
+ *   3. A shared bank of 8 center-ice palettes at $9A:D0B6 selected by
+ *      the tile attribute byte's SNES BG palette bits (bits 2-4)
  *
  * Tile/tilemap pointer table at SNES $9C:83B7 (file $0E03B7), 8 bytes/team:
  *   [tileGfxAddr:16] [tileGfxBank:16] [tilemapAddr:16] [tilemapBank:16]
- *
- * Palette pointer table at SNES $9C:850F (file $0E050F), 4 bytes/team:
- *   [palAddr:16] [palBank:16] -> 16 raw SNES 15-bit RGB colors (32 bytes)
  *
  * Tilemap header: [width:16] [height:16] [info:16] then width*height tile entries
  * Tile index $FF = blank (game does INC A, $FF wraps to $00 = transparent)
@@ -22,8 +20,10 @@ import { decompress } from "./decompress";
 
 // SNES $9C:83B7 -> file offset ((0x1C) * 0x8000) + 0x03B7
 const TEAM_TABLE_OFFSET = 0x0E03B7;
-// SNES $9C:850F -> file offset ((0x1C) * 0x8000) + 0x050F
-const PALETTE_TABLE_OFFSET = 0x0E050F;
+const CENTER_ICE_PALETTE_BANK = 0x9A;
+const CENTER_ICE_PALETTE_ADDR = 0xD0B6;
+const CENTER_ICE_PALETTE_COUNT = 8;
+const PALETTE_SIZE = 32;
 const TEAM_COUNT = 28;
 
 export { TEAM_COUNT };
@@ -70,26 +70,44 @@ export interface TeamLogo {
   heightTiles: number;
   tileData: Uint8Array;
   tilemap: number[];   // tile indices ($FF = blank, 0+ = direct data tile index)
-  palette: RGB[];      // 16-color per-team palette from ROM
+  tileAttrs: number[];
+  palette: RGB[];      // primary 16-color palette selected by tile attrs
+  paletteBank: RGB[][];
+  paletteSlotOffset: number;
+  paletteSlot: number;
+  paletteSlots: number[];
+  paletteSlotAddrs: string[];
+  paletteAddr: string;
   log: string[];
 }
 
-function readTeamPalette(romData: Uint8Array, teamIndex: number): { palette: RGB[]; fileOffset: number; log: string[] } {
+function getEffectiveCenterIcePaletteSlot(rawSlot: number, paletteSlotOffset: number): number {
+  return rawSlot + paletteSlotOffset;
+}
+
+function readCenterIcePaletteBank(romData: Uint8Array): { palettes: RGB[][]; addrs: string[]; log: string[] } {
   const log: string[] = [];
-  const base = PALETTE_TABLE_OFFSET + teamIndex * 4;
-  const palAddr = romData[base] | (romData[base + 1] << 8);
-  const palBank = romData[base + 2] | (romData[base + 3] << 8);
-  const palFile = snesLoROMToFile(palBank, palAddr);
+  const palettes: RGB[][] = [];
+  const addrs: string[] = [];
+  const base = snesLoROMToFile(CENTER_ICE_PALETTE_BANK, CENTER_ICE_PALETTE_ADDR);
 
-  log.push(`  Palette ptr: $${((palBank << 16) | palAddr).toString(16).toUpperCase()} (file $${palFile.toString(16).toUpperCase()})`);
+  log.push(`  Center-ice palette bank: $${CENTER_ICE_PALETTE_BANK.toString(16).toUpperCase()}:${CENTER_ICE_PALETTE_ADDR.toString(16).toUpperCase()} (file $${base.toString(16).toUpperCase()})`);
 
-  const palBytes = romData.slice(palFile, palFile + 32);
-  const palette = parseSNESPalette(palBytes);
+  for (let index = 0; index < CENTER_ICE_PALETTE_COUNT; index++) {
+    const addr = CENTER_ICE_PALETTE_ADDR + index * PALETTE_SIZE;
+    const fileOffset = base + index * PALETTE_SIZE;
+    const palBytes = romData.slice(fileOffset, fileOffset + PALETTE_SIZE);
+    const palette = parseSNESPalette(palBytes);
+    const snesAddr = `${CENTER_ICE_PALETTE_BANK.toString(16).toUpperCase()}:${addr.toString(16).toUpperCase().padStart(4, "0")}`;
 
-  const colorStrs = palette.map((c, i) => `${i}:rgb(${c[0]},${c[1]},${c[2]})`);
-  log.push(`  Palette: ${colorStrs.join(" ")}`);
+    palettes.push(palette);
+    addrs.push(snesAddr);
 
-  return { palette, fileOffset: palFile, log };
+    const colorStrs = palette.map((c, i) => `${i}:rgb(${c[0]},${c[1]},${c[2]})`);
+    log.push(`  palette[${index}] $${snesAddr}: ${colorStrs.join(" ")}`);
+  }
+
+  return { palettes, addrs, log };
 }
 
 export function parseTeamLogo(romData: Uint8Array, teamIndex: number): TeamLogo {
@@ -116,16 +134,52 @@ export function parseTeamLogo(romData: Uint8Array, teamIndex: number): TeamLogo 
   // So ROM value N maps directly to data tile N; $FF = blank.
   const totalCells = widthTiles * heightTiles;
   const tilemap: number[] = [];
+  const tileAttrs: number[] = [];
+  const paletteCounts = new Map<number, number>();
   for (let i = 0; i < totalCells; i++) {
     const tileIdx = romData[mapOff + 6 + i * 2];
-    // const attr = romData[mapOff + 6 + i * 2 + 1]; // attributes (palette/flip bits)
+    const attr = romData[mapOff + 6 + i * 2 + 1];
     tilemap.push(tileIdx);
+    tileAttrs.push(attr);
+
+    if (tileIdx !== 0xFF) {
+      const paletteSlot = (attr >> 2) & 0x07;
+      paletteCounts.set(paletteSlot, (paletteCounts.get(paletteSlot) ?? 0) + 1);
+    }
   }
   log.push(`  Tilemap indices: [${tilemap.join(",")}]`);
+  log.push(`  Tile attrs: [${tileAttrs.map((attr) => `$${attr.toString(16).padStart(2, "0")}`).join(",")}]`);
 
-  // Read per-team palette
-  const palResult = readTeamPalette(romData, teamIndex);
+  const rawPaletteSlots = [...paletteCounts.entries()]
+    .sort((left, right) => right[1] - left[1] || left[0] - right[0])
+    .map(([slot]) => slot);
+  const paletteSlotOffset = rawPaletteSlots.length > 0 && rawPaletteSlots.every((slot) => slot === 0 || slot === 1)
+    ? 5
+    : 0;
+  const paletteSlots = rawPaletteSlots.map((slot) => getEffectiveCenterIcePaletteSlot(slot, paletteSlotOffset));
+  const preferredPaletteSlots = [5, 6].filter((slot) => paletteSlots.includes(slot));
+  const paletteSlot = preferredPaletteSlots.length > 0
+    ? preferredPaletteSlots.sort((left, right) => {
+        const leftRawSlot = left - paletteSlotOffset;
+        const rightRawSlot = right - paletteSlotOffset;
+        const leftCount = paletteCounts.get(leftRawSlot) ?? 0;
+        const rightCount = paletteCounts.get(rightRawSlot) ?? 0;
+        return rightCount - leftCount || left - right;
+      })[0]
+    : (paletteSlots[0] ?? 0);
+
+  // Read shared center-ice palette bank and select the slot used by this logo.
+  const palResult = readCenterIcePaletteBank(romData);
   for (const line of palResult.log) log.push(line);
+  log.push(`  Raw palette slots used: [${rawPaletteSlots.join(", ") || "0"}]`);
+  if (paletteSlotOffset !== 0) {
+    log.push(`  Applying center-ice palette slot offset: +${paletteSlotOffset}`);
+  }
+  log.push(`  Palette slots used: [${paletteSlots.join(", ") || "0"}]`);
+  if (preferredPaletteSlots.length > 0) {
+    log.push(`  Preferred auto slots present: [${preferredPaletteSlots.join(", ")}]`);
+  }
+  log.push(`  Selected palette slot: ${paletteSlot} -> $${palResult.addrs[paletteSlot]}`);
 
   // Decompress per-team tile graphics
   const gfxOff = ptrs.tileGfxFile;
@@ -146,7 +200,23 @@ export function parseTeamLogo(romData: Uint8Array, teamIndex: number): TeamLogo 
     tileData = new Uint8Array(0);
   }
 
-  return { teamIndex, teamName: name, widthTiles, heightTiles, tileData, tilemap, palette: palResult.palette, log };
+  return {
+    teamIndex,
+    teamName: name,
+    widthTiles,
+    heightTiles,
+    tileData,
+    tilemap,
+    tileAttrs,
+    palette: palResult.palettes[paletteSlot] ?? palResult.palettes[0] ?? [],
+    paletteBank: palResult.palettes,
+    paletteSlotOffset,
+    paletteSlot,
+    paletteSlots,
+    paletteSlotAddrs: paletteSlots.map((slot) => palResult.addrs[slot] ?? palResult.addrs[0] ?? ""),
+    paletteAddr: palResult.addrs[paletteSlot] ?? palResult.addrs[0] ?? `${CENTER_ICE_PALETTE_BANK.toString(16).toUpperCase()}:${CENTER_ICE_PALETTE_ADDR.toString(16).toUpperCase().padStart(4, "0")}`,
+    log,
+  };
 }
 
 export function renderTeamLogo(
@@ -163,7 +233,7 @@ export function renderTeamLogo(
   const ctx = canvas.getContext("2d")!;
 
   // Fill background with palette color 0
-  const bgColor = palette ? palette[0] : [0, 0, 0] as RGB;
+  const bgColor = palette ? palette[0] : (logo.paletteBank[logo.paletteSlot]?.[0] ?? [0, 0, 0] as RGB);
   ctx.fillStyle = `rgb(${bgColor[0]},${bgColor[1]},${bgColor[2]})`;
   ctx.fillRect(0, 0, pw, ph);
 
@@ -175,6 +245,10 @@ export function renderTeamLogo(
     for (let col = 0; col < logo.widthTiles; col++) {
       const cellIdx = row * logo.widthTiles + col;
       const tileIdx = logo.tilemap[cellIdx];
+      const attr = logo.tileAttrs[cellIdx] ?? 0;
+      const rawPaletteSlot = (attr >> 2) & 0x07;
+      const effectivePaletteSlot = getEffectiveCenterIcePaletteSlot(rawPaletteSlot, logo.paletteSlotOffset);
+      const tilePalette = palette ?? logo.paletteBank[effectivePaletteSlot] ?? logo.palette;
 
       if (tileIdx === 0xFF) continue; // $FF in ROM → blank (game does INC → $00)
 
@@ -190,7 +264,7 @@ export function renderTeamLogo(
           const colorIdx = pixels[py][px];
           if (colorIdx === 0) continue; // transparent
 
-          const color: RGB = palette ? palette[colorIdx] : [colorIdx * 17, colorIdx * 17, colorIdx * 17];
+          const color: RGB = tilePalette[colorIdx] ?? [colorIdx * 17, colorIdx * 17, colorIdx * 17];
           ctx.fillStyle = `rgb(${color[0]},${color[1]},${color[2]})`;
           const dx = (col * 8 + px) * scale;
           const dy = (row * 8 + py) * scale;
