@@ -39,7 +39,7 @@ const framePaletteInput = document.getElementById("framePaletteInput") as HTMLIn
 const autoPlayCheck = document.getElementById("autoPlay") as HTMLInputElement;
 const autoPlaySpeedInput = document.getElementById("autoPlaySpeed") as HTMLInputElement;
 
-// --- Team Logo mode elements ---
+// --- Team Logo - Center Ice mode elements ---
 const teamLogoControls = document.getElementById("teamLogoControls") as HTMLDivElement;
 const teamSelect = document.getElementById("teamSelect") as HTMLSelectElement;
 const teamPrevBtn = document.getElementById("teamPrev") as HTMLButtonElement;
@@ -545,7 +545,7 @@ autoPlaySpeedInput.addEventListener("change", () => {
 });
 
 // ============================================================
-// Team Logo Browser mode
+// Team Logo - Center Ice mode
 // ============================================================
 
 function loadPlayerPortrait(teamIndex: number, portraitIndex: number) {
