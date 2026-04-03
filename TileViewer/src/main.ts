@@ -47,7 +47,7 @@ const teamNextBtn = document.getElementById("teamNext") as HTMLButtonElement;
 const teamScaleInput = document.getElementById("teamScale") as HTMLInputElement;
 const teamPaletteInput = document.getElementById("teamPaletteInput") as HTMLInputElement;
 
-// --- Game Setup Logo mode elements ---
+// --- Team Logo - Game Setup mode elements ---
 const setupLogoControls = document.getElementById("setupLogoControls") as HTMLDivElement;
 const setupTeamSelect = document.getElementById("setupTeamSelect") as HTMLSelectElement;
 const setupPrevBtn = document.getElementById("setupPrev") as HTMLButtonElement;
@@ -56,7 +56,7 @@ const setupSideSelect = document.getElementById("setupSide") as HTMLSelectElemen
 const setupScaleInput = document.getElementById("setupScale") as HTMLInputElement;
 const setupPaletteInput = document.getElementById("setupPaletteInput") as HTMLInputElement;
 
-// --- Player Portraits mode elements ---
+// --- Player Portraits elements ---
 const playerPortraitControls = document.getElementById("playerPortraitControls") as HTMLDivElement;
 const portraitTeamSelect = document.getElementById("portraitTeamSelect") as HTMLSelectElement;
 const portraitSelect = document.getElementById("portraitSelect") as HTMLSelectElement;
@@ -776,7 +776,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 // ============================================================
-// Game Setup Logo Browser mode
+// Team Logo - Game Setup mode
 // ============================================================
 
 function ensureSetupBlob(): Uint8Array | null {
