@@ -713,6 +713,22 @@ teamNextBtn.addEventListener("click", () => {
   loadTeamLogo(idx);
 });
 
+// Keyboard navigation: left/right arrows when in team logo mode
+document.addEventListener("keydown", (e) => {
+  if (modeSelect.value !== "team-logos" || !romData) return;
+  if (document.activeElement?.tagName === "INPUT" || document.activeElement?.tagName === "SELECT") return;
+
+  if (e.key === "ArrowLeft") {
+    e.preventDefault();
+    const idx = Math.max(0, (parseInt(teamSelect.value) || 0) - 1);
+    loadTeamLogo(idx);
+  } else if (e.key === "ArrowRight") {
+    e.preventDefault();
+    const idx = Math.min(TEAM_COUNT - 1, (parseInt(teamSelect.value) || 0) + 1);
+    loadTeamLogo(idx);
+  }
+});
+
 portraitTeamSelect.addEventListener("change", () => {
   loadPlayerPortrait(parseInt(portraitTeamSelect.value) || 0, parseInt(portraitSelect.value) || 1);
 });
@@ -858,4 +874,20 @@ setupPrevBtn.addEventListener("click", () => {
 setupNextBtn.addEventListener("click", () => {
   const idx = Math.min(SETUP_TEAM_COUNT - 1, (parseInt(setupTeamSelect.value) || 0) + 1);
   loadSetupLogo(idx);
+});
+
+// Keyboard navigation: left/right arrows when in game setup logo mode
+document.addEventListener("keydown", (e) => {
+  if (modeSelect.value !== "setup-logos" || !romData) return;
+  if (document.activeElement?.tagName === "INPUT" || document.activeElement?.tagName === "SELECT") return;
+
+  if (e.key === "ArrowLeft") {
+    e.preventDefault();
+    const idx = Math.max(0, (parseInt(setupTeamSelect.value) || 0) - 1);
+    loadSetupLogo(idx);
+  } else if (e.key === "ArrowRight") {
+    e.preventDefault();
+    const idx = Math.min(SETUP_TEAM_COUNT - 1, (parseInt(setupTeamSelect.value) || 0) + 1);
+    loadSetupLogo(idx);
+  }
 });
