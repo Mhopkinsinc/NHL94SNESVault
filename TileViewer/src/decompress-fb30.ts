@@ -57,6 +57,9 @@ class BitReader {
   get position(): string {
     return `byte ${this.bytePos}, bit ${this.bitPos}`;
   }
+
+  get byteOffset(): number { return this.bytePos; }
+  get bitOffset(): number { return this.bitPos; }
 }
 
 /**
@@ -92,6 +95,180 @@ function readVLI(reader: BitReader): number {
 }
 
 import type { DecompressResult } from "./decompress";
+
+/**
+ * Extracted Huffman table from an FB30 compressed stream.
+ * Used by the compressor for round-trip verification.
+ */
+export interface FB30HuffmanTable {
+  codeLengthCounts: number[];  // index 0 = length 1, index 1 = length 2, etc.
+  orderedSymbols: number[];    // symbols in canonical order
+  maxLengthIndex: number;      // highest used code length index (0-based)
+  endMarker: number;
+}
+
+/**
+ * Extract just the Huffman table (Phase 1 + Phase 2) from FB30 compressed data.
+ * Does NOT decompress the data stream — only parses the header and code tables.
+ */
+export function extractFB30Codes(compressedData: Uint8Array): FB30HuffmanTable {
+  if (compressedData[0] !== 0x30 || compressedData[1] !== 0xfb) {
+    throw new Error("Invalid FB30 magic");
+  }
+
+  const endMarker = compressedData[5];
+  const reader = new BitReader(compressedData, 6);
+
+  // Phase 1: code length distribution
+  const codeLengthCounts: number[] = [];
+  let totalSymbols = 0;
+  let maxLengthIndex = -1;
+  let kraft = 0;
+
+  for (let i = 0; i < 16; i++) {
+    kraft *= 2;
+    const count = readVLI(reader);
+    codeLengthCounts.push(count);
+    totalSymbols += count;
+    kraft += count;
+
+    if (count > 0) {
+      maxLengthIndex = i;
+    }
+
+    const remaining = 15 - i;
+    if (remaining > 0 && count > 0) {
+      if (kraft * (1 << remaining) >= 0x10000) {
+        maxLengthIndex = i;
+        break;
+      }
+    } else if (remaining === 0) {
+      break;
+    }
+  }
+
+  // Phase 2: symbol assignments
+  const usedSlots = new Uint8Array(256);
+  const orderedSymbols: number[] = [];
+  let slotPtr = -1;
+
+  for (let i = 0; i < totalSymbols; i++) {
+    let gap = readVLI(reader) + 1;
+    while (gap > 0) {
+      slotPtr = (slotPtr + 1) & 0xff;
+      if (!usedSlots[slotPtr]) {
+        gap--;
+      }
+    }
+    usedSlots[slotPtr] = 1;
+    orderedSymbols.push(slotPtr);
+  }
+
+  return { codeLengthCounts, orderedSymbols, maxLengthIndex, endMarker };
+}
+
+/**
+ * Trace the decode actions from an FB30 compressed stream.
+ * Returns the same action sequence that the compressor should produce.
+ */
+export interface DecodeAction {
+  type: "symbol" | "run" | "literal" | "terminate";
+  symbol?: number;
+  runCount?: number;
+  dataIndex: number; // position in the output data at this point
+}
+
+export function traceFB30Decode(compressedData: Uint8Array): DecodeAction[] {
+  if (compressedData[0] !== 0x30 || compressedData[1] !== 0xfb) {
+    throw new Error("Invalid FB30 magic");
+  }
+
+  const endMarker = compressedData[5];
+  const reader = new BitReader(compressedData, 6);
+
+  // Phase 1: code length distribution
+  const codeLengthCounts: number[] = [];
+  let totalSymbols = 0;
+  let maxLengthIndex = -1;
+  let kraft = 0;
+
+  for (let i = 0; i < 16; i++) {
+    kraft *= 2;
+    const count = readVLI(reader);
+    codeLengthCounts.push(count);
+    totalSymbols += count;
+    kraft += count;
+    if (count > 0) maxLengthIndex = i;
+    const remaining = 15 - i;
+    if (remaining > 0 && count > 0) {
+      if (kraft * (1 << remaining) >= 0x10000) {
+        maxLengthIndex = i;
+        break;
+      }
+    } else if (remaining === 0) break;
+  }
+
+  // Phase 2: symbol assignments
+  const usedSlots = new Uint8Array(256);
+  const orderedSymbols: number[] = [];
+  let slotPtr = -1;
+  for (let i = 0; i < totalSymbols; i++) {
+    let gap = readVLI(reader) + 1;
+    while (gap > 0) {
+      slotPtr = (slotPtr + 1) & 0xff;
+      if (!usedSlots[slotPtr]) gap--;
+    }
+    usedSlots[slotPtr] = 1;
+    orderedSymbols.push(slotPtr);
+  }
+
+  // Phase 3: decode and record actions
+  function decodeOneSymbol(): number {
+    let code = 0;
+    let fc = 0;
+    let si = 0;
+    for (let lenIdx = 0; lenIdx <= maxLengthIndex; lenIdx++) {
+      code = (code << 1) | reader.readBit();
+      const count = codeLengthCounts[lenIdx];
+      if (code - fc < count) return orderedSymbols[si + (code - fc)];
+      si += count;
+      fc = (fc + count) << 1;
+    }
+    throw new Error("Invalid Huffman code");
+  }
+
+  const actions: DecodeAction[] = [];
+  let dataIndex = 0;
+  let done = false;
+
+  while (!done) {
+    const symbol = decodeOneSymbol();
+
+    if (symbol === endMarker) {
+      const runCount = readVLI(reader);
+      if (runCount > 0) {
+        actions.push({ type: "run", runCount, dataIndex });
+        dataIndex += runCount;
+      } else {
+        if (reader.peekBit() === 1) {
+          reader.readBit();
+          actions.push({ type: "terminate", dataIndex });
+          done = true;
+        } else {
+          reader.readBit();
+          const rawSymbol = reader.readBits(8);
+          actions.push({ type: "literal", symbol: rawSymbol, dataIndex });
+          dataIndex++;
+        }
+      }
+    } else {
+      actions.push({ type: "symbol", symbol, dataIndex });
+      dataIndex++;
+    }
+  }
+
+  return actions;
+}
 
 /**
  * Decompress $FB30 (Canonical Huffman) compressed data.
@@ -268,10 +445,14 @@ export function decompressFB30(compressedData: Uint8Array): DecompressResult {
     }
   }
 
-  log.push(`Decompressed ${output.length} bytes`);
+  // Compute how many bytes of compressed input were consumed
+  const compressedSize = reader.bitOffset === 7 ? reader.byteOffset : reader.byteOffset + 1;
+
+  log.push(`Decompressed ${output.length} bytes from ${compressedSize} compressed bytes`);
 
   return {
     data: new Uint8Array(output),
     log,
+    compressedSize,
   };
 }

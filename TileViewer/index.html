@@ -143,6 +143,7 @@
         <option value="team-logos">Team Logo - Center Ice</option>
         <option value="setup-logos">Team Logo - Game Setup</option>
         <option value="player-portraits">Player Portraits</option>
+        <option value="compressor">Compressor (FB30)</option>
       </select>
     </label>
     <button id="debugToggle" disabled title="Toggle debug panel">
@@ -225,6 +226,7 @@
       <label>Palette (SNES addr or hex bytes):
         <input type="text" id="teamPaletteInput" value="" size="60" placeholder="Leave empty — auto-detected from ROM" />
       </label>
+      <button id="teamExportAsepriteBtn" disabled>Export to Aseprite</button>
     </div>
     <div id="teamPaletteSlotsInfo" style="margin-top: -8px; margin-bottom: 16px; color: #9ab; font-size: 12px; white-space: pre-wrap;"></div>
   </div>
@@ -277,6 +279,30 @@
         <input type="text" id="portraitPaletteInput" value="" size="60" placeholder="Leave empty for grayscale" />
       </label>
     </div>
+  </div>
+
+  <!-- Compressor (FB30) controls -->
+  <div id="compressorControls" style="display: none;">
+    <div class="controls">
+      <label>Team:
+        <select id="compressorTeamSelect"></select>
+      </label>
+      <label><input type="checkbox" id="compressorFromScratch" /> Build tree from scratch</label>
+    <button id="compressorRunBtn" disabled>Decompress + Re-Compress</button>
+    </div>
+    <hr style="border-color: #0f3460; margin: 12px 0;" />
+    <div class="controls">
+      <label>Upload raw binary: <input type="file" id="compressorBinFile" accept=".bin,.raw,.dat" /></label>
+      <button id="compressorBinRunBtn" disabled>Compress Binary</button>
+      <button id="compressorDownloadBtn" style="display: none;">Download .bin</button>
+    </div>
+    <div class="controls" id="compressorMetaControls">
+      <label>Flags: <input type="text" id="compressorFlags" value="00" size="3" /></label>
+      <label>Size hi: <input type="text" id="compressorMeta0" value="00" size="3" /></label>
+      <label>Size lo: <input type="text" id="compressorMeta1" value="00" size="3" /></label>
+      <span id="compressorMetaHint" style="color: #9ab; font-size: 12px;">(auto-calculated from input size, or loaded from ROM team header)</span>
+    </div>
+    <div id="compressorResult" style="display: none; margin: 12px 0; padding: 8px; background: #16213e; border-left: 3px solid #00d4ff; white-space: pre-wrap; font-size: 13px; max-height: 400px; overflow-y: auto;"></div>
   </div>
 
   <div id="status">Load a ROM file to begin.</div>

@@ -19,7 +19,7 @@ import { RGB, decodeTile, parseSNESPalette } from "./snes-tiles";
 import { decompress } from "./decompress";
 
 // SNES $9C:83B7 -> file offset ((0x1C) * 0x8000) + 0x03B7
-const TEAM_TABLE_OFFSET = 0x0E03B7;
+export const TEAM_TABLE_OFFSET = 0x0E03B7;
 const CENTER_ICE_PALETTE_BANK = 0x9A;
 const CENTER_ICE_PALETTE_ADDR = 0xD0B6;
 const CENTER_ICE_PALETTE_COUNT = 8;
@@ -37,18 +37,18 @@ export const TEAM_NAMES = [
   "All-Star West", "All-Star East",
 ];
 
-function snesLoROMToFile(bank: number, addr: number): number {
+export function snesLoROMToFile(bank: number, addr: number): number {
   return ((bank & 0x7f) * 0x8000) + (addr & 0x7fff);
 }
 
-interface TeamPointers {
+export interface TeamPointers {
   tileGfxAddr: number;  // SNES address (bank:addr combined)
   tileGfxFile: number;  // file offset
   tilemapAddr: number;
   tilemapFile: number;
 }
 
-function readTeamPointers(romData: Uint8Array, teamIndex: number): TeamPointers {
+export function readTeamPointers(romData: Uint8Array, teamIndex: number): TeamPointers {
   const base = TEAM_TABLE_OFFSET + teamIndex * 8;
   const gfxAddr = romData[base] | (romData[base + 1] << 8);
   const gfxBank = romData[base + 2] | (romData[base + 3] << 8);
@@ -81,8 +81,107 @@ export interface TeamLogo {
   log: string[];
 }
 
+export interface IndexedTeamLogoImage {
+  width: number;
+  height: number;
+  pixels: Uint8Array;
+  palette: RGB[];
+  paletteNames: string[];
+  usedPaletteSlots: number[];
+}
+
 function getEffectiveCenterIcePaletteSlot(rawSlot: number, paletteSlotOffset: number): number {
   return rawSlot + paletteSlotOffset;
+}
+
+export function buildTeamLogoIndexedImage(logo: TeamLogo, paletteOverride?: RGB[]): IndexedTeamLogoImage {
+  const width = logo.widthTiles * 8;
+  const height = logo.heightTiles * 8;
+  const pixels = new Uint8Array(width * height);
+  const tileCount = Math.floor(logo.tileData.length / 32);
+
+  if (paletteOverride) {
+    const palette = paletteOverride.slice(0, 256);
+    const paletteNames = palette.map((_, index) => index === 0 ? "transparent" : `color${index}`);
+
+    for (let row = 0; row < logo.heightTiles; row++) {
+      for (let col = 0; col < logo.widthTiles; col++) {
+        const cellIdx = row * logo.widthTiles + col;
+        const tileIdx = logo.tilemap[cellIdx];
+        if (tileIdx === 0xFF || tileIdx >= tileCount) continue;
+
+        const tileOff = tileIdx * 32;
+        const tilePixels = decodeTile(logo.tileData, tileOff, "nibble");
+        for (let py = 0; py < 8; py++) {
+          for (let px = 0; px < 8; px++) {
+            const colorIdx = tilePixels[py][px];
+            if (colorIdx === 0) continue;
+            const pixelIndex = (row * 8 + py) * width + (col * 8 + px);
+            pixels[pixelIndex] = colorIdx;
+          }
+        }
+      }
+    }
+
+    return {
+      width,
+      height,
+      pixels,
+      palette,
+      paletteNames,
+      usedPaletteSlots: [logo.paletteSlot],
+    };
+  }
+
+  const usedPaletteSlots = logo.paletteSlots.length > 0 ? [...logo.paletteSlots] : [logo.paletteSlot];
+  const palette: RGB[] = [[0, 0, 0]];
+  const paletteNames: string[] = ["transparent"];
+  const paletteBaseBySlot = new Map<number, number>();
+  let nextPaletteIndex = 1;
+
+  for (const slot of usedPaletteSlots) {
+    paletteBaseBySlot.set(slot, nextPaletteIndex);
+    const slotPalette = logo.paletteBank[slot] ?? logo.palette;
+    for (let colorIndex = 1; colorIndex < 16; colorIndex++) {
+      palette.push(slotPalette[colorIndex] ?? [0, 0, 0]);
+      paletteNames.push(`slot${slot}-color${colorIndex}`);
+      nextPaletteIndex += 1;
+    }
+  }
+
+  for (let row = 0; row < logo.heightTiles; row++) {
+    for (let col = 0; col < logo.widthTiles; col++) {
+      const cellIdx = row * logo.widthTiles + col;
+      const tileIdx = logo.tilemap[cellIdx];
+      const attr = logo.tileAttrs[cellIdx] ?? 0;
+      if (tileIdx === 0xFF || tileIdx >= tileCount) continue;
+
+      const rawPaletteSlot = (attr >> 2) & 0x07;
+      const effectivePaletteSlot = getEffectiveCenterIcePaletteSlot(rawPaletteSlot, logo.paletteSlotOffset);
+      const paletteBase = paletteBaseBySlot.get(effectivePaletteSlot);
+      if (paletteBase === undefined) continue;
+
+      const tileOff = tileIdx * 32;
+      const tilePixels = decodeTile(logo.tileData, tileOff, "nibble");
+      for (let py = 0; py < 8; py++) {
+        for (let px = 0; px < 8; px++) {
+          const colorIdx = tilePixels[py][px];
+          if (colorIdx === 0) continue;
+          const pixelIndex = (row * 8 + py) * width + (col * 8 + px);
+          pixels[pixelIndex] = paletteBase + colorIdx - 1;
+        }
+      }
+    }
+  }
+
+  return {
+    width,
+    height,
+    pixels,
+    palette,
+    paletteNames,
+    usedPaletteSlots,
+  };
 }
 
 function readCenterIcePaletteBank(romData: Uint8Array): { palettes: RGB[][]; addrs: string[]; log: string[] } {

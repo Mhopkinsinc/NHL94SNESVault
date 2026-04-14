@@ -19,6 +19,7 @@ import { decompressFB7A } from "./decompress-fb7a";
 export interface DecompressResult {
   data: Uint8Array;
   log: string[];
+  compressedSize?: number;  // bytes consumed from compressed input
 }
 
 export interface CompressionType {

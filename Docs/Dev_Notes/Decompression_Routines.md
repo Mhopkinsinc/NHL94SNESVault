@@ -96,19 +96,74 @@ This is a classic **LZSS/LZ77 variant** — literals interspersed with (distance
 
 ### 3. `LoadGameSetupScreen` / `CODE_80BBB3` — Canonical Huffman Decoder (magic `$FB30`)
 
-The comment in the source says "Logo Decompression function." This is the most sophisticated algorithm:
+The comment in the source says "Logo Decompression function." This is the most sophisticated algorithm.
 
-- Reads a **symbol count** (`$73`), then builds a full **canonical Huffman code table**:
-  - `$0700,X` = code lengths (number of symbols per bit-length)
-  - `$0720,X` = code start values
-  - `$0740,X` = shifted comparison thresholds
-  - Uses `CODE_80C1B0` to read variable-width bit fields from the source stream
-- Builds a **symbol assignment table** at `$0500`/`$0600` mapping codes to symbols
-- Uses a **fast dispatch** via jump table at `$BCF9` — one entry per code length (up to 9+ bits)
-- Each dispatch entry shifts the bitstream by the appropriate amount, looks up the symbol, and writes it to WRAM
-- The `$0760` indirect jump (`JMP ($0760)`) provides a computed-goto back into the bit-width-specific handler
+#### Header Format (6 bytes)
 
-This is essentially a **canonical Huffman decoder** with computed jump tables for speed — very efficient for SNES hardware.
+```
+Offset  Size  Field              Description
+------  ----  -----------------  -------------------------------------------
+  0       2   Magic              $30 $FB (little-endian $FB30)
+  2       1   Flags              Reserved / unused (always $00)
+  3       1   Size high byte     High byte of decompressed output size
+  4       1   Size low byte      Low byte of decompressed output size
+  5       1   End marker         Escape symbol value for RLE / literal / termination
+  6+      —   Bitstream          Phase 1 + Phase 2 + Phase 3 (see below)
+```
+
+**Decompressed size encoding**: The dispatcher (`CODE_80C373`) reads bytes 3–4 as a 16-bit little-endian value (`LDA.W $0003,Y`), then `XBA` byte-swaps it, yielding `(byte3 << 8) | byte4` = the decompressed byte count. This value is pushed to the stack but not directly used by the decompressor itself — it is available to the caller after the `RTL` via `PLX` in the epilogue.
+
+For center-ice team logos, the decompressed size = `numTiles * 32` (nibble-packed 4bpp tiles at 32 bytes each). Examples:
+
+| Team | Byte 3 | Byte 4 | Size (hex) | Size (dec) | Tiles |
+|------|--------|--------|------------|------------|-------|
+| Anaheim | `$03` | `$60` | `$0360` | 864 | 27 |
+| Boston | `$03` | `$20` | `$0320` | 800 | 25 |
+| Chicago | `$03` | `$80` | `$0380` | 896 | 28 |
+| Pittsburgh | `$02` | `$C0` | `$02C0` | 704 | 22 |
+
+**End marker** (byte 5): Stored into direct page `$73`. This is the Huffman symbol value reserved as an escape code — when decoded, it triggers RLE repeat, literal byte, or stream termination rather than outputting a data byte. Typically chosen as a value not present in the uncompressed data.
+
+#### Decompression Phases
+
+The decompressor skips the first 5 header bytes (`ADC #$0005`), reads byte 5 as the end marker into `$73`, then processes the bitstream in three phases:
+
+**Phase 1 — Code length distribution** (loop at `CODE_80BBD9`):
+- Reads up to 16 VLI-encoded counts, one per bit length (1–16)
+- Stores counts at `$0700,X` and builds canonical code start values at `$0720,X`
+- Tracks the Kraft sum in `$75`; exits early when `$75 << remaining >= $10000`
+
+**Phase 2 — Symbol assignments** (loop at `CODE_80BC32`):
+- Reads VLI-encoded gap deltas to assign symbol values to each code slot
+- Walks a 256-slot pointer (wrapping at $FF→$00), skipping already-used slots
+- Stores symbol→code mappings at `$0500`/`$0600`
+
+**Phase 3 — Huffman decode + RLE** (dispatch via jump table at `$BCF9`):
+- Decodes Huffman codes bit-by-bit using precomputed tables at `$0700`–`$0760`
+- Uses a **fast dispatch** via jump table — one entry per code length (up to 9+ bits)
+- Each dispatch entry shifts the bitstream by the appropriate amount, looks up the symbol, and writes it to WRAM via `$2180`
+- When the end marker symbol is decoded:
+  - VLI > 0: repeat the last output byte that many times (RLE)
+  - VLI = 0, next bit = 0: read 8 raw bits as a literal byte
+  - VLI = 0, next bit = 1: stream termination
+
+#### VLI Encoding (Exponential Golomb order 2)
+
+Used in both Phase 1 and Phase 2, implemented at `CODE_80C1B0`:
+
+```
+Prefix    Value bits  Range
+1xx       2           0–3
+01xxx     3           4–11
+001xxxx   4           12–27
+0001xxxxx 5           28–59
+...
+```
+
+#### Helpers
+
+- **`CODE_80C1B0`** — Variable-width bit reader. Uses `$6C` as a 16-bit shift register, `Y` as remaining bit count, `$0C` as source pointer. Reads bits MSB-first by shifting `$6C` left, rotating carry into `$6F`.
+- **`CODE_80C232`** — Bit reader variant using X as bit count (decrements by 2), handles unary-coded lengths for the Huffman symbol output phase.
 
 #### Helper: `CODE_80C1B0` — Variable-Width Bit Reader
 
@@ -220,9 +275,10 @@ CODE_9D87D7:
 30 FB 00 7C 00 B2 96 5C 44 80 88 7A 12 42 0B A0 ...
 ```
 
-- Bytes 0–1: `$FB30` (magic — canonical Huffman)
-- Byte 2: `$00`
-- Bytes 3–4: `$7C, $00` → symbol count = `$7C` (124 unique symbols)
-- Byte 5+: compressed bitstream
+- Bytes 0–1: `$30 $FB` → magic `$FB30` (canonical Huffman)
+- Byte 2: `$00` → flags (unused)
+- Bytes 3–4: `$7C, $00` → decompressed size = `($7C << 8) | $00` = `$7C00` = 31,744 bytes
+- Byte 5: `$B2` → end marker symbol
+- Bytes 6+: Huffman bitstream (Phase 1 + Phase 2 + Phase 3)
 
 The decompressed data is written to WRAM at `$7F:7800`. After decompression, the calling code sets up SNES PPU registers (`$2107`, `$2108`, `$210B`, `$2101`, `$212C`) to display the graphics as background tile data.

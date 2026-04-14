@@ -1,7 +1,10 @@
 import { decompress, identifyCompression, NotImplementedError } from "./decompress";
 import { renderImage, renderTileGrid, TileRenderOptions, PixelFormat, RGB, parseSNESPalette } from "./snes-tiles";
 import { parseFrame, renderFrame, FRAME_COUNT } from "./sprite-frame";
-import { parseTeamLogo, renderTeamLogo, TEAM_COUNT, TEAM_NAMES } from "./team-logos";
+import { createAsepriteFile } from "./aseprite-export";
+import { buildTeamLogoIndexedImage, parseTeamLogo, renderTeamLogo, TEAM_COUNT, TEAM_NAMES, readTeamPointers, TeamLogo } from "./team-logos";
+import { decompressFB30, extractFB30Codes, traceFB30Decode } from "./decompress-fb30";
+import { compressFB30, compareCompressed, chooseEndMarker } from "./compress-fb30";
 import {
   decompressSetupBlob, parseSetupLogo, renderSetupLogo, getFrameCount,
   TEAM_COUNT as SETUP_TEAM_COUNT, TEAM_NAMES as SETUP_TEAM_NAMES,
@@ -48,6 +51,7 @@ const teamScaleInput = document.getElementById("teamScale") as HTMLInputElement;
 const teamPaletteMode = document.getElementById("teamPaletteMode") as HTMLSelectElement;
 const teamPaletteInput = document.getElementById("teamPaletteInput") as HTMLInputElement;
 const teamPaletteSlotsInfo = document.getElementById("teamPaletteSlotsInfo") as HTMLDivElement;
+const teamExportAsepriteBtn = document.getElementById("teamExportAsepriteBtn") as HTMLButtonElement;
 
 // --- Team Logo - Game Setup mode elements ---
 const setupLogoControls = document.getElementById("setupLogoControls") as HTMLDivElement;
@@ -68,6 +72,20 @@ const portraitFormatSelect = document.getElementById("portraitFormat") as HTMLSe
 const portraitPaletteInput = document.getElementById("portraitPaletteInput") as HTMLInputElement;
 const portraitLoadBtn = document.getElementById("portraitLoadBtn") as HTMLButtonElement;
 
+// --- Compressor mode elements ---
+const compressorControls = document.getElementById("compressorControls") as HTMLDivElement;
+const compressorTeamSelect = document.getElementById("compressorTeamSelect") as HTMLSelectElement;
+const compressorFromScratch = document.getElementById("compressorFromScratch") as HTMLInputElement;
+const compressorRunBtn = document.getElementById("compressorRunBtn") as HTMLButtonElement;
+const compressorResult = document.getElementById("compressorResult") as HTMLDivElement;
+const compressorBinFile = document.getElementById("compressorBinFile") as HTMLInputElement;
+const compressorBinRunBtn = document.getElementById("compressorBinRunBtn") as HTMLButtonElement;
+const compressorDownloadBtn = document.getElementById("compressorDownloadBtn") as HTMLButtonElement;
+const compressorFlagsInput = document.getElementById("compressorFlags") as HTMLInputElement;
+const compressorMeta0Input = document.getElementById("compressorMeta0") as HTMLInputElement;
+const compressorMeta1Input = document.getElementById("compressorMeta1") as HTMLInputElement;
+const compressorMetaHint = document.getElementById("compressorMetaHint") as HTMLSpanElement;
+
 teamPaletteInput.disabled = teamPaletteMode.value !== "custom";
 
 // Populate team dropdowns
@@ -81,6 +99,11 @@ for (let i = 0; i < TEAM_COUNT; i++) {
   portraitOpt.value = String(i);
   portraitOpt.textContent = `${i}: ${TEAM_NAMES[i]}`;
   portraitTeamSelect.appendChild(portraitOpt);
+
+  const compOpt = document.createElement("option");
+  compOpt.value = String(i);
+  compOpt.textContent = `${i}: ${TEAM_NAMES[i]}`;
+  compressorTeamSelect.appendChild(compOpt);
 }
 for (let i = 0; i < SETUP_TEAM_COUNT; i++) {
   const opt = document.createElement("option");
@@ -106,10 +129,21 @@ const tabRaw = document.getElementById("tabRaw") as HTMLDivElement;
 const debugTabs = debugPanel.querySelectorAll<HTMLButtonElement>(".debug-tab");
 
 let romData: Uint8Array | null = null;
+let lastCompressedBin: Uint8Array | null = null;
 let setupBlob: Uint8Array | null = null;
 let debugHasData = false;
 let debugUserCollapsed = false;
 let autoPlayTimer: ReturnType<typeof setInterval> | null = null;
+
+type TeamPaletteModeValue = "auto" | "slot5" | "slot6" | "custom";
+
+interface TeamLogoExportState {
+  logo: TeamLogo;
+  palette: RGB[];
+  paletteMode: TeamPaletteModeValue;
+}
+
+let currentTeamLogoExportState: TeamLogoExportState | null = null;
 
 // ============================================================
 // Debug panel
@@ -153,6 +187,25 @@ function status(msg: string) {
 
 function clearStatus() {
   statusDiv.textContent = "";
+}
+
+function downloadBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+function sanitizeFileNamePart(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "team-logo";
 }
 
 function setActiveTab(tabName: string) {
@@ -277,6 +330,7 @@ function updateModeUI() {
   teamLogoControls.style.display = mode === "team-logos" ? "" : "none";
   setupLogoControls.style.display = mode === "setup-logos" ? "" : "none";
   playerPortraitControls.style.display = mode === "player-portraits" ? "" : "none";
+  compressorControls.style.display = mode === "compressor" ? "" : "none";
   stopAutoPlay();
 
   if (romData) {
@@ -288,6 +342,8 @@ function updateModeUI() {
       loadSetupLogo(parseInt(setupTeamSelect.value) || 0);
     } else if (mode === "player-portraits") {
       loadPlayerPortrait(parseInt(portraitTeamSelect.value) || 0, parseInt(portraitSelect.value) || 1);
+    } else if (mode === "compressor") {
+      // Don't auto-run on mode switch — wait for button click
     }
   }
 }
@@ -318,6 +374,9 @@ romFileInput.addEventListener("change", async () => {
   setupPrevBtn.disabled = false;
   setupNextBtn.disabled = false;
   portraitLoadBtn.disabled = false;
+  compressorRunBtn.disabled = false;
+  teamExportAsepriteBtn.disabled = true;
+  currentTeamLogoExportState = null;
 
   // Reset cached setup blob when new ROM loaded
   setupBlob = null;
@@ -665,6 +724,8 @@ function loadTeamLogo(teamIndex: number) {
 
   clearStatus();
   hideDebugPanel();
+  currentTeamLogoExportState = null;
+  teamExportAsepriteBtn.disabled = true;
 
   try {
     const logo = parseTeamLogo(romData, teamIndex);
@@ -676,8 +737,9 @@ function loadTeamLogo(teamIndex: number) {
       : teamPaletteMode.value === "slot6"
         ? "9A:D176"
         : null;
+    const paletteMode = teamPaletteMode.value as TeamPaletteModeValue;
     const currentPalVal = teamPaletteInput.value.trim();
-    const isCustomMode = teamPaletteMode.value === "custom";
+    const isCustomMode = paletteMode === "custom";
     const isAutoField = currentPalVal === "" || currentPalVal === (teamPaletteInput as HTMLInputElement & { _autoAddr?: string })._autoAddr;
     if (!isCustomMode) {
       const displayAddr = forcedPaletteAddr ?? logo.paletteAddr;
@@ -687,7 +749,7 @@ function loadTeamLogo(teamIndex: number) {
     } else {
       teamPaletteInput.disabled = false;
     }
-    if (teamPaletteMode.value === "auto" && isAutoField) {
+    if (paletteMode === "auto" && isAutoField) {
       teamPaletteInput.value = logo.paletteAddr;
       (teamPaletteInput as HTMLInputElement & { _autoAddr?: string })._autoAddr = logo.paletteAddr;
     }
@@ -699,10 +761,12 @@ function loadTeamLogo(teamIndex: number) {
       : `${logo.paletteSlot}=$${logo.paletteAddr}`;
     const modeSummary = forcedPaletteAddr
       ? `forced: $${forcedPaletteAddr}`
-      : teamPaletteMode.value === "custom"
+      : paletteMode === "custom"
         ? `custom: ${currentPalVal || "(empty -> auto)"}`
         : `auto-selected: ${logo.paletteSlot}=$${logo.paletteAddr}`;
     teamPaletteSlotsInfo.textContent = `Palette slots used: ${paletteSlotSummary} | ${modeSummary}`;
+    currentTeamLogoExportState = { logo, palette, paletteMode };
+    teamExportAsepriteBtn.disabled = false;
 
     const dims = renderTeamLogo(imageCanvas, logo, scale, palette);
 
@@ -730,6 +794,8 @@ function loadTeamLogo(teamIndex: number) {
   } catch (err) {
     teamPaletteInput.disabled = teamPaletteMode.value !== "custom";
     teamPaletteSlotsInfo.textContent = "";
+    currentTeamLogoExportState = null;
+    teamExportAsepriteBtn.disabled = true;
     status(`ERROR: ${err instanceof Error ? err.message : String(err)}`);
     console.error(err);
   }
@@ -752,6 +818,37 @@ teamPrevBtn.addEventListener("click", () => {
 teamNextBtn.addEventListener("click", () => {
   const idx = Math.min(TEAM_COUNT - 1, (parseInt(teamSelect.value) || 0) + 1);
   loadTeamLogo(idx);
+});
+
+teamExportAsepriteBtn.addEventListener("click", () => {
+  if (!currentTeamLogoExportState) return;
+
+  try {
+    const { logo, palette, paletteMode } = currentTeamLogoExportState;
+    const indexedLogo = buildTeamLogoIndexedImage(logo, paletteMode === "auto" ? undefined : palette);
+    const asepriteData = createAsepriteFile({
+      width: indexedLogo.width,
+      height: indexedLogo.height,
+      pixels: indexedLogo.pixels,
+      palette: indexedLogo.palette,
+      paletteNames: indexedLogo.paletteNames,
+      layerName: logo.teamName,
+      transparentIndex: 0,
+    });
+
+    const filename = `${sanitizeFileNamePart(logo.teamName)}-center-ice.aseprite`;
+    const asepriteBuffer = new ArrayBuffer(asepriteData.byteLength);
+    new Uint8Array(asepriteBuffer).set(asepriteData);
+    const blob = new Blob([asepriteBuffer], { type: "application/octet-stream" });
+    downloadBlob(blob, filename);
+
+    status(
+      `Exported Aseprite: ${logo.teamName}, ${indexedLogo.width}x${indexedLogo.height}px, ${indexedLogo.palette.length} colors, slots [${indexedLogo.usedPaletteSlots.join(", ") || "none"}]`
+    );
+  } catch (err) {
+    status(`ERROR exporting Aseprite: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(err);
+  }
 });
 
 // Keyboard navigation: left/right arrows when in team logo mode
@@ -931,4 +1028,363 @@ document.addEventListener("keydown", (e) => {
     const idx = Math.min(SETUP_TEAM_COUNT - 1, (parseInt(setupTeamSelect.value) || 0) + 1);
     loadSetupLogo(idx);
   }
+});
+
+// ============================================================
+// Compressor (FB30) mode
+// ============================================================
+
+function runCompressor(teamIndex: number) {
+  if (!romData) return;
+
+  clearStatus();
+  compressorResult.style.display = "none";
+  compressorResult.textContent = "";
+
+  try {
+    // Read team pointers to get compressed GFX offset
+    const ptrs = readTeamPointers(romData, teamIndex);
+    const gfxOff = ptrs.tileGfxFile;
+    const teamName = TEAM_NAMES[teamIndex] || `Team ${teamIndex}`;
+
+    status(`Compressor: ${teamName} — GFX at file $${gfxOff.toString(16)}`);
+
+    // Slice compressed data from ROM
+    const maxRead = Math.min(0x10000, romData.length - gfxOff);
+    const gfxSlice = romData.slice(gfxOff, gfxOff + maxRead);
+
+    // Decompress to get uncompressed bytes + compressed size
+    const decompResult = decompressFB30(gfxSlice);
+    const compressedSize = decompResult.compressedSize!;
+    const uncompressed = decompResult.data;
+
+    status(`Decompressed: ${uncompressed.length} bytes from ${compressedSize} compressed bytes`);
+
+    // Extract original compressed bytes for comparison
+    const originalCompressed = gfxSlice.slice(0, compressedSize);
+
+    // Read header metadata from original
+    const flags = originalCompressed[2];
+    const meta0 = originalCompressed[3];
+    const meta1 = originalCompressed[4];
+    const endMarker = originalCompressed[5];
+
+    status(`Header: flags=$${flags.toString(16).padStart(2, "0")} meta=$${meta0.toString(16).padStart(2, "0")},$${meta1.toString(16).padStart(2, "0")} endMarker=$${endMarker.toString(16).padStart(2, "0")}`);
+
+    // Auto-populate binary upload metadata fields with original header values
+    compressorFlagsInput.value = flags.toString(16).padStart(2, "0");
+    compressorMeta0Input.value = meta0.toString(16).padStart(2, "0");
+    compressorMeta1Input.value = meta1.toString(16).padStart(2, "0");
+    compressorMetaHint.textContent = `(from ${teamName} ROM header)`;
+
+    // Extract Huffman table from original for round-trip verification
+    const refTable = extractFB30Codes(gfxSlice);
+
+    // Re-compress — use reference table unless "from scratch" is checked
+    const fromScratch = compressorFromScratch.checked;
+    const compResult = compressFB30(uncompressed, endMarker, { flags, meta0, meta1 }, fromScratch ? undefined : refTable);
+    const recompressed = compResult.data;
+
+    status(`Re-compressed: ${recompressed.length} bytes`);
+
+    // Self-verification: decompress our output and check it matches the input
+    let selfVerify = "";
+    try {
+      const verify = decompressFB30(recompressed);
+      let selfMatch = true;
+      if (verify.data.length !== uncompressed.length) {
+        selfMatch = false;
+        selfVerify = `SELF-CHECK FAIL: length mismatch (${verify.data.length} vs ${uncompressed.length})`;
+      } else {
+        for (let k = 0; k < uncompressed.length; k++) {
+          if (verify.data[k] !== uncompressed[k]) {
+            selfMatch = false;
+            selfVerify = `SELF-CHECK FAIL: data mismatch at byte ${k} ($${uncompressed[k].toString(16)} vs $${verify.data[k].toString(16)})`;
+            break;
+          }
+        }
+      }
+      if (selfMatch) {
+        selfVerify = "SELF-CHECK OK: recompressed data decompresses to original";
+      }
+    } catch (e) {
+      selfVerify = `SELF-CHECK ERROR: ${e instanceof Error ? e.message : String(e)}`;
+    }
+    status(selfVerify);
+
+    // Compare with original compressed bytes
+    const cmp = compareCompressed(originalCompressed, recompressed);
+
+    // Display results
+    const resultLines: string[] = [];
+    resultLines.push(`=== ${teamName} (team ${teamIndex}) ===`);
+    resultLines.push(`Mode: ${fromScratch ? "FROM SCRATCH (own Huffman tree)" : "Reference table (round-trip)"}`);
+    resultLines.push(`GFX offset: $${gfxOff.toString(16)}`);
+    resultLines.push(`Original compressed: ${originalCompressed.length} bytes`);
+    resultLines.push(`Decompressed: ${uncompressed.length} bytes`);
+    resultLines.push(`Re-compressed: ${recompressed.length} bytes`);
+    resultLines.push(selfVerify);
+    resultLines.push("");
+    resultLines.push(...cmp.log);
+
+    // In from-scratch mode, show code length comparison with original
+    if (fromScratch && compResult.codeLengthCounts) {
+      resultLines.push("");
+      resultLines.push("--- Code Length Comparison ---");
+      const ourCLC = compResult.codeLengthCounts;
+      const ourMaxIdx = compResult.maxLengthIndex ?? 0;
+      resultLines.push(`Original: ${refTable.orderedSymbols.length} symbols, max len ${refTable.maxLengthIndex + 1}`);
+      resultLines.push(`Ours:     ${compResult.orderedSymbols?.length ?? 0} symbols, max len ${ourMaxIdx + 1}`);
+      const maxIdx = Math.max(refTable.maxLengthIndex, ourMaxIdx);
+      let lengthsMatch = true;
+      for (let i = 0; i <= maxIdx; i++) {
+        const origCount = refTable.codeLengthCounts[i] || 0;
+        const ourCount = ourCLC[i] || 0;
+        const diff = origCount !== ourCount ? " <<<" : "";
+        if (diff) lengthsMatch = false;
+        if (origCount > 0 || ourCount > 0) {
+          resultLines.push(`  Length ${(i + 1).toString().padStart(2)}: orig=${origCount.toString().padStart(3)}  ours=${ourCount.toString().padStart(3)}${diff}`);
+        }
+      }
+      if (lengthsMatch) {
+        resultLines.push("  Code lengths MATCH original!");
+      }
+      // Show symbol order comparison
+      const origSyms = refTable.orderedSymbols;
+      const ourSyms = compResult.orderedSymbols ?? [];
+      if (origSyms.length === ourSyms.length) {
+        let symMatch = true;
+        for (let i = 0; i < origSyms.length; i++) {
+          if (origSyms[i] !== ourSyms[i]) { symMatch = false; break; }
+        }
+        resultLines.push(symMatch ? "  Symbol order MATCH!" : "  Symbol order DIFFERS");
+      } else {
+        resultLines.push(`  Symbol count differs: orig=${origSyms.length} ours=${ourSyms.length}`);
+      }
+    }
+
+    compressorResult.textContent = resultLines.join("\n");
+    compressorResult.style.display = "block";
+    compressorResult.style.borderLeftColor = cmp.match ? "#00ff88" : "#ff4444";
+
+    status(cmp.match ? "MATCH — compression round-trip verified!" : `MISMATCH — ${cmp.diffCount} bytes differ`);
+
+    // Trace original decode actions and compare with our encoding actions
+    const origActions = traceFB30Decode(gfxSlice);
+    const ourActions = compResult.actions!;
+    const actionLog: string[] = ["", "--- Action Trace ---"];
+    actionLog.push(`Original: ${origActions.length} actions, Ours: ${ourActions.length} actions`);
+
+    // Helper to stringify an action
+    function fmtAction(a: { type: string; symbol?: number; runCount?: number; dataIndex?: number }): string {
+      let s = a.type;
+      if (a.symbol !== undefined) s += `($${a.symbol.toString(16).padStart(2, "0")})`;
+      if (a.runCount !== undefined) s += `(${a.runCount})`;
+      if (a.dataIndex !== undefined) s += ` @data[${a.dataIndex}]`;
+      return s;
+    }
+
+    // Normalize our actions to have dataIndex for comparison
+    let di = 0;
+    const ourActionsAnnotated = ourActions.map((a: Record<string, unknown>) => {
+      const out = { ...a, dataIndex: di };
+      if (a.type === "symbol" || a.type === "literal") di++;
+      else if (a.type === "run") di += (a.runCount as number);
+      return out;
+    });
+
+    // Find first divergence
+    const maxActions = Math.max(origActions.length, ourActionsAnnotated.length);
+    let firstDivergence = -1;
+    for (let k = 0; k < maxActions; k++) {
+      const o = origActions[k] as unknown as Record<string, unknown> | undefined;
+      const m = ourActionsAnnotated[k] as unknown as Record<string, unknown> | undefined;
+      if (!o || !m || o.type !== m.type || o.symbol !== m.symbol || o.runCount !== m.runCount) {
+        firstDivergence = k;
+        break;
+      }
+    }
+
+    if (firstDivergence >= 0) {
+      actionLog.push(`First action divergence at index ${firstDivergence}:`);
+      const start = Math.max(0, firstDivergence - 3);
+      const end = Math.min(maxActions, firstDivergence + 6);
+      for (let k = start; k < end; k++) {
+        const o = origActions[k];
+        const m = ourActionsAnnotated[k];
+        const oStr = o ? fmtAction(o as never) : "---";
+        const mStr = m ? fmtAction(m as never) : "---";
+        const marker = k === firstDivergence ? " <<<" : "";
+        actionLog.push(`  [${k}] orig: ${oStr.padEnd(30)} ours: ${mStr}${marker}`);
+      }
+      // Show the uncompressed data around the divergence point
+      const dataIdx = origActions[firstDivergence]?.dataIndex ?? 0;
+      const dataStart = Math.max(0, dataIdx - 8);
+      const dataEnd = Math.min(uncompressed.length, dataIdx + 16);
+      actionLog.push(`  Data around index ${dataIdx}:`);
+      const hexBytes = Array.from(uncompressed.slice(dataStart, dataEnd))
+        .map((b, j) => {
+          const pos = dataStart + j;
+          const prefix = pos === dataIdx ? "[" : " ";
+          const suffix = pos === dataIdx ? "]" : " ";
+          return prefix + b.toString(16).padStart(2, "0") + suffix;
+        }).join("");
+      actionLog.push(`    $${dataStart.toString(16)}: ${hexBytes}`);
+    } else {
+      actionLog.push("All actions match!");
+    }
+
+    // Populate debug panel with compression logs
+    const allLog = [...decompResult.log, "", "--- Compressor ---", ...compResult.log, "", "--- Comparison ---", ...cmp.log, ...actionLog];
+    populateDebugPanel(allLog, recompressed);
+    showDebugPanel();
+
+    // Render tiles and assembled logo using decompressed data
+    const logo = parseTeamLogo(romData, teamIndex);
+    const scale = 4;
+    renderTeamLogo(imageCanvas, logo, scale);
+
+    if (logo.tileData.length > 0) {
+      const tileOpts: TileRenderOptions = {
+        format: "nibble",
+        tilesWide: 8,
+        scale: Math.max(scale - 2, 2),
+        palette: logo.palette,
+      };
+      renderTileGrid(tilesCanvas, logo.tileData, tileOpts);
+    }
+  } catch (err) {
+    status(`ERROR: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(err);
+  }
+}
+
+compressorRunBtn.addEventListener("click", () => {
+  runCompressor(parseInt(compressorTeamSelect.value) || 0);
+});
+
+compressorTeamSelect.addEventListener("change", () => {
+  if (romData && modeSelect.value === "compressor") {
+    runCompressor(parseInt(compressorTeamSelect.value) || 0);
+  }
+});
+
+compressorFromScratch.addEventListener("change", () => {
+  if (romData && modeSelect.value === "compressor") {
+    runCompressor(parseInt(compressorTeamSelect.value) || 0);
+  }
+});
+
+// --- Binary upload compressor ---
+
+compressorBinFile.addEventListener("change", () => {
+  const file = compressorBinFile.files?.[0];
+  compressorBinRunBtn.disabled = !file;
+  compressorDownloadBtn.style.display = "none";
+  lastCompressedBin = null;
+});
+
+async function runBinaryCompressor() {
+  const file = compressorBinFile.files?.[0];
+  if (!file) return;
+
+  clearStatus();
+  compressorResult.style.display = "none";
+  compressorResult.textContent = "";
+  compressorDownloadBtn.style.display = "none";
+  lastCompressedBin = null;
+
+  try {
+    const buffer = await file.arrayBuffer();
+    const uncompressed = new Uint8Array(buffer);
+
+    status(`Loaded binary: ${file.name} (${uncompressed.length} bytes)`);
+
+    const flags = parseInt(compressorFlagsInput.value, 16) || 0;
+
+    // Meta0/Meta1 encode the decompressed size:
+    // Dispatcher reads LDA $0003,Y (LE: meta0|meta1<<8), XBA → (meta0<<8)|meta1 = size
+    // So: meta0 = high byte of size, meta1 = low byte of size
+    const autoMeta0 = (uncompressed.length >> 8) & 0xff;
+    const autoMeta1 = uncompressed.length & 0xff;
+
+    // Use auto-calculated values if fields are still default "00", otherwise respect user override
+    const meta0Input = parseInt(compressorMeta0Input.value, 16);
+    const meta1Input = parseInt(compressorMeta1Input.value, 16);
+    const meta0 = (meta0Input === 0 && meta1Input === 0) ? autoMeta0 : (meta0Input || 0);
+    const meta1 = (meta0Input === 0 && meta1Input === 0) ? autoMeta1 : (meta1Input || 0);
+
+    // Update the UI fields to show actual values used
+    compressorMeta0Input.value = meta0.toString(16).padStart(2, "0");
+    compressorMeta1Input.value = meta1.toString(16).padStart(2, "0");
+    compressorMetaHint.textContent = `(auto: decompressed size = ${uncompressed.length} bytes = 0x${meta0.toString(16).padStart(2,"0")}${meta1.toString(16).padStart(2,"0")})`;
+
+    const endMarker = chooseEndMarker(uncompressed);
+    status(`End marker: $${endMarker.toString(16).padStart(2, "0")}`);
+
+    const compResult = compressFB30(uncompressed, endMarker, { flags, meta0, meta1 });
+    const compressed = compResult.data;
+
+    status(`Compressed: ${uncompressed.length} -> ${compressed.length} bytes (${(compressed.length / uncompressed.length * 100).toFixed(1)}%)`);
+
+    // Self-verification
+    let selfVerify = "";
+    try {
+      const verify = decompressFB30(compressed);
+      let selfMatch = true;
+      if (verify.data.length !== uncompressed.length) {
+        selfMatch = false;
+        selfVerify = `SELF-CHECK FAIL: length mismatch (${verify.data.length} vs ${uncompressed.length})`;
+      } else {
+        for (let k = 0; k < uncompressed.length; k++) {
+          if (verify.data[k] !== uncompressed[k]) {
+            selfMatch = false;
+            selfVerify = `SELF-CHECK FAIL: data mismatch at byte ${k} ($${uncompressed[k].toString(16)} vs $${verify.data[k].toString(16)})`;
+            break;
+          }
+        }
+      }
+      if (selfMatch) {
+        selfVerify = "SELF-CHECK OK: compressed data decompresses back to original";
+      }
+    } catch (e) {
+      selfVerify = `SELF-CHECK ERROR: ${e instanceof Error ? e.message : String(e)}`;
+    }
+    status(selfVerify);
+
+    const resultLines: string[] = [];
+    resultLines.push(`=== Binary Compression: ${file.name} ===`);
+    resultLines.push(`Input: ${uncompressed.length} bytes`);
+    resultLines.push(`Output: ${compressed.length} bytes (${(compressed.length / uncompressed.length * 100).toFixed(1)}%)`);
+    resultLines.push(`End marker: $${endMarker.toString(16).padStart(2, "0")}`);
+    resultLines.push(`Metadata: flags=$${flags.toString(16).padStart(2, "0")} meta0=$${meta0.toString(16).padStart(2, "0")} meta1=$${meta1.toString(16).padStart(2, "0")}`);
+    resultLines.push(selfVerify);
+
+    compressorResult.textContent = resultLines.join("\n");
+    compressorResult.style.display = "block";
+    compressorResult.style.borderLeftColor = selfVerify.includes("OK") ? "#00ff88" : "#ff4444";
+
+    populateDebugPanel([...compResult.log], compressed);
+    showDebugPanel();
+
+    lastCompressedBin = compressed;
+    compressorDownloadBtn.style.display = "";
+
+  } catch (err) {
+    status(`ERROR: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(err);
+  }
+}
+
+compressorBinRunBtn.addEventListener("click", () => {
+  runBinaryCompressor();
+});
+
+compressorDownloadBtn.addEventListener("click", () => {
+  if (!lastCompressedBin) return;
+
+  const blob = new Blob([new Uint8Array(lastCompressedBin) as unknown as ArrayBuffer], { type: "application/octet-stream" });
+  const inputName = compressorBinFile.files?.[0]?.name ?? "output";
+  const baseName = inputName.replace(/\.[^.]+$/, "");
+  downloadBlob(blob, `${baseName}_fb30.bin`);
 });
