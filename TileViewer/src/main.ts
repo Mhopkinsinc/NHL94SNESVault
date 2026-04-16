@@ -825,7 +825,14 @@ teamExportAsepriteBtn.addEventListener("click", () => {
 
   try {
     const { logo, palette, paletteMode } = currentTeamLogoExportState;
-    const indexedLogo = buildTeamLogoIndexedImage(logo, paletteMode === "auto" ? undefined : palette);
+    const indexedLogo = buildTeamLogoIndexedImage(
+      logo,
+      paletteMode === "auto" ? undefined : palette,
+      { preservePaletteBlocks: paletteMode === "auto" },
+    );
+    const transparentIndices = paletteMode === "auto"
+      ? indexedLogo.usedPaletteSlots.map((_, index) => index * 16)
+      : [0];
     const asepriteData = createAsepriteFile({
       width: indexedLogo.width,
       height: indexedLogo.height,
@@ -834,6 +841,7 @@ teamExportAsepriteBtn.addEventListener("click", () => {
       paletteNames: indexedLogo.paletteNames,
       layerName: logo.teamName,
       transparentIndex: 0,
+      transparentIndices,
     });
 
     const filename = `${sanitizeFileNamePart(logo.teamName)}-center-ice.aseprite`;

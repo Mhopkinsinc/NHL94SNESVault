@@ -90,15 +90,24 @@ export interface IndexedTeamLogoImage {
   usedPaletteSlots: number[];
 }
 
+export interface IndexedTeamLogoImageOptions {
+  preservePaletteBlocks?: boolean;
+}
+
 function getEffectiveCenterIcePaletteSlot(rawSlot: number, paletteSlotOffset: number): number {
   return rawSlot + paletteSlotOffset;
 }
 
-export function buildTeamLogoIndexedImage(logo: TeamLogo, paletteOverride?: RGB[]): IndexedTeamLogoImage {
+export function buildTeamLogoIndexedImage(
+  logo: TeamLogo,
+  paletteOverride?: RGB[],
+  options: IndexedTeamLogoImageOptions = {},
+): IndexedTeamLogoImage {
   const width = logo.widthTiles * 8;
   const height = logo.heightTiles * 8;
   const pixels = new Uint8Array(width * height);
   const tileCount = Math.floor(logo.tileData.length / 32);
+  const preservePaletteBlocks = options.preservePaletteBlocks ?? false;
 
   if (paletteOverride) {
     const palette = paletteOverride.slice(0, 256);
@@ -133,16 +142,20 @@ export function buildTeamLogoIndexedImage(logo: TeamLogo, paletteOverride?: RGB[
     };
   }
 
-  const usedPaletteSlots = logo.paletteSlots.length > 0 ? [...logo.paletteSlots] : [logo.paletteSlot];
-  const palette: RGB[] = [[0, 0, 0]];
-  const paletteNames: string[] = ["transparent"];
+  const usedPaletteSlots = preservePaletteBlocks
+    ? [5, 6]
+    : (logo.paletteSlots.length > 0 ? [...logo.paletteSlots] : [logo.paletteSlot])
+        .sort((left, right) => left - right);
+  const palette: RGB[] = [];
+  const paletteNames: string[] = [];
   const paletteBaseBySlot = new Map<number, number>();
-  let nextPaletteIndex = 1;
+  let nextPaletteIndex = 0;
 
   for (const slot of usedPaletteSlots) {
     paletteBaseBySlot.set(slot, nextPaletteIndex);
     const slotPalette = logo.paletteBank[slot] ?? logo.palette;
-    for (let colorIndex = 1; colorIndex < 16; colorIndex++) {
+    const startColorIndex = preservePaletteBlocks ? 0 : 1;
+    for (let colorIndex = startColorIndex; colorIndex < 16; colorIndex++) {
       palette.push(slotPalette[colorIndex] ?? [0, 0, 0]);
       paletteNames.push(`slot${slot}-color${colorIndex}`);
       nextPaletteIndex += 1;
@@ -166,9 +179,11 @@ export function buildTeamLogoIndexedImage(logo: TeamLogo, paletteOverride?: RGB[
       for (let py = 0; py < 8; py++) {
         for (let px = 0; px < 8; px++) {
           const colorIdx = tilePixels[py][px];
-          if (colorIdx === 0) continue;
           const pixelIndex = (row * 8 + py) * width + (col * 8 + px);
-          pixels[pixelIndex] = paletteBase + colorIdx - 1;
+          if (colorIdx === 0 && !preservePaletteBlocks) continue;
+          pixels[pixelIndex] = preservePaletteBlocks
+            ? paletteBase + colorIdx
+            : paletteBase + colorIdx - 1;
         }
       }
     }

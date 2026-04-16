@@ -8,6 +8,7 @@ export interface IndexedSpriteExport {
   paletteNames?: string[];
   layerName?: string;
   transparentIndex?: number;
+  transparentIndices?: number[];
 }
 
 class BinaryWriter {
@@ -83,7 +84,7 @@ function buildLayerChunk(layerName: string): Uint8Array {
   });
 }
 
-function buildPaletteChunk(palette: RGB[], paletteNames: string[]): Uint8Array {
+function buildPaletteChunk(palette: RGB[], paletteNames: string[], transparentIndices: Set<number>): Uint8Array {
   return buildChunk(0x2019, (writer) => {
     writer.writeDword(palette.length);
     writer.writeDword(0);
@@ -97,7 +98,7 @@ function buildPaletteChunk(palette: RGB[], paletteNames: string[]): Uint8Array {
       writer.writeByte(red);
       writer.writeByte(green);
       writer.writeByte(blue);
-      writer.writeByte(index === 0 ? 0 : 255);
+      writer.writeByte(transparentIndices.has(index) ? 0 : 255);
       if (name) {
         writer.writeString(name);
       }
@@ -122,6 +123,7 @@ function buildRawCelChunk(sprite: IndexedSpriteExport): Uint8Array {
 
 export function createAsepriteFile(sprite: IndexedSpriteExport): Uint8Array {
   const transparentIndex = sprite.transparentIndex ?? 0;
+  const transparentIndices = new Set<number>(sprite.transparentIndices ?? [transparentIndex]);
   const paletteNames = sprite.paletteNames ?? [];
   const layerName = sprite.layerName ?? "Logo";
 
@@ -134,9 +136,14 @@ export function createAsepriteFile(sprite: IndexedSpriteExport): Uint8Array {
   if (transparentIndex < 0 || transparentIndex > 255) {
     throw new Error(`Transparent palette index must be 0-255, got ${transparentIndex}`);
   }
+  for (const index of transparentIndices) {
+    if (index < 0 || index > 255) {
+      throw new Error(`Transparent palette index must be 0-255, got ${index}`);
+    }
+  }
 
   const layerChunk = buildLayerChunk(layerName);
-  const paletteChunk = buildPaletteChunk(sprite.palette, paletteNames);
+  const paletteChunk = buildPaletteChunk(sprite.palette, paletteNames, transparentIndices);
   const celChunk = buildRawCelChunk(sprite);
   const frameChunkCount = 3;
   const frameSize = 16 + layerChunk.length + paletteChunk.length + celChunk.length;
