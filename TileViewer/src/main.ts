@@ -81,6 +81,10 @@ const compressorResult = document.getElementById("compressorResult") as HTMLDivE
 const compressorBinFile = document.getElementById("compressorBinFile") as HTMLInputElement;
 const compressorBinRunBtn = document.getElementById("compressorBinRunBtn") as HTMLButtonElement;
 const compressorDownloadBtn = document.getElementById("compressorDownloadBtn") as HTMLButtonElement;
+const compressorBinFormatSelect = document.getElementById("compressorBinFormat") as HTMLSelectElement;
+const compressorBinTilesWideInput = document.getElementById("compressorBinTilesWide") as HTMLInputElement;
+const compressorBinScaleInput = document.getElementById("compressorBinScale") as HTMLInputElement;
+const compressorBinPaletteInput = document.getElementById("compressorBinPalette") as HTMLInputElement;
 const compressorFlagsInput = document.getElementById("compressorFlags") as HTMLInputElement;
 const compressorMeta0Input = document.getElementById("compressorMeta0") as HTMLInputElement;
 const compressorMeta1Input = document.getElementById("compressorMeta1") as HTMLInputElement;
@@ -130,6 +134,7 @@ const debugTabs = debugPanel.querySelectorAll<HTMLButtonElement>(".debug-tab");
 
 let romData: Uint8Array | null = null;
 let lastCompressedBin: Uint8Array | null = null;
+let lastBinaryPreviewData: Uint8Array | null = null;
 let setupBlob: Uint8Array | null = null;
 let debugHasData = false;
 let debugUserCollapsed = false;
@@ -317,6 +322,45 @@ function parsePaletteFromInput(input: string): RGB[] | null {
   }
 
   return null;
+}
+
+function clearCanvas(canvas: HTMLCanvasElement) {
+  const ctx = canvas.getContext("2d");
+  canvas.width = 1;
+  canvas.height = 1;
+  canvas.style.width = "1px";
+  canvas.style.height = "1px";
+  ctx?.clearRect(0, 0, 1, 1);
+}
+
+function clearPreviewCanvases() {
+  clearCanvas(imageCanvas);
+  clearCanvas(tilesCanvas);
+}
+
+function renderBinaryPreview(data: Uint8Array, sourceLabel: string) {
+  const format = compressorBinFormatSelect.value as PixelFormat;
+  const tilesWide = Math.max(1, parseInt(compressorBinTilesWideInput.value) || 8);
+  const scale = Math.max(1, parseInt(compressorBinScaleInput.value) || 4);
+  const palette = parsePaletteFromInput(compressorBinPaletteInput.value.trim());
+  const opts: TileRenderOptions = { format, tilesWide, scale, palette: palette ?? undefined };
+  const bytesPerTile = format === "bitplane2" ? 16 : 32;
+  const tileCount = Math.floor(data.length / bytesPerTile);
+  const trailingBytes = data.length % bytesPerTile;
+
+  if (tileCount === 0) {
+    clearPreviewCanvases();
+    status(`Preview skipped for ${sourceLabel}: ${data.length} bytes does not contain a full ${format} tile.`);
+    return;
+  }
+
+  const info = renderImage(imageCanvas, data, opts);
+  renderTileGrid(tilesCanvas, data, opts);
+  status(`Previewed ${sourceLabel}: ${tileCount} tiles as ${info.tileCount > 0 ? `${tilesWide}x${info.tilesHigh}` : "0x0"} (${format}, ${scale}x scale).`);
+
+  if (trailingBytes > 0) {
+    status(`Preview ignored ${trailingBytes} trailing byte${trailingBytes === 1 ? "" : "s"} that do not form a complete tile.`);
+  }
 }
 
 // ============================================================
@@ -1290,7 +1334,19 @@ compressorBinFile.addEventListener("change", () => {
   compressorBinRunBtn.disabled = !file;
   compressorDownloadBtn.style.display = "none";
   lastCompressedBin = null;
+  lastBinaryPreviewData = null;
+  clearPreviewCanvases();
 });
+
+function rerenderBinaryPreviewIfAvailable() {
+  if (!lastBinaryPreviewData) return;
+  renderBinaryPreview(lastBinaryPreviewData, "round-tripped compressed binary");
+}
+
+compressorBinFormatSelect.addEventListener("change", rerenderBinaryPreviewIfAvailable);
+compressorBinTilesWideInput.addEventListener("change", rerenderBinaryPreviewIfAvailable);
+compressorBinScaleInput.addEventListener("change", rerenderBinaryPreviewIfAvailable);
+compressorBinPaletteInput.addEventListener("change", rerenderBinaryPreviewIfAvailable);
 
 async function runBinaryCompressor() {
   const file = compressorBinFile.files?.[0];
@@ -1301,6 +1357,8 @@ async function runBinaryCompressor() {
   compressorResult.textContent = "";
   compressorDownloadBtn.style.display = "none";
   lastCompressedBin = null;
+  lastBinaryPreviewData = null;
+  clearPreviewCanvases();
 
   try {
     const buffer = await file.arrayBuffer();
@@ -1337,8 +1395,10 @@ async function runBinaryCompressor() {
 
     // Self-verification
     let selfVerify = "";
+    let verifiedData: Uint8Array | null = null;
     try {
       const verify = decompressFB30(compressed);
+      verifiedData = verify.data;
       let selfMatch = true;
       if (verify.data.length !== uncompressed.length) {
         selfMatch = false;
@@ -1376,7 +1436,12 @@ async function runBinaryCompressor() {
     showDebugPanel();
 
     lastCompressedBin = compressed;
+    lastBinaryPreviewData = verifiedData;
     compressorDownloadBtn.style.display = "";
+
+    if (verifiedData) {
+      renderBinaryPreview(verifiedData, "round-tripped compressed binary");
+    }
 
   } catch (err) {
     status(`ERROR: ${err instanceof Error ? err.message : String(err)}`);

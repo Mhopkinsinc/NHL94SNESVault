@@ -296,6 +296,20 @@
       <button id="compressorBinRunBtn" disabled>Compress Binary</button>
       <button id="compressorDownloadBtn" style="display: none;">Download .bin</button>
     </div>
+    <div class="controls" id="compressorBinPreviewControls">
+      <label>Preview format:
+        <select id="compressorBinFormat">
+          <option value="nibble" selected>Nibble-packed (FB30 WRAM)</option>
+          <option value="bitplane4">4bpp Bitplane (VRAM)</option>
+          <option value="bitplane2">2bpp Bitplane (VRAM)</option>
+        </select>
+      </label>
+      <label>Tiles Wide: <input type="number" id="compressorBinTilesWide" value="8" min="1" max="64" /></label>
+      <label>Scale: <input type="number" id="compressorBinScale" value="4" min="1" max="16" /></label>
+      <label>Palette (SNES addr or hex bytes):
+        <input type="text" id="compressorBinPalette" value="" size="50" placeholder="Leave empty for grayscale" />
+      </label>
+    </div>
     <div class="controls" id="compressorMetaControls">
       <label>Flags: <input type="text" id="compressorFlags" value="00" size="3" /></label>
       <label>Size hi: <input type="text" id="compressorMeta0" value="00" size="3" /></label>

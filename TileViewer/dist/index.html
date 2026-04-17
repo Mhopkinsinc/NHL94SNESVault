@@ -128,7 +128,7 @@
       background: #000;
     }
   </style>
-  <script type="module" crossorigin src="/assets/index-B13wx3km.js"></script>
+  <script type="module" crossorigin src="/assets/index-SXAq0LFr.js"></script>
 </head>
 <body>
   <h1>NHL 94 SNES - Master Decompression Tool</h1>
@@ -296,6 +296,20 @@
       <label>Upload raw binary: <input type="file" id="compressorBinFile" accept=".bin,.raw,.dat" /></label>
       <button id="compressorBinRunBtn" disabled>Compress Binary</button>
       <button id="compressorDownloadBtn" style="display: none;">Download .bin</button>
+    </div>
+    <div class="controls" id="compressorBinPreviewControls">
+      <label>Preview format:
+        <select id="compressorBinFormat">
+          <option value="nibble" selected>Nibble-packed (FB30 WRAM)</option>
+          <option value="bitplane4">4bpp Bitplane (VRAM)</option>
+          <option value="bitplane2">2bpp Bitplane (VRAM)</option>
+        </select>
+      </label>
+      <label>Tiles Wide: <input type="number" id="compressorBinTilesWide" value="8" min="1" max="64" /></label>
+      <label>Scale: <input type="number" id="compressorBinScale" value="4" min="1" max="16" /></label>
+      <label>Palette (SNES addr or hex bytes):
+        <input type="text" id="compressorBinPalette" value="" size="50" placeholder="Leave empty for grayscale" />
+      </label>
     </div>
     <div class="controls" id="compressorMetaControls">
       <label>Flags: <input type="text" id="compressorFlags" value="00" size="3" /></label>
