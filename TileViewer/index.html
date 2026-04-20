@@ -251,6 +251,13 @@
       <label>Palette (SNES addr or hex bytes):
         <input type="text" id="setupPaletteInput" value="" size="60" placeholder="Leave empty — auto-detected from ROM" />
       </label>
+      <button id="setupImportPaletteBtn">Import .pal</button>
+      <button id="setupImportBinBtn">Import Raw 4bpp Bin</button>
+      <button id="setupClearImportBtn" disabled>Clear Import</button>
+      <button id="setupDownloadFrameBtn" disabled>Download Frame Bin</button>
+      <button id="setupExportAsepriteBtn" disabled>Export to Aseprite</button>
+      <input type="file" id="setupImportPaletteFile" accept=".pal,application/octet-stream" style="display: none;" />
+      <input type="file" id="setupImportBinFile" accept=".bin,.chr,.4bpp,application/octet-stream" style="display: none;" />
     </div>
   </div>
 

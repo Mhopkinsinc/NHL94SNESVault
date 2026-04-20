@@ -6,7 +6,8 @@ import { buildTeamLogoIndexedImage, parseTeamLogo, renderTeamLogo, TEAM_COUNT, T
 import { decompressFB30, extractFB30Codes, traceFB30Decode } from "./decompress-fb30";
 import { compressFB30, compareCompressed, chooseEndMarker } from "./compress-fb30";
 import {
-  decompressSetupBlob, parseSetupLogo, renderSetupLogo, getFrameCount,
+  buildImportedSetupLogo, buildSetupLogoIndexedImage, decompressSetupBlob, getImportedSetupLogoExpectedSize,
+  parseSetupLogo, renderSetupLogo, serializeSetupLogoFrame, getFrameCount, SetupLogo,
   TEAM_COUNT as SETUP_TEAM_COUNT, TEAM_NAMES as SETUP_TEAM_NAMES,
 } from "./game-setup-logos";
 import {
@@ -61,6 +62,13 @@ const setupNextBtn = document.getElementById("setupNext") as HTMLButtonElement;
 const setupSideSelect = document.getElementById("setupSide") as HTMLSelectElement;
 const setupScaleInput = document.getElementById("setupScale") as HTMLInputElement;
 const setupPaletteInput = document.getElementById("setupPaletteInput") as HTMLInputElement;
+const setupImportPaletteBtn = document.getElementById("setupImportPaletteBtn") as HTMLButtonElement;
+const setupImportPaletteFile = document.getElementById("setupImportPaletteFile") as HTMLInputElement;
+const setupImportBinBtn = document.getElementById("setupImportBinBtn") as HTMLButtonElement;
+const setupClearImportBtn = document.getElementById("setupClearImportBtn") as HTMLButtonElement;
+const setupDownloadFrameBtn = document.getElementById("setupDownloadFrameBtn") as HTMLButtonElement;
+const setupImportBinFile = document.getElementById("setupImportBinFile") as HTMLInputElement;
+const setupExportAsepriteBtn = document.getElementById("setupExportAsepriteBtn") as HTMLButtonElement;
 
 // --- Player Portraits elements ---
 const playerPortraitControls = document.getElementById("playerPortraitControls") as HTMLDivElement;
@@ -148,7 +156,28 @@ interface TeamLogoExportState {
   paletteMode: TeamPaletteModeValue;
 }
 
+interface SetupLogoExportState {
+  logo: SetupLogo;
+  palette: RGB[];
+}
+
+interface ImportedSetupLogoState {
+  fileName: string;
+  rawTileData: Uint8Array;
+}
+
 let currentTeamLogoExportState: TeamLogoExportState | null = null;
+let currentSetupLogoExportState: SetupLogoExportState | null = null;
+let currentImportedSetupLogo: ImportedSetupLogoState | null = null;
+
+function clearImportedSetupLogo(resetFileInput = true): void {
+  currentImportedSetupLogo = null;
+  setupClearImportBtn.disabled = true;
+  setupDownloadFrameBtn.disabled = true;
+  if (resetFileInput) {
+    setupImportBinFile.value = "";
+  }
+}
 
 // ============================================================
 // Debug panel
@@ -211,6 +240,12 @@ function sanitizeFileNamePart(value: string): string {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "") || "team-logo";
+}
+
+function formatPaletteBytes(bytes: Uint8Array): string {
+  return Array.from(bytes)
+    .map((value) => value.toString(16).toUpperCase().padStart(2, "0"))
+    .join(" ");
 }
 
 function setActiveTab(tabName: string) {
@@ -420,7 +455,11 @@ romFileInput.addEventListener("change", async () => {
   portraitLoadBtn.disabled = false;
   compressorRunBtn.disabled = false;
   teamExportAsepriteBtn.disabled = true;
+  setupExportAsepriteBtn.disabled = true;
+  setupDownloadFrameBtn.disabled = true;
   currentTeamLogoExportState = null;
+  currentSetupLogoExportState = null;
+  setupClearImportBtn.disabled = currentImportedSetupLogo === null;
 
   // Reset cached setup blob when new ROM loaded
   setupBlob = null;
@@ -992,14 +1031,19 @@ function loadSetupLogo(teamIndex: number) {
 
   clearStatus();
   hideDebugPanel();
+  currentSetupLogoExportState = null;
+  setupExportAsepriteBtn.disabled = true;
+  setupDownloadFrameBtn.disabled = true;
 
   const blob = ensureSetupBlob();
-  if (!blob) return;
+  if (!blob && !currentImportedSetupLogo) return;
 
   try {
     const side = setupSideSelect.value as "home" | "away";
-    const logo = parseSetupLogo(romData, blob, teamIndex, side);
-    setupTeamSelect.value = String(teamIndex);
+    const logo = currentImportedSetupLogo
+      ? buildImportedSetupLogo(romData, currentImportedSetupLogo.rawTileData, side)
+      : parseSetupLogo(romData, blob!, teamIndex, side);
+    setupTeamSelect.value = String(currentImportedSetupLogo ? 0 : teamIndex);
 
     const scale = parseInt(setupScaleInput.value) || 8;
 
@@ -1013,6 +1057,9 @@ function loadSetupLogo(teamIndex: number) {
     }
     const manualPalette = isAutoAddr ? null : parsePaletteFromInput(currentPalVal);
     const palette = manualPalette ?? logo.palette;
+    currentSetupLogoExportState = { logo, palette };
+    setupExportAsepriteBtn.disabled = logo.tileData.length === 0;
+    setupDownloadFrameBtn.disabled = currentImportedSetupLogo === null;
 
     const dims = renderSetupLogo(imageCanvas, logo, scale, palette);
 
@@ -1033,16 +1080,23 @@ function loadSetupLogo(teamIndex: number) {
     }
 
     const tileCount = Math.floor(logo.tileData.length / 32);
-    const frameCount = getFrameCount(blob);
+    const frameCount = blob ? getFrameCount(blob) : 0;
     const flagNote = (logo.flag & 0x80) === 0
       ? ` [no inline tiles — VRAM pre-loaded]`
       : "";
-    status(`${logo.teamName} (${side}): ${logo.numSprites} sprites, ${tileCount} tiles, ${dims.width}x${dims.height}px${flagNote}`);
-    status(`Blob: ${frameCount} total frame entries`);
+    const importNote = currentImportedSetupLogo
+      ? ` [imported: ${currentImportedSetupLogo.fileName}; Anaheim palette]`
+      : "";
+    status(`${logo.teamName} (${side}): ${logo.numSprites} sprites, ${tileCount} tiles, ${dims.width}x${dims.height}px${flagNote}${importNote}`);
+    if (blob) {
+      status(`Blob: ${frameCount} total frame entries`);
+    }
 
     populateDebugPanel(logo.log, logo.tileData);
     showDebugPanel();
   } catch (err) {
+    currentSetupLogoExportState = null;
+    setupExportAsepriteBtn.disabled = true;
     status(`ERROR: ${err instanceof Error ? err.message : String(err)}`);
     console.error(err);
   }
@@ -1064,6 +1118,134 @@ setupPrevBtn.addEventListener("click", () => {
 setupNextBtn.addEventListener("click", () => {
   const idx = Math.min(SETUP_TEAM_COUNT - 1, (parseInt(setupTeamSelect.value) || 0) + 1);
   loadSetupLogo(idx);
+});
+
+setupImportPaletteBtn.addEventListener("click", () => {
+  if (!romData) {
+    status("Load a ROM before importing a setup palette.");
+    return;
+  }
+  setupImportPaletteFile.click();
+});
+
+setupImportPaletteFile.addEventListener("change", async () => {
+  const file = setupImportPaletteFile.files?.[0];
+  if (!file) return;
+  if (!romData) {
+    setupImportPaletteFile.value = "";
+    status("Load a ROM before importing a setup palette.");
+    return;
+  }
+
+  try {
+    const buffer = await file.arrayBuffer();
+    const paletteBytes = new Uint8Array(buffer);
+    if (paletteBytes.length < 32) {
+      throw new Error(`Expected at least 32 bytes for a 16-color SNES palette, got ${paletteBytes.length}`);
+    }
+
+    setupPaletteInput.value = formatPaletteBytes(paletteBytes.slice(0, 32));
+    delete (setupPaletteInput as any)._autoAddr;
+    status(`Loaded setup palette from ${file.name} (using first 32 bytes)`);
+    loadSetupLogo(parseInt(setupTeamSelect.value) || 0);
+  } catch (err) {
+    status(`ERROR importing setup palette: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(err);
+  } finally {
+    setupImportPaletteFile.value = "";
+  }
+});
+
+setupImportBinBtn.addEventListener("click", () => {
+  if (!romData) {
+    status("Load a ROM before importing a setup-logo bin.");
+    return;
+  }
+  setupImportBinFile.click();
+});
+
+setupImportBinFile.addEventListener("change", async () => {
+  const file = setupImportBinFile.files?.[0];
+  if (!file) return;
+  if (!romData) {
+    setupImportBinFile.value = "";
+    status("Load a ROM before importing a setup-logo bin.");
+    return;
+  }
+
+  try {
+    const buffer = await file.arrayBuffer();
+    const rawTileData = new Uint8Array(buffer);
+    const expectedSize = getImportedSetupLogoExpectedSize();
+    if (rawTileData.length !== expectedSize) {
+      throw new Error(`Expected ${expectedSize} bytes for a 48x48 raw 4bpp bin, got ${rawTileData.length}`);
+    }
+
+    currentImportedSetupLogo = { fileName: file.name, rawTileData };
+    setupClearImportBtn.disabled = false;
+    loadSetupLogo(0);
+  } catch (err) {
+    clearImportedSetupLogo();
+    currentSetupLogoExportState = null;
+    setupExportAsepriteBtn.disabled = true;
+    setupDownloadFrameBtn.disabled = true;
+    status(`ERROR importing setup-logo bin: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(err);
+  }
+});
+
+setupClearImportBtn.addEventListener("click", () => {
+  clearImportedSetupLogo();
+  loadSetupLogo(parseInt(setupTeamSelect.value) || 0);
+});
+
+setupDownloadFrameBtn.addEventListener("click", () => {
+  if (!currentImportedSetupLogo || !currentSetupLogoExportState) return;
+
+  try {
+    const frameData = serializeSetupLogoFrame(currentSetupLogoExportState.logo);
+    const frameBuffer = new ArrayBuffer(frameData.byteLength);
+    new Uint8Array(frameBuffer).set(frameData);
+    const blob = new Blob([frameBuffer], { type: "application/octet-stream" });
+    const baseName = currentImportedSetupLogo.fileName.replace(/\.[^.]+$/, "");
+    downloadBlob(blob, `${baseName}_setup_frame.bin`);
+    status(`Downloaded setup-logo frame bin: ${frameData.length} bytes`);
+  } catch (err) {
+    status(`ERROR serializing setup-logo frame: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(err);
+  }
+});
+
+setupExportAsepriteBtn.addEventListener("click", () => {
+  if (!currentSetupLogoExportState) return;
+
+  try {
+    const { logo, palette } = currentSetupLogoExportState;
+    const indexedLogo = buildSetupLogoIndexedImage(logo, palette);
+    const asepriteData = createAsepriteFile({
+      width: indexedLogo.width,
+      height: indexedLogo.height,
+      pixels: indexedLogo.pixels,
+      palette: indexedLogo.palette,
+      paletteNames: indexedLogo.paletteNames,
+      layerName: `${logo.teamName} ${logo.side}`,
+      transparentIndex: 0,
+      transparentIndices: [0],
+    });
+
+    const filename = `${sanitizeFileNamePart(logo.teamName)}-${sanitizeFileNamePart(logo.side)}-game-setup.aseprite`;
+    const asepriteBuffer = new ArrayBuffer(asepriteData.byteLength);
+    new Uint8Array(asepriteBuffer).set(asepriteData);
+    const blob = new Blob([asepriteBuffer], { type: "application/octet-stream" });
+    downloadBlob(blob, filename);
+
+    status(
+      `Exported Aseprite: ${logo.teamName} (${logo.side}), ${indexedLogo.width}x${indexedLogo.height}px, ${indexedLogo.palette.length} colors`
+    );
+  } catch (err) {
+    status(`ERROR exporting Aseprite: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(err);
+  }
 });
 
 // Keyboard navigation: left/right arrows when in game setup logo mode

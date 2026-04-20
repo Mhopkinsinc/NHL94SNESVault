@@ -6,6 +6,9 @@
 !.vscode/*.code-snippets
 
 .claude/
+tmpbuild/
+tmp/
+dist/
 
 *.stackdump
 

@@ -1,7 +1,7 @@
 /**
  * NHL 94 SNES Game Setup Logo Browser
  *
- * The game setup screen logos are stored differently from the team logo browser:
+ * The game setup screen logos are stored differently from the team logo - Center Ice Mode:
  *
  * 1. Compressed data at SNES $81:ABDE (file $ABDE) is decompressed (FB30)
  *    into a blob containing:
@@ -11,7 +11,7 @@
  * 2. CODE_80B08D reads from this blob: [$base + index*4] gives a relative
  *    pointer to the frame data within the blob.
  *
- * 3. Team indices 0-27 = "home/left" logos, 33-60 = "away/right" logos.
+ * 3. Team indices 0-27 = "home/left" logos, 33-60 = "away/right" logos. Not 100% certain about 33-60
  *
  * 4. Palettes from the same per-team table at $9C:850F used by team-logos.
  *
@@ -34,6 +34,23 @@ const PALETTE_TABLE_OFFSET = 0x0E0497;
 const TEAM_COUNT = 28;
 const HEADER_SIZE = 0x16; // 22 bytes
 const ENTRY_SIZE = 7;
+const FIXED_IMPORT_TILE_COUNT = 36;
+const FIXED_IMPORT_TILE_BYTES = FIXED_IMPORT_TILE_COUNT * 32;
+const FIXED_IMPORT_PADDED_TILE_COUNT = 50;
+const FIXED_IMPORT_TOP_TILE_COUNT = 16;
+const FIXED_IMPORT_TILES_WIDE = 6;
+const FIXED_IMPORT_FIRST_TILES = [0, 2, 4, 6, 8, 10, 12, 14, 32] as const;
+const FIXED_IMPORT_POSITIONS = [
+  [0, 0],
+  [16, 0],
+  [32, 0],
+  [0, 16],
+  [16, 16],
+  [32, 16],
+  [0, 32],
+  [16, 32],
+  [32, 32],
+] as const;
 
 export { TEAM_COUNT };
 
@@ -78,6 +95,280 @@ export interface SetupLogo {
   paletteAddr: string;  // SNES address string e.g. "9A:F17C"
   frameOffset: number;  // offset within decompressed blob
   log: string[];
+}
+
+export interface IndexedSetupLogoImage {
+  width: number;
+  height: number;
+  pixels: Uint8Array;
+  palette: RGB[];
+  paletteNames: string[];
+}
+
+interface SetupLogoBounds {
+  minX: number;
+  minY: number;
+  width: number;
+  height: number;
+}
+
+const MAX_DIM = 256;
+
+function createDefaultPalette(): RGB[] {
+  return Array.from({ length: 16 }, (_, i) => {
+    const v = Math.round((i / 15) * 255);
+    return [v, v, v] as RGB;
+  });
+}
+
+function clampSigned8(value: number): number {
+  return Math.max(-128, Math.min(127, value));
+}
+
+function writeSigned16(target: Uint8Array, offset: number, value: number): void {
+  const normalized = value < 0 ? value + 0x10000 : value;
+  target[offset] = normalized & 0xff;
+  target[offset + 1] = (normalized >> 8) & 0xff;
+}
+
+function writeWord(target: Uint8Array, offset: number, value: number): void {
+  target[offset] = value & 0xff;
+  target[offset + 1] = (value >> 8) & 0xff;
+}
+
+function getImportedTileIndices(firstTile: number): [number, number, number, number] {
+  return [firstTile, firstTile + 1, firstTile + 16, firstTile + 17];
+}
+
+function createImportedTileData(tileData: Uint8Array): Uint8Array {
+  if (tileData.length !== FIXED_IMPORT_TILE_BYTES) {
+    throw new Error(
+      `Imported setup logo must be exactly ${FIXED_IMPORT_TILE_BYTES} bytes (${FIXED_IMPORT_TILE_COUNT} tiles), got ${tileData.length}`
+    );
+  }
+
+  const padded = new Uint8Array(FIXED_IMPORT_PADDED_TILE_COUNT * 32);
+  for (let slot = 0; slot < FIXED_IMPORT_FIRST_TILES.length; slot++) {
+    const blockX = (slot % 3) * 2;
+    const blockY = Math.floor(slot / 3) * 2;
+    const sourceTileIndices = [
+      blockY * FIXED_IMPORT_TILES_WIDE + blockX,
+      blockY * FIXED_IMPORT_TILES_WIDE + blockX + 1,
+      (blockY + 1) * FIXED_IMPORT_TILES_WIDE + blockX,
+      (blockY + 1) * FIXED_IMPORT_TILES_WIDE + blockX + 1,
+    ];
+    const targetTileIndices = getImportedTileIndices(FIXED_IMPORT_FIRST_TILES[slot]);
+    for (let index = 0; index < targetTileIndices.length; index++) {
+      const sourceOffset = sourceTileIndices[index] * 32;
+      const targetOffset = targetTileIndices[index] * 32;
+      padded.set(tileData.slice(sourceOffset, sourceOffset + 32), targetOffset);
+    }
+  }
+
+  return padded;
+}
+
+export function getImportedSetupLogoExpectedSize(): number {
+  return FIXED_IMPORT_TILE_BYTES;
+}
+
+export function buildImportedSetupLogo(
+  romData: Uint8Array,
+  rawTileData: Uint8Array,
+  side: "home" | "away" = "home",
+): SetupLogo {
+  const log: string[] = [];
+  const paletteResult = readPalette(romData, 0);
+  const tileData = createImportedTileData(rawTileData);
+  const sprites: SetupSpriteEntry[] = FIXED_IMPORT_FIRST_TILES.map((firstTile, index) => {
+    const [xOffset, yOffset] = FIXED_IMPORT_POSITIONS[index];
+    return {
+      xOffset,
+      yOffset,
+      firstTile,
+      flags: 0,
+      size: 0xFF,
+    };
+  });
+
+  log.push(`Imported setup logo (${side}) using fixed 3x3 16x16 layout`);
+  log.push(`  Source tiles: ${FIXED_IMPORT_TILE_COUNT} (${rawTileData.length} bytes)`);
+  log.push(`  Padded tile buffer: ${FIXED_IMPORT_PADDED_TILE_COUNT} tiles (${tileData.length} bytes)`);
+  log.push(`  Header: 9 sprites, 50 tiles, flag=$80`);
+  log.push(
+    `  topBytes=$${(FIXED_IMPORT_TOP_TILE_COUNT * 32).toString(16)}, botBytes=$${((FIXED_IMPORT_PADDED_TILE_COUNT - FIXED_IMPORT_TOP_TILE_COUNT) * 32).toString(16)}, dataLen=$${(HEADER_SIZE + sprites.length * ENTRY_SIZE).toString(16)}`
+  );
+
+  sprites.forEach((sprite, index) => {
+    const tiles = getImportedTileIndices(sprite.firstTile).join(", ");
+    log.push(`  sprite[${index}]: (${sprite.xOffset}, ${sprite.yOffset}) tile=${sprite.firstTile} flags=$0 16x16 uses [${tiles}]`);
+  });
+  for (const line of paletteResult.log) log.push(line);
+
+  return {
+    teamIndex: 0,
+    teamName: "Imported (Anaheim palette)",
+    side,
+    numSprites: sprites.length,
+    flag: 0x80,
+    numTiles: FIXED_IMPORT_PADDED_TILE_COUNT,
+    topBytes: FIXED_IMPORT_TOP_TILE_COUNT * 32,
+    botBytes: (FIXED_IMPORT_PADDED_TILE_COUNT - FIXED_IMPORT_TOP_TILE_COUNT) * 32,
+    dataLength: HEADER_SIZE + sprites.length * ENTRY_SIZE,
+    sprites,
+    tileData,
+    palette: paletteResult.palette,
+    paletteAddr: paletteResult.snesAddr,
+    frameOffset: -1,
+    log,
+  };
+}
+
+export function serializeSetupLogoFrame(logo: SetupLogo): Uint8Array {
+  if ((logo.flag & 0x80) === 0) {
+    throw new Error("Cannot serialize a setup logo frame without inline tile data");
+  }
+
+  const expectedTileBytes = logo.numTiles * 32;
+  if (logo.tileData.length !== expectedTileBytes) {
+    throw new Error(
+      `Setup logo tile buffer length ${logo.tileData.length} does not match numTiles (${logo.numTiles} => ${expectedTileBytes} bytes)`
+    );
+  }
+
+  const entryBytes = logo.sprites.length * ENTRY_SIZE;
+  const bounds = getSetupLogoBounds(logo);
+  const frameBytes = new Uint8Array(HEADER_SIZE + entryBytes + logo.tileData.length);
+
+  frameBytes[0x00] = logo.numSprites & 0xff;
+  frameBytes[0x01] = logo.flag & 0xff;
+  frameBytes[0x02] = logo.numTiles & 0xff;
+  frameBytes[0x03] = (logo.numTiles >> 8) & 0xff;
+  writeWord(frameBytes, 0x0C, logo.topBytes);
+  writeWord(frameBytes, 0x0E, logo.botBytes);
+  writeWord(frameBytes, 0x10, logo.dataLength);
+  frameBytes[0x12] = clampSigned8(bounds.minX) & 0xff;
+  frameBytes[0x13] = clampSigned8(bounds.minY) & 0xff;
+  frameBytes[0x14] = clampSigned8(bounds.minX + bounds.width) & 0xff;
+  frameBytes[0x15] = clampSigned8(bounds.minY + bounds.height) & 0xff;
+
+  logo.sprites.forEach((sprite, index) => {
+    const entryOffset = HEADER_SIZE + index * ENTRY_SIZE;
+    writeSigned16(frameBytes, entryOffset + 0x00, sprite.xOffset);
+    writeSigned16(frameBytes, entryOffset + 0x02, sprite.yOffset);
+    frameBytes[entryOffset + 0x04] = sprite.firstTile & 0xff;
+    frameBytes[entryOffset + 0x05] = sprite.flags & 0xff;
+    frameBytes[entryOffset + 0x06] = sprite.size & 0xff;
+  });
+
+  frameBytes.set(logo.tileData, HEADER_SIZE + entryBytes);
+  return frameBytes;
+}
+
+function getSetupLogoBounds(logo: SetupLogo): SetupLogoBounds {
+  let minX = 0;
+  let minY = 0;
+  let maxX = 0;
+  let maxY = 0;
+
+  for (const sprite of logo.sprites) {
+    const span = sprite.size === 0xFF ? 16 : 8;
+    if (Math.abs(sprite.xOffset) > MAX_DIM || Math.abs(sprite.yOffset) > MAX_DIM) continue;
+    minX = Math.min(minX, sprite.xOffset);
+    minY = Math.min(minY, sprite.yOffset);
+    maxX = Math.max(maxX, sprite.xOffset + span);
+    maxY = Math.max(maxY, sprite.yOffset + span);
+  }
+
+  return {
+    minX,
+    minY,
+    width: Math.min(Math.max(maxX - minX, 8), MAX_DIM),
+    height: Math.min(Math.max(maxY - minY, 8), MAX_DIM),
+  };
+}
+
+function getSetupTileIndex(logo: SetupLogo, vramTile: number): number {
+  const topSectionSize = Math.floor(logo.topBytes / 32);
+  const topRows = Math.ceil(topSectionSize / 16);
+  const bottomStartVram = topRows * 16;
+
+  if (vramTile < bottomStartVram) {
+    return vramTile;
+  }
+
+  return topSectionSize + (vramTile - bottomStartVram);
+}
+
+function forEachSetupLogoPixel(
+  logo: SetupLogo,
+  bounds: SetupLogoBounds,
+  visit: (x: number, y: number, colorIdx: number) => void,
+): void {
+  for (const sprite of logo.sprites) {
+    if (Math.abs(sprite.xOffset) > MAX_DIM || Math.abs(sprite.yOffset) > MAX_DIM) continue;
+
+    const is16 = sprite.size === 0xFF;
+    const tilesX = is16 ? 2 : 1;
+    const tilesY = is16 ? 2 : 1;
+    const hFlip = (sprite.flags & 0x40) !== 0;
+    const vFlip = (sprite.flags & 0x80) !== 0;
+
+    for (let ty = 0; ty < tilesY; ty++) {
+      for (let tx = 0; tx < tilesX; tx++) {
+        const vramTile = sprite.firstTile + ty * 16 + tx;
+        const tileIdx = getSetupTileIndex(logo, vramTile);
+        const tileOffset = tileIdx * 32;
+        if (tileOffset + 32 > logo.tileData.length) continue;
+
+        const tile = decodeTile(logo.tileData, tileOffset, "bitplane4");
+        const drawTx = hFlip ? (tilesX - 1 - tx) : tx;
+        const drawTy = vFlip ? (tilesY - 1 - ty) : ty;
+        const baseX = sprite.xOffset - bounds.minX + drawTx * 8;
+        const baseY = sprite.yOffset - bounds.minY + drawTy * 8;
+
+        for (let y = 0; y < 8; y++) {
+          for (let x = 0; x < 8; x++) {
+            const srcX = hFlip ? (7 - x) : x;
+            const srcY = vFlip ? (7 - y) : y;
+            const pixelX = baseX + x;
+            const pixelY = baseY + y;
+            if (pixelX < 0 || pixelX >= bounds.width || pixelY < 0 || pixelY >= bounds.height) continue;
+
+            const colorIdx = tile[srcY][srcX];
+            if (colorIdx === 0) continue;
+            visit(pixelX, pixelY, colorIdx);
+          }
+        }
+      }
+    }
+  }
+}
+
+export function buildSetupLogoIndexedImage(
+  logo: SetupLogo,
+  paletteOverride?: RGB[],
+): IndexedSetupLogoImage {
+  if (logo.tileData.length === 0) {
+    throw new Error("Game setup logo has no inline tile data to export");
+  }
+
+  const bounds = getSetupLogoBounds(logo);
+  const pixels = new Uint8Array(bounds.width * bounds.height);
+  const palette = (paletteOverride ?? logo.palette ?? createDefaultPalette()).slice(0, 256);
+  const paletteNames = palette.map((_, index) => index === 0 ? "transparent" : `color${index}`);
+
+  forEachSetupLogoPixel(logo, bounds, (x, y, colorIdx) => {
+    pixels[y * bounds.width + x] = colorIdx;
+  });
+
+  return {
+    width: bounds.width,
+    height: bounds.height,
+    pixels,
+    palette,
+    paletteNames,
+  };
 }
 
 /**
@@ -261,14 +552,9 @@ export function renderSetupLogo(
   scale: number,
   palette?: RGB[],
 ): { width: number; height: number } {
-  const DEFAULT_PAL: RGB[] = Array.from({ length: 16 }, (_, i) => {
-    const v = Math.round((i / 15) * 255);
-    return [v, v, v] as RGB;
-  });
-  const pal = palette ?? logo.palette ?? DEFAULT_PAL;
-  const { sprites, tileData } = logo;
+  const pal = palette ?? logo.palette ?? createDefaultPalette();
 
-  if (tileData.length === 0) {
+  if (logo.tileData.length === 0) {
     // No inline tiles — render placeholder
     canvas.width = 64 * scale;
     canvas.height = 64 * scale;
@@ -282,20 +568,9 @@ export function renderSetupLogo(
     return { width: 64, height: 64 };
   }
 
-  // Calculate bounding box
-  const MAX_DIM = 256;
-  let minX = 0, minY = 0, maxX = 0, maxY = 0;
-  for (const s of sprites) {
-    const w = s.size === 0xFF ? 16 : 8;
-    if (Math.abs(s.xOffset) > MAX_DIM || Math.abs(s.yOffset) > MAX_DIM) continue;
-    minX = Math.min(minX, s.xOffset);
-    minY = Math.min(minY, s.yOffset);
-    maxX = Math.max(maxX, s.xOffset + w);
-    maxY = Math.max(maxY, s.yOffset + w);
-  }
-
-  const imgW = Math.min(Math.max(maxX - minX, 8), MAX_DIM);
-  const imgH = Math.min(Math.max(maxY - minY, 8), MAX_DIM);
+  const bounds = getSetupLogoBounds(logo);
+  const imgW = bounds.width;
+  const imgH = bounds.height;
 
   canvas.width = imgW * scale;
   canvas.height = imgH * scale;
@@ -317,66 +592,14 @@ export function renderSetupLogo(
     px[i + 3] = 255;
   }
 
-  // Compute top section size for VRAM tile grid mapping
-  const topSectionSize = Math.floor(logo.topBytes / 32);
-
-  // Render each sprite
-  for (const s of sprites) {
-    if (Math.abs(s.xOffset) > MAX_DIM || Math.abs(s.yOffset) > MAX_DIM) continue;
-
-    const is16 = s.size === 0xFF;
-    const tilesX = is16 ? 2 : 1;
-    const tilesY = is16 ? 2 : 1;
-    const hFlip = (s.flags & 0x40) !== 0;
-    const vFlip = (s.flags & 0x80) !== 0;
-
-    for (let ty = 0; ty < tilesY; ty++) {
-      for (let tx = 0; tx < tilesX; tx++) {
-        // SNES 16-wide VRAM tile grid mapping
-        const vramTile = s.firstTile + ty * 16 + tx;
-        const topRows = Math.ceil(topSectionSize / 16);
-        const bottomStartVram = topRows * 16;
-
-        let tileIdx: number;
-        if (vramTile < bottomStartVram) {
-          tileIdx = vramTile;
-        } else {
-          tileIdx = topSectionSize + (vramTile - bottomStartVram);
-        }
-        const tileOffset = tileIdx * 32;
-
-        if (tileOffset + 32 > tileData.length) continue;
-
-        // Try 4bpp bitplane format first (native VRAM format)
-        const tile = decodeTile(tileData, tileOffset, "bitplane4");
-
-        const drawTx = hFlip ? (tilesX - 1 - tx) : tx;
-        const drawTy = vFlip ? (tilesY - 1 - ty) : ty;
-        const baseX = s.xOffset - minX + drawTx * 8;
-        const baseY = s.yOffset - minY + drawTy * 8;
-
-        for (let y = 0; y < 8; y++) {
-          for (let x = 0; x < 8; x++) {
-            const srcX = hFlip ? (7 - x) : x;
-            const srcY = vFlip ? (7 - y) : y;
-            const px_x = baseX + x;
-            const px_y = baseY + y;
-            if (px_x < 0 || px_x >= imgW || px_y < 0 || px_y >= imgH) continue;
-
-            const colorIdx = tile[srcY][srcX];
-            if (colorIdx === 0) continue;
-
-            const idx = (px_y * imgW + px_x) * 4;
-            const color = pal[colorIdx] ?? [255, 0, 255];
-            px[idx] = color[0];
-            px[idx + 1] = color[1];
-            px[idx + 2] = color[2];
-            px[idx + 3] = 255;
-          }
-        }
-      }
-    }
-  }
+  forEachSetupLogoPixel(logo, bounds, (x, y, colorIdx) => {
+    const idx = (y * imgW + x) * 4;
+    const color = pal[colorIdx] ?? [255, 0, 255];
+    px[idx] = color[0];
+    px[idx + 1] = color[1];
+    px[idx + 2] = color[2];
+    px[idx + 3] = 255;
+  });
 
   // Scale up
   const tempCanvas = document.createElement("canvas");
