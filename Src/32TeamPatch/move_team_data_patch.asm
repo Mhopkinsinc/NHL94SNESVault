@@ -67,6 +67,10 @@ org $9B934A
 org $9B9383
     LDA.W #!RelocatedTeamDataBank
 
+; Penalties summary team-data reader.
+org $9B9B3E
+    LDA.W #!RelocatedTeamDataBank
+
 ; Setup/adjective text reader derived from Team_PTR.
 org $9ECC2A
     LDA.W #!RelocatedTeamDataBank
