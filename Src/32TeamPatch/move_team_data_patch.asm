@@ -12,7 +12,7 @@ lorom
 ; This patch intentionally does not modify any files under Src.
 
 
-!OriginalTeamDataStart = $9CA657
+!OriginalTeamDataStart = $9CA65B; this needs to increase each time you add a new team to the end of the original data table. TODO: Make this dynamic.
 !OriginalTeamDataEnd   = $9CED58
 !RelocatedTeamDataBank = $00A3
 
@@ -187,7 +187,7 @@ org $9CA5E7
     dw TeamData_Winnipeg, !RelocatedTeamDataBank ; Winnipeg
     dw TeamData_AllStarsEast, !RelocatedTeamDataBank ; All Stars East
     dw TeamData_AllStarsWest, !RelocatedTeamDataBank ; All Stars West
-    dw TeamData_Seattle, !RelocatedTeamDataBank ; TeamData_Seattle
+    dw TeamData_Seattle, !RelocatedTeamDataBank ; Seattle
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Relocated Team Data Blob
@@ -254,9 +254,9 @@ TeamData_Florida:
 TeamData_Anaheim:
     incbin "TeamData/anaheim.bin"
 TeamData_Seattle:
-    incbin "TeamData/anaheim.bin"
+    incbin "TeamData/seattle.bin"
 
-org $A3C800
+;org $A3C800
 ScoreLookup_9F9F91:
     PHP
     REP #$30

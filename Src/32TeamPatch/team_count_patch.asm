@@ -14,17 +14,17 @@ org $9DACD3
     dw !TeamSelectionCount ; Away Team
 
 ; Game setup team-index bound checks.
- ;org $9DAB37
- ;    CMP.W #!TeamSelectionCount
+ org $9DAB37
+     CMP.W #!TeamSelectionCount
 
- ;org $9DAB55
- ;    CMP.W #!TeamSelectionCount
+ org $9DAB55
+     CMP.W #!TeamSelectionCount
 
- ;org $9DABE2
- ;    CMP.W #!TeamSelectionCount
+ org $9DABE2
+     CMP.W #!TeamSelectionCount
 
- ;org $9DABF8
- ;    CMP.W #!TeamSelectionCount
+ org $9DABF8
+     CMP.W #!TeamSelectionCount
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Deferred Audit Candidates

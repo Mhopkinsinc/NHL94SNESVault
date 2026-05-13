@@ -2,7 +2,7 @@
 ; Banner Text Changes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Change old pointer values to new pointer values for the team names in the banner
-org $9c9452
+org $9C9452
 LDA.W Banner_Team_Text_PTR,Y
 
 org $9D8F52
@@ -80,3 +80,6 @@ ASW_Banner_Text:       db "All Stars W."                    ; Banner Text ASW
                        db $00                               
 Sea_Banner_Text:       db "Seattle"                         ; Banner Text SEA
                        db $00
+
+; Need to capture the address space here so we can continue to use this free space in the center ice logo patch.
+Banner_Text_End:
