@@ -1,5 +1,5 @@
 ;Continue Using Free Space After Banner Text Patchorg Banner_Text_End
-
+org Banner_Text_End
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Center Ice Logo Loaders
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
