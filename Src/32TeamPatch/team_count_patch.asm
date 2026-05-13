@@ -3,6 +3,7 @@
 ; unchanged while the active team-count sites remain easy to audit.
 
 !TeamSelectionCount = $001D ; 29 teams
+!IntroCenterIceBufferSize = !TeamSelectionCount*2
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Confirmed Team-Count Sites
@@ -12,8 +13,8 @@
 org $9DACD3
     dw !TeamSelectionCount ; Home Team
     dw !TeamSelectionCount ; Away Team
-
-; Game setup team-index bound checks.
+    
+;Game setup team-index bound checks.
  org $9DAB37
      CMP.W #!TeamSelectionCount
 
@@ -25,6 +26,16 @@ org $9DACD3
 
  org $9DABF8
      CMP.W #!TeamSelectionCount
+
+; Startup fly-by center-ice logo shuffle and iteration.
+org $9DBD08
+    CMP.W #!TeamSelectionCount
+
+org $9DBD2D
+    CPX.W #!IntroCenterIceBufferSize
+
+org $9DBD3A
+    CMP.W #!TeamSelectionCount
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Deferred Audit Candidates
