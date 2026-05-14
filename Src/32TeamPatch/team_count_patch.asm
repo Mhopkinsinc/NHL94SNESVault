@@ -37,10 +37,14 @@ org $9DBD2D
 org $9DBD3A
     CMP.W #!TeamSelectionCount
 
+; ; Edit-lines / roster flow selection boundary seed.
+; org $9D9D41
+;     LDA.W #!TeamSelectionCount
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Deferred Audit Candidates
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; Nearby constants around $9D8433/$9D843C and $9D9D41 still need a second pass.
-; They may represent All-Star identity or boundary behavior rather than raw team
-; count, so they are intentionally left unchanged in this first implementation.
+; $9D8433/$9D843C are part of CODE_9D842F's explicit game-setup team tail list,
+; not raw team-count comparisons. Patch them only after the expanded menu-order
+; literals are confirmed alongside adjacent special-team IDs.

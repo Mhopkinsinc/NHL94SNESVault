@@ -47,6 +47,10 @@ org $9FEB63
     JML SummaryNameBank_9FEB63
     NOP
 
+; Binary-surviving team-data reader found in patched-ROM scan.
+org $9FD3E9
+    LDA.W #!RelocatedTeamDataBank
+
 ; Shared Team_PTR-backed player reader used by adjacent setup flows.
 org $9FBD6F
     LDA.W #!RelocatedTeamDataBank
@@ -97,6 +101,10 @@ org $9D9FC6
 
 ; Team roster scrolling reader.
 org $9DBE1F
+    LDA.W #!RelocatedTeamDataBank
+
+; Binary-surviving roster-path reader adjacent to the scrolling routine.
+org $9DBDC6
     LDA.W #!RelocatedTeamDataBank
 
 ; Team roster detail reader.
@@ -366,6 +374,7 @@ TeamPtrWalker_9F9F95:
     STA.B $8F
     PLA
     LDY.W #$0008
+    CLC
     ADC.B [$8D],Y
     STA.B $8D
     JML.L $009F9FAC
@@ -384,6 +393,7 @@ TeamPtrWalker_9F9FDD:
     STA.B $8F
     PLA
     LDY.W #$0008
+    CLC
     ADC.B [$8D],Y
     STA.B $8D
     JML.L $009FA006
