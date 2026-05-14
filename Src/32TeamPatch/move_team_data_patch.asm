@@ -47,7 +47,7 @@ org $9FEB63
     JML SummaryNameBank_9FEB63
     NOP
 
-; Binary-surviving team-data reader found in patched-ROM scan.
+; Line-changes automatic setup reader.
 org $9FD3E9
     LDA.W #!RelocatedTeamDataBank
 
@@ -103,7 +103,7 @@ org $9D9FC6
 org $9DBE1F
     LDA.W #!RelocatedTeamDataBank
 
-; Binary-surviving roster-path reader adjacent to the scrolling routine.
+; Line-changes on roster-path reader.
 org $9DBDC6
     LDA.W #!RelocatedTeamDataBank
 
