@@ -14,10 +14,10 @@ LDX.W #$0006                         ;Reduced player portraits per team from 26 
 ; bank $9A, matching the banner palette pointer approach.
 
 org $9D9D41
-    LDA.W #$001E                        ;Portrait flow team count = 30
+    LDA.W #!TeamSelectionCount          ; Portrait flow team count
 
 org $9DAAD4
-    LDA.W #$001E                        ;Portrait flow team count = 30
+    LDA.W #!TeamSelectionCount          ; Portrait flow team count
 
 org $9DCA87
     LDA.W $1C98,Y
