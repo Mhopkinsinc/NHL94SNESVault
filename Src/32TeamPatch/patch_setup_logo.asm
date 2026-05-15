@@ -4,16 +4,19 @@ lorom
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Game Setup Logo Verification
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Standalone setup-logo patch for the added Seattle team.
+; Standalone setup-logo patch for the added Seattle and Vegas teams.
 ; This keeps the existing patch.asm untouched and relocates the setup-logo
 ; blob and palette table into bank $A2. Seattle's setup-logo slot (28) is
-; populated by duplicating Anaheim's existing setup-logo assets.
+; populated by duplicating Anaheim's existing setup-logo assets, and Vegas
+; temporarily reuses Seattle's setup-logo palette.
 ;
-; The game still feeds Seattle's shifted away-side ID ($003D) through this
-; path, so that one value is normalized back to Seattle's real setup-logo slot.
+; The game still feeds shifted away-side IDs through this path, so Seattle
+; and Vegas away slots are normalized back to their real setup-logo slots.
 
 !SeattleTeamId      = $001C
 !SeattleAwayTeamId  = $003D
+!VegasTeamId        = $001D
+!VegasAwayTeamId    = $003E
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Setup Logo Hook Sites
@@ -87,12 +90,16 @@ SetupLogo_CompressedBlob:
 SetupLogo_PaletteTable:
     incbin "setup_logo_palette_table.bin"
 
-; Override Seattle's palette pointer (slot 28) to custom palette data stored
+; Override Seattle/Vegas palette pointers to custom palette data stored
 ; immediately after the relocated table in bank $A2.
 org SetupLogo_PaletteTable+(!SeattleTeamId*4)
     dw Seattle_SetupLogo_Palette, $00A2
 
+org SetupLogo_PaletteTable+(!VegasTeamId*4)
+    dw Vegas_SetupLogo_Palette, $00A2
+
 org SetupLogo_PaletteTable+$0078
+Vegas_SetupLogo_Palette:
 Seattle_SetupLogo_Palette:
     incbin "Seattle-gamesetup.pal"
 
@@ -113,8 +120,14 @@ SetupLogo_LoadNormalizedHomeIndex:
 SetupLogo_NormalizeIndex:
     CMP.W #!SeattleAwayTeamId
     BEQ SetupLogo_UseSeattleSlot
+    CMP.W #!VegasAwayTeamId
+    BEQ SetupLogo_UseVegasSlot
     RTS
 
 SetupLogo_UseSeattleSlot:
     LDA.W #!SeattleTeamId
+    RTS
+
+SetupLogo_UseVegasSlot:
+    LDA.W #!VegasTeamId
     RTS
