@@ -1,50 +1,241 @@
-Play Music Debugging:
+SNES Music And Organ Notes
 
-Called before music is playing
-Address $80A2E0 CODE_80A2E0
+Overview
+
+The SNES game does not use the Genesis-style 5-byte per-team music table.
+The in-game music path is split into:
+
+1. A per-team organ music pointer table.
+2. A separate shared goal-music pool.
+
+The main music player entry point is CODE_80A2E0 / fn_PlayMusic at $80A2E0.
+The caller passes a music data pointer in $0C/$0E.
 
 
-Main_Menu Music:
-CODE_9F82FB
-SETUP VARS
-					   LDA.W #$0090                         ;9F82FB|A99000  |;
-                       STA.B $0E                            ;9F82FE|850E    |;
-                       LDA.W #$C20C                         ;9F8300|A90CC2  |;
-                       STA.B $0C                            ;9F8303|850C    |;
-					   
-Intro Music:
-$9DB2AD
-SETUP VARS					   
-					   LDA.W #$008F                         ;9DB2AD|A98F00  |;
-                       STA.B $0E                            ;9DB2B0|850E    |;
-                       LDA.W #$DD32                         ;9DB2B2|A932DD  |;
-                       STA.B $0C                            ;9DB2B5|850C    |;
-					   
-Finals Playoff Music:
-$9D8BEF
-						LDA 0093
-						STA $0E
-						LDA ED31
-						STA $0C
+General Music Entry Points
 
-					   
-					   
-Organ Ditties:
-$9C9B85
-SETUP VARS
-						(MTL)
-						LDA $0098
-						STA $0E
-						LDA 90B0
-						STA $0C
-						
-						(NJ)
-						LDA $0096
-						STA $0E
-						LDA D442
-						STA $0C
-						
-Goal Music:
-$9C9BA1
-SETUP Vars:
-						
+Main Menu Music
+Caller: CODE_9F82FB
+Setup:
+											 LDA.W #$0090                         ; bank byte -> $0E
+											 STA.B $0E
+											 LDA.W #$C20C                         ; pointer low word -> $0C
+											 STA.B $0C
+
+Intro Music
+Caller: $9DB2AD
+Setup:
+											 LDA.W #$008F
+											 STA.B $0E
+											 LDA.W #$DD32
+											 STA.B $0C
+
+Finals Playoff Music
+Caller: $9D8BEF
+Setup pattern:
+											 LDA.W #$0093
+											 STA.B $0E
+											 LDA.W #$31ED
+											 STA.B $0C
+
+
+In-Game Team Music Selector
+
+Routine: CODE_9C9B5F in bank_9C
+
+Purpose:
+- Chooses per-team organ music from a table in bank_80.
+- Falls back to shared goal music if the selected table entry is disabled.
+
+Early exit:
+- If $07F3 is nonzero, the routine returns immediately without starting new music.
+
+Effective index math:
+- Input A is the slot number.
+- Team ID comes from $1C98.
+- The routine computes:
+
+	X = ((team_id * 6) + slot) * 4
+
+This means the per-team organ table is organized as 6 slots per team, with each
+slot consuming 4 bytes.
+
+Why this is 6 slots and not 3:
+- The table region from $80DA56 to $80DCF6 is 672 bytes total.
+- 672 / 4 = 168 pointer entries.
+- 168 / 28 teams = 6 entries per team.
+
+
+Per-Team Organ Table
+
+Effective table region:
+- Low word starts at $80DA56.
+- Bank/high bytes are read from $80DA58.
+
+The disassembly labels are split, but the routine treats them as one 4-byte-entry
+table:
+
+- LDA.L UNREACH_80DA58,X -> loads the bank/high portion into $0E
+- LDA.L UNREACH_80DA56,X -> loads the low word into $0C
+
+Important detail:
+- If the byte read from UNREACH_80DA58,X is negative ($FF), the organ entry is
+	treated as disabled and the code branches to goal-music fallback.
+
+Observed table size:
+- $80DA56 .. $80DCF5
+- 672 bytes
+- 168 entries
+- 28 teams x 6 slots x 4 bytes
+
+
+Goal Music Fallback
+
+Routine path: CODE_9C9B8B
+
+If the selected organ slot is disabled, the code does not try another team slot.
+Instead it chooses a random entry from the shared goal-music pool:
+
+- Base table: UNREACH_80DCF6 / UNREACH_80DCF8
+- Random selector source: CODE_9BB385 with A = #$0008
+
+This goal-music pool is global and is not indexed by team.
+
+
+Live Slot Requests In Vanilla Code
+
+The only live call site into CODE_9C9B5F is in bank_9F around $9FA8BA-$9FA909,
+but that block requests multiple slot values.
+
+Confirmed requests:
+
+1. Slot 4
+	 Raw bytes at $9FA8D1 decode to:
+	 - LDA.W #$0004
+	 - JSL.L CODE_9C9B5F
+	 This path runs when the high nibble of $1624 is less than the low nibble.
+
+2. Slot 1
+	 Normal assembled path at $9FA8DA:
+	 - LDA.W #$0001
+	 - JSL.L CODE_9C9B5F
+	 This path runs when the high nibble of $1624 is greater than or equal to the
+	 low nibble after the unequal-nibble test.
+
+3. Slot 2
+	 Raw bytes at $9FA902 decode to:
+	 - LDA.W #$0002
+	 The call at $9FA905 then uses that value when $0CC1 is zero.
+
+4. Slot 0
+	 At $9FA8FA the routine loads:
+	 - LDA.W #$0000
+	 That value is used by the call at $9FA905 when $0CC1 is nonzero.
+
+So the currently observed vanilla slot usage is: 0, 1, 2, and 4.
+Slots 3 and 5 exist in the table layout but are not yet proven as live from the
+call sites checked so far.
+
+
+Per-Team Slot Map
+
+Team order used below follows the vanilla in-game team ordering:
+ANH, BOS, BUF, CAL, CHI, DAL, DET, EDM, FLA, HFD, LA, MTL, NJD, NYI, NYR,
+OTT, PHI, PIT, QUE, SJ, STL, TB, TOR, VAN, WSH, WPG, ASE, ASW.
+
+Pointers are written as $bank:address.
+DISABLED means the 4-byte entry is $FF,$FF,$FF,$FF and therefore branches to
+goal-music fallback.
+
+ANH  S0=DISABLED   S1=DISABLED   S2=DISABLED   S3=DISABLED   S4=DISABLED   S5=DISABLED
+BOS  S0=$99:9A9C   S1=$9A:AF99   S2=$9A:ADE5   S3=DISABLED   S4=$9A:B2DF   S5=$99:9A9C
+BUF  S0=$96:8646   S1=$97:8BBB   S2=$97:8BBB   S3=$96:8646   S4=$9A:B2DF   S5=DISABLED
+CAL  S0=$9A:9601   S1=$97:8000   S2=$9A:9601   S3=$97:8000   S4=$97:DA41   S5=$97:DA41
+CHI  S0=$96:E1A9   S1=$99:D765   S2=$99:CEDE   S3=$96:E1A9   S4=$9A:B2DF   S5=$97:85F0
+DAL  S0=$99:9A9C   S1=$8B:FE74   S2=$8B:FE74   S3=DISABLED   S4=$9A:B2DF   S5=DISABLED
+DET  S0=$96:F46D   S1=$98:90B0   S2=$99:D765   S3=DISABLED   S4=$9A:B2DF   S5=$98:90B0
+EDM  S0=$98:DF46   S1=$99:9A9C   S2=$99:9A9C   S3=DISABLED   S4=$9A:B2DF   S5=DISABLED
+FLA  S0=DISABLED   S1=DISABLED   S2=DISABLED   S3=DISABLED   S4=DISABLED   S5=DISABLED
+HFD  S0=$99:BB80   S1=$97:E67A   S2=$96:FA7D   S3=$97:E67A   S4=$9A:B2DF   S5=$99:BB80
+LA   S0=$9A:9BAD   S1=$9A:9BAD   S2=$99:D765   S3=$97:8000   S4=$9A:B2DF   S5=$81:FE45
+MTL  S0=$98:90B0   S1=$9A:A14D   S2=$98:90B0   S3=$98:9C71   S4=$9A:B2DF   S5=$96:E4D9
+NJD  S0=$96:D442   S1=$97:FC21   S2=$96:D442   S3=DISABLED   S4=$9A:B2DF   S5=$96:F46D
+NYI  S0=$97:8BBB   S1=$8B:FE74   S2=$97:8BBB   S3=$96:D0CE   S4=$9A:B2DF   S5=$96:D0CE
+NYR  S0=$99:9A9C   S1=$9A:AA6E   S2=$96:D442   S3=DISABLED   S4=$9A:B2DF   S5=DISABLED
+OTT  S0=$97:8BBB   S1=$98:90B0   S2=$96:EE45   S3=DISABLED   S4=$9A:B2DF   S5=DISABLED
+PHI  S0=$99:CA96   S1=$97:B78D   S2=$99:CA96   S3=$96:9C09   S4=$9A:B2DF   S5=$96:9C09
+PIT  S0=$97:9162   S1=$96:F779   S2=$97:9162   S3=$96:AEBB   S4=$9A:B2DF   S5=$96:AEBB
+QUE  S0=$96:E7FD   S1=$97:DA41   S2=$96:E7FD   S3=DISABLED   S4=$9A:B2DF   S5=$97:DA41
+SJ   S0=$8E:FD2B   S1=$96:B6CD   S2=$96:BEA5   S3=$96:DB0E   S4=$97:CB79   S5=$97:85F0
+STL  S0=$97:F4F1   S1=$97:969D   S2=$97:969D   S3=$97:F4F1   S4=$9A:B2DF   S5=$96:EB21
+TB   S0=$97:B50D   S1=$99:9CD0   S2=$99:9CD0   S3=DISABLED   S4=$9A:B2DF   S5=DISABLED
+TOR  S0=$9A:97E5   S1=$9A:97E5   S2=$99:C872   S3=DISABLED   S4=$9A:B2DF   S5=DISABLED
+VAN  S0=$97:E19B   S1=$8E:FD2B   S2=$9A:B931   S3=DISABLED   S4=$9A:B2DF   S5=DISABLED
+WSH  S0=$98:90B0   S1=$96:C265   S2=$98:90B0   S3=DISABLED   S4=$9A:B2DF   S5=$98:90B0
+WPG  S0=$97:8BBB   S1=$98:90B0   S2=$96:EE45   S3=DISABLED   S4=$9A:B2DF   S5=DISABLED
+ASE  S0=DISABLED   S1=DISABLED   S2=DISABLED   S3=DISABLED   S4=DISABLED   S5=DISABLED
+ASW  S0=DISABLED   S1=DISABLED   S2=DISABLED   S3=DISABLED   S4=DISABLED   S5=DISABLED
+
+Quick observations from the map:
+- Slot 4 is heavily shared. $9A:B2DF appears in 22 team rows.
+- ANH, FLA, ASE, and ASW are fully disabled in the current table.
+- SJ is the only team in this decode with all 6 slots populated.
+- Slots 3 and 5 are populated for some teams even though live slot requests for
+	those positions are not yet confirmed from the caller analysis.
+
+
+Selector State Feeding The Slot Choice
+
+$1624
+- This value is split into high and low nibbles at $9FA8BA-$9FA8CB.
+- If the nibbles are equal, execution falls through to the slot-0/slot-2 logic.
+- If the nibbles differ, execution chooses slot 4 or slot 1.
+
+Penalty-related code writes $1624 in multiple places, including:
+- bank_9E around $9EBEEE, where the value is incremented.
+- bank_9F around $9FCDC9, where the value is incremented/decremented.
+- bank_9F at $9FCDFA contains an in-code note: PenCalled 5th (in the box).
+
+$0CC1
+- Initialized to $FFFF at $9F84C3.
+- Sometimes cleared at $9F84E8.
+- Later consumed at $9FA8E3 and $9FA8FD to decide whether the selector call uses
+	slot 0 or slot 2.
+- Cleared again after the call at $9FA909.
+
+
+Worked Example
+
+Example pointer load for team music:
+- Team ID from $1C98 = t
+- Requested slot = s
+- Entry offset = ((t * 6) + s) * 4
+- Bank byte comes from $80DA58 + offset
+- Low word comes from $80DA56 + offset
+- fn_PlayMusic is called with the resulting pointer in $0C/$0E
+
+
+Expansion Notes
+
+The current SNES baseline for future expansion is:
+- 28 teams
+- 6 organ slots per team
+- 4 bytes per slot
+- separate shared goal-music pool
+
+Before relocating or extending the table, the next reverse-engineering tasks are:
+- Rename the anonymous UNREACH_80DA56 / UNREACH_80DA58 labels to explicit organ
+	table labels.
+- Map each of the 6 slot positions for every team.
+- Determine whether slots 3 and 5 are dead, unused in vanilla, or reached through
+	code not yet documented.
+- Audit any hard-coded team-count assumptions before changing table size.
+
+
+Open Questions
+
+- What human-friendly gameplay names correspond to slots 0, 1, 2, 3, 4, and 5?
+- Are slots 3 and 5 reachable in normal gameplay, or only reserved in the table?
+- Does $0CC3, which receives slot+1 at the end of CODE_9C9B5F, affect later music
+	suppression or repeat logic elsewhere?
+

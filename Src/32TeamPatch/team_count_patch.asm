@@ -2,7 +2,7 @@
 ; Keep this file limited to ROM-only org patches so the disassembly sources stay
 ; unchanged while the active team-count sites remain easy to audit.
 
-!TeamSelectionCount = $001D ; 29 teams
+!TeamSelectionCount = $001E ; 30 teams
 !IntroCenterIceBufferSize = !TeamSelectionCount*2
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;

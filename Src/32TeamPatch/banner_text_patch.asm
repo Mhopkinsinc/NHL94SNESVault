@@ -21,7 +21,7 @@ Banner_Team_Text_PTR:
                        dw Phi_Banner_Text,Pit_Banner_Text,Que_Banner_Text,SJ_Banner_Text    
                        dw STL_Banner_Text,TB_Banner_Text,Tor_Banner_Text,Van_Banner_Text    
                        dw Wsh_Banner_Text,Wpg_Banner_Text,ASE_Banner_Text,ASW_Banner_Text   
-                       dw Sea_Banner_Text                                                   
+                       dw Sea_Banner_Text,Vgk_Banner_Text                                                   
 Anh_Banner_Text:       db "Anaheim"                         ; Banner Text ANH
                        db $00                               
 Bos_Banner_Text:       db "Boston"                          ; Banner Text BOS
@@ -79,6 +79,8 @@ ASE_Banner_Text:       db "All Stars E."                    ; Banner Text ASE
 ASW_Banner_Text:       db "All Stars W."                    ; Banner Text ASW
                        db $00                               
 Sea_Banner_Text:       db "Seattle"                         ; Banner Text SEA
+                       db $00                               
+Vgk_Banner_Text:       db "Vegas"                           ; Banner Text VGS
                        db $00
 
 ; Need to capture the address space here so we can continue to use this free space in the center ice logo patch.

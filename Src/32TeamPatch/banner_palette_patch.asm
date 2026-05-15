@@ -49,7 +49,7 @@ Banner_Team_Palette_PTR:
                        dw Phi_Banner_Palette,Pit_Banner_Palette,Que_Banner_Palette,SJ_Banner_Palette
                        dw STL_Banner_Palette,TB_Banner_Palette,Tor_Banner_Palette,Van_Banner_Palette
                        dw Wsh_Banner_Palette,Wpg_Banner_Palette,ASE_Banner_Palette,ASW_Banner_Palette
-                       dw Sea_Banner_Palette
+                       dw Sea_Banner_Palette,Vgk_Banner_Palette
 
 org $9AF17C
 Anh_Banner_Palette:
@@ -139,6 +139,13 @@ org $9AF5BB
 Sea_Banner_Palette:
 
 org $9AF5BB ; Free Space in Bank $9A for new Banner Palettes (Currently Used for SEA Team Banner Palette)
+    db $00,$00,$7B,$6F,$C0,$34,$E0,$BC
+    db $20,$C9,$40,$55,$80,$61,$A0,$ED
+    db $D6,$DA,$94,$D2,$73,$CE,$31,$46
+    db $10,$42,$CE,$39,$AD,$B5,$1A,$83
+
+org $9AF57B
+Vgk_Banner_Palette:
     db $00,$00,$7B,$6F,$C0,$34,$E0,$BC
     db $20,$C9,$40,$55,$80,$61,$A0,$ED
     db $D6,$DA,$94,$D2,$73,$CE,$31,$46

@@ -149,25 +149,25 @@ Center_Ice_LogoGfxAddrTable:
                        dw $B47B,$BFA1,$CA96,$FF3D,$AC2E,$FF38,$C880,$C315
                        dw $C557,$FEA9,$D79C,$DA4A,$BBF5,$FECB,$CBA0,$FEC0
                        dw $C436,$FF47,$D5AF,$C667,$C774,$FE85,$D972,$FE78
-                       dw $DD33,$BE73,$D4B6,$D4B6,$8000
+                       dw $DD33,$BE73,$D4B6,$D4B6,$8000,$D4B6
 
 Center_Ice_LogoGfxBankTable:
                        db $9A,$9A,$9A,$8D,$9A,$84,$9A,$9A
                        db $9A,$82,$9A,$9A,$9A,$98,$9A,$99
                        db $9A,$83,$9A,$9A,$9A,$97,$9A,$86
-                       db $9A,$9A,$9A,$9A,$A1
+                       db $9A,$9A,$9A,$9A,$A1,$9A
 
 Center_Ice_LogoTilemapAddrTable:
                        dw $E53C,$E7F8,$E76C,$E6E0,$E4F6,$E398,$E1F4,$E726
                        dw $E654,$E4B0,$E2C6,$E83E,$E69A,$E582,$E5C8,$E60E
                        dw $E7B2,$E168,$E1AE,$E23A,$E280,$E30C,$E352,$E3DE
-                       dw $E424,$E46A,$FFC6,$FFC6,$9200
+                       dw $E424,$E46A,$FFC6,$FFC6,$9200,$FFC6
 
 Center_Ice_LogoTilemapBankTable:
                        db $9A,$9A,$9A,$9A,$9A,$9A,$9A,$9A
                        db $9A,$9A,$9A,$9A,$9A,$9A,$9A,$9A
                        db $9A,$9A,$9A,$9A,$9A,$9A,$9A,$9A
-                       db $9A,$9A,$88,$88,$A1
+                       db $9A,$9A,$88,$88,$A1,$88
 
 ; Hook gameplay and intro logo loaders to the compact split tables.
 

@@ -47,7 +47,7 @@ Player_Portrait_Palette_PTR:
     dw $F47C,Bos_Portrait_Palette,$EA5C,$EA7C,$EA9C,$EABC,$EADC,$EAFC
     dw $EB1C,$EB5C,$EB7C,$EB9C,$EBBC,$EBDC,$EBFC,$EC1C
     dw $EC3C,$EC5C,$EC7C,$EC9C,$ECBC,$ECDC,$ECFC,$ED1C
-    dw $ED3C,$ED5C,$EB3C,$EB3C,$F47C
+    dw $ED3C,$ED5C,$EB3C,$EB3C,$F47C,$F47C
 
 org $9AF5BB ; Free Space in Bank $9A for new Banner Palettes (Currently Used for SEA Team Banner Palette)
     db $00,$00,$7B,$6F,$C0,$34,$E0,$BC
