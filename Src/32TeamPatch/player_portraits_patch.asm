@@ -1,6 +1,8 @@
 ;;;;;;;;;;;;;;;;
 ; Portraits
 ;;;;;;;;;;;;;;;;
+!PortraitPalettePointerTableBank = $00A2
+
 org $9DC9D0
 LDX.W #$0006                         ;Reduced player portraits per team from 26 to 10 to free up space for new portraits and other features
 
@@ -39,10 +41,10 @@ org $9DCC06
     STA.B $0E
     NOP #12
 
-; Overwrite the original 4-byte portrait palette pointer table at $9DD8B3 with
-; a compact 16-bit table. This frees the remaining bytes in the original region to add more team pointers
-; The new table points to the first palette for each team, and the palettes are stored in bank $9A. Had to move Bostons palette data to 9A
-org $9DD8B3
+; Keep the compact 16-bit portrait palette table out of the original $9DD8B3
+; region, because Seattle's roster copy block now occupies that space.
+; The table entries still point at palette data stored in bank $9A.
+org $A2D500
 Player_Portrait_Palette_PTR:
     dw $F47C,Bos_Portrait_Palette,$EA5C,$EA7C,$EA9C,$EABC,$EADC,$EAFC
     dw $EB1C,$EB5C,$EB7C,$EB9C,$EBBC,$EBDC,$EBFC,$EC1C
