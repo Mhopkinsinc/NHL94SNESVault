@@ -1,3 +1,6 @@
+# ARCHIVED
+This repository is no longer maintained. Development has moved to NHL94SNES, which is now the unified base for our NHL 9x decompilation projects. We’ve brought our resources together there so the work can continue in one place.
+
 # NHL 94' SNESVault
 Decompiling NHL '94 on SNES + ROM Hacks. This project includes an [app](https://github.com/Mhopkinsinc/NHL94SNESVault/releases) to apply hacks and bug fixes to an existing ROM. <br>
 If your a developer and want to modify or build the rom, please see the Development Setup below.
